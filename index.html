@@ -18,8 +18,7 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .hbtn{background:#26262c;border:1px solid #34343c;color:#fff;border-radius:11px;font-size:17px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
 .hbtn:active,.hbtn.on{background:#1d4a63;border-color:var(--blue)}
 .badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:11px;border-radius:9px;min-width:18px;height:18px;padding:0 4px;display:none;align-items:center;justify-content:center}
-#roleBtn{width:auto;padding:0 7px;font-size:13px;gap:3px;background:#3a2a10;border-color:#a07020;color:#ffd76a}
-#roleBtn.friend{background:#10333a;border-color:#2aa0b0;color:#7fe6f2}
+#roleBtn{position:absolute;left:8px;top:-42px;width:60px;height:40px;opacity:0;border:none;background:transparent;padding:0;z-index:5}
 #banner{position:absolute;left:12px;right:12px;top:-80px;z-index:30;background:#ff5a55;color:#fff;border-radius:14px;padding:10px 14px;font-size:15px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.5);transition:top .5s cubic-bezier(.3,1.4,.5,1);text-align:center}
 #banner.show{top:62px}
 #msgs{flex:1;overflow-y:auto;padding:14px 12px 24px}
@@ -59,6 +58,12 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 .env .efrom b{font-size:22px}
 .env .eto{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:30px}
 .env .eto:after{content:"";display:block;width:60%;margin:2px auto 0;border-bottom:1.5px solid rgba(80,60,60,.35)}
+.env.pic{background:url(paper1.webp) center/cover,var(--ec)}
+.env.pic .efrom{top:auto;bottom:10px;left:10px;background:rgba(255,255,255,.78);padding:3px 7px;border-radius:4px;font-size:14px}
+.env.pic .efrom b{font-size:18px}
+.env.pic .eto{left:auto;right:10px;bottom:10px;background:rgba(255,255,255,.78);padding:2px 9px;border-radius:4px;font-size:22px}
+.env.pic .eto:after{display:none}
+.mini .ico.pic{background:url(paper1.webp) center/cover,var(--ec)}
 .envwrap{cursor:pointer;transition:transform .15s}
 .envwrap:active{transform:scale(.96)}
 /* 창 */
@@ -85,6 +90,9 @@ input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;backgr
 .pthumb:before{content:"";position:absolute;left:-4px;top:-4px;width:46px;height:46px;background:var(--decor) no-repeat center/contain}
 .pthumb:after{content:"";position:absolute;right:-4px;bottom:-4px;width:46px;height:46px;background:var(--decor) no-repeat center/contain;transform:rotate(180deg)}
 .pthumb span{position:absolute;left:0;right:0;bottom:6px;font-size:13px;color:var(--ink);font-weight:700;z-index:1}
+.pthumb.pic{background:var(--pimg) center/cover}
+.pthumb.pic:before,.pthumb.pic:after,.pthumb.wimun:before,.pthumb.wimun:after{display:none}
+.pthumb.wimun{background-image:linear-gradient(90deg,transparent 14px,rgba(200,60,50,.5) 14px 15px,transparent 15px),repeating-linear-gradient(to bottom,transparent 0 15px,var(--lc) 15px 16px);border-top:5px double rgba(200,60,50,.6)}
 .pthumb.sel{border-color:var(--blue);box-shadow:0 0 14px rgba(79,195,255,.8)}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .fchip{border:3px solid transparent;border-radius:12px;padding:10px 8px;background:var(--pbg);color:var(--ink);text-align:center;line-height:1.2}
@@ -93,6 +101,10 @@ input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;backgr
 .paperbox{position:relative;border-radius:6px;padding:18px 20px 22px;box-shadow:0 6px 20px rgba(0,0,0,.6);color:var(--ink);background:var(--pbg)}
 .paperbox:before,.paperbox:after{content:"";position:absolute;width:96px;height:96px;background:var(--decor) no-repeat center/contain;pointer-events:none;opacity:.9}
 .paperbox:before{left:-6px;top:-8px;transform:rotate(-12deg)}
+.paperbox.pic{border-style:solid;border-width:var(--pbw);border-image:var(--pimg) var(--pslice) fill / var(--pbw) stretch;border-radius:0;padding:2px 6px}
+.paperbox.pic:before,.paperbox.pic:after,.paperbox.wimun:before,.paperbox.wimun:after{display:none}
+.paperbox.pic .ptop,.paperbox.wimun .ptop{padding-left:0}
+.paperbox.wimun{background:linear-gradient(90deg,transparent 30px,rgba(200,60,50,.45) 30px 31px,transparent 31px),var(--pbg);border-top:7px double rgba(200,60,50,.6);padding-left:40px}
 .paperbox:after{right:-6px;bottom:-8px;transform:rotate(168deg)}
 .ptop{font-size:22px;margin-bottom:6px;position:relative;z-index:1;padding-left:52px}
 .ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:62%;outline:none}
@@ -161,7 +173,6 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div id="app">
   <header>
     <h1>빨간 우체통<small id="subTitle">(못다한 그 말)</small></h1>
-    <button class="hbtn" id="roleBtn" title="연습용: 나/친구 바꾸기">🔄 나</button>
     <button class="hbtn on" id="musicBtn" title="음악">🎵</button>
     <button class="hbtn" id="draftBtn" title="임시 저장함">📝<span class="badge" id="draftBadge"></span></button>
     <button class="hbtn" id="pileBtn" title="편지 보관함">📚</button>
@@ -171,6 +182,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <div id="msgs"></div>
   <footer>
     <span class="sign">YMwav</span>
+    <button id="roleBtn" aria-label="연습"></button>
     <button id="mailbox" title="빨간 우체통">
       <svg viewBox="0 0 76 66" width="54" height="47">
         <defs>
@@ -280,7 +292,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div class="ov" id="readOv">
   <div class="panel">
     <div id="readPaper"></div>
-    <button class="big" id="rVoice" style="display:none">🔊 목소리 다시 듣기</button>
+    <div class="twin"><button class="big" id="rVoice" style="display:none">🔊 목소리 다시 듣기</button><button class="big" id="rTTS">📖 편지 읽기</button></div>
     <div class="twin"><button class="big r" id="rReply">✏ 답장 쓰기</button><button class="big" id="rClose">닫기</button></div>
   </div>
 </div>
@@ -360,6 +372,10 @@ const flower = (x, y, r, c) => [0,72,144,216,288].map(a => {
   return `<circle cx="${(x + Math.sin(t) * r).toFixed(1)}" cy="${(y - Math.cos(t) * r).toFixed(1)}" r="${r * .75}" fill="${c}"/>`;
 }).join('') + `<circle cx="${x}" cy="${y}" r="${r * .5}" fill="#ffd76a"/>`;
 const PAPERS = [
+  { id:'tulip', name:'튤립 데이지', bg:'#fbf8f2', line:'rgba(140,165,200,.45)', ink:'#4a3a48', env:'#d8e6f5', cls:'pic', img:'paper2.webp', slice:'15% 12%', bw:'46px 38px' },
+  { id:'sakura', name:'벚꽃 레이스', bg:'#e3edf8', line:'rgba(110,140,195,.45)', ink:'#34405a', env:'#cfe0f3', cls:'pic', img:'paper3.webp', slice:'17% 15%', bw:'56px 46px' },
+  { id:'rose', name:'장미 레이스', bg:'#f7f6f2', line:'rgba(165,145,125,.42)', ink:'#4a3a34', env:'#dfeaf3', cls:'pic', img:'paper4.webp', slice:'22% 22%', bw:'66px 58px' },
+  { id:'wimun', name:'위문편지', bg:'#efe2b6', line:'rgba(140,70,40,.55)', ink:'#3a2a14', env:'#d9c48e', cls:'wimun' },
   { id:'pink', name:'분홍 꽃', bg:'#fff1f4', line:'rgba(236,140,165,.55)', ink:'#5a3440', env:'#f7c9d4',
     decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30 70 Q45 55 60 62" stroke="#8cc09a" stroke-width="3" fill="none"/><ellipse cx="50" cy="66" rx="9" ry="4" fill="#9fd1ab" transform="rotate(-30 50 66)"/>${flower(30,40,13,'#f59ab2')}${flower(64,30,8,'#f8b9ca')}${flower(70,62,6,'#f59ab2')}</svg>` },
   { id:'sky', name:'하늘 구름', bg:'#eef7ff', line:'rgba(120,175,230,.55)', ink:'#2c4460', env:'#bfdff7',
@@ -383,7 +399,9 @@ const FONTS = [
 const STICKERS = ['🌸','💗','🍀','⭐','🌷','💌','🦋','☁️'];
 const paperOf = id => PAPERS.find(p => p.id === id) || PAPERS[0];
 const fontOf = id => FONTS.find(f => f.id === id) || FONTS[0];
-const paperVars = p => `--pbg:${p.bg};--lc:${p.line};--ink:${p.ink};--ec:${p.env};--decor:${svgURI(p.decor)}`;
+const paperVars = p => `--pbg:${p.bg};--lc:${p.line};--ink:${p.ink};--ec:${p.env};--decor:${p.decor ? svgURI(p.decor) : 'none'}`
+  + (p.img ? `;--pimg:url(${p.img});--pslice:${p.slice};--pbw:${p.bw}` : '');
+const pcls = p => p.cls || '';
 
 /* ----- 사람 (연습 모드에서는 나/친구 바꾸기) ----- */
 let me = LS.get('rp_me', null);
@@ -461,7 +479,8 @@ const unreadIn = () => received().filter(m => !m.read);
 
 function envHTML(m){
   const L = m.letter;
-  return `<div class="env" style="${paperVars(paperOf(L.paper))}">
+  const p = paperOf(L.paper);
+  return `<div class="env ${p.cls === 'pic' ? 'pic' : ''}" style="${paperVars(p)}">
     <div class="stamp"><i>♥<b>우표</b></i></div>
     <div class="pwave"></div>
     <div class="pmark">${fmtDate(whenOf(m))}<br>빨간우체통</div>
@@ -481,7 +500,7 @@ function render(){
     html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? '' : `<div class="who">${esc(m.name)}</div>`}`;
     if (m.type === 'letter') {
       const st = !arrived(m) ? '<span class="st wait">내일 아침 도착</span>' : m.read ? '<span class="st read">읽음</span>' : '<span class="st">안 읽음</span>';
-      html += `<div class="mini" data-id="${m.id}">${st}<div class="ico" style="${paperVars(paperOf(m.letter.paper))}"></div></div>`;
+      html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(paperOf(m.letter.paper))}" style="${paperVars(paperOf(m.letter.paper))}"></div></div>`;
     } else {
       html += `<div class="bubble">${esc(m.text)}</div>`;
     }
@@ -520,8 +539,6 @@ $('msgs').addEventListener('click', e => { const w = e.target.closest('.mini'); 
 /* ----- 연습용 나/친구 바꾸기 ----- */
 $('roleBtn').onclick = () => {
   role = role === 'me' ? 'friend' : 'me';
-  $('roleBtn').textContent = role === 'me' ? '🔄 나' : '🔄 친구';
-  $('roleBtn').classList.toggle('friend', role === 'friend');
   $('subTitle').textContent = role === 'me' ? '(못다한 그 말)' : `(친구 화면으로 보는 중)`;
   toast(role === 'me' ? `지금은 "${me.name}" 화면이에요` : '지금은 "친구" 화면이에요');
   render.jump = true; render();
@@ -572,7 +589,7 @@ function step(n){
   (n === 1 ? $('step1') : $('step2')).scrollTop = 0;
 }
 function buildPick(){
-  $('paperGrid').innerHTML = PAPERS.map(p => `<button class="pthumb ${W.paper === p.id ? 'sel' : ''}" data-p="${p.id}" style="${paperVars(p)}"><span>${p.name}</span></button>`).join('');
+  $('paperGrid').innerHTML = PAPERS.map(p => `<button class="pthumb ${pcls(p)} ${W.paper === p.id ? 'sel' : ''}" data-p="${p.id}" style="${paperVars(p)}"><span>${p.name}</span></button>`).join('');
   const p = paperOf(W.paper);
   $('fontGrid').innerHTML = FONTS.map(f => `<button class="fchip ${W.font === f.id ? 'sel' : ''}" data-f="${f.id}" style="${paperVars(p)};font-family:${f.css};font-size:${f.size - 2}px">못다한 그 말<small>${f.name}</small></button>`).join('');
 }
@@ -581,7 +598,9 @@ function buildStk(){
 }
 function applyW(){
   const f = fontOf(W.font);
-  $('wPaper').setAttribute('style', paperVars(paperOf(W.paper)) + `;font-family:${f.css}`);
+  const p = paperOf(W.paper);
+  $('wPaper').className = 'paperbox ' + pcls(p);
+  $('wPaper').setAttribute('style', paperVars(p) + `;font-family:${f.css}`);
   $('wBody').style.fontSize = f.size + 'px';
   $('wStk').textContent = W.stickers.join('');
 }
@@ -713,7 +732,7 @@ function showReader(){
   const m = curLetter, L = m.letter, p = paperOf(L.paper), f = fontOf(L.font);
   hideOv('openOv');
   const rp = $('readPaper');
-  rp.innerHTML = `<div class="paperbox" style="${paperVars(p)};font-family:${f.css}">
+  rp.innerHTML = `<div class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}">
     <div class="ptop">To. ${esc(L.to)}</div>
     <div class="lined rbody" style="font-size:${f.size}px">${esc(L.body)}</div>
     ${L.stickers && L.stickers.length ? `<div class="pstk">${L.stickers.join('')}</div>` : ''}
@@ -734,8 +753,22 @@ function playVoice(){
   voiceAudio.onended = () => musicDuck(false);
   voiceAudio.play().catch(() => musicDuck(false));
 }
-function closeReader(){ if (voiceAudio) voiceAudio.pause(); musicDuck(false); hideOv('readOv'); }
+function closeReader(){ if (voiceAudio) voiceAudio.pause(); if ('speechSynthesis' in window) speechSynthesis.cancel(); musicDuck(false); hideOv('readOv'); }
 $('rVoice').onclick = playVoice;
+function readAloud(){
+  if (!('speechSynthesis' in window)) { toast('이 휴대폰은 읽어 주기가 안 돼요'); return; }
+  speechSynthesis.cancel();
+  if (voiceAudio) voiceAudio.pause();
+  const L = curLetter.letter;
+  const u = new SpeechSynthesisUtterance(`${L.to}에게. ${L.body}. ${L.fromName} 씀.`);
+  u.lang = 'ko-KR'; u.rate = .95;
+  const v = speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith('ko'));
+  if (v) u.voice = v;
+  musicDuck(true);
+  u.onend = u.onerror = () => musicDuck(false);
+  speechSynthesis.speak(u);
+}
+$('rTTS').onclick = readAloud;
 $('rClose').onclick = closeReader;
 $('rReply').onclick = () => {
   const to = curLetter.letter.fromName;
