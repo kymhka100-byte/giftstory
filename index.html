@@ -20,42 +20,59 @@ button{font-family:inherit;cursor:pointer}
 header{display:flex;align-items:center;gap:6px;padding:10px 12px;background:#17171a;border-bottom:1px solid var(--line)}
 header h1{flex:1;margin:0;font-size:17px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#ff5a55;line-height:1.15;min-width:0}
 header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
-.hbtn{background:#26262c;border:1px solid #34343c;color:#fff;border-radius:11px;font-size:17px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.hbtn{background:#26262c;border:1px solid #34343c;color:#fff;border-radius:11px;font-size:17px;width:34px;height:38px;padding:0;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
 .hbtn:active,.hbtn.on{background:#1d4a63;border-color:var(--blue)}
+.hbtn.lb{width:auto;min-width:40px;padding:0 4px;flex-direction:column;font-size:15px;line-height:1}
+.hbtn.lb b{font-size:9px;font-weight:400;margin-top:3px;white-space:nowrap}
 .badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:11px;border-radius:9px;min-width:18px;height:18px;padding:0 4px;display:none;align-items:center;justify-content:center}
 #moleBtn,#callBtn{flex:none;height:42px;border-radius:12px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:16px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
 #moleBtn b,#callBtn b{font-size:9px;font-weight:400;margin-top:2px}
 #moleBtn{position:absolute;left:8px;top:-50px;height:40px;z-index:5;opacity:.9}
 .dot{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid #666;background:#222;color:#fff;font-size:15px;padding:0;line-height:1}
 .dot:active{background:var(--blue)}
-.rooms{display:flex;gap:6px;overflow-x:auto;padding:7px 10px;border-bottom:1px solid var(--line);background:#141417;scrollbar-width:none}
-.rooms::-webkit-scrollbar{display:none}
-.rb{flex:none;height:32px;min-width:32px;padding:0 10px;border-radius:16px 16px 16px 4px;border:1px solid #444;background:#26262c;color:#fff;font-size:14px;font-weight:700;white-space:nowrap}
+/* 방 말풍선 줄: 말풍선은 옆으로 밀리고, 빨간 ＋는 항상 오른쪽 끝 */
+.rooms{display:flex;align-items:center;gap:8px;padding:0 10px 0 6px;border-bottom:1px solid var(--line);background:#141417}
+.rscroll{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto;padding:10px 4px 7px;scrollbar-width:none}
+.rscroll::-webkit-scrollbar{display:none}
+.rb{flex:none;height:32px;min-width:32px;padding:0 10px;border-radius:16px 16px 16px 4px;border:1px solid #444;background:#26262c;color:#fff;font-size:14px;font-weight:700;white-space:nowrap;position:relative;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-x}
 .rb.cur{background:#ffe14d;color:#222;border-color:#ffe14d}
-.rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff}
-.top2{margin-bottom:4px}.top2 .big{margin-top:0;font-size:14px;padding:10px;position:relative}
-.top2 .badge{position:static;display:none;margin-left:4px;vertical-align:middle}
+.rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff;margin-top:3px}
+.rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
+.rb.flash{animation:rbflash 1.8s ease}
+@keyframes rbflash{0%{transform:none}8%{transform:rotate(-9deg);background:#ff4d4a;color:#fff}16%{transform:rotate(8deg)}24%{transform:rotate(-6deg)}32%{transform:rotate(4deg)}40%{transform:none;background:#ff4d4a;color:#fff}55%{background:#26262c}70%{background:#ff4d4a;color:#fff}100%{transform:none}}
+.rb.press{transform:scale(.9)}
 #readOv .dot{width:32px;height:32px}
 #app{position:relative}#app>*{position:relative}
-body:not(.dark) #app{background:linear-gradient(180deg,#cfe5fb 0%,#e9f3fe 35%,#fbf6fb 100%);color:#2d3445}
-body:not(.dark) #msgs{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='260'%3E%3Cg fill='%23fff' opacity='.7'%3E%3Cellipse cx='60' cy='60' rx='46' ry='18'/%3E%3Cellipse cx='85' cy='48' rx='30' ry='20'/%3E%3Cellipse cx='270' cy='170' rx='52' ry='18'/%3E%3Cellipse cx='300' cy='158' rx='30' ry='20'/%3E%3C/g%3E%3Cg fill='%23f7b4c6' opacity='.5'%3E%3Cpath d='M200 70c-6-6-14 2-6 9l6 5 6-5c8-7 0-15-6-9z'/%3E%3Cpath d='M40 200c-4-4-9 1-4 6l4 3 4-3c5-5 0-10-4-6z'/%3E%3C/g%3E%3C/svg%3E") repeat}
-body:not(.dark) header{background:rgba(255,255,255,.7);border-color:#dbe6f3}
-body:not(.dark) header h1 small{color:#6b7a90}
-body:not(.dark) .hbtn{background:#fff;border-color:#d7e2ef;color:#333}
-body:not(.dark) .rooms{background:rgba(255,255,255,.45);border-color:#dbe6f3}
-body:not(.dark) .rb{background:#fff;color:#334;border-color:#cdd9e8}
+/* 바탕 테마 (검은 화면이 아닐 때) */
+body:not(.dark) #app{background:var(--t-bg);color:var(--t-ink)}
+body:not(.dark) #msgs{background:var(--t-pat)}
+body:not(.dark) header{background:var(--t-bar);border-color:var(--t-line)}
+body:not(.dark) header h1 small{color:var(--t-sub)}
+body:not(.dark) .hbtn{background:var(--t-btn);border-color:var(--t-btnline);color:var(--t-btnink)}
+body:not(.dark) .hbtn.on{background:#d6efff;border-color:var(--blue);color:#223}
+body:not(.dark) .rooms{background:var(--t-bar);border-color:var(--t-line)}
+body:not(.dark) .rb{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
 body:not(.dark) .rb.cur{background:#ffe14d;border-color:#f2cd2c;color:#222}
 body:not(.dark) .rb.add{background:var(--red);color:#fff}
-body:not(.dark) .them .bubble{background:#fff;color:#333;box-shadow:0 2px 6px rgba(80,110,160,.18)}
-body:not(.dark) .me .bubble{background:#ffe58f;box-shadow:0 2px 6px rgba(160,130,40,.18)}
-body:not(.dark) .who{color:#55607a}
-body:not(.dark) .time,body:not(.dark) .day{color:#7d8aa0}
-body:not(.dark) footer{background:rgba(255,255,255,.75);border-color:#dbe6f3}
-body:not(.dark) #txt{background:#fff;color:#222;border-color:#cdd9e8}
-body:not(.dark) #moleBtn,body:not(.dark) #callBtn{background:#fff;color:#333;border-color:#cdd9e8}
-body:not(.dark) .dot{background:#fff;color:#333;border-color:#bbb}
-body:not(.dark) .sign{color:#8a97ad}
-body:not(.dark) .mini .st{color:#6b7a90}
+body:not(.dark) .them .bubble{background:var(--t-them);color:var(--t-themink);box-shadow:0 2px 6px rgba(60,80,120,.18)}
+body:not(.dark) .me .bubble{background:var(--t-me);box-shadow:0 2px 6px rgba(120,100,40,.18)}
+body:not(.dark) .who,body:not(.dark) .time,body:not(.dark) .day,body:not(.dark) .sign,body:not(.dark) .mini .st{color:var(--t-sub)}
+body:not(.dark) footer{background:var(--t-bar);border-color:var(--t-line)}
+body:not(.dark) #txt{background:var(--t-field);color:var(--t-fieldink);border-color:var(--t-btnline)}
+body:not(.dark) #moleBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+/* 홈 화면에 추가 안내 */
+#installBar{display:none;align-items:center;gap:6px;margin:6px 10px 0;padding:8px 10px;border-radius:12px;background:#2b2b33;color:#fff;font-size:14px;border:1px solid #555;z-index:3}
+#installBar.show{display:flex}
+#installBar span{flex:1;line-height:1.35}
+#installBar button{border:none;border-radius:10px;padding:7px 12px;font-size:14px;flex:none}
+#instYes{background:var(--red);color:#fff;font-weight:700}
+#instNo{background:transparent;color:#bbb}
+/* 초대 창: 카카오톡 · 문자 아이콘 */
+.sharerow{display:flex;justify-content:center;gap:34px;margin:16px 0 6px}
+.shico{background:none;border:none;color:#fff;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0}
+.shico svg{width:62px;height:62px;border-radius:18px;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+.shico:active svg{transform:scale(.92)}
+.shhint{text-align:center;color:#ffd76a;font-size:15px;margin:6px 0 4px}
 body.dark .paperbox{background:#000 !important;color:#fff !important;border:1px solid #555 !important;border-image:none !important;padding:16px 16px 20px !important}
 body.dark .paperbox:before,body.dark .paperbox:after{display:none}
 body.dark .paperbox .lined{background-image:repeating-linear-gradient(to bottom,transparent 0 33px,rgba(255,255,255,.22) 33px 34px)}
@@ -120,7 +137,6 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 .big.r{background:var(--red);border:none;font-weight:700}
 .twin{display:flex;gap:8px}.twin .big{flex:1}
 input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;background:#222;color:#fff;font-size:16px}
-.box{background:#0b0b0d;border:1px solid #333;border-radius:12px;padding:12px;font-size:15px;word-break:break-all;user-select:all}
 /* 편지 쓰기 (1단계 고르기 / 2단계 쓰기) */
 #writer{position:fixed;inset:0;background:#0e0e10;z-index:40;display:none;flex-direction:column}
 #writer.show{display:flex}
@@ -222,11 +238,15 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div id="app">
   <header>
     <h1>빨간 우체통<small id="subTitle">(못다한 그 말)</small></h1>
+    <button class="hbtn lb" id="draftBtn" title="쓰던 편지">📝<b>쓰던 편지</b><span class="badge" id="draftBadge"></span></button>
+    <button class="hbtn lb" id="pileBtn" title="편지 보관함">📚<b>보관함</b></button>
     <button class="hbtn on" id="musicBtn" title="음악">🎵</button>
+    <button class="dot" id="themeBtn" title="바탕 바꾸기">🎨</button>
     <button class="dot" data-dark title="검은 화면">◐</button>
     <button class="hbtn" id="roomBtn" title="설정">⚙</button>
   </header>
-  <div class="rooms" id="roomBar"></div>
+  <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
+  <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
   <div id="msgs"></div>
   <footer>
@@ -247,14 +267,14 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
         <rect x="14" y="36" width="22" height="9" rx="1.5" fill="#fff" opacity=".93"/>
         <text x="25" y="43" font-size="6.5" fill="#d02a28" text-anchor="middle" font-family="Noto Sans KR" font-weight="700">우편</text>
         <rect x="10" y="23" width="3" height="32" rx="1.5" fill="#fff" opacity=".2"/>
-        <g class="flag down" id="flag" style="transform-origin:47.7px 41px">
+        <g class="flag down" style="transform-origin:47.7px 41px">
           <rect x="46.5" y="16" width="2.5" height="26" rx="1" fill="#d8d8d8"/>
           <path d="M49 16 H60 L57 20.5 L60 25 H49 Z" fill="#ff2020"/>
         </g>
       </svg>
     </button>
-    <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <textarea id="txt" placeholder="메시지 입력"></textarea>
+    <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <button id="sendBtn">전송</button>
   </footer>
 </div>
@@ -268,11 +288,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   </div>
   <!-- 1단계: 편지지·글씨체 고르기 -->
   <div class="wbody" id="step1">
-    <div class="twin top2">
-      <button class="big" id="draftBtn">📝 임시 저장함 <span class="badge" id="draftBadge"></span></button>
-      <button class="big" id="pileBtn">📚 편지 보관함</button>
-    </div>
-    <div class="lab">편지지</div>
+    <div class="lab" style="margin-top:4px">편지지</div>
     <div class="pgrid" id="paperGrid"></div>
     <div class="lab">글씨체</div>
     <div class="fgrid" id="fontGrid"></div>
@@ -364,10 +380,10 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   </div>
 </div>
 
-<!-- 임시 저장함 -->
+<!-- 쓰던 편지 -->
 <div class="ov" id="draftOv">
   <div class="panel">
-    <h2>📝 임시 저장한 편지</h2>
+    <h2>📝 쓰던 편지</h2>
     <div id="draftList"></div>
     <button class="big" data-close>닫기</button>
   </div>
@@ -388,12 +404,11 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <!-- 새 친구 방 -->
 <div class="ov" id="newOv">
   <div class="panel">
-    <h2>＋ 새 친구 방</h2>
-    <div style="color:#ccc;margin-bottom:8px">친구 이름을 먼저 적어 두세요. 친구가 들어오면 친구가 적은 이름으로 바뀌어요.</div>
-    <input class="in" id="newName" maxlength="12" placeholder="예: 엄마, 철수">
-    <button class="big y" data-share="kakao">카카오톡으로 초대</button>
-    <button class="big" data-share="sms">문자로 초대</button>
-    <button class="big" data-share="copy">링크 복사</button>
+    <h2>＋ 새 친구 방이 생겼어요</h2>
+    <input class="in" id="newName" maxlength="12" placeholder="친구 이름 (예: 엄마, 철수)">
+    <div class="sharerow" data-shares></div>
+    <div class="shhint">친구를 초대하세요</div>
+    <button class="big" data-share="copy">🔗 방 주소 복사</button>
     <button class="big" data-close>닫기</button>
   </div>
 </div>
@@ -402,13 +417,21 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div class="ov" id="inviteOv">
   <div class="panel">
     <h2>👥 이 방에 친구 부르기</h2>
-    <div style="color:#ccc;margin-bottom:8px">이 링크로 들어온 친구는 지금 대화방에 같이 들어와요.</div>
-    <div class="box" id="inviteLink"></div>
-    <button class="big y" data-share="kakao">카카오톡으로 부르기</button>
-    <button class="big" data-share="sms">문자로 부르기</button>
-    <button class="big" data-share="copy">링크 복사</button>
+    <div style="color:#ccc">이 방 주소로 들어온 친구는 이름을 뭐라고 적든 지금 대화방에 같이 들어와요.</div>
+    <div class="sharerow" data-shares></div>
+    <div class="shhint">친구를 부르세요</div>
+    <button class="big" data-share="copy">🔗 방 주소 복사</button>
     <div id="demoNote" style="color:#ffb45c;font-size:15px;margin-top:10px"></div>
     <button class="big" data-close>닫기</button>
+  </div>
+</div>
+
+<!-- 방 지우기 (말풍선 길게 누르기) -->
+<div class="ov" id="delOv">
+  <div class="panel" style="max-width:340px;text-align:center">
+    <h2 id="delTitle"></h2>
+    <div style="color:#ccc">내 방 목록에서만 지워져요.</div>
+    <div class="twin"><button class="big r" id="delYes">지우기</button><button class="big" data-close>취소</button></div>
   </div>
 </div>
 
@@ -515,7 +538,7 @@ function addMsg(m){
   m.id = rid(); msgs[m.id] = m; saveDemo(); render();
 }
 function markRead(m){
-  if (m.read || isMine(m)) return;
+  if (m.read || m.sample || isMine(m)) return;
   m.read = true;
   if (fb) fb.read(m.id); else saveDemo();
   render();
@@ -544,15 +567,18 @@ async function initStore(){
   else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js').then(x => swReg = x).catch(() => {});   // 앱 설치용
   if (LS.get('rp_auth', null)) syncAccount();
 }
-/* 방 열기 (방마다 따로 대화) */
+/* 방 열기 (방마다 따로 대화) - 방은 이름이 아니라 고유 번호(room)로 찾아요 */
 function openRoom(id){
   unsub.forEach(f => { try { f(); } catch (e) {} }); unsub = [];
+  if (room !== id) setSeen(room);
   room = id; LS.set('rp_room', room);
   try { history.replaceState(history.state, '', location.pathname + '?room=' + room); } catch (e) {}
   msgs = {}; loadedAt = Date.now(); render.jump = true;
+  delete unread[room]; setSeen(room);
+  stopWatch(room);
   saveRoom(room, null);
   if (FB) {
-    const { D, db } = FB, path = 'giftstory/rooms/' + room;
+    const { D, db } = FB, path = 'giftstory/rooms/' + room, t0 = loadedAt;
     const list = D.ref(db, path + '/msgs');
     fb = {
       push: m => D.push(list, m),
@@ -566,12 +592,33 @@ function openRoom(id){
     };
     unsub.push(D.onChildAdded(list, put, () => toast('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요')));
     unsub.push(D.onChildChanged(list, put));
-    D.update(D.ref(db, path + '/members/' + me.uid), { name: me.name, at: Date.now() }).catch(() => {});
+    const mems = D.ref(db, path + '/members'), rid0 = room;
+    unsub.push(D.onChildAdded(mems, s => memberIn(rid0, s.key, s.val(), t0)));
+    unsub.push(D.onChildChanged(mems, s => memberIn(rid0, s.key, s.val(), Infinity)));
+    joinRoom(room);
   } else {
     fb = null;
     msgs = LS.get(demoKey(), {});
   }
   render();
+}
+/* 방에 들어감 표시 - 처음 들어올 때만 joined(들어온 시각)를 남겨요 → 방 만든 사람에게 딩동 */
+function joinRoom(id){
+  const { D, db } = FB, r = D.ref(db, 'giftstory/rooms/' + id + '/members/' + me.uid), now = Date.now();
+  D.get(r).then(s => D.update(r, s.exists() ? { name: me.name, at: now } : { name: me.name, at: now, joined: now })).catch(() => {});
+}
+/* 방 사람들 */
+const roomMembers = {};
+function memberIn(id, uid, v, t0){
+  if (!v) return;
+  (roomMembers[id] || (roomMembers[id] = {}))[uid] = v;
+  const mine = me.ids.includes(uid) || v.name === me.name;
+  if (!mine && v.joined && v.joined > t0) {
+    showBanner(`🔔 ${v.name}님이 들어왔어요`); dingdong();
+    flashRoom(id);
+  }
+  saveRoom(id, titleFor(id));
+  queueRender();
 }
 /* 방 목록 (내 휴대폰에 저장) */
 const getRooms = () => LS.get('rp_rooms', []);
@@ -581,9 +628,60 @@ function saveRoom(id, title){
   const n = { id, title: title || '', at: Date.now() };
   rooms.unshift(n); LS.set('rp_rooms', rooms); pushRoomUp(n);
 }
-function roomTitle(){
-  const names = [...new Set(Object.values(msgs).filter(m => !isMine(m)).map(m => m.name))];
-  return names.join(', ');
+function removeRoom(id){
+  LS.set('rp_rooms', getRooms().filter(x => x.id !== id));
+  stopWatch(id); delete unread[id];
+  const seen = LS.get('rp_seen', {}); delete seen[id]; LS.set('rp_seen', seen);
+  const au = LS.get('rp_auth', null);
+  if (FB && au) FB.D.remove(FB.D.ref(FB.db, 'giftstory/users/' + au.uid + '/rooms/' + id)).catch(() => {});
+  if (id === room) { const next = getRooms()[0]; openRoom(next ? next.id : rid()); }
+  else render();
+}
+/* 방 이름: 들어온 친구가 적은 이름 → 미리 적어 둔 이름 → 대화한 사람 이름 */
+function titleFor(id){
+  const mem = Object.entries(roomMembers[id] || {}).filter(([u, v]) => !me.ids.includes(u) && v.name && v.name !== me.name);
+  const names = [...new Set(mem.sort((a, b) => (a[1].joined || a[1].at || 0) - (b[1].joined || b[1].at || 0)).map(([, v]) => v.name))];
+  if (names.length) return names.join(', ');
+  if (id === room) { const t = [...new Set(Object.values(msgs).filter(m => !isMine(m)).map(m => m.name))].join(', '); if (t) return t; }
+  return (getRooms().find(x => x.id === id) || {}).title || '';
+}
+
+/* ----- 다른 방 새 메시지: 안 읽은 개수 · 말풍선 순서 ----- */
+const unread = {};      // 방 → { keys: 안 읽은 메시지, first: 처음 온 시각 }
+const watch = {};       // 방 → 듣기 끄기
+const flashing = {};
+const getSeen = () => LS.get('rp_seen', {});
+function setSeen(id){ if (!id) return; const s = getSeen(); s[id] = Date.now(); LS.set('rp_seen', s); }
+function flashRoom(id){ flashing[id] = Date.now(); queueRender(); setTimeout(() => { delete flashing[id]; queueRender(); }, 1900); }
+function stopWatch(id){ (watch[id] || []).forEach(f => { try { f(); } catch (e) {} }); delete watch[id]; }
+function syncWatchers(){
+  if (!FB) return;
+  const ids = getRooms().map(x => x.id).filter(x => x !== room);
+  Object.keys(watch).forEach(id => { if (!ids.includes(id)) stopWatch(id); });
+  ids.forEach(id => { if (!watch[id]) watchRoom(id); });
+}
+function watchRoom(id){
+  const { D, db } = FB, path = 'giftstory/rooms/' + id, t0 = Date.now();
+  const un = watch[id] = [];
+  un.push(D.onChildAdded(D.query(D.ref(db, path + '/msgs'), D.limitToLast(50)), snap => {
+    const m = snap.val();
+    if (!m || me.ids.includes(m.from) || (m.at || 0) <= (getSeen()[id] || 0)) return;
+    if (m.type === 'letter' && m.letter && m.letter.deliverAt > Date.now()) return;   // 아직 도착 안 한 편지
+    const u = unread[id] || (unread[id] = { keys: new Set(), first: m.at || Date.now() });
+    u.keys.add(snap.key); u.first = Math.min(u.first, m.at || Date.now());
+    if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); }
+    queueRender();
+  }));
+  const mems = D.ref(db, path + '/members');
+  un.push(D.onChildAdded(mems, s => memberIn(id, s.key, s.val(), t0)));
+  un.push(D.onChildChanged(mems, s => memberIn(id, s.key, s.val(), Infinity)));
+}
+/* 지금 방은 맨 왼쪽 → 새 메시지 온 방(먼저 온 순서) → 나머지 */
+function orderedRooms(){
+  const rooms = getRooms(), has = x => unread[x.id] && unread[x.id].keys.size;
+  const cur = rooms.filter(x => x.id === room);
+  const news = rooms.filter(x => x.id !== room && has(x)).sort((a, b) => unread[a.id].first - unread[b.id].first);
+  return [...cur, ...news, ...rooms.filter(x => x.id !== room && !has(x))];
 }
 function drawRooms(){
   const rooms = getRooms();
@@ -594,38 +692,73 @@ function drawRooms(){
   const au = LS.get('rp_auth', null);
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
-/* 위쪽 말풍선 줄: 방마다 하나, 지금 방은 노란색 + 이름 전체 */
+/* 위쪽 말풍선 줄: 방마다 하나, 지금 방은 노란색 + 이름 전체, 안 읽은 개수는 귀퉁이 숫자 */
+let barHTML = '', barOrder = '';
 function drawBar(){
-  const rooms = getRooms();
-  $('roomBar').innerHTML = rooms.map(x => {
-    const name = x.title || '새 방', cur = x.id === room;
-    return `<button class="rb ${cur ? 'cur' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? name : [...name][0])}</button>`;
-  }).join('') + '<button class="rb add" id="addRoom" title="새 친구 방">＋</button>';
+  const list = orderedRooms();
+  const html = list.map(x => {
+    const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
+    const n = unread[x.id] ? unread[x.id].keys.size : 0;
+    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? name : [...name][0])}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+  }).join('');
+  if (html === barHTML) return;
+  barHTML = html; $('roomBar').innerHTML = html;
+  const order = list.map(x => x.id).join();
+  if (order !== barOrder) { barOrder = order; $('roomBar').scrollLeft = 0; }
 }
+/* 말풍선: 누르면 방 옮기기, 길게 누르면 지우기 */
+let lpT = 0, lpDone = false, lpX = 0, lpBtn = null, delId = null;
+const lpEnd = () => { clearTimeout(lpT); if (lpBtn) lpBtn.classList.remove('press'); lpBtn = null; };
+$('roomBar').addEventListener('pointerdown', e => {
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  lpDone = false; lpX = e.clientX; lpBtn = b; b.classList.add('press');
+  lpT = setTimeout(() => {
+    lpDone = true; lpEnd(); delId = b.dataset.go;
+    if (navigator.vibrate) navigator.vibrate(30);
+    $('delTitle').textContent = `'${b.title}' 방을 지울까요?`;
+    showOv('delOv');
+  }, 600);
+});
+$('roomBar').addEventListener('pointermove', e => { if (lpBtn && Math.abs(e.clientX - lpX) > 10) lpEnd(); });
+['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('roomBar').addEventListener(t, lpEnd));
+$('roomBar').addEventListener('contextmenu', e => e.preventDefault());
 $('roomBar').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
+  const b = e.target.closest('[data-go]'); if (!b) return;
+  if (lpDone) { lpDone = false; return; }
   click();
-  if (b.id === 'addRoom') { $('newName').value = ''; showOv('newOv'); return; }
-  if (b.dataset.go && b.dataset.go !== room) openRoom(b.dataset.go);
+  if (b.dataset.go !== room) openRoom(b.dataset.go);
+});
+$('delYes').onclick = () => { hideOv('delOv'); if (delId) { removeRoom(delId); toast('방을 지웠어요'); } delId = null; };
+/* ＋ : 새 방이 바로 생기고 초대 창 */
+$('addRoom').onclick = () => {
+  click();
+  const id = rid(); saveRoom(id, ''); openRoom(id);
+  $('newName').value = ''; showOv('newOv');
+};
+$('newName').addEventListener('input', () => {
+  const t = $('newName').value.trim(), rooms = getRooms(), r = rooms.find(x => x.id === room);
+  if (r) { r.title = t; LS.set('rp_rooms', rooms); pushRoomUp(r); render(); }
 });
 $('roomBtn').onclick = () => { drawRooms(); showOv('roomOv'); };
 $('roomList').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.go) { hideOv('roomOv'); openRoom(b.dataset.go); toast('방을 옮겼어요'); }
-  if (b.dataset.rm) { LS.set('rp_rooms', getRooms().filter(x => x.id !== b.dataset.rm)); drawRooms(); drawBar(); }
+  if (b.dataset.rm) { removeRoom(b.dataset.rm); drawRooms(); }
 });
 $('callBtn').onclick = () => {
   click();
-  $('inviteLink').textContent = inviteURL();
   $('demoNote').textContent = fb ? '' : '※ 지금은 연습 모드예요.';
   showOv('inviteOv');
 };
-/* 초대 보내기: 카카오톡 · 문자 · 링크 복사 */
+/* 초대 보내기: 카카오톡(왼쪽) · 문자(오른쪽) 아이콘 + 방 주소 복사 */
+const ICON_KAKAO = `<svg viewBox="0 0 62 62"><rect width="62" height="62" rx="16" fill="#FEE500"/><ellipse cx="31" cy="29" rx="19" ry="15" fill="#3C1E1E"/><path d="M20 39 L17 48 L27 42 Z" fill="#3C1E1E"/><text x="31" y="33" font-size="10" font-weight="700" fill="#FEE500" text-anchor="middle" font-family="Arial">TALK</text></svg>`;
+const ICON_SMS = `<svg viewBox="0 0 62 62"><defs><linearGradient id="smsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5df17a"/><stop offset="1" stop-color="#22c33f"/></linearGradient></defs><rect width="62" height="62" rx="16" fill="url(#smsG)"/><ellipse cx="31" cy="29" rx="19" ry="15" fill="#fff"/><path d="M19 38 L15 47 L26 41 Z" fill="#fff"/></svg>`;
+document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
+  `<button class="shico" data-share="kakao">${ICON_KAKAO}카카오톡</button><button class="shico" data-share="sms">${ICON_SMS}문자</button>`);
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = () => {
   const kind = b.dataset.share;
-  if (b.closest('#newOv')) {                    // 새 방을 만들고 바로 보내기
-    const id = rid(); saveRoom(id, $('newName').value.trim()); hideOv('newOv'); openRoom(id);
-  } else hideOv('inviteOv');
+  click();
+  if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 보내고 돌아오면 바로 그 방 대화창
   shareInvite(kind);
 });
 const inviteURL = () => location.origin + location.pathname + '?room=' + room;
@@ -745,8 +878,10 @@ function envHTML(m){
   </div>`;
 }
 function render(){
-  const t = roomTitle(); saveRoom(room, t || null);
+  const t = titleFor(room); saveRoom(room, t || null);
   $('subTitle').textContent = t ? `${t} 님과 대화` : '(못다한 그 말)';
+  if (!document.hidden) setSeen(room);
+  syncWatchers();
   drawBar();
   const box = $('msgs');
   const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
@@ -786,10 +921,11 @@ function checkArrivals(){
   const fresh = unreadIn().filter(m => !seen.has(m.id));
   if (!fresh.length) return;
   fresh.forEach(m => seen.add(m.id));
-  const b = $('banner');
-  b.textContent = `💌 ${fresh[fresh.length - 1].name}님의 편지가 도착했어요`;
-  b.classList.add('show'); ding();
+  showBanner(`💌 ${fresh[fresh.length - 1].name}님의 편지가 도착했어요`); ding();
   const mb = $('mailbox'); mb.classList.remove('bump'); void mb.offsetWidth; mb.classList.add('bump');
+}
+function showBanner(t){
+  const b = $('banner'); b.textContent = t; b.classList.add('show');
   clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), 3000);
 }
 $('banner').onclick = () => $('banner').classList.remove('show');
@@ -833,8 +969,15 @@ $('popList').addEventListener('click', e => { const k = e.target.closest('.pick'
 
 /* ----- 편지 쓰기 ----- */
 let W = null;
-function uidOf(name){ const m = sorted().slice().reverse().find(x => x.name === name && !isMine(x)); return m ? m.from : null; }
-function otherName(){ const o = sorted().slice().reverse().find(m => !isMine(m)); return o ? o.name : ((getRooms().find(x => x.id === room) || {}).title || ''); }
+/* 받는 사람: 이름이 달라도 방에 들어온 사람(고유 번호)으로 찾아요 */
+function uidOf(name){
+  const mem = Object.entries(roomMembers[room] || {}).filter(([u]) => !me.ids.includes(u));
+  const hit = mem.find(([, v]) => v.name === name) || (mem.length === 1 ? mem[0] : null);
+  if (hit) return hit[0];
+  const m = sorted().slice().reverse().find(x => x.name === name && !isMine(x));
+  return m ? m.from : null;
+}
+function otherName(){ const o = sorted().slice().reverse().find(m => !isMine(m)); return o ? o.name : titleFor(room); }
 function openWriter(data){
   W = data || { to: otherName(), body: '', paper: 'pink', font: 'pen', stickers: [], voice: null, draftId: null, align: '' };
   $('wTo').value = W.to; $('wBody').value = W.body; $('wFrom').textContent = who().name;
@@ -898,7 +1041,7 @@ $('wSave').onclick = () => {
   if (!W.body.trim()) { toast('아직 쓴 내용이 없어요'); return; }
   const d = { ...W, draftId: W.draftId || rid(), savedAt: Date.now() };
   setDrafts([d, ...getDrafts().filter(x => x.draftId !== d.draftId)]);
-  closeWriter(); updateFlag(); toast('💾 서랍에 임시 저장했어요');
+  closeWriter(); updateFlag(); toast('💾 쓰던 편지에 저장했어요');
 };
 $('wSend').onclick = () => sendLetter(false);
 $('wSlow').onclick = () => sendLetter(true);
@@ -1022,7 +1165,7 @@ function showReader(){
   </div>`;
   rp.style.animation = 'none'; void rp.offsetWidth; rp.style.animation = '';
   $('rVoice').style.display = L.voice ? '' : 'none';
-  $('rReply').style.display = isMine(m) ? 'none' : '';
+  $('rReply').style.display = isMine(m) || m.sample ? 'none' : '';
   showOv('readOv'); $('readOv').scrollTop = 0;
   if (L.voice) setTimeout(playVoice, 1000);
   markRead(m);
@@ -1069,24 +1212,52 @@ $('rReply').onclick = () => {
 
 /* ----- 보관함 (자연스럽게 쌓인 편지) ----- */
 function hashN(s, n){ let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) | 0; return ((h % n) + n) % n; }
+/* 예시 편지: 빨간 우체부(사용 방법)는 항상, 나머지는 진짜 편지가 오면 사라짐 */
+const GUIDE_BODY = `빨간 우체통에 오신 걸 환영해요!
+
+📮 아래 빨간 우체통을 누르면 편지를 쓸 수 있어요.
+편지지와 글씨체를 고르고 ✏ 글쓰기를 누르세요.
+다 쓰면 📮 바로 보내기, 또는 🌙 내일 아침(다음 날 아침 8시 도착)으로 보내요.
+
+🚩 편지가 오면 우체통 깃발이 올라가요.
+우체통을 누르면 봉투가 나오고, 봉투를 누르면 열려요.
+
+＋ 위쪽 빨간 ＋를 누르면 새 친구 방이 생겨요.
+카카오톡이나 문자로 친구를 초대하세요.
+👥 부르기로 지금 방에 친구를 더 부를 수 있어요.
+
+방 말풍선을 누르면 그 방으로 가고, 길게 누르면 방을 지울 수 있어요.
+새 메시지가 온 방은 숫자로 알려 줘요.
+
+📝 쓰던 편지 - 임시 저장한 편지
+📚 보관함 - 읽은 편지가 쌓여요
+🎨 바탕 바꾸기 · ◐ 검은 화면 · 🎵 음악 켜고 끄기`;
+const sampleOf = (id, from, paper, font, body, stickers, day) => ({ id, sample: true, read: true, at: Date.now() - day * 86400000,
+  letter: { to: me.name || '친구', fromName: from, body, paper, font, stickers, align: '' } });
+const GUIDE = () => sampleOf('s_guide', '빨간 우체부', 'sky', 'gothic', GUIDE_BODY, ['📮'], 0);
+const SAMPLES = () => [
+  sampleOf('s_hong', '홍길동', 'pink', 'pen', '잘 지내지?\n요즘 바쁘다는 핑계로 연락을 못 했네.\n지난번에 고마웠다는 말, 꼭 하고 싶었어.\n다음에 밥 한번 먹자!', ['🌸', '💗'], 3),
+  sampleOf('s_post', '빨간 우체통', 'old', 'gaegu', '편지는 이렇게\n보관함에 차곡차곡 쌓여요.\n\n못다한 그 말,\n오늘은 편지로 전해 보세요.', ['💌'], 2),
+  sampleOf('s_mom', '엄마', 'tulip', 'melody', '밥은 잘 챙겨 먹고 다니니?\n날이 추워졌으니 따뜻하게 입고 다녀라.\n늘 고맙고 사랑한다.', ['🌷'], 1)
+];
+let pileItems = {};
 $('pileBtn').onclick = () => {
+  click();
   const list = received().filter(m => m.read);
-  $('pileCnt').textContent = `(${list.length}통)`;
-  const pile = $('pile');
-  if (!list.length) { pile.style.height = 'auto'; pile.innerHTML = '<div class="empty">아직 읽은 편지가 없어요</div>'; }
-  else {
-    const stepH = 26;
-    pile.style.height = (180 + (list.length - 1) * stepH) + 'px';
-    pile.innerHTML = list.map((m, i) => {
-      const rot = hashN(m.id, 29) - 14, dx = hashN(m.id + 'x', 70) - 35;
-      return `<div class="envwrap" data-id="${m.id}" style="bottom:${i * stepH}px;transform:translateX(calc(-50% + ${dx}px)) rotate(${rot}deg);z-index:${i + 1}">${envHTML(m)}</div>`;
-    }).join('');
-  }
+  $('pileCnt').textContent = list.length ? `(${list.length}통)` : '· 예시 편지';
+  const items = [...(list.length ? list : SAMPLES()), GUIDE()];   // 빨간 우체부 편지는 맨 위
+  pileItems = {}; items.forEach(m => pileItems[m.id] = m);
+  const pile = $('pile'), stepH = 26;
+  pile.style.height = (180 + (items.length - 1) * stepH) + 'px';
+  pile.innerHTML = items.map((m, i) => {
+    const rot = hashN(m.id, 29) - 14, dx = hashN(m.id + 'x', 70) - 35;
+    return `<div class="envwrap" data-id="${m.id}" style="bottom:${i * stepH}px;transform:translateX(calc(-50% + ${dx}px)) rotate(${rot}deg);z-index:${i + 1}">${envHTML(m)}</div>`;
+  }).join('');
   showOv('pileOv');
 };
-$('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); curLetter = msgs[w.dataset.id]; showReader(); } });
+$('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); curLetter = pileItems[w.dataset.id]; showReader(); } });
 
-/* ----- 임시 저장함 ----- */
+/* ----- 쓰던 편지 ----- */
 function drawDrafts(){
   const ds = getDrafts();
   $('draftList').innerHTML = ds.length ? ds.map(d => `<div class="drow">
@@ -1094,7 +1265,8 @@ function drawDrafts(){
     <button data-edit="${d.draftId}">이어 쓰기</button><button data-del="${d.draftId}">지우기</button></div>`).join('')
     : '<div class="empty">임시 저장한 편지가 없어요</div>';
 }
-$('draftBtn').onclick = () => { drawDrafts(); showOv('draftOv'); };
+/* 쓰던 편지: 없으면 바로 편지 쓰기(편지지 고르기)로 */
+$('draftBtn').onclick = () => { click(); if (!getDrafts().length) openWriter(); else { drawDrafts(); showOv('draftOv'); } };
 $('draftList').addEventListener('click', e => {
   const b = e.target.closest('button'); if (!b) return;
   if (b.dataset.edit) { const d = getDrafts().find(x => x.draftId === b.dataset.edit); hideOv('draftOv'); openWriter({ ...d }); }
@@ -1127,7 +1299,7 @@ function closeAll(){
     if (W && W.body.trim()) {
       const d = { ...W, draftId: W.draftId || rid(), savedAt: Date.now() };
       setDrafts([d, ...getDrafts().filter(x => x.draftId !== d.draftId)]);
-      toast('💾 쓰던 편지는 임시 저장했어요');
+      toast('💾 쓰던 편지에 저장했어요');
     }
     stopRec(); $('writer').classList.remove('show');
   }
@@ -1226,6 +1398,8 @@ function tone(fq, t0, len, vol){
   o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + len + .05);
 }
 function ding(){ if (!ac()) return; tone(880, 0, .6, .25); tone(1318.5, .15, .9, .2); }
+function dingdong(){ if (!ac()) return; tone(659.3, 0, 1.1, .3); tone(1318.5, 0, .5, .05); tone(523.3, .45, 1.5, .3); tone(1046.5, .45, .6, .05); }   // 딩~동 초인종
+function pop(){ if (!ac()) return; tone(988, 0, .12, .12); tone(1480, .07, .14, .08); }   // 다른 방 새 메시지
 function thunk(){
   const c = ac(); if (!c) return;
   const o = c.createOscillator(), g = c.createGain(), t = c.currentTime;
@@ -1245,6 +1419,72 @@ if (/KAKAOTALK/i.test(navigator.userAgent) && !sessionStorage.getItem('rp_ext'))
 function applyDark(){ document.body.classList.toggle('dark', !!LS.get('rp_dark', false)); }
 document.querySelectorAll('[data-dark]').forEach(b => b.onclick = () => { LS.set('rp_dark', !LS.get('rp_dark', false)); applyDark(); click(); });
 applyDark();
+
+/* ----- 바탕 테마 (🎨 누를 때마다 바뀜) ----- */
+const pat = svg => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" ${svg}</svg>`)}") repeat`;
+const heart = (x, y, s, c) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 0c-6-6-14 2-6 9l6 5 6-5c8-7 0-15-6-9z" fill="${c}"/>`;
+const star = (x, y, s, c) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0-10 3-3 10-3 4 2 6 10 0 5-6 10-4 2-10-3-3-3z" fill="${c}"/>`;
+const petal = (x, y, r, c) => `<ellipse cx="${x}" cy="${y}" rx="7" ry="4" transform="rotate(${r} ${x} ${y})" fill="${c}"/>`;
+const THEMES = [
+  { name: '하늘 구름', bg: 'linear-gradient(180deg,#cfe5fb 0%,#e9f3fe 35%,#fbf6fb 100%)',
+    pat: pat(`width="360" height="260"><g fill="#fff" opacity=".7"><ellipse cx="60" cy="60" rx="46" ry="18"/><ellipse cx="85" cy="48" rx="30" ry="20"/><ellipse cx="270" cy="170" rx="52" ry="18"/><ellipse cx="300" cy="158" rx="30" ry="20"/></g><g opacity=".5">${heart(200, 70, 1, '#f7b4c6')}${heart(40, 200, .7, '#f7b4c6')}</g>`),
+    ink: '#2d3445', sub: '#6b7a90', bar: 'rgba(255,255,255,.7)', line: '#dbe6f3', btn: '#fff', btnline: '#d7e2ef', btnink: '#333', me: '#ffe58f', them: '#fff', themink: '#333' },
+  { name: '벚꽃 봄날', bg: 'linear-gradient(180deg,#ffdbe6 0%,#fff0f4 40%,#fffaf2 100%)',
+    pat: pat(`width="320" height="280"><g opacity=".75">${petal(50, 40, 30, '#ffb3c8')}${petal(70, 52, -20, '#ffc9d7')}${petal(230, 90, 60, '#ffb3c8')}${petal(150, 190, -40, '#ffc9d7')}${petal(280, 230, 15, '#ffb3c8')}${petal(30, 240, 75, '#ffc9d7')}</g><g opacity=".6"><circle cx="190" cy="30" r="3" fill="#fff"/><circle cx="110" cy="120" r="2.5" fill="#fff"/></g>`),
+    ink: '#4a3040', sub: '#9a7486', bar: 'rgba(255,255,255,.65)', line: '#f6d3de', btn: '#fff', btnline: '#f2cdd9', btnink: '#5a3a48', me: '#ffd3e0', them: '#fff', themink: '#4a3040' },
+  { name: '노을 바다', bg: 'linear-gradient(180deg,#ffcfae 0%,#ffe3cf 35%,#f5e1f7 75%,#d9e8fb 100%)',
+    pat: pat(`width="340" height="240"><g fill="none" stroke="#fff" stroke-width="2" opacity=".55"><path d="M20 60 q15 -10 30 0 t30 0"/><path d="M200 150 q15 -10 30 0 t30 0"/><path d="M90 210 q12 -8 24 0 t24 0"/></g><circle cx="270" cy="50" r="16" fill="#ffb07a" opacity=".45"/>${heart(140, 100, .6, '#ff9a8a')}`),
+    ink: '#4a3428', sub: '#9a7a68', bar: 'rgba(255,248,240,.7)', line: '#f3d6c2', btn: '#fffaf5', btnline: '#f0d2bd', btnink: '#5a3a2a', me: '#ffd9a8', them: '#fff', themink: '#4a3428' },
+  { name: '민트 숲', bg: 'linear-gradient(180deg,#cdf0dd 0%,#eafaf0 40%,#fbfdf4 100%)',
+    pat: pat(`width="320" height="260"><g fill="#9fdcb4" opacity=".55"><circle cx="50" cy="50" r="7"/><circle cx="62" cy="50" r="7"/><circle cx="50" cy="62" r="7"/><circle cx="62" cy="62" r="7"/><circle cx="240" cy="170" r="5"/><circle cx="249" cy="170" r="5"/><circle cx="240" cy="179" r="5"/><circle cx="249" cy="179" r="5"/></g><path d="M150 100 q10 -14 22 -4 q-8 12 -22 4z" fill="#b6e6c6" opacity=".7"/>${heart(270, 50, .6, '#fff')}`),
+    ink: '#24402f', sub: '#6a8a76', bar: 'rgba(255,255,255,.65)', line: '#cfeadb', btn: '#fff', btnline: '#c9e6d4', btnink: '#2c4a38', me: '#d8f5b0', them: '#fff', themink: '#24402f' },
+  { name: '보라 별빛', bg: 'linear-gradient(180deg,#ddd3ff 0%,#efeaff 40%,#fdf8ff 100%)',
+    pat: pat(`width="300" height="260"><g opacity=".6">${star(50, 50, 1, '#c5b3f5')}${star(220, 120, .7, '#d6c8fa')}${star(120, 210, .8, '#c5b3f5')}</g><g fill="#fff" opacity=".8"><circle cx="160" cy="40" r="2.5"/><circle cx="260" cy="220" r="2"/><circle cx="30" cy="150" r="2"/></g>`),
+    ink: '#3a2f5e', sub: '#857aa8', bar: 'rgba(255,255,255,.65)', line: '#e0d8f7', btn: '#fff', btnline: '#ddd3f5', btnink: '#3e3164', me: '#e6dcff', them: '#fff', themink: '#3a2f5e' },
+  { name: '옛날 편지', bg: 'repeating-linear-gradient(to bottom,transparent 0 33px,rgba(150,110,60,.13) 33px 34px),linear-gradient(180deg,#efdfbd 0%,#f6ecd6 50%,#fbf5e8 100%)',
+    pat: pat(`width="340" height="300"><g opacity=".35">${heart(60, 60, .8, '#c0392b')}</g><g fill="#a5814a" opacity=".3"><ellipse cx="260" cy="200" rx="10" ry="5" transform="rotate(-60 260 200)"/><ellipse cx="275" cy="192" rx="10" ry="5" transform="rotate(20 275 192)"/></g>`),
+    ink: '#4a3518', sub: '#8d7550', bar: 'rgba(251,245,232,.8)', line: '#e5d4b0', btn: '#fffaf0', btnline: '#e2cfa8', btnink: '#4a3518', me: '#f5d88a', them: '#fffdf6', themink: '#4a3518' },
+  { name: '별밤', bg: 'linear-gradient(180deg,#141a3c 0%,#232c66 55%,#3d3f80 100%)',
+    pat: pat(`width="300" height="260"><g fill="#fff"><circle cx="30" cy="40" r="1.4"/><circle cx="120" cy="20" r="1"/><circle cx="210" cy="70" r="1.6"/><circle cx="280" cy="30" r="1"/><circle cx="70" cy="150" r="1.2"/><circle cx="170" cy="190" r="1"/><circle cx="250" cy="230" r="1.4"/></g><g opacity=".85">${star(150, 110, .6, '#ffe58a')}</g><circle cx="260" cy="150" r="12" fill="#fff5c8" opacity=".25"/>`),
+    ink: '#eef0ff', sub: '#a9b0dd', bar: 'rgba(16,20,50,.75)', line: '#2f3870', btn: '#2a3270', btnline: '#3d478c', btnink: '#fff', me: '#ffe14d', them: '#38418a', themink: '#fff', field: '#1d2456', fieldink: '#fff' }
+];
+function applyTheme(){
+  const t = THEMES[LS.get('rp_theme', 0) % THEMES.length], s = document.body.style;
+  const v = { bg: t.bg, pat: t.pat, ink: t.ink, sub: t.sub, bar: t.bar, line: t.line, btn: t.btn, btnline: t.btnline, btnink: t.btnink,
+    me: t.me, them: t.them, themink: t.themink, field: t.field || '#fff', fieldink: t.fieldink || '#222' };
+  Object.entries(v).forEach(([k, x]) => s.setProperty('--t-' + k, x));
+  return t;
+}
+$('themeBtn').onclick = () => {
+  click();
+  if (LS.get('rp_dark', false)) { LS.set('rp_dark', false); applyDark(); }   // 검은 화면이면 먼저 풀고 테마 보여 주기
+  else LS.set('rp_theme', (LS.get('rp_theme', 0) + 1) % THEMES.length);
+  toast('🎨 ' + applyTheme().name);
+};
+applyTheme();
+
+/* ----- 홈 화면에 추가 (크롬: 버튼 한 번 / 아이폰: 안내) ----- */
+let installEv = null;
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const installMuted = () => Date.now() - LS.get('rp_inst_no', 0) < 3 * 86400000;   // ✕ 누르면 3일 동안 안 보임
+function showInstall(ios){
+  if (isStandalone() || installMuted()) return;
+  $('instText').textContent = ios ? '📲 아이폰: 아래 공유 버튼(□↑) → "홈 화면에 추가"를 누르면 앱처럼 열려요' : '📲 홈 화면에 빨간 우체통을 추가할까요?';
+  $('instYes').style.display = ios ? 'none' : '';
+  $('installBar').classList.add('show');
+}
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEv = e; showInstall(false); });
+addEventListener('appinstalled', () => { $('installBar').classList.remove('show'); toast('📮 홈 화면에 추가했어요'); });
+$('instYes').onclick = async () => {
+  click();
+  if (!installEv) { toast('크롬 메뉴(⋮) → "홈 화면에 추가"를 눌러 주세요'); return; }
+  installEv.prompt();
+  try { await installEv.userChoice; } catch (e) {}
+  installEv = null; $('installBar').classList.remove('show');
+};
+$('instNo').onclick = () => { LS.set('rp_inst_no', Date.now()); $('installBar').classList.remove('show'); };
+if (isIOS) setTimeout(() => showInstall(true), 2500);
 
 /* ----- 시작 ----- */
 function start(){
