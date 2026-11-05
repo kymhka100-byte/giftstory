@@ -35,6 +35,7 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .rscroll{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto;padding:10px 4px 7px;scrollbar-width:none}
 .rscroll::-webkit-scrollbar{display:none}
 .rb{flex:none;height:32px;min-width:32px;padding:0 10px;border-radius:16px 16px 16px 4px;border:1px solid #444;background:#26262c;color:#fff;font-size:14px;font-weight:700;white-space:nowrap;position:relative;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-x}
+.rb:not(.cur):not(.add){width:44px;padding:0;overflow:visible;text-overflow:clip;font-size:13px}
 .rb.cur{background:#ffe14d;color:#222;border-color:#ffe14d}
 .rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff;margin-top:3px}
 .rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
@@ -103,6 +104,15 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 @keyframes bump{30%{transform:scale(1.2,.85)}60%{transform:scale(.92,1.1)}100%{transform:none}}
 .flag{transform-box:view-box;transform-origin:51px 38px;transition:transform .6s cubic-bezier(.5,1.8,.5,1)}
 .flag.down{transform:rotate(90deg)}
+.flag.wave{animation:fwave 1.6s ease}
+@keyframes fwave{25%{transform:rotate(90deg)}50%{transform:none}75%{transform:rotate(90deg)}100%{transform:none}}
+#testBtn{position:absolute;right:8px;top:-50px;width:64px;height:44px;opacity:0;border:none;background:none;z-index:4}
+.toshare{display:inline-flex;gap:6px;vertical-align:middle;margin-left:4px}
+.toshare button{width:30px;height:30px;padding:0;border:none;background:none}
+.toshare svg{width:30px;height:30px;border-radius:9px;box-shadow:0 2px 5px rgba(0,0,0,.35)}
+.intro{margin:12px 0 4px;padding:12px 12px;border-radius:12px;background:#222228;border:1px solid #3a3a42;font-size:14px;line-height:1.75;color:#eee}
+.intro small{color:#999}
+.drow.go{cursor:pointer}.drow.go:active{background:#1d4a63}
 #txt{flex:1;resize:none;height:42px;max-height:110px;border-radius:14px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:15px;padding:10px 12px;font-family:inherit}
 #sendBtn{height:42px;padding:0 14px;border-radius:14px;border:none;background:#ffe14d;color:#222;font-weight:700;font-size:15px;flex:none}
 #sendBtn:active{background:var(--blue)}
@@ -166,7 +176,7 @@ input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;backgr
 .paperbox.wimun{background:linear-gradient(90deg,transparent 30px,rgba(200,60,50,.45) 30px 31px,transparent 31px),var(--pbg);border-top:7px double rgba(200,60,50,.6);padding-left:40px}
 .paperbox:after{right:-6px;bottom:-8px;transform:rotate(168deg)}
 .ptop{font-size:22px;margin-bottom:6px;position:relative;z-index:1;padding-left:52px}
-.ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:62%;outline:none}
+.ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:46%;outline:none}
 .lined{display:block;width:100%;border:none;outline:none;resize:none;background-color:transparent;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,var(--lc) 33px 34px);background-attachment:local;line-height:34px;color:inherit;padding:0 4px;white-space:pre-wrap;word-break:break-word;position:relative;z-index:1}
 textarea.lined{min-height:48vh}
 textarea.lined::placeholder{color:var(--ink);opacity:.38}
@@ -197,19 +207,10 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 .pick .env{position:absolute;left:0;top:0;transform:scale(.6);transform-origin:0 0}
 .pick:active{transform:scale(.95)}
 @keyframes popin{from{transform:translateY(40px) scale(.4);opacity:0}to{transform:none;opacity:1}}
-/* 봉투 열기 */
-.scene{perspective:1200px;margin-top:90px}
-.card3d{width:300px;height:192px;position:relative;transform-style:preserve-3d;transition:transform .8s ease}
-.card3d.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.face .env{width:300px;height:192px}
-.face.back{transform:rotateY(180deg)}
-.eback{position:absolute;inset:0;background:var(--ec);border-radius:6px;box-shadow:0 5px 14px rgba(0,0,0,.6)}
-.eletter{position:absolute;left:6%;width:88%;top:8%;height:84%;background:var(--pbg);background-image:repeating-linear-gradient(to bottom,transparent 0 17px,var(--lc) 17px 18px);border-radius:3px;z-index:1;transition:transform 1s ease}
-.epocket{position:absolute;inset:0;background:var(--ec);filter:brightness(.93);clip-path:polygon(0 0,50% 54%,100% 0,100% 100%,0 100%);border-radius:6px;z-index:2}
-.eflap{position:absolute;left:0;right:0;top:0;height:60%;background:var(--ec);filter:brightness(.86);clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s ease;z-index:3}
-.card3d.open .eflap{transform:rotateX(180deg);z-index:0}
-.card3d.rise .eletter{transform:translateY(-78%)}
+/* 봉투 찢기 */
+.envwrap.rip{animation:rip .45s ease forwards}
+@keyframes rip{0%{transform:translate(-50%,-30px) scale(.9) rotate(-6deg)}25%{transform:translate(-52%,-30px) scale(.95) rotate(-10deg)}50%{transform:translate(-48%,-30px) scale(1) rotate(-2deg);opacity:1}100%{transform:translate(-50%,-80px) scale(1.25);opacity:0}}
+.pick.rip{animation:none;transition:transform .3s,opacity .3s;transform:scale(1.15);opacity:0}
 .hint{margin-top:26px;color:#ddd;font-size:16px;animation:blink 1.4s infinite}
 @keyframes blink{50%{opacity:.35}}
 /* 편지 읽기 */
@@ -276,6 +277,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <button id="sendBtn">전송</button>
+    <button id="testBtn" aria-hidden="true" tabindex="-1"></button>
   </footer>
 </div>
 
@@ -297,7 +299,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
     <div class="paperbox" id="wPaper">
-      <div class="ptop">To. <input id="wTo" placeholder="받는 사람"></div>
+      <div class="ptop">To. <input id="wTo" placeholder="받는 사람"><span class="toshare"><button data-lsend="kakao" title="카카오톡으로 바로 보내기"></button><button data-lsend="sms" title="문자로 바로 보내기"></button></span></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
@@ -355,12 +357,6 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <button class="big" style="max-width:260px" data-close>닫기</button>
 </div>
 
-<!-- 봉투 열기 -->
-<div class="ov" id="openOv">
-  <div class="scene"><div class="card3d" id="card3d"></div></div>
-  <div class="hint" id="openHint">봉투를 눌러 열어 보세요</div>
-</div>
-
 <!-- 편지 읽기 -->
 <div class="ov" id="readOv">
   <div class="panel">
@@ -393,7 +389,9 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div class="ov" id="roomOv">
   <div class="panel">
     <h2>⚙ 설정</h2>
-    <div class="lab" style="margin-top:0">대화방</div>
+    <div class="lab" style="margin-top:0">내 이름 (친구에게 보이는 이름)</div>
+    <div style="display:flex;gap:8px"><input class="in" id="myName" maxlength="12"><button class="big y" id="myNameOk" style="width:auto;margin:0;padding:0 16px">바꾸기</button></div>
+    <div class="lab">대화방 (줄을 누르면 들어가요)</div>
     <div id="roomList"></div>
     <button class="big" id="notiBtn">🔔 알림 켜기</button>
     <button class="big" id="loginBtn">G 구글로 로그인 (다른 기기에서도 방 목록 보기)</button>
@@ -441,7 +439,17 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <h2>📮 빨간 우체통</h2>
     <div style="margin-bottom:10px;color:#ccc">친구에게 보일 내 이름(별명)을 적어 주세요.</div>
     <input class="in" id="nameIn" maxlength="12" placeholder="예: 영민">
+    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 나만의 편지지를 만들어 보낼 수 있어요 <small>(곧 열려요)</small><br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
     <button class="big y" id="nameOk">대화 시작하기</button>
+  </div>
+</div>
+
+<!-- 카톡 안에서 열었을 때 -->
+<div class="ov" id="kakaoOv">
+  <div class="panel" style="max-width:360px;text-align:center">
+    <h2>📮 빨간 우체통</h2>
+    <div style="color:#ccc;line-height:1.6">크롬(인터넷) 창으로 열었어요.<br>이 창은 닫아도 돼요.</div>
+    <button class="big" id="kakaoStay">여기서 그냥 열기</button>
   </div>
 </div>
 
@@ -463,7 +471,8 @@ const FB_VERSIONS = ['13.1.0', '11.0.2'];
 const KAKAO_JS_KEY = '';   // 카카오 개발자 JavaScript 키를 넣으면 카톡 친구 고르는 창이 바로 떠요
 const MOLE_URL = 'https://kymhka100-byte.github.io/mole';
 const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3KtrcCh3EjeyKlVz0x4c8CDjQjp_OU';  // 웹 푸시 인증서
-const BGM_FILE = 'bgm.mp3';     // 배경음악 (없으면 기본 음악)
+const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
+const BGM_FILE = 'bgm.mp3';     // 내 배경음악
 const SFX_FILES = { drop: 'drop.mp3', rustle: 'rustle.mp3', tear: 'tear.mp3' };  // 효과음 (없으면 기본 소리)
 /* ================ */
 
@@ -513,10 +522,13 @@ const paperVars = p => `--pbg:${p.bg};--lc:${p.line};--ink:${p.ink};--ec:${p.env
   + (p.img ? `;--pimg:url(${p.img});--pslice:${p.slice};--pbw:${p.bw}` : '');
 const pcls = p => p.cls || '';
 
-/* ----- 사람 (연습 모드에서는 나/친구 바꾸기) ----- */
-let me = LS.get('rp_me', null);
-if (!me) { me = { uid: rid(), name: '' }; LS.set('rp_me', me); }
-if (!me.ids) { me.ids = [me.uid]; LS.set('rp_me', me); }
+/* ----- 사람 (전송 버튼 위 투명 버튼: 나 ↔ 테스트 친구) ----- */
+const realMe = LS.get('rp_me', null) || { uid: rid(), name: '' };
+if (!realMe.ids) realMe.ids = [realMe.uid];
+LS.set('rp_me', realMe);
+let testMe = null;
+let me = realMe;
+const saveMe = () => LS.set(me === realMe ? 'rp_me' : 'rp_test_me', me);
 const who = () => me;
 const isMine = m => me.ids.includes(m.from);
 
@@ -536,6 +548,17 @@ const saveDemo = () => LS.set(demoKey(), msgs);
 function addMsg(m){
   if (fb) { fb.push(m).catch(() => toast('보내기 실패 - 인터넷을 확인해 주세요')); return; }
   m.id = rid(); msgs[m.id] = m; saveDemo(); render();
+}
+/* 다른 방(새 방)에 메시지 넣기 */
+function pushTo(id, m){
+  if (FB) {
+    const { D, db } = FB, base = 'giftstory/rooms/' + id;
+    D.push(D.ref(db, base + '/msgs'), m).catch(() => toast('보내기 실패 - 인터넷을 확인해 주세요'));
+    if (me === realMe) D.update(D.ref(db, base + '/members/' + me.uid), { name: me.name, at: Date.now(), joined: Date.now() }).catch(() => {});
+    return;
+  }
+  const k = 'rp_msgs_' + id, all = LS.get(k, {}), mid = rid();
+  all[mid] = { ...m, id: mid }; LS.set(k, all);
 }
 function markRead(m){
   if (m.read || m.sample || isMine(m)) return;
@@ -565,6 +588,7 @@ async function initStore(){
   openRoom(room);
   if ('Notification' in window && Notification.permission === 'granted') setupPush(false);
   else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js').then(x => swReg = x).catch(() => {});   // 앱 설치용
+  if (FB) { authModule().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
   if (LS.get('rp_auth', null)) syncAccount();
 }
 /* 방 열기 (방마다 따로 대화) - 방은 이름이 아니라 고유 번호(room)로 찾아요 */
@@ -604,6 +628,7 @@ function openRoom(id){
 }
 /* 방에 들어감 표시 - 처음 들어올 때만 joined(들어온 시각)를 남겨요 → 방 만든 사람에게 딩동 */
 function joinRoom(id){
+  if (me !== realMe) return;   // 테스트 친구는 방 사람 목록에 안 남김
   const { D, db } = FB, r = D.ref(db, 'giftstory/rooms/' + id + '/members/' + me.uid), now = Date.now();
   D.get(r).then(s => D.update(r, s.exists() ? { name: me.name, at: now } : { name: me.name, at: now, joined: now })).catch(() => {});
 }
@@ -617,7 +642,7 @@ function memberIn(id, uid, v, t0){
     showBanner(`🔔 ${v.name}님이 들어왔어요`); dingdong();
     flashRoom(id);
   }
-  saveRoom(id, titleFor(id));
+  if (me === realMe) saveRoom(id, titleFor(id));
   queueRender();
 }
 /* 방 목록 (내 휴대폰에 저장) */
@@ -685,9 +710,10 @@ function orderedRooms(){
 }
 function drawRooms(){
   const rooms = getRooms();
-  $('roomList').innerHTML = rooms.map(x => `<div class="drow">
-    <div class="dt">${esc(x.title || '새 방')}<br><small>${x.id === room ? '● 지금 보는 방' : fmtDate(x.at) + ' 만듦'}</small></div>
-    ${x.id === room ? '' : `<button data-go="${x.id}">들어가기</button><button data-rm="${x.id}">지우기</button>`}</div>`).join('');
+  $('roomList').innerHTML = rooms.map(x => `<div class="drow ${x.id === room ? '' : 'go'}" ${x.id === room ? '' : `data-go="${x.id}"`}>
+    <div class="dt">${esc(titleFor(x.id) || x.title || '새 방')}<br><small>${x.id === room ? '● 지금 보는 방' : fmtDate(x.at) + ' 만듦'}</small></div>
+    ${x.id === room ? '' : `<button data-rm="${x.id}">지우기</button>`}</div>`).join('');
+  $('myName').value = me.name;
   $('notiBtn').textContent = 'Notification' in window && Notification.permission === 'granted' ? '🔔 알림 켜짐' : '🔔 알림 켜기';
   const au = LS.get('rp_auth', null);
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
@@ -699,7 +725,7 @@ function drawBar(){
   const html = list.map(x => {
     const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
     const n = unread[x.id] ? unread[x.id].keys.size : 0;
-    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? name : [...name][0])}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('');
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
@@ -741,10 +767,17 @@ $('newName').addEventListener('input', () => {
 });
 $('roomBtn').onclick = () => { drawRooms(); showOv('roomOv'); };
 $('roomList').addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b) return;
-  if (b.dataset.go) { hideOv('roomOv'); openRoom(b.dataset.go); toast('방을 옮겼어요'); }
-  if (b.dataset.rm) { removeRoom(b.dataset.rm); drawRooms(); }
+  const rm = e.target.closest('[data-rm]');
+  if (rm) { removeRoom(rm.dataset.rm); drawRooms(); return; }
+  const r = e.target.closest('[data-go]');
+  if (r) { click(); hideOv('roomOv'); openRoom(r.dataset.go); toast('방을 옮겼어요'); }
 });
+$('myNameOk').onclick = () => {
+  const n = $('myName').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
+  me.name = n; saveMe(); click();
+  if (FB) joinRoom(room);
+  render(); toast('이름을 바꿨어요');
+};
 $('callBtn').onclick = () => {
   click();
   $('demoNote').textContent = fb ? '' : '※ 지금은 연습 모드예요.';
@@ -755,33 +788,41 @@ const ICON_KAKAO = `<svg viewBox="0 0 62 62"><rect width="62" height="62" rx="16
 const ICON_SMS = `<svg viewBox="0 0 62 62"><defs><linearGradient id="smsG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5df17a"/><stop offset="1" stop-color="#22c33f"/></linearGradient></defs><rect width="62" height="62" rx="16" fill="url(#smsG)"/><ellipse cx="31" cy="29" rx="19" ry="15" fill="#fff"/><path d="M19 38 L15 47 L26 41 Z" fill="#fff"/></svg>`;
 document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
   `<button class="shico" data-share="kakao">${ICON_KAKAO}카카오톡</button><button class="shico" data-share="sms">${ICON_SMS}문자</button>`);
-document.querySelectorAll('[data-share]').forEach(b => b.onclick = () => {
+/* 공유 창을 먼저 띄우고, 다 보내고 나서 초대 창을 닫아요 (먼저 닫으면 공유 창이 취소돼 친구 고르기가 안 나와요) */
+document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
   click();
-  if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 보내고 돌아오면 바로 그 방 대화창
-  shareInvite(kind);
+  await shareInvite(kind);
+  if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
 });
-const inviteURL = () => location.origin + location.pathname + '?room=' + room;
+const roomURL = id => location.origin + location.pathname + '?room=' + id;
 const inviteText = () => `📮 ${me.name}님이 빨간 우체통에 초대했어요. 못다한 그 말, 편지로 주고받아요.`;
-async function shareInvite(kind){
-  const url = inviteURL(), text = inviteText();
+const shareInvite = kind => shareTo(kind, roomURL(room), inviteText());
+/* 공유 창은 누른 순간 바로 띄워야 해요 (먼저 기다리면 휴대폰이 막아요) */
+async function shareTo(kind, url, text){
   if (kind === 'copy') { copy(text + '\n' + url); return; }
   if (kind === 'sms') { location.href = 'sms:?body=' + encodeURIComponent(text + '\n' + url); return; }
-  if (await kakaoShare(url, text)) return;
+  if (KAKAO_JS_KEY && await kakaoShare(url, text)) return;
   if (navigator.share) { try { await navigator.share({ title: '빨간 우체통', text, url }); } catch (e) {} }
   else copy(text + '\n' + url);
 }
 let kakaoReady = null;
-function kakaoShare(url, text){
-  if (!KAKAO_JS_KEY) return Promise.resolve(false);
+function loadScript(src){
+  return new Promise((ok, no) => { const sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = no; document.head.appendChild(sc); });
+}
+function kakaoLoad(){
   if (!kakaoReady) kakaoReady = loadScript('https://t1.kakaocdn.net/kakao_js_sdk/2.7.4/kakao.min.js')
     .then(() => { if (!Kakao.isInitialized()) Kakao.init(KAKAO_JS_KEY); return true; }).catch(() => false);
-  return kakaoReady.then(ok => {
+  return kakaoReady;
+}
+if (KAKAO_JS_KEY) kakaoLoad();   // 미리 불러 둠
+function kakaoShare(url, text){
+  return kakaoLoad().then(ok => {
     if (!ok) return false;
     try {
       const img = new URL('icon-512.png', location.href).href;
       Kakao.Share.sendDefault({ objectType: 'feed',
-        content: { title: '📮 빨간 우체통 초대', description: text, imageUrl: img, link: { mobileWebUrl: url, webUrl: url } },
+        content: { title: '📮 빨간 우체통', description: text, imageUrl: img, link: { mobileWebUrl: url, webUrl: url } },
         buttons: [{ title: '대화방 들어가기', link: { mobileWebUrl: url, webUrl: url } }] });
       return true;
     } catch (e) { return false; }
@@ -793,24 +834,41 @@ let AU = null;
 async function authModule(){ if (!AU && FB) AU = await import(FB.base + 'firebase-auth.js'); return AU; }
 async function googleLogin(){
   if (!FB) { toast('서버 연결이 필요해요'); return; }
+  let A, auth, prov;
+  try { A = await authModule(); auth = A.getAuth(FB.app); prov = new A.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' }); }
+  catch (e) { toast('로그인을 불러오지 못했어요'); return; }
   try {
-    const A = await authModule(), auth = A.getAuth(FB.app);
-    const res = await A.signInWithPopup(auth, new A.GoogleAuthProvider());
-    LS.set('rp_auth', { uid: res.user.uid, name: res.user.displayName || '' });
-    await syncAccount(); toast('✓ 로그인했어요'); drawRooms();
-  } catch (e) { toast('로그인이 안 됐어요 ' + (e && e.code ? '(' + e.code + ')' : '')); }
+    const res = await A.signInWithPopup(auth, prov);
+    await afterLogin(res.user);
+  } catch (e) {
+    const code = (e && e.code) || '';
+    if (/popup-blocked|operation-not-supported|web-storage-unsupported/.test(code)) {
+      LS.set('rp_login_wait', 1); A.signInWithRedirect(auth, prov).catch(() => toast('로그인이 안 됐어요')); return;
+    }
+    if (!/popup-closed|cancelled-popup/.test(code)) toast('로그인이 안 됐어요 ' + (code ? '(' + code + ')' : ''));
+  }
+}
+async function afterLogin(user){
+  if (!user) return;
+  LS.set('rp_auth', { uid: user.uid, name: user.displayName || '' });
+  await syncAccount(); toast('✓ 구글로 로그인했어요'); drawRooms();
+}
+async function loginReturn(){   // 페이지 이동 방식으로 로그인하고 돌아왔을 때
+  if (!LS.get('rp_login_wait', 0)) return;
+  LS.set('rp_login_wait', 0);
+  try { const A = await authModule(), r = await A.getRedirectResult(A.getAuth(FB.app)); if (r) await afterLogin(r.user); } catch (e) { toast('로그인이 안 됐어요'); }
 }
 $('loginBtn').onclick = () => { if (!LS.get('rp_auth', null)) googleLogin(); else syncAccount().then(() => toast('방 목록을 맞췄어요')); };
 async function syncAccount(){
-  const au = LS.get('rp_auth', null); if (!FB || !au) return;
+  const au = LS.get('rp_auth', null); if (!FB || !au || me !== realMe) return;
   try {
     const A = await authModule(), auth = A.getAuth(FB.app);
     if (auth.authStateReady) await auth.authStateReady();
     if (!auth.currentUser) return;
     const { D, db } = FB, base = 'giftstory/users/' + au.uid;
-    await D.update(D.ref(db, base + '/ids'), { [me.uid]: Date.now() });
+    await D.update(D.ref(db, base + '/ids'), { [realMe.uid]: Date.now() });
     const ids = (await D.get(D.ref(db, base + '/ids'))).val() || {};
-    me.ids = [...new Set([me.uid, ...me.ids, ...Object.keys(ids)])]; LS.set('rp_me', me);
+    realMe.ids = [...new Set([realMe.uid, ...realMe.ids, ...Object.keys(ids)])]; LS.set('rp_me', realMe);
     const local = getRooms(), up = {};
     local.forEach(x => up[x.id] = { title: x.title || '', at: x.at });
     if (local.length) await D.update(D.ref(db, base + '/rooms'), up);
@@ -878,8 +936,8 @@ function envHTML(m){
   </div>`;
 }
 function render(){
-  const t = titleFor(room); saveRoom(room, t || null);
-  $('subTitle').textContent = t ? `${t} 님과 대화` : '(못다한 그 말)';
+  const t = titleFor(room); if (me === realMe) saveRoom(room, t || null);
+  $('subTitle').textContent = `나: ${me.name}` + (t ? ` · ${t}님과 대화` : '');
   if (!document.hidden) setSeen(room);
   syncWatchers();
   drawBar();
@@ -912,6 +970,23 @@ function updateFlag(){
   document.querySelectorAll('.flag').forEach(f => f.classList.toggle('down', !up));
   const n = getDrafts().length, b = $('draftBadge');
   b.textContent = n; b.style.display = n ? 'flex' : 'none';
+  updateAppBadge();
+}
+/* 홈 화면 아이콘 숫자: 안 읽은 메시지(다른 방) + 안 읽은 편지 */
+function updateAppBadge(){
+  if (!navigator.setAppBadge) return;
+  const n = Object.entries(unread).reduce((a, [id, u]) => a + (id === room ? 0 : u.keys.size), 0) + unreadIn().length;
+  (n ? navigator.setAppBadge(n) : navigator.clearAppBadge()).catch(() => {});
+}
+/* 30초마다: 안 읽은 방 말풍선 흔들림, 편지 왔으면 우체통 흔들림 + 깃발 오르내림, 띵동 */
+function bumpBox(){ const mb = $('mailbox'); mb.classList.remove('bump'); void mb.offsetWidth; mb.classList.add('bump'); }
+function waveFlag(){ const f = document.querySelector('#mailbox .flag'); f.classList.remove('wave'); void f.getBoundingClientRect(); f.classList.add('wave'); setTimeout(() => f.classList.remove('wave'), 1700); }
+function remind(){
+  if (document.hidden) return;
+  let ring = false;
+  Object.keys(unread).forEach(id => { if (id !== room && unread[id].keys.size) { flashRoom(id); ring = true; } });
+  if (unreadIn().length) { bumpBox(); waveFlag(); ring = true; }
+  if (ring) dingdong();
 }
 /* 편지 도착 알림 줄 */
 const notified = {};
@@ -922,7 +997,7 @@ function checkArrivals(){
   if (!fresh.length) return;
   fresh.forEach(m => seen.add(m.id));
   showBanner(`💌 ${fresh[fresh.length - 1].name}님의 편지가 도착했어요`); ding();
-  const mb = $('mailbox'); mb.classList.remove('bump'); void mb.offsetWidth; mb.classList.add('bump');
+  bumpBox(); waveFlag();
 }
 function showBanner(t){
   const b = $('banner'); b.textContent = t; b.classList.add('show');
@@ -930,6 +1005,17 @@ function showBanner(t){
 }
 $('banner').onclick = () => $('banner').classList.remove('show');
 $('msgs').addEventListener('click', e => { const w = e.target.closest('.mini'); if (w) { curLetter = msgs[w.dataset.id]; showReader(); } });
+
+/* ----- 테스트 버튼 (전송 버튼 위, 안 보임) ----- */
+$('testBtn').onclick = () => {
+  if (me === realMe) {
+    testMe = LS.get('rp_test_me', null) || { uid: rid(), name: '테스트친구' };
+    if (!testMe.ids) testMe.ids = [testMe.uid];
+    LS.set('rp_test_me', testMe); me = testMe;
+  } else me = realMe;
+  click(); openRoom(room);
+  toast(me === realMe ? `🙋 나(${me.name})로 돌아왔어요` : `🧪 테스트: ${me.name}(으)로 바뀌었어요`);
+};
 
 /* ----- 두더지 게임 ----- */
 $('moleBtn').onclick = () => { click(); window.open(MOLE_URL, '_blank'); };
@@ -962,10 +1048,18 @@ function openBox(list){
   showOv('boxOv');
   setTimeout(() => { d.classList.add('open'); drop(.5); }, 400);
   setTimeout(() => { if (!many) pe.classList.add('out'); rustle(.5); $('popHint').style.visibility = many ? 'hidden' : 'visible'; }, 900);
-  pe.onclick = () => { hideOv('boxOv'); openLetter(list[0]); };
-  document.querySelector('.bigbox svg').onclick = () => { hideOv('boxOv'); openLetter(list[0]); };   // 우체통을 눌러도 첫 편지부터
+  pe.onclick = () => ripOpen(pe, list[0]);
+  document.querySelector('.bigbox svg').onclick = () => ripOpen(many ? null : pe, list[0]);   // 우체통을 눌러도 첫 편지부터
 }
-$('popList').addEventListener('click', e => { const k = e.target.closest('.pick'); if (k) { hideOv('boxOv'); openLetter(msgs[k.dataset.id]); } });
+$('popList').addEventListener('click', e => { const k = e.target.closest('.pick'); if (k) ripOpen(k, msgs[k.dataset.id]); });
+/* 봉투가 찢어지면서 바로 편지가 펼쳐져요 */
+let ripping = false;
+function ripOpen(el, m){
+  if (ripping || !m) return;
+  ripping = true; tear();
+  if (el) el.classList.add('rip');
+  setTimeout(() => { ripping = false; if (el) el.classList.remove('rip'); hideOv('boxOv'); openLetter(m); }, 420);
+}
 
 /* ----- 편지 쓰기 ----- */
 let W = null;
@@ -1044,6 +1138,26 @@ $('wSave').onclick = () => {
   closeWriter(); updateFlag(); toast('💾 쓰던 편지에 저장했어요');
 };
 $('wSend').onclick = () => sendLetter(false);
+document.querySelectorAll('[data-lsend]').forEach(b => {
+  b.innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
+  b.onclick = () => sendLetterLink(b.dataset.lsend);
+});
+/* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
+async function sendLetterLink(kind){
+  readW();
+  if (!W.body.trim()) { toast('편지 내용을 써 주세요'); return; }
+  if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
+  if (rec) { toast('녹음을 먼저 멈춰 주세요'); return; }
+  const id = rid(), u = who();
+  const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
+    letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
+  const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
+  const shared = shareTo(kind, roomURL(id), text);   // 공유 창 먼저
+  pushTo(id, m); saveRoom(id, W.to);
+  if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
+  await shared;
+  closeWriter(); drop(); toast('💌 편지를 보냈어요 · 링크를 열면 우체통에 도착해요');
+}
 $('wSlow').onclick = () => sendLetter(true);
 function nextMorning(){ const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(8, 0, 0, 0); return d.getTime(); }
 async function sendLetter(slow){
@@ -1075,7 +1189,7 @@ function flyToMailbox(m, done){
   ], { duration: 1700, easing: 'ease-in-out' });
   a.onfinish = () => {
     fly.style.display = 'none'; fly.innerHTML = '';
-    drop(); const mb = $('mailbox'); mb.classList.remove('bump'); void mb.offsetWidth; mb.classList.add('bump');
+    drop(); bumpBox();
     done();
   };
 }
@@ -1135,27 +1249,11 @@ $('recDel').onclick = () => { W.voice = null; updRec(); };
 let curLetter = null, voiceAudio = null;
 function openLetter(m){
   if (!m) return;
-  curLetter = m;
-  const c = $('card3d');
-  c.className = 'card3d';
-  c.setAttribute('style', paperVars(paperOf(m.letter.paper)));
-  c.innerHTML = `<div class="face front">${envHTML(m)}</div>
-    <div class="face back"><div class="eback"></div><div class="eletter"></div><div class="epocket"></div><div class="eflap"></div></div>`;
-  $('openHint').style.visibility = 'visible';
-  showOv('openOv');
-  c.onclick = () => {
-    if (c.classList.contains('flip')) return;
-    $('openHint').style.visibility = 'hidden';
-    click();
-    c.classList.add('flip');
-    setTimeout(() => { c.classList.add('open'); tear(); }, 850);
-    setTimeout(() => { c.classList.add('rise'); rustle(.8); }, 1650);
-    setTimeout(showReader, 2800);
-  };
+  curLetter = m; rustle(.8);
+  showReader();
 }
 function showReader(){
   const m = curLetter, L = m.letter, p = paperOf(L.paper), f = fontOf(L.font);
-  hideOv('openOv');
   const rp = $('readPaper');
   rp.innerHTML = `<div class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}">
     <div class="ptop">To. ${esc(L.to)}</div>
@@ -1316,56 +1414,26 @@ addEventListener('popstate', () => {
 let toastT = 0;
 function toast(t){ const el = $('toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', 2300); }
 
-/* ----- 소리: 배경음악(MP3 또는 기본), 바스락, 툭, 띵 ----- */
-let actx = null, master = null, musicOn = LS.get('rp_music', true), synthT = 0, chordI = 0;
-const bgm = new Audio(BGM_FILE);
-bgm.loop = true; bgm.volume = .22; bgm.preload = 'auto';
-let bgmOk = true;
-bgm.addEventListener('error', () => { bgmOk = false; if (musicOn && !synthT && actx) synthStart(); });
+/* ----- 소리: 배경음악(내 MP3), 바스락, 툭, 띵 ----- */
+/* 파일이 옆에 없으면(앱 미리보기·휴대폰 저장공간) GitHub에 올린 파일로 재생 */
+function loadMedia(file, onFail){
+  const a = new Audio(file); a.preload = 'auto';
+  let alt = false;
+  a.addEventListener('error', () => { if (!alt) { alt = true; a.src = MEDIA_HOME + file; a.load(); } else if (onFail) onFail(); });
+  return a;
+}
+let actx = null, musicOn = LS.get('rp_music', true);
+const bgm = loadMedia(BGM_FILE);
+bgm.loop = true; bgm.volume = .22;
 function ac(){
-  if (!actx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; actx = new A(); master = actx.createGain(); master.gain.value = 0; master.connect(actx.destination); }
+  if (!actx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; actx = new A(); }
   if (actx.state === 'suspended') actx.resume();
   return actx;
 }
-const CHORDS = [[261.6,329.6,392],[220,261.6,329.6],[174.6,220,261.6],[196,246.9,293.7]];
-const BELL = [523.3,587.3,659.3,784,880];
-function playChord(){
-  const c = ac(); if (!c) return;
-  const t = c.currentTime;
-  CHORDS[chordI++ % 4].forEach(fq => {
-    const o = c.createOscillator(), g = c.createGain();
-    o.type = 'sine'; o.frequency.value = fq;
-    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.22, t + 1.6); g.gain.linearRampToValueAtTime(0, t + 4.6);
-    o.connect(g); g.connect(master); o.start(t); o.stop(t + 4.8);
-  });
-  [0, 1.3, 2.6].forEach(dt => {
-    if (Math.random() < .35) return;
-    const o = c.createOscillator(), g = c.createGain();
-    o.type = 'triangle'; o.frequency.value = BELL[Math.floor(Math.random() * BELL.length)];
-    g.gain.setValueAtTime(0, t + dt); g.gain.linearRampToValueAtTime(.16, t + dt + .03); g.gain.exponentialRampToValueAtTime(.001, t + dt + 2);
-    o.connect(g); g.connect(master); o.start(t + dt); o.stop(t + dt + 2.1);
-  });
-}
-function synthStart(){
-  const c = ac(); if (!c || synthT) return;
-  master.gain.cancelScheduledValues(c.currentTime);
-  master.gain.setTargetAtTime(.06, c.currentTime, .8);
-  playChord(); synthT = setInterval(playChord, 4000);
-}
-function musicStart(){
-  ac();
-  if (bgmOk) bgm.play().catch(() => { bgmOk = false; synthStart(); });
-  else synthStart();
-}
-function musicStop(){
-  bgm.pause();
-  if (actx) { clearInterval(synthT); synthT = 0; master.gain.setTargetAtTime(0, actx.currentTime, .3); }
-}
-function musicDuck(on){
-  bgm.volume = on ? .04 : .22;
-  if (actx && synthT) master.gain.setTargetAtTime(on ? .012 : .06, actx.currentTime, .3);
-}
-const musicPlaying = () => !bgm.paused || synthT;
+function musicStart(){ ac(); bgm.play().catch(() => {}); }   // 막히면 다음 터치 때 다시 시도
+function musicStop(){ bgm.pause(); }
+function musicDuck(on){ bgm.volume = on ? .04 : .22; }
+const musicPlaying = () => !bgm.paused;
 function setMusicBtn(){ $('musicBtn').textContent = musicOn ? '🎵' : '🔇'; $('musicBtn').classList.toggle('on', musicOn); }
 $('musicBtn').onclick = () => { musicOn = !musicOn; LS.set('rp_music', musicOn); setMusicBtn(); musicOn ? musicStart() : musicStop(); };
 document.addEventListener('pointerdown', () => { if (musicOn && !musicPlaying()) musicStart(); }, { capture: true });
@@ -1380,12 +1448,12 @@ function noiseBurst(dur, freq, vol){
   s.buffer = b; s.connect(f); f.connect(g); g.connect(c.destination); s.start();
 }
 const sfx = {};
-Object.entries(SFX_FILES).forEach(([k, f]) => { const a = new Audio(f); a.preload = 'auto'; a.addEventListener('error', () => sfx[k] = null); sfx[k] = a; });
+Object.entries(SFX_FILES).forEach(([k, f]) => sfx[k] = loadMedia(f, () => sfx[k] = null));
 function playSfx(k, vol, fallback){
   const a = sfx[k];
   if (!a) { fallback(); return; }
   const c = a.cloneNode(); c.volume = vol;
-  c.play().catch(() => { sfx[k] = null; fallback(); });
+  c.play().catch(e => { if (!e || e.name !== 'NotAllowedError') fallback(); });
 }
 function rustle(v = 1){ playSfx('rustle', v, () => { noiseBurst(.7, 2800, .9 * v); setTimeout(() => noiseBurst(.4, 1800, .6 * v), 180); }); }
 function tear(){ playSfx('tear', 1, () => rustle()); }
@@ -1409,10 +1477,11 @@ function thunk(){
   noiseBurst(.15, 900, .5);
 }
 
-/* ----- 카톡 안에서 열면 바깥 브라우저(크롬)로 다시 열기 (녹음·읽기 때문) ----- */
-if (/KAKAOTALK/i.test(navigator.userAgent) && !sessionStorage.getItem('rp_ext')) {
-  sessionStorage.setItem('rp_ext', '1');
+/* ----- 카톡 안에서 열면 크롬으로 열고, 카톡 안 창은 닫아요 (창이 2개 생기지 않게) ----- */
+const inKakao = /KAKAOTALK/i.test(navigator.userAgent);
+if (inKakao) {
   location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(location.href);
+  setTimeout(() => { location.href = 'kakaotalk://inappbrowser/close'; }, 1200);
 }
 
 /* ----- 검은 화면 (각자 화면에서만) ----- */
@@ -1491,14 +1560,21 @@ function start(){
   setMusicBtn();
   initStore();
   setInterval(render, 30000);
+  setInterval(remind, 30000);
 }
-if (!me.name) {
-  showOv('nameOv');
-  $('nameOk').onclick = () => {
-    const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
-    me.name = n; LS.set('rp_me', me); hideOv('nameOv'); start();
-  };
-} else start();
+function begin(){
+  if (!me.name) {
+    showOv('nameOv');
+    $('nameOk').onclick = () => {
+      const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
+      me.name = n; saveMe(); hideOv('nameOv'); start();
+    };
+  } else start();
+}
+if (inKakao) {   // 카톡 안 창에서는 시작하지 않음 (크롬 쪽에서 열려요)
+  showOv('kakaoOv');
+  $('kakaoStay').onclick = () => { hideOv('kakaoOv'); begin(); };
+} else begin();
 </script>
 </body>
 </html>
