@@ -40,7 +40,8 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff;margin-top:3px}
 .rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
 .rb.flash{animation:rbflash 1.8s ease}
-@keyframes rbflash{0%{transform:none}8%{transform:rotate(-9deg);background:#ff4d4a;color:#fff}16%{transform:rotate(8deg)}24%{transform:rotate(-6deg)}32%{transform:rotate(4deg)}40%{transform:none;background:#ff4d4a;color:#fff}55%{background:#26262c}70%{background:#ff4d4a;color:#fff}100%{transform:none}}
+@keyframes rbflash{0%{transform:none}8%{transform:rotate(-9deg) scale(1.08);background:#ff4d4a;color:#fff;border-color:#ff4d4a}16%{transform:rotate(8deg) scale(1.08)}24%{transform:rotate(-6deg)}32%{transform:rotate(4deg)}40%{transform:none;background:#ff4d4a;color:#fff}55%{background:#ff4d4a}70%{background:#ff4d4a;color:#fff}100%{transform:none}}
+body:not(.dark) .rb.flash{animation:rbflash 1.8s ease}
 .rb.press{transform:scale(.9)}
 #readOv .dot{width:32px;height:32px}
 #app{position:relative}#app>*{position:relative}
@@ -61,6 +62,71 @@ body:not(.dark) .who,body:not(.dark) .time,body:not(.dark) .day,body:not(.dark) 
 body:not(.dark) footer{background:var(--t-bar);border-color:var(--t-line)}
 body:not(.dark) #txt{background:var(--t-field);color:var(--t-fieldink);border-color:var(--t-btnline)}
 body:not(.dark) #moleBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+
+/* 나만의 편지지 · 편지지 가게 */
+.mkhint{font-size:13px;color:#ffd76a;margin:-2px 0 10px;line-height:1.4}
+.mkhint small{color:#999}
+.pthumb.special{background:#232329;border:2px dashed #666;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;line-height:1.3;font-weight:700}
+.pthumb.special b{font-size:30px;line-height:1}
+.pthumb.special.shop{border-style:solid;border-color:#b07a3c;background:linear-gradient(#3a2a1a,#2a1d12)}
+.pthumb.special:before,.pthumb.special:after,.pthumb.photo:before,.pthumb.photo:after{display:none}
+.pthumb.photo{background:repeating-linear-gradient(to bottom,transparent 0 15px,var(--lc) 15px 16px),linear-gradient(rgba(255,255,255,var(--pfade)),rgba(255,255,255,var(--pfade))),var(--pimg) center/cover}
+.paperbox.photo{background:linear-gradient(rgba(255,255,255,var(--pfade)),rgba(255,255,255,var(--pfade))),var(--pimg) center/cover}
+.paperbox.photo:before,.paperbox.photo:after{display:none}
+.paperbox.photo .ptop{padding-left:0}
+.env.pic.photo{background:var(--pimg) center/cover,var(--ec)}
+.mini .ico.photo{background:var(--pimg) center/cover,var(--ec)}
+.shelf{display:grid;grid-template-columns:repeat(3,1fr);gap:16px 10px;padding:6px 2px 4px}
+.shelf .item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;position:relative;padding-bottom:12px}
+.shelf .item:after{content:"";position:absolute;left:-6px;right:-6px;bottom:0;height:8px;background:linear-gradient(#b07a3c,#7a5226);border-radius:2px;box-shadow:0 3px 6px rgba(0,0,0,.5)}
+.shelf .pthumb{width:100%;height:110px}
+.shelf .nm{font-size:13px;font-weight:700;text-align:center}
+.shelf .mk{font-size:11px;color:#aaa}
+.shelf .pr{font-size:12px;color:#4cd964;font-weight:700}
+.shelf .pr.got{color:#4fc3ff}
+.shopTop{background:linear-gradient(#5a3a1c,#3a2614);margin:-16px -16px 12px;padding:16px;border-radius:18px 18px 0 0;text-align:center}
+.shopTop h2{margin:0;font-size:20px}
+.shopTop div{font-size:13px;color:#f3d9b0;margin-top:4px}
+.mrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+#mkFade{width:100%}
+.mythumb{width:54px;flex:none}.mythumb .pthumb{height:40px;box-shadow:none}
+
+/* 노래 같이 듣기 · 영화 같이 보기 */
+#plusBtn{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:22px;line-height:1;padding:0;margin-bottom:3px}
+#plusBtn.on{background:var(--red);border-color:var(--red)}
+body:not(.dark) #plusBtn{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+.pmenu{position:absolute;left:58px;bottom:62px;z-index:25;display:none;flex-direction:column;gap:2px;background:#1f1f25;border:1px solid #444;border-radius:14px;padding:6px;box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.pmenu.show{display:flex}
+.pmenu button{background:none;border:none;color:#fff;font-size:15px;padding:11px 14px;text-align:left;border-radius:10px;white-space:nowrap}
+.pmenu button:active{background:#1d4a63}
+#app>.tpanel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:22;width:300px;max-width:92%;background:rgba(22,22,28,.96);border:1px solid #444;border-radius:18px;padding:16px 14px 12px;box-shadow:0 12px 30px rgba(0,0,0,.6);display:none;color:#fff}
+#app>.tpanel.show{display:block}
+#app>.tpanel.wide{width:94%;max-width:600px}
+.tx{position:absolute;right:6px;top:4px;background:none;border:none;color:#bbb;font-size:20px;padding:4px 8px}
+.cass{display:block;margin:2px auto 0}
+.reel{transform-box:fill-box;transform-origin:center}
+.cass.spin .reel{animation:reelspin 1.8s linear infinite}
+@keyframes reelspin{to{transform:rotate(360deg)}}
+.tctl{display:flex;justify-content:center;gap:8px;margin-top:10px}
+.tctl button{width:50px;height:42px;border-radius:12px;border:1px solid #555;background:#2b2b33;color:#fff;font-size:18px}
+.tctl button:active{background:#1d4a63}
+#mPlay{background:var(--red);border-color:var(--red)}
+.tctl.small button{width:auto;padding:0 12px;font-size:13px;height:36px}
+.ttitle{text-align:center;margin-top:8px;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tby{text-align:center;font-size:12px;color:#ffd76a;min-height:16px;margin-top:3px}
+.tadd{display:flex;gap:6px;margin-top:10px}
+.tadd input{flex:1;min-width:0;padding:9px 10px;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:14px}
+.tadd button{padding:0 12px;border-radius:10px;border:none;background:#ffe14d;color:#222;font-weight:700;font-size:14px}
+.tlist{max-height:92px;overflow-y:auto;margin-top:8px;font-size:13px}
+.tlist div{padding:5px 8px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.tlist div.on{background:#1d4a63}
+.tsmall{display:block;margin:8px auto 0;background:none;border:1px dashed #555;color:#aaa;border-radius:10px;padding:6px 10px;font-size:12px}
+.mytbox{width:200px;height:112px;margin:8px auto 0;border-radius:8px;overflow:hidden;display:none}
+.mytbox.show{display:block}
+.mytbox iframe{width:100%;height:100%}
+.vbox{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin-top:16px}
+.vbox iframe{position:absolute;inset:0;width:100%;height:100%}
+.vempty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;text-align:center;padding:10px}
 /* 홈 화면에 추가 안내 */
 #installBar{display:none;align-items:center;gap:6px;margin:6px 10px 0;padding:8px 10px;border-radius:12px;background:#2b2b33;color:#fff;font-size:14px;border:1px solid #555;z-index:3}
 #installBar.show{display:flex}
@@ -82,7 +148,8 @@ body.dark textarea.lined::placeholder{color:#fff;opacity:.5}
 .center{text-align:center}
 #banner{position:absolute;left:12px;right:12px;top:-80px;z-index:30;background:#ff5a55;color:#fff;border-radius:14px;padding:10px 14px;font-size:15px;font-weight:700;box-shadow:0 6px 18px rgba(0,0,0,.5);transition:top .5s cubic-bezier(.3,1.4,.5,1);text-align:center}
 #banner.show{top:62px}
-#msgs{flex:1;overflow-y:auto;padding:14px 12px 24px}
+#msgs{flex:1;overflow-y:auto;padding:14px 12px 24px;display:flex;flex-direction:column}
+.mwrap{margin-top:auto}
 .row{display:flex;flex-direction:column;margin:10px 0}
 .row.me{align-items:flex-end}.row.them{align-items:flex-start}
 .who{font-size:13px;color:var(--sub);margin:0 6px 3px}
@@ -107,9 +174,12 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 .flag.wave{animation:fwave 1.6s ease}
 @keyframes fwave{25%{transform:rotate(90deg)}50%{transform:none}75%{transform:rotate(90deg)}100%{transform:none}}
 #testBtn{position:absolute;right:8px;top:-50px;width:64px;height:44px;opacity:0;border:none;background:none;z-index:4}
-.toshare{display:inline-flex;gap:6px;vertical-align:middle;margin-left:4px}
-.toshare button{width:30px;height:30px;padding:0;border:none;background:none}
-.toshare svg{width:30px;height:30px;border-radius:9px;box-shadow:0 2px 5px rgba(0,0,0,.35)}
+.lsendrow{display:flex;align-items:center;gap:8px;margin-top:10px;position:relative;z-index:5}
+.lsendrow span{flex:1;font-size:13px;color:var(--sub)}
+.lsendrow button{display:flex;align-items:center;gap:6px;padding:5px 12px 5px 5px;border-radius:14px;border:1px solid #444;background:#26262c;color:#fff;font-size:14px;touch-action:manipulation}
+.lsendrow button:active{transform:scale(.94)}
+.lsendrow i{display:block;width:30px;height:30px}
+.lsendrow svg{width:30px;height:30px;border-radius:9px;display:block}
 .intro{margin:12px 0 4px;padding:12px 12px;border-radius:12px;background:#222228;border:1px solid #3a3a42;font-size:14px;line-height:1.75;color:#eee}
 .intro small{color:#999}
 .drow.go{cursor:pointer}.drow.go:active{background:#1d4a63}
@@ -176,7 +246,7 @@ input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;backgr
 .paperbox.wimun{background:linear-gradient(90deg,transparent 30px,rgba(200,60,50,.45) 30px 31px,transparent 31px),var(--pbg);border-top:7px double rgba(200,60,50,.6);padding-left:40px}
 .paperbox:after{right:-6px;bottom:-8px;transform:rotate(168deg)}
 .ptop{font-size:22px;margin-bottom:6px;position:relative;z-index:1;padding-left:52px}
-.ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:46%;outline:none}
+.ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:62%;outline:none}
 .lined{display:block;width:100%;border:none;outline:none;resize:none;background-color:transparent;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,var(--lc) 33px 34px);background-attachment:local;line-height:34px;color:inherit;padding:0 4px;white-space:pre-wrap;word-break:break-word;position:relative;z-index:1}
 textarea.lined{min-height:48vh}
 textarea.lined::placeholder{color:var(--ink);opacity:.38}
@@ -192,7 +262,9 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 .wbar .slow{background:#3b3570;border:none}
 .wbar .go{background:var(--red);border:none;font-weight:700;padding:9px 18px}
 .wbar .left{margin-right:auto}
-#recState{font-size:13px;color:#ff6b66}
+#recState{font-size:14px;color:#ff6b66;font-weight:700}
+#recStop{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;font-size:16px;padding:9px 16px;animation:blink 1.2s infinite}
+#recState.ok{color:#4cd964}
 /* 우체통 열기 */
 .bigbox{position:relative;width:300px;height:300px;margin-top:20px}
 .bigbox svg{position:absolute;left:0;bottom:0}
@@ -249,6 +321,27 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
+  <!-- 노래 같이 듣기 -->
+  <div class="tpanel" id="musicPanel">
+    <button class="tx" data-tclose="musicPanel">✕</button>
+    <svg class="cass" id="mCass" viewBox="0 0 220 120" width="200" height="109"><rect x="2" y="2" width="216" height="116" rx="12" fill="#c8302d" stroke="#7a1414" stroke-width="3"/><rect x="18" y="14" width="184" height="58" rx="6" fill="#fff4e0"/><text x="110" y="30" text-anchor="middle" font-size="12" font-family="Nanum Pen Script, cursive" fill="#7a1414">빨간 우체통 테이프</text><rect x="50" y="36" width="120" height="30" rx="15" fill="#3a2a2a"/><g class="reel"><circle cx="72" cy="51" r="12" fill="#fff"/><g stroke="#3a2a2a" stroke-width="3"><path d="M72 41v20M62 51h20M65 44l14 14M79 44 65 58"/></g></g><g class="reel"><circle cx="148" cy="51" r="12" fill="#fff"/><g stroke="#3a2a2a" stroke-width="3"><path d="M148 41v20M138 51h20M141 44l14 14M155 44l-14 14"/></g></g><path d="M40 118 l14-30 h112 l14 30" fill="#a02420"/><circle cx="70" cy="104" r="4" fill="#5a1010"/><circle cx="150" cy="104" r="4" fill="#5a1010"/></svg>
+    <div class="tctl"><button id="mPrev" title="이전 곡">⏮</button><button id="mPlay" title="재생">▶</button><button id="mNext" title="다음 곡">⏭</button><button id="mStop" title="정지">⏹</button></div>
+    <div class="ttitle" id="mTitle">노래를 골라 주세요</div>
+    <div class="tby" id="mBy"></div>
+    <div class="mytbox" id="mYTbox"><div id="mYT"></div></div>
+    <div class="tlist" id="mList"></div>
+    <div class="tadd"><input id="mUrl" placeholder="유튜브 노래 주소 붙여 넣기"><button id="mAdd">넣기</button></div>
+    <button class="tsmall" id="mPhone">📱 내 휴대폰 노래 (곧 열려요)</button>
+  </div>
+  <!-- 영화 같이 보기 -->
+  <div class="tpanel wide" id="videoPanel">
+    <button class="tx" data-tclose="videoPanel">✕</button>
+    <div class="vbox"><div class="vempty" id="vEmpty">유튜브 주소를 넣으면<br>방 친구와 같은 장면을 같이 봐요</div><div id="vYT"></div></div>
+    <div class="tby" id="vBy"></div>
+    <div class="tadd"><input id="vUrl" placeholder="유튜브 주소 붙여 넣기 (또는 검색어)"><button id="vGo">틀기</button></div>
+    <div class="tctl small"><button id="vFind">🔍 유튜브에서 찾기</button><button id="vEnd">⏹ 같이 보기 끝내기</button></div>
+  </div>
+
   <div id="msgs"></div>
   <footer>
     <span class="sign">YMwav</span>
@@ -274,6 +367,8 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
         </g>
       </svg>
     </button>
+    <button id="plusBtn" title="같이 듣기 · 같이 보기">＋</button>
+    <div class="pmenu" id="plusMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <button id="sendBtn">전송</button>
@@ -291,6 +386,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <!-- 1단계: 편지지·글씨체 고르기 -->
   <div class="wbody" id="step1">
     <div class="lab" style="margin-top:4px">편지지</div>
+    <div class="mkhint">💡 나만의 편지지를 만들고 여러 사람과 공유하면 수익이 돌아와요 <small>(판매는 곧 열려요)</small></div>
     <div class="pgrid" id="paperGrid"></div>
     <div class="lab">글씨체</div>
     <div class="fgrid" id="fontGrid"></div>
@@ -299,17 +395,19 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
     <div class="paperbox" id="wPaper">
-      <div class="ptop">To. <input id="wTo" placeholder="받는 사람"><span class="toshare"><button data-lsend="kakao" title="카카오톡으로 바로 보내기"></button><button data-lsend="sms" title="문자로 바로 보내기"></button></span></div>
+      <div class="ptop">To. <input id="wTo" placeholder="받는 사람"></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
     </div>
+    <div class="lsendrow"><span>방에 없는 사람에게 바로 보내기</span><button type="button" data-lsend="kakao"><i></i>카톡</button><button type="button" data-lsend="sms"><i></i>문자</button></div>
     <div class="chips" style="margin-top:10px"><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button></div>
     <div class="lab">스티커 (편지 끝에 붙어요)</div>
     <div class="chips" id="stkChips"></div>
     <div class="lab">목소리 녹음 (선택 · 편지를 펼치면 나와요)</div>
     <div class="chips">
       <button class="chip" id="recBtn">🎙 녹음하기</button>
+      <button class="chip" id="recStop" style="display:none">⏹ 녹음 끝내기</button>
       <button class="chip" id="recPlay" style="display:none">▶ 들어보기</button>
       <button class="chip" id="recDel" style="display:none">🗑 지우기</button>
       <span id="recState"></span>
@@ -393,7 +491,11 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <div style="display:flex;gap:8px"><input class="in" id="myName" maxlength="12"><button class="big y" id="myNameOk" style="width:auto;margin:0;padding:0 16px">바꾸기</button></div>
     <div class="lab">대화방 (줄을 누르면 들어가요)</div>
     <div id="roomList"></div>
-    <button class="big" id="notiBtn">🔔 알림 켜기</button>
+    <div class="lab">알림</div>
+    <button class="big" id="notiBtn" style="margin-top:0">🔔 알림</button>
+    <button class="big" id="notiTest" style="display:none">📳 시험 알림 보내 보기</button>
+    <div class="lab">앱</div>
+    <button class="big" id="installBtn2" style="margin-top:0">📲 홈 화면에 추가</button>
     <button class="big" id="loginBtn">G 구글로 로그인 (다른 기기에서도 방 목록 보기)</button>
     <button class="big" data-close>닫기</button>
   </div>
@@ -424,6 +526,19 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   </div>
 </div>
 
+<!-- 알림이 막혔을 때 -->
+<div class="ov" id="notiHelpOv">
+  <div class="panel" style="max-width:380px">
+    <h2>🚫 알림이 막혀 있어요</h2>
+    <div style="color:#ddd;line-height:1.8">
+      <b>크롬으로 열었을 때</b><br>주소창 왼쪽 동그란 아이콘(또는 자물쇠) → 권한 → 알림 → <b>허용</b><br><br>
+      <b>홈 화면 앱으로 열었을 때</b><br>휴대폰 설정 → 애플리케이션 → 빨간 우체통 → 알림 → <b>허용</b><br><br>
+      허용한 다음 빨간 우체통을 다시 열고 알림 버튼을 한 번 더 눌러 주세요.
+    </div>
+    <button class="big" data-close>닫기</button>
+  </div>
+</div>
+
 <!-- 방 지우기 (말풍선 길게 누르기) -->
 <div class="ov" id="delOv">
   <div class="panel" style="max-width:340px;text-align:center">
@@ -441,6 +556,43 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <input class="in" id="nameIn" maxlength="12" placeholder="예: 영민">
     <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 나만의 편지지를 만들어 보낼 수 있어요 <small>(곧 열려요)</small><br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
     <button class="big y" id="nameOk">대화 시작하기</button>
+  </div>
+</div>
+
+
+<!-- 편지지 가게 -->
+<div class="ov" id="shopOv">
+  <div class="panel">
+    <div class="shopTop"><h2>🏪 편지지 가게</h2><div>마음에 드는 편지지를 받아 가세요 · 받은 편지지는 편지지 고르기에 생겨요</div></div>
+    <div class="shelf" id="shelf"></div>
+    <div class="lab">내가 만든 편지지</div>
+    <div id="myShelf"></div>
+    <button class="big" id="shopSell">💰 내 편지지 가게에 올리기 · 팔기 (곧 열려요)</button>
+    <button class="big" data-close>닫기</button>
+  </div>
+</div>
+<!-- 가게 편지지 크게 보기 -->
+<div class="ov" id="peekOv">
+  <div class="panel">
+    <div id="peekPaper"></div>
+    <div id="peekInfo" style="text-align:center;color:#ccc;margin-top:10px;font-size:14px"></div>
+    <div class="twin"><button class="big y" id="peekGet">받기 (무료)</button><button class="big" data-close>닫기</button></div>
+  </div>
+</div>
+<!-- 나만의 편지지 만들기 -->
+<div class="ov" id="makeOv">
+  <div class="panel">
+    <h2>＋ 나만의 편지지 만들기</h2>
+    <button class="big y" id="mkPick" style="margin-top:0">🖼 사진 고르기</button>
+    <input type="file" id="mkFile" accept="image/*" style="display:none">
+    <div id="mkPreview" style="margin-top:12px"></div>
+    <div class="lab">사진 흐리게 (글씨가 잘 보이게)</div>
+    <input type="range" id="mkFade" min="0.15" max="0.85" step="0.05" value="0.55">
+    <div class="lab">줄 색깔</div>
+    <div class="chips" id="mkLines"></div>
+    <div class="lab">편지지 이름</div>
+    <input class="in" id="mkName" maxlength="12" placeholder="예: 우리 집 강아지">
+    <div class="twin"><button class="big r" id="mkSave">저장하기</button><button class="big" data-close>닫기</button></div>
   </div>
 </div>
 
@@ -485,7 +637,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
 /* ----- 편지지 · 글씨체 · 스티커 ----- */
-const svgURI = s => `url("data:image/svg+xml,${encodeURIComponent(s)}")`;
+const svgURI = s => `url('data:image/svg+xml,${encodeURIComponent(s).replace(/'/g, '%27')}')`;
 const flower = (x, y, r, c) => [0,72,144,216,288].map(a => {
   const t = a * Math.PI / 180;
   return `<circle cx="${(x + Math.sin(t) * r).toFixed(1)}" cy="${(y - Math.cos(t) * r).toFixed(1)}" r="${r * .75}" fill="${c}"/>`;
@@ -516,10 +668,33 @@ const FONTS = [
   { id:'gothic', name:'고딕체', css:"'Noto Sans KR',sans-serif", size:15 }
 ];
 const STICKERS = ['🌸','💗','🍀','⭐','🌷','💌','🦋','☁️'];
-const paperOf = id => PAPERS.find(p => p.id === id) || PAPERS[0];
+/* 편지지 가게 샘플 (사진 받기 전까지 쓰는 샘플) */
+const leaf = (x, y, s, r, c) => `<path transform="translate(${x} ${y}) rotate(${r}) scale(${s})" d="M0-14 3-6 10-9 7-2 14 0 7 3 9 9 2 6 0 14-2 6-9 9-7 3-14 0-7-2-10-9-3-6z" fill="${c}"/>`;
+const SHOP = [
+  { id:'shop_maple', name:'가을 단풍', maker:'빨간 우체통', price:0, bg:'#fff6ea', line:'rgba(220,130,70,.45)', ink:'#5a3420', env:'#f6d2ad',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${leaf(32,36,1.5,-20,'#e8743b')}${leaf(66,30,1,25,'#f2a33a')}${leaf(56,66,.9,60,'#d9532b')}</svg>` },
+  { id:'shop_sea', name:'바다 편지', maker:'빨간 우체통', price:0, bg:'#eaf8fb', line:'rgba(80,170,200,.45)', ink:'#1f4a5a', env:'#bfe6f0',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="none" stroke="#5bb7d6" stroke-width="4" stroke-linecap="round"><path d="M10 60 q10-10 20 0 t20 0 t20 0"/><path d="M20 76 q10-10 20 0 t20 0"/></g><path d="M66 22 q12 0 12 14 h-24 q0-14 12-14z" fill="#f5b7a8"/><g stroke="#e2907e" stroke-width="1.5"><path d="M66 22v14M60 25l3 11M72 25l-3 11"/></g></svg>` },
+  { id:'shop_snow', name:'눈 오는 밤', maker:'샘플 작가', price:0, bg:'#eef3fb', line:'rgba(120,145,200,.45)', ink:'#2a3558', env:'#cdd9f2',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g stroke="#7f9be0" stroke-width="3" stroke-linecap="round"><path d="M35 15v40M15 35h40M21 21l28 28M49 21 21 49"/><path d="M72 55v24M60 67h24M64 59l16 16M80 59 64 75"/></g></svg>` },
+  { id:'shop_lemon', name:'레몬 여름', maker:'샘플 작가', price:0, bg:'#fffbe3', line:'rgba(200,180,60,.45)', ink:'#4a4218', env:'#f7ec9e',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><ellipse cx="40" cy="45" rx="22" ry="16" fill="#ffd93b" transform="rotate(-20 40 45)"/><ellipse cx="40" cy="45" rx="15" ry="10" fill="#fff3a6" transform="rotate(-20 40 45)"/><path d="M58 28 q14-10 22 2 q-12 8-22-2z" fill="#7cc35a"/></svg>` },
+  { id:'shop_cat', name:'고양이 발자국', maker:'빨간 우체통', price:0, bg:'#fbf3f0', line:'rgba(190,140,130,.45)', ink:'#4a302a', env:'#efd3cb',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g fill="#d79a8c"><ellipse cx="35" cy="50" rx="11" ry="9"/><circle cx="23" cy="36" r="5"/><circle cx="33" cy="30" r="5"/><circle cx="44" cy="31" r="5"/><circle cx="51" cy="40" r="5"/></g><g fill="#e6b6ab" transform="translate(30 30) scale(.6)"><ellipse cx="60" cy="60" rx="11" ry="9"/><circle cx="48" cy="46" r="5"/><circle cx="58" cy="40" r="5"/><circle cx="69" cy="41" r="5"/><circle cx="76" cy="50" r="5"/></g></svg>` },
+  { id:'shop_sun', name:'해바라기', maker:'샘플 작가', price:0, bg:'#fffaf0', line:'rgba(200,150,60,.42)', ink:'#4a3510', env:'#f6dfa4',
+    decor:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => `<ellipse cx="45" cy="25" rx="5" ry="11" fill="#ffc02e" transform="rotate(${a} 45 42)"/>`).join('')}<circle cx="45" cy="42" r="11" fill="#7a4a1c"/><path d="M45 54 q4 20-6 36" stroke="#6aaa4a" stroke-width="3" fill="none"/></svg>` }
+];
+const myPapers = () => LS.get('rp_mypapers', []);
+const gotIds = () => LS.get('rp_got', []);
+const EXTRA = {};   // 친구가 보낸 나만의 편지지
+const paperOf = id => PAPERS.find(p => p.id === id) || SHOP.find(p => p.id === id) || myPapers().find(p => p.id === id) || EXTRA[id] || PAPERS[0];
+/* 편지에 붙어 온 나만의 편지지도 쓸 수 있게 */
+const lp = L => { if (L.paperData && L.paper && !EXTRA[L.paper]) EXTRA[L.paper] = L.paperData; return paperOf(L.paper); };
+const paperDataFor = id => id && id.startsWith('my_') ? myPapers().find(p => p.id === id) || null : null;
 const fontOf = id => FONTS.find(f => f.id === id) || FONTS[0];
 const paperVars = p => `--pbg:${p.bg};--lc:${p.line};--ink:${p.ink};--ec:${p.env};--decor:${p.decor ? svgURI(p.decor) : 'none'}`
-  + (p.img ? `;--pimg:url(${p.img});--pslice:${p.slice};--pbw:${p.bw}` : '');
+  + (p.img ? `;--pimg:url(${p.img});--pslice:${p.slice};--pbw:${p.bw}` : '')
+  + (p.photo ? `;--pimg:url(${p.photo});--pfade:${p.fade}` : '');
 const pcls = p => p.cls || '';
 
 /* ----- 사람 (전송 버튼 위 투명 버튼: 나 ↔ 테스트 친구) ----- */
@@ -530,7 +705,7 @@ let testMe = null;
 let me = realMe;
 const saveMe = () => LS.set(me === realMe ? 'rp_me' : 'rp_test_me', me);
 const who = () => me;
-const isMine = m => me.ids.includes(m.from);
+const isMine = m => me.ids.includes(m.from) || (!!m.name && m.name === me.name);
 
 const urlRoom = new URLSearchParams(location.search).get('room');
 let room = urlRoom || LS.get('rp_room', null) || rid();
@@ -624,6 +799,7 @@ function openRoom(id){
     fb = null;
     msgs = LS.get(demoKey(), {});
   }
+  tgListen();
   render();
 }
 /* 방에 들어감 표시 - 처음 들어올 때만 joined(들어온 시각)를 남겨요 → 방 만든 사람에게 딩동 */
@@ -638,6 +814,7 @@ function memberIn(id, uid, v, t0){
   if (!v) return;
   (roomMembers[id] || (roomMembers[id] = {}))[uid] = v;
   const mine = me.ids.includes(uid) || v.name === me.name;
+  if (mine && me === realMe && !me.ids.includes(uid)) { me.ids.push(uid); saveMe(); }   // 다른 브라우저에서 쓰던 내 번호도 내 것으로
   if (!mine && v.joined && v.joined > t0) {
     showBanner(`🔔 ${v.name}님이 들어왔어요`); dingdong();
     flashRoom(id);
@@ -690,23 +867,22 @@ function watchRoom(id){
   const un = watch[id] = [];
   un.push(D.onChildAdded(D.query(D.ref(db, path + '/msgs'), D.limitToLast(50)), snap => {
     const m = snap.val();
-    if (!m || me.ids.includes(m.from) || (m.at || 0) <= (getSeen()[id] || 0)) return;
+    if (!m || isMine(m) || (m.at || 0) <= (getSeen()[id] || 0)) return;
     if (m.type === 'letter' && m.letter && m.letter.deliverAt > Date.now()) return;   // 아직 도착 안 한 편지
     const u = unread[id] || (unread[id] = { keys: new Set(), first: m.at || Date.now() });
     u.keys.add(snap.key); u.first = Math.min(u.first, m.at || Date.now());
-    if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); }
+    if ((m.at || 0) >= t0 - 3000) { toFront(id); flashRoom(id); pop(); }
     queueRender();
   }));
   const mems = D.ref(db, path + '/members');
   un.push(D.onChildAdded(mems, s => memberIn(id, s.key, s.val(), t0)));
   un.push(D.onChildChanged(mems, s => memberIn(id, s.key, s.val(), Infinity)));
 }
-/* 지금 방은 맨 왼쪽 → 새 메시지 온 방(먼저 온 순서) → 나머지 */
-function orderedRooms(){
-  const rooms = getRooms(), has = x => unread[x.id] && unread[x.id].keys.size;
-  const cur = rooms.filter(x => x.id === room);
-  const news = rooms.filter(x => x.id !== room && has(x)).sort((a, b) => unread[a.id].first - unread[b.id].first);
-  return [...cur, ...news, ...rooms.filter(x => x.id !== room && !has(x))];
+/* 말풍선 순서: 누르면 제자리 그대로, 새 메시지가 온 방만 맨 왼쪽으로 */
+const orderedRooms = () => getRooms();
+function toFront(id){
+  const rooms = getRooms(), i = rooms.findIndex(x => x.id === id);
+  if (i > 0) { rooms.unshift(rooms.splice(i, 1)[0]); LS.set('rp_rooms', rooms); }
 }
 function drawRooms(){
   const rooms = getRooms();
@@ -714,7 +890,7 @@ function drawRooms(){
     <div class="dt">${esc(titleFor(x.id) || x.title || '새 방')}<br><small>${x.id === room ? '● 지금 보는 방' : fmtDate(x.at) + ' 만듦'}</small></div>
     ${x.id === room ? '' : `<button data-rm="${x.id}">지우기</button>`}</div>`).join('');
   $('myName').value = me.name;
-  $('notiBtn').textContent = 'Notification' in window && Notification.permission === 'granted' ? '🔔 알림 켜짐' : '🔔 알림 켜기';
+  notiState();
   const au = LS.get('rp_auth', null);
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
@@ -885,23 +1061,43 @@ function pushRoomUp(r){
 
 /* ----- 알림 ----- */
 let swReg = null;
+/* 알림 상태 글씨: 켜짐 / 꺼짐 / 막힘 / 안 되는 화면 */
+function notiState(){
+  const b = $('notiBtn'), t = $('notiTest');
+  let txt, ok = false;
+  if (!('Notification' in window) || !('serviceWorker' in navigator)) txt = '🚫 이 화면에서는 알림이 안 돼요 (크롬이나 홈 화면 앱으로 열어 주세요)';
+  else if (Notification.permission === 'granted') { txt = LS.get('rp_push_ok', 0) ? '🔔 알림: 켜짐 ✓ (앱을 닫아도 와요)' : '🔔 알림: 켜짐 ✓ (서버 등록 중…)'; ok = true; }
+  else if (Notification.permission === 'denied') txt = '🚫 알림이 막혀 있어요 · 눌러서 푸는 방법 보기';
+  else txt = '🔕 알림: 꺼짐 · 눌러서 켜기';
+  b.textContent = txt; b.classList.toggle('y', ok);
+  t.style.display = ok ? '' : 'none';
+}
 async function setupPush(ask){
   if (!('Notification' in window) || !('serviceWorker' in navigator)) { if (ask) toast('이 화면에서는 알림이 안 돼요 (크롬으로 열어 주세요)'); return; }
   let perm = Notification.permission;
+  if (perm === 'denied') { if (ask) showOv('notiHelpOv'); return; }
   if (perm !== 'granted' && ask) perm = await Notification.requestPermission();
-  if (perm !== 'granted') { if (ask) toast('알림이 허용되지 않았어요'); return; }
+  notiState();
+  if (perm !== 'granted') { if (ask) toast(perm === 'denied' ? '알림을 막았어요 · 다시 켜는 방법을 볼 수 있어요' : '알림을 켜지 않았어요'); return; }
   try { swReg = await navigator.serviceWorker.register('firebase-messaging-sw.js'); } catch (e) { swReg = null; }
-  if (ask) toast('🔔 알림을 켰어요');
   if (FB && swReg) {
     try {
       const M = await import(FB.base + 'firebase-messaging.js');
       const token = await M.getToken(M.getMessaging(FB.app), { vapidKey: VAPID_KEY, serviceWorkerRegistration: swReg });
-      if (token) FB.D.set(FB.D.ref(FB.db, 'giftstory/tokens/' + me.uid + '/' + token.replace(/[.#$\[\]\/]/g, '_')), { token, at: Date.now() }).catch(() => {});
-    } catch (e) {}
+      if (token) {
+        await FB.D.set(FB.D.ref(FB.db, 'giftstory/tokens/' + me.uid + '/' + token.replace(/[.#$\[\]\/]/g, '_')), { token, at: Date.now() });
+        LS.set('rp_push_ok', 1);
+      }
+    } catch (e) { if (ask) toast('알림은 켜졌는데 서버 등록이 안 됐어요 · 잠시 뒤 다시 눌러 주세요'); }
   }
-  drawRooms();
+  notiState();
+  if (ask && LS.get('rp_push_ok', 0)) toast('🔔 알림이 켜졌어요');
 }
 $('notiBtn').onclick = () => setupPush(true);
+$('notiTest').onclick = () => {
+  const opt = { body: '알림이 잘 와요 📮', tag: 'rp-test' };
+  (swReg ? swReg.showNotification('빨간 우체통', opt) : Promise.reject()).catch(() => { try { new Notification('빨간 우체통', opt); } catch (e) { toast('시험 알림을 띄우지 못했어요'); } });
+};
 function notifyNew(m){
   if (isMine(m) || m.at < loadedAt - 5000 || !document.hidden) return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
@@ -926,8 +1122,8 @@ const unreadIn = () => received().filter(m => !m.read);
 
 function envHTML(m){
   const L = m.letter;
-  const p = paperOf(L.paper);
-  return `<div class="env ${p.cls === 'pic' ? 'pic' : ''}" style="${paperVars(p)}">
+  const p = lp(L);
+  return `<div class="env ${p.cls === 'pic' ? 'pic' : p.cls === 'photo' ? 'pic photo' : ''}" style="${paperVars(p)}">
     <div class="stamp"><i>♥<b>우표</b></i></div>
     <div class="pwave"></div>
     <div class="pmark">${fmtDate(whenOf(m))}<br>빨간우체통</div>
@@ -952,13 +1148,13 @@ function render(){
     html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? '' : `<div class="who">${esc(m.name)}</div>`}`;
     if (m.type === 'letter') {
       const st = !arrived(m) ? '<span class="st wait">내일 아침 도착</span>' : m.read ? '<span class="st read">읽음</span>' : '<span class="st">안 읽음</span>';
-      html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(paperOf(m.letter.paper))}" style="${paperVars(paperOf(m.letter.paper))}"></div></div>`;
+      html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(lp(m.letter))}" style="${paperVars(lp(m.letter))}"></div></div>`;
     } else {
       html += `<div class="bubble">${esc(m.text)}</div>`;
     }
     html += `<div class="time">${fmtTime(m.at)}</div></div>`;
   });
-  box.innerHTML = html;
+  box.innerHTML = `<div class="mwrap">${html}</div>`;
   if (atBottom || render.jump) box.scrollTop = box.scrollHeight;
   render.jump = false;
   updateFlag();
@@ -981,12 +1177,13 @@ function updateAppBadge(){
 /* 30초마다: 안 읽은 방 말풍선 흔들림, 편지 왔으면 우체통 흔들림 + 깃발 오르내림, 띵동 */
 function bumpBox(){ const mb = $('mailbox'); mb.classList.remove('bump'); void mb.offsetWidth; mb.classList.add('bump'); }
 function waveFlag(){ const f = document.querySelector('#mailbox .flag'); f.classList.remove('wave'); void f.getBoundingClientRect(); f.classList.add('wave'); setTimeout(() => f.classList.remove('wave'), 1700); }
-function remind(){
+function remindRooms(){   // 20초마다, 소리 없음
   if (document.hidden) return;
-  let ring = false;
-  Object.keys(unread).forEach(id => { if (id !== room && unread[id].keys.size) { flashRoom(id); ring = true; } });
-  if (unreadIn().length) { bumpBox(); waveFlag(); ring = true; }
-  if (ring) dingdong();
+  Object.keys(unread).forEach(id => { if (id !== room && unread[id].keys.size) flashRoom(id); });
+}
+function remindBox(){   // 30초마다, 띵동
+  if (document.hidden || !unreadIn().length) return;
+  bumpBox(); waveFlag(); dingdong();
 }
 /* 편지 도착 알림 줄 */
 const notified = {};
@@ -1000,10 +1197,11 @@ function checkArrivals(){
   bumpBox(); waveFlag();
 }
 function showBanner(t){
-  const b = $('banner'); b.textContent = t; b.classList.add('show');
-  clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), 3000);
+  const b = $('banner'); b.textContent = t; b.classList.add('show'); bannerAct = null;
+  clearTimeout(bannerT); bannerT = setTimeout(() => b.classList.remove('show'), 6000);
 }
-$('banner').onclick = () => $('banner').classList.remove('show');
+let bannerAct = null;
+$('banner').onclick = () => { $('banner').classList.remove('show'); if (bannerAct) { const f = bannerAct; bannerAct = null; click(); f(); } };
 $('msgs').addEventListener('click', e => { const w = e.target.closest('.mini'); if (w) { curLetter = msgs[w.dataset.id]; showReader(); } });
 
 /* ----- 테스트 버튼 (전송 버튼 위, 안 보임) ----- */
@@ -1086,7 +1284,8 @@ function step(n){
   (n === 1 ? $('step1') : $('step2')).scrollTop = 0;
 }
 function buildPick(){
-  $('paperGrid').innerHTML = PAPERS.map(p => `<button class="pthumb ${pcls(p)} ${W.paper === p.id ? 'sel' : ''}" data-p="${p.id}" style="${paperVars(p)}"><span>${p.name}</span></button>`).join('');
+  const list = [...PAPERS, ...SHOP.filter(p => gotIds().includes(p.id)), ...myPapers()];
+  $('paperGrid').innerHTML = `<button class="pthumb special" data-act="make"><b>＋</b>나만의 편지지<br>만들기</button><button class="pthumb special shop" data-act="shop"><b>🏪</b>편지지 가게</button>` + list.map(p => `<button class="pthumb ${pcls(p)} ${W.paper === p.id ? 'sel' : ''}" data-p="${p.id}" style="${paperVars(p)}"><span>${p.name}</span></button>`).join('');
   const p = paperOf(W.paper);
   $('fontGrid').innerHTML = FONTS.map(f => `<button class="fchip ${W.font === f.id ? 'sel' : ''}" data-f="${f.id}" style="${paperVars(p)};font-family:${f.css};font-size:${f.size - 2}px">못다한 그 말<small>${f.name}</small></button>`).join('');
 }
@@ -1104,6 +1303,8 @@ function applyW(){
   $('wStk').textContent = W.stickers.join('');
 }
 $('step1').addEventListener('click', e => {
+  const a = e.target.closest('[data-act]');
+  if (a) { click(); a.dataset.act === 'make' ? openMaker() : openShop(); return; }
   const c = e.target.closest('[data-p],[data-f]'); if (!c) return;
   if (c.dataset.p) W.paper = c.dataset.p;
   if (c.dataset.f) W.font = c.dataset.f;
@@ -1139,18 +1340,18 @@ $('wSave').onclick = () => {
 };
 $('wSend').onclick = () => sendLetter(false);
 document.querySelectorAll('[data-lsend]').forEach(b => {
-  b.innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
+  b.querySelector('i').innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
   b.onclick = () => sendLetterLink(b.dataset.lsend);
 });
 /* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
 async function sendLetterLink(kind){
-  readW();
+  click(); readW();
   if (!W.body.trim()) { toast('편지 내용을 써 주세요'); return; }
   if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
-  if (rec) { toast('녹음을 먼저 멈춰 주세요'); return; }
+  if (rec) await stopRec();
   const id = rid(), u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
+    letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
   const shared = shareTo(kind, roomURL(id), text);   // 공유 창 먼저
   pushTo(id, m); saveRoom(id, W.to);
@@ -1167,7 +1368,7 @@ async function sendLetter(slow){
   if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
   const u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: W.body, paper: W.paper, font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: slow ? nextMorning() : 0 } };
+    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: slow ? nextMorning() : 0 } };
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   closeWriter();
   flyToMailbox(m, () => { render.jump = true; addMsg(m); toast(slow ? '🌙 내일 아침 8시에 도착해요' : '📮 편지를 우체통에 넣었어요'); });
@@ -1195,13 +1396,16 @@ function flyToMailbox(m, done){
 }
 
 /* ----- 목소리 녹음 ----- */
-let rec = null, recTimer = 0, recAudio = null;
+let rec = null, recTimer = 0, recAudio = null, sec = 0;
 function updRec(){
   const has = W && W.voice;
-  $('recPlay').style.display = has ? '' : 'none';
-  $('recDel').style.display = has ? '' : 'none';
-  $('recBtn').textContent = rec ? '⏹ 녹음 멈추기' : (has ? '🎙 다시 녹음' : '🎙 녹음하기');
-  if (!rec) $('recState').textContent = has ? '녹음 있음 ✓' : '';
+  $('recBtn').style.display = rec ? 'none' : '';
+  $('recStop').style.display = rec ? '' : 'none';
+  $('recPlay').style.display = has && !rec ? '' : 'none';
+  $('recDel').style.display = has && !rec ? '' : 'none';
+  $('recBtn').textContent = has ? '🎙 다시 녹음' : '🎙 녹음하기';
+  $('recState').classList.toggle('ok', !rec && !!has);
+  if (!rec) $('recState').textContent = has ? `✓ 녹음됐어요${W.voiceSec ? ' (' + W.voiceSec + '초)' : ''}` : '';
 }
 let recDone = null;
 function stopRec(){
@@ -1210,31 +1414,33 @@ function stopRec(){
   rec.stop(); return p;
 }
 function pickMime(){
-  const list = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+  const list = isIOS ? ['audio/mp4', 'audio/webm;codecs=opus'] : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
   return list.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
 }
+$('recStop').onclick = () => stopRec();
 $('recBtn').onclick = async () => {
   if (rec) { stopRec(); return; }
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { toast('이 화면에서는 녹음이 안 돼요 (크롬으로 열어 주세요)'); return; }
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    musicDuck(true); if (recAudio) recAudio.pause();
     const chunks = [], mime = pickMime(), target = W;
     rec = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
     rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
     rec.onstop = () => {
-      stream.getTracks().forEach(t => t.stop()); clearInterval(recTimer);
+      stream.getTracks().forEach(t => t.stop()); clearInterval(recTimer); musicDuck(false);
       const type = (rec && rec.mimeType) || mime || 'audio/webm';
       rec = null;
       const blob = new Blob(chunks, { type });
       const finish = () => { updRec(); if (recDone) { recDone(); recDone = null; } };
-      if (!blob.size) { toast('녹음이 안 됐어요. 다시 해 주세요'); finish(); return; }
+      if (!blob.size || sec < 1) { toast('녹음이 너무 짧아요. 다시 해 주세요'); finish(); return; }
       const fr = new FileReader();
-      fr.onload = () => { target.voice = fr.result; toast('🎙 녹음했어요'); finish(); };
+      fr.onload = () => { target.voice = fr.result; target.voiceSec = sec; toast('🎙 녹음됐어요 · ▶ 들어보기로 확인해 보세요'); finish(); };
       fr.onerror = finish;
       fr.readAsDataURL(blob);
     };
-    rec.start(250);
-    let sec = 0; $('recState').textContent = '● 녹음 중 0초 / 30초';
+    rec.start(250); sec = 0;
+    $('recState').textContent = '● 녹음 중 0초 / 30초';
     recTimer = setInterval(() => { sec++; $('recState').textContent = `● 녹음 중 ${sec}초 / 30초`; if (sec >= 30) stopRec(); }, 1000);
     updRec();
   } catch (e) {
@@ -1242,8 +1448,17 @@ $('recBtn').onclick = async () => {
     toast(e && e.name === 'NotAllowedError' ? '마이크 권한을 허용해 주세요 (주소창 왼쪽 → 권한)' : '녹음을 시작할 수 없어요');
   }
 };
-$('recPlay').onclick = () => { if (W.voice) { if (recAudio) recAudio.pause(); recAudio = new Audio(W.voice); recAudio.play().catch(() => toast('재생이 안 돼요')); } };
-$('recDel').onclick = () => { W.voice = null; updRec(); };
+$('recPlay').onclick = () => {
+  if (!W.voice) return;
+  if (recAudio && !recAudio.paused) { recAudio.pause(); musicDuck(false); $('recPlay').textContent = '▶ 들어보기'; return; }
+  recAudio = new Audio(W.voice); recAudio.volume = 1;
+  musicDuck(true); $('recPlay').textContent = '⏸ 멈추기';
+  const end = () => { musicDuck(false); $('recPlay').textContent = '▶ 들어보기'; };
+  recAudio.onended = end;
+  recAudio.onerror = () => { end(); toast('이 휴대폰에서 녹음 재생이 안 돼요 · 다시 녹음해 주세요'); };
+  recAudio.play().catch(e => { end(); toast('재생이 안 돼요 (' + ((e && e.name) || '') + ')'); });
+};
+$('recDel').onclick = () => { W.voice = null; W.voiceSec = 0; if (recAudio) recAudio.pause(); updRec(); toast('🗑 녹음을 지웠어요'); };
 
 /* ----- 편지 열기 · 읽기 ----- */
 let curLetter = null, voiceAudio = null;
@@ -1253,7 +1468,7 @@ function openLetter(m){
   showReader();
 }
 function showReader(){
-  const m = curLetter, L = m.letter, p = paperOf(L.paper), f = fontOf(L.font);
+  const m = curLetter, L = m.letter, p = lp(L), f = fontOf(L.font);
   const rp = $('readPaper');
   rp.innerHTML = `<div class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}">
     <div class="ptop">To. ${esc(L.to)}</div>
@@ -1305,7 +1520,7 @@ $('rClose').onclick = closeReader;
 $('rReply').onclick = () => {
   const to = curLetter.letter.fromName;
   closeReader();
-  openWriter({ to, body: '', paper: curLetter.letter.paper, font: curLetter.letter.font, stickers: [], voice: null, draftId: null });
+  openWriter({ to, body: '', paper: curLetter.letter.paperData ? 'pink' : curLetter.letter.paper, font: curLetter.letter.font, stickers: [], voice: null, draftId: null });
 };
 
 /* ----- 보관함 (자연스럽게 쌓인 편지) ----- */
@@ -1354,6 +1569,260 @@ $('pileBtn').onclick = () => {
   showOv('pileOv');
 };
 $('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); curLetter = pileItems[w.dataset.id]; showReader(); } });
+
+
+/* ----- 편지지 가게 ----- */
+const thumbHTML = p => `<div class="pthumb ${pcls(p)}" style="${paperVars(p)}"></div>`;
+function openShop(){
+  const got = gotIds();
+  $('shelf').innerHTML = SHOP.map(p => `<div class="item" data-shop="${p.id}">${thumbHTML(p)}<div class="nm">${esc(p.name)}</div><div class="mk">만든 사람 · ${esc(p.maker)}</div><div class="pr ${got.includes(p.id) ? 'got' : ''}">${got.includes(p.id) ? '받음 ✓' : p.price ? p.price + '원' : '무료'}</div></div>`).join('');
+  const mine = myPapers();
+  $('myShelf').innerHTML = mine.length ? mine.map(p => `<div class="drow"><div class="mythumb">${thumbHTML(p)}</div><div class="dt">${esc(p.name)}</div><button data-mydel="${p.id}">지우기</button></div>`).join('')
+    : '<div class="empty" style="padding:10px 0">아직 없어요 · 편지지 고르기 맨 앞 ＋ 나만의 편지지 만들기</div>';
+  showOv('shopOv');
+}
+let peekId = null;
+$('shelf').addEventListener('click', e => {
+  const it = e.target.closest('[data-shop]'); if (!it) return;
+  click(); peekId = it.dataset.shop;
+  const p = paperOf(peekId), f = fontOf('pen');
+  $('peekPaper').innerHTML = `<div class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}"><div class="ptop">To. 소중한 사람</div><div class="lined" style="font-size:${f.size}px;min-height:30vh">${esc('이 편지지에 못다한 그 말을\n적어 보세요.')}</div><div class="pfrom">From. ${esc(p.maker)}</div></div>`;
+  const got = gotIds().includes(peekId);
+  $('peekInfo').textContent = `${p.name} · 만든 사람 ${p.maker} · ${p.price ? p.price + '원' : '무료'}`;
+  $('peekGet').textContent = got ? '이미 받았어요 ✓' : '받기 (무료)';
+  showOv('peekOv');
+});
+$('peekGet').onclick = () => {
+  if (!peekId) return;
+  const g = gotIds(); if (!g.includes(peekId)) { g.push(peekId); LS.set('rp_got', g); }
+  click(); hideOv('peekOv'); openShop();
+  if (W) { W.paper = peekId; buildPick(); applyW(); }
+  toast('🎁 편지지를 받았어요 · 편지지 고르기에 생겼어요');
+};
+$('myShelf').addEventListener('click', e => {
+  const b = e.target.closest('[data-mydel]'); if (!b) return;
+  LS.set('rp_mypapers', myPapers().filter(p => p.id !== b.dataset.mydel));
+  if (W && W.paper === b.dataset.mydel) W.paper = 'pink';
+  openShop(); if (W) { buildPick(); applyW(); }
+});
+$('shopSell').onclick = () => toast('💰 편지지 팔기는 곧 열려요!');
+
+/* ----- 나만의 편지지 만들기 (내 사진으로) ----- */
+const MK_LINES = [['분홍', 'rgba(236,140,165,.6)'], ['하늘', 'rgba(110,165,225,.6)'], ['갈색', 'rgba(150,110,60,.55)'], ['회색', 'rgba(120,120,120,.5)'], ['없음', 'transparent']];
+let MK = null;
+function openMaker(){
+  MK = { photo: null, fade: .55, line: MK_LINES[0][1], env: '#f2e6e0' };
+  $('mkName').value = ''; $('mkFade').value = .55;
+  $('mkLines').innerHTML = MK_LINES.map(([n, c], i) => `<button class="chip ${i ? '' : 'sel'}" data-line="${c}">${n}</button>`).join('');
+  drawMaker(); showOv('makeOv');
+}
+function mkPaper(){ return { id: 'my_preview', name: $('mkName').value.trim() || '나만의 편지지', cls: 'photo', bg: '#ffffff', ink: '#333333', line: MK.line, env: MK.env, photo: MK.photo, fade: MK.fade, maker: me.name }; }
+function drawMaker(){
+  if (!MK.photo) { $('mkPreview').innerHTML = '<div class="empty" style="padding:16px 0">사진을 고르면 여기에 편지지가 보여요</div>'; return; }
+  const p = mkPaper(), f = fontOf('pen');
+  $('mkPreview').innerHTML = `<div class="paperbox photo" style="${paperVars(p)};font-family:${f.css}"><div class="ptop">To. 소중한 사람</div><div class="lined" style="font-size:${f.size}px;min-height:170px">${esc('이렇게 보여요\n못다한 그 말')}</div></div>`;
+}
+$('mkPick').onclick = () => $('mkFile').click();
+$('mkFile').onchange = () => {
+  const f = $('mkFile').files[0]; $('mkFile').value = ''; if (!f) return;
+  const img = new Image(), url = URL.createObjectURL(f);
+  img.onload = () => {
+    const k = Math.min(1, 720 / Math.max(img.width, img.height)), w = Math.round(img.width * k), h = Math.round(img.height * k);
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+    const g = cv.getContext('2d'); g.drawImage(img, 0, 0, w, h);
+    MK.photo = cv.toDataURL('image/jpeg', .72);
+    const d = g.getImageData(0, 0, w, h).data; let r = 0, gg = 0, b = 0, n = 0;
+    for (let i = 0; i < d.length; i += 400) { r += d[i]; gg += d[i + 1]; b += d[i + 2]; n++; }
+    const mix = c => Math.round((c / n) * .5 + 255 * .5);
+    MK.env = `rgb(${mix(r)},${mix(gg)},${mix(b)})`;
+    URL.revokeObjectURL(url); drawMaker();
+  };
+  img.onerror = () => toast('이 사진은 열 수 없어요');
+  img.src = url;
+};
+$('mkFade').oninput = () => { MK.fade = +$('mkFade').value; drawMaker(); };
+$('mkLines').addEventListener('click', e => {
+  const c = e.target.closest('[data-line]'); if (!c) return;
+  MK.line = c.dataset.line; [...$('mkLines').children].forEach(x => x.classList.toggle('sel', x === c)); click(); drawMaker();
+});
+$('mkName').oninput = () => MK.photo && drawMaker();
+$('mkSave').onclick = () => {
+  if (!MK.photo) { toast('먼저 사진을 골라 주세요'); return; }
+  const p = { ...mkPaper(), id: 'my_' + rid() };
+  LS.set('rp_mypapers', [...myPapers(), p]);
+  click(); hideOv('makeOv');
+  if (W) { W.paper = p.id; buildPick(); applyW(); }
+  toast('✨ 나만의 편지지를 만들었어요');
+};
+
+
+/* ----- 노래 같이 듣기 · 영화 같이 보기 (방 친구와 같은 곳을 같이) ----- */
+const BASE_SONGS = [{ type: 'mp3', src: BGM_FILE, title: '빨간 우체통 테마곡' }];
+const ytId = t => { const m = String(t).match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(t.trim()) ? t.trim() : null); };
+let YTready = null;
+function loadYT(){
+  if (!YTready) YTready = new Promise((ok, no) => {
+    if (window.YT && YT.Player) return ok();
+    window.onYouTubeIframeAPIReady = ok;
+    loadScript('https://www.youtube.com/iframe_api').catch(no);
+  });
+  return YTready;
+}
+function makeYT(el, onState){
+  return loadYT().then(() => new Promise(ok => {
+    const pl = new YT.Player(el, { width: '100%', height: '100%', playerVars: { playsinline: 1, rel: 0, modestbranding: 1 },
+      events: { onReady: () => ok(pl), onStateChange: e => onState && onState(e.data), onError: () => toast('이 영상은 다른 앱에서 재생이 막혀 있어요') } });
+  }));
+}
+const tgRef = kind => FB ? FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/together/' + kind) : null;
+function tgWrite(kind, st){
+  if (FB) FB.D.set(tgRef(kind), st).catch(() => toast('같이 듣기 연결 실패 - 인터넷을 확인해 주세요'));
+  else (kind === 'music' ? applyMusic : applyVideo)(st);
+}
+const posNow = st => st ? (st.pos || 0) + (st.playing ? Math.max(0, (Date.now() - (st.at || Date.now())) / 1000) : 0) : 0;
+let tgBusy = false;   // 같이 듣기·보기 중이면 배경음악 쉬기
+function tgMusicPause(on){ tgBusy = on; if (on) bgm.pause(); else if (musicOn && !document.hidden) musicStart(); }
+function showPanel(id, on){ $(id).classList.toggle('show', on); }
+function closePlus(){ $('plusMenu').classList.remove('show'); $('plusBtn').classList.remove('on'); }
+$('plusBtn').onclick = e => { e.stopPropagation(); click(); const on = !$('plusMenu').classList.contains('show'); $('plusMenu').classList.toggle('show', on); $('plusBtn').classList.toggle('on', on); };
+document.addEventListener('click', e => { if (!e.target.closest('#plusMenu,#plusBtn')) closePlus(); });
+$('plusMenu').addEventListener('click', e => {
+  const b = e.target.closest('[data-tg]'); if (!b) return;
+  click(); closePlus();
+  if (b.dataset.tg === 'music') { showPanel('musicPanel', true); showPanel('videoPanel', false); drawMusic(); syncMusic(); }
+  else { showPanel('videoPanel', true); showPanel('musicPanel', false); syncVideo(); }
+});
+document.querySelectorAll('[data-tclose]').forEach(b => b.onclick = () => {
+  click(); showPanel(b.dataset.tclose, false);
+  if (b.dataset.tclose === 'videoPanel' && vPlayer) { vApplying(); vPlayer.pauseVideo(); }   // 나만 닫기 (친구는 계속)
+  if (b.dataset.tclose === 'musicPanel') { tAudio.pause(); if (mPlayer) mPlayer.pauseVideo(); tgMusicPause(false); $('mCass').classList.remove('spin'); }
+});
+
+/* --- 노래 --- */
+let M = null, mPlayer = null, mLocalOff = false;
+const tAudio = new Audio(); tAudio.preload = 'auto';
+const mList = () => (M && M.list) || BASE_SONGS;
+function drawMusic(){
+  const list = mList(), i = M ? M.idx : -1;
+  $('mList').innerHTML = list.map((x, k) => `<div class="${k === i ? 'on' : ''}" data-k="${k}">${x.type === 'yt' ? '▶ ' : '♪ '}${esc(x.title || '유튜브 노래')}</div>`).join('');
+  $('mTitle').textContent = M && list[M.idx] ? (list[M.idx].title || '유튜브 노래') : '노래를 골라 주세요';
+  $('mBy').textContent = M && M.by ? `${M.by}님이 ${M.playing ? '틀었어요' : '멈췄어요'}` : '';
+  $('mPlay').textContent = M && M.playing && !mLocalOff ? '⏸' : '▶';
+  $('mCass').classList.toggle('spin', !!(M && M.playing && !mLocalOff));
+}
+function mCurPos(){
+  const it = M && mList()[M.idx]; if (!it) return 0;
+  return it.type === 'yt' ? (mPlayer && mPlayer.getCurrentTime ? mPlayer.getCurrentTime() : posNow(M)) : tAudio.currentTime || posNow(M);
+}
+function mSet(ch){ tgWrite('music', { list: mList(), idx: 0, pos: 0, playing: false, ...M, ...ch, at: Date.now(), by: me.name }); }
+function applyMusic(st){
+  const prev = M; M = st && st.list ? st : null;
+  if (M && prev && prev.idx === M.idx && prev.playing === M.playing && prev.at === M.at) return;
+  if (M && M.playing && M.by !== me.name && !$('musicPanel').classList.contains('show')) {
+    showBanner(`🎵 ${M.by}님이 노래를 틀었어요 · 눌러서 같이 듣기`); bannerAct = () => { showPanel('musicPanel', true); mLocalOff = false; syncMusic(); drawMusic(); };
+  }
+  if (M && M.by === me.name) mLocalOff = false;
+  drawMusic();
+  if ($('musicPanel').classList.contains('show') || (M && M.by === me.name)) syncMusic();
+}
+function syncMusic(){
+  const it = M && mList()[M.idx];
+  if (!it || !M.playing || mLocalOff) { tAudio.pause(); if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); $('mYTbox').classList.toggle('show', !!(it && it.type === 'yt')); tgMusicPause(false); drawMusic(); return; }
+  const at = posNow(M);
+  tgMusicPause(true);
+  if (it.type === 'mp3') {
+    if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo();
+    $('mYTbox').classList.remove('show');
+    const src = new URL(it.src, location.href).href;
+    const go = () => { if (Math.abs(tAudio.currentTime - at) > 2) { try { tAudio.currentTime = at; } catch (e) {} } tAudio.play().catch(() => { showBanner('🎵 눌러서 같이 듣기'); bannerAct = () => syncMusic(); }); };
+    if (tAudio.src !== src) { tAudio.src = src; tAudio.addEventListener('loadedmetadata', go, { once: true }); tAudio.load(); } else go();
+  } else {
+    tAudio.pause();
+    $('mYTbox').classList.add('show');
+    const run = pl => {
+      const cur = pl.getVideoData && pl.getVideoData().video_id;
+      if (cur !== it.src) pl.loadVideoById(it.src, at);
+      else { if (Math.abs(pl.getCurrentTime() - at) > 2) pl.seekTo(at, true); pl.playVideo(); }
+    };
+    if (mPlayer) run(mPlayer);
+    else makeYT('mYT', st => {
+      if (st === 0) mEnded();
+      if (st === 1 && M && mList()[M.idx] && !mList()[M.idx].title && M.by === me.name) {   // 제목 채우기
+        const t = mPlayer.getVideoData().title; if (t) { const l = mList().map(x => ({ ...x })); l[M.idx].title = t; mSet({ list: l, pos: mCurPos(), playing: true }); }
+      }
+    }).then(pl => { mPlayer = pl; run(pl); }).catch(() => toast('유튜브를 불러오지 못했어요'));
+  }
+  drawMusic();
+}
+function mEnded(){ if (M && M.by === me.name) mSet({ idx: (M.idx + 1) % mList().length, pos: 0, playing: true }); }
+tAudio.onended = mEnded;
+$('mPlay').onclick = () => {
+  click();
+  if (M && M.playing && !mLocalOff) mSet({ pos: mCurPos(), playing: false });
+  else { mLocalOff = false; mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); }
+};
+$('mStop').onclick = () => { click(); if (M) mSet({ pos: 0, playing: false }); };
+$('mNext').onclick = () => { click(); const n = mList().length; mLocalOff = false; mSet({ idx: ((M ? M.idx : -1) + 1) % n, pos: 0, playing: true }); };
+$('mPrev').onclick = () => { click(); const n = mList().length; mLocalOff = false; mSet({ idx: ((M ? M.idx : 1) - 1 + n) % n, pos: 0, playing: true }); };
+$('mList').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (!d) return; click(); mLocalOff = false; mSet({ idx: +d.dataset.k, pos: 0, playing: true }); });
+$('mAdd').onclick = () => {
+  const id = ytId($('mUrl').value); if (!id) { toast('유튜브 주소를 붙여 넣어 주세요'); return; }
+  $('mUrl').value = ''; click();
+  const l = [...mList(), { type: 'yt', src: id, title: '' }];
+  mLocalOff = false; mSet({ list: l, idx: l.length - 1, pos: 0, playing: true });
+};
+$('mPhone').onclick = () => toast('📱 내 휴대폰 노래 같이 듣기는 곧 열려요!');
+
+/* --- 영화 (유튜브) --- */
+let V = null, vPlayer = null, vApplyT = 0;
+const vApplying = () => { vApplyT = Date.now() + 1500; };
+function vSet(ch){ tgWrite('video', { vid: V && V.vid, pos: 0, playing: false, ...ch, at: Date.now(), by: me.name }); }
+function applyVideo(st){
+  const prev = V; V = st && st.vid ? st : null;
+  $('vBy').textContent = V ? `${V.by}님이 ${V.playing ? '틀었어요' : '멈췄어요'}` : '';
+  $('vEmpty').style.display = V ? 'none' : '';
+  if (V && V.playing && V.by !== me.name && !$('videoPanel').classList.contains('show') && (!prev || prev.vid !== V.vid || !prev.playing)) {
+    showBanner(`🎬 ${V.by}님이 영화를 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('videoPanel', true); showPanel('musicPanel', false); syncVideo(); };
+  }
+  if ($('videoPanel').classList.contains('show')) syncVideo();
+}
+function syncVideo(){
+  $('vEmpty').style.display = V ? 'none' : '';
+  if (!V) { if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } tgMusicPause(false); return; }
+  const at = posNow(V);
+  const run = pl => {
+    vApplying();
+    const cur = pl.getVideoData && pl.getVideoData().video_id;
+    if (cur !== V.vid) { V.playing ? pl.loadVideoById(V.vid, at) : pl.cueVideoById(V.vid, at); }
+    else { if (Math.abs(pl.getCurrentTime() - at) > 2) pl.seekTo(at, true); V.playing ? pl.playVideo() : pl.pauseVideo(); }
+    tgMusicPause(!!V.playing);
+  };
+  if (vPlayer) run(vPlayer);
+  else makeYT('vYT', st => {
+    if (Date.now() < vApplyT || !V) return;   // 내가 맞춘 건 다시 보내지 않음
+    if (st === 1) vSet({ vid: V.vid, pos: vPlayer.getCurrentTime(), playing: true });
+    if (st === 2) vSet({ vid: V.vid, pos: vPlayer.getCurrentTime(), playing: false });
+  }).then(pl => { vPlayer = pl; run(pl); }).catch(() => toast('유튜브를 불러오지 못했어요'));
+}
+$('vGo').onclick = () => {
+  const q = $('vUrl').value.trim(), id = ytId(q);
+  if (!id) { if (q) window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(q), '_blank'); else toast('유튜브 주소를 붙여 넣어 주세요'); return; }
+  $('vUrl').value = ''; click();
+  vSet({ vid: id, pos: 0, playing: true });
+  if (!FB) syncVideo();
+};
+$('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); window.open('https://www.youtube.com/' + (q && !ytId(q) ? 'results?search_query=' + encodeURIComponent(q) : ''), '_blank'); };
+$('vEnd').onclick = () => { click(); tgWrite('video', null); };
+
+/* 방이 바뀌면 같이 듣기·보기도 그 방 것으로 */
+function tgListen(){
+  M = null; V = null; tAudio.pause(); if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); }
+  showPanel('musicPanel', false); showPanel('videoPanel', false); tgBusy = false;
+  drawMusic(); applyVideo(null);
+  if (!FB) return;
+  unsub.push(FB.D.onValue(tgRef('music'), s => applyMusic(s.val())));
+  unsub.push(FB.D.onValue(tgRef('video'), s => applyVideo(s.val())));
+}
 
 /* ----- 쓰던 편지 ----- */
 function drawDrafts(){
@@ -1436,7 +1905,7 @@ function musicDuck(on){ bgm.volume = on ? .04 : .22; }
 const musicPlaying = () => !bgm.paused;
 function setMusicBtn(){ $('musicBtn').textContent = musicOn ? '🎵' : '🔇'; $('musicBtn').classList.toggle('on', musicOn); }
 $('musicBtn').onclick = () => { musicOn = !musicOn; LS.set('rp_music', musicOn); setMusicBtn(); musicOn ? musicStart() : musicStop(); };
-document.addEventListener('pointerdown', () => { if (musicOn && !musicPlaying()) musicStart(); }, { capture: true });
+document.addEventListener('pointerdown', () => { if (musicOn && !musicPlaying() && !tgBusy) musicStart(); }, { capture: true });
 
 function noiseBurst(dur, freq, vol){
   const c = ac(); if (!c) return;
@@ -1532,42 +2001,55 @@ $('themeBtn').onclick = () => {
 };
 applyTheme();
 
-/* ----- 홈 화면에 추가 (크롬: 버튼 한 번 / 아이폰: 안내) ----- */
+/* ----- 홈 화면에 추가: 추가 전에는 늘 버튼, 추가하면 저절로 사라짐 ----- */
 let installEv = null;
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
-const installMuted = () => Date.now() - LS.get('rp_inst_no', 0) < 3 * 86400000;   // ✕ 누르면 3일 동안 안 보임
-function showInstall(ios){
-  if (isStandalone() || installMuted()) return;
-  $('instText').textContent = ios ? '📲 아이폰: 아래 공유 버튼(□↑) → "홈 화면에 추가"를 누르면 앱처럼 열려요' : '📲 홈 화면에 빨간 우체통을 추가할까요?';
-  $('instYes').style.display = ios ? 'none' : '';
+let instHidden = false;   // ✕ 는 이번에만 숨김
+function showInstall(){
+  const done = isStandalone() || LS.get('rp_installed', 0);
+  $('installBtn2').style.display = isStandalone() ? 'none' : '';
+  if (done || instHidden) { $('installBar').classList.remove('show'); return; }
+  $('instText').textContent = isIOS ? '📲 아이폰: 아래 공유 버튼(□↑) → "홈 화면에 추가"' : '📲 빨간 우체통을 홈 화면에 추가할까요?';
+  $('instYes').style.display = isIOS ? 'none' : '';
   $('installBar').classList.add('show');
 }
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEv = e; showInstall(false); });
-addEventListener('appinstalled', () => { $('installBar').classList.remove('show'); toast('📮 홈 화면에 추가했어요'); });
-$('instYes').onclick = async () => {
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEv = e; LS.set('rp_installed', 0); showInstall(); });
+addEventListener('appinstalled', () => { LS.set('rp_installed', 1); showInstall(); toast('📮 홈 화면에 추가했어요 · 아이콘이 안 보이면 앱 목록(앱스)에서 찾아 보세요'); });
+async function doInstall(){
   click();
-  if (!installEv) { toast('크롬 메뉴(⋮) → "홈 화면에 추가"를 눌러 주세요'); return; }
+  if (isIOS) { toast('아래 공유 버튼(□↑) → "홈 화면에 추가"를 눌러 주세요'); return; }
+  if (!installEv) {
+    toast(LS.get('rp_installed', 0) ? '이미 추가돼 있어요 · 홈 화면에 없으면 앱 목록(앱스)에서 빨간 우체통을 찾아 보세요' : '크롬 메뉴(⋮) → "홈 화면에 추가" 또는 "앱 설치"를 눌러 주세요');
+    return;
+  }
   installEv.prompt();
-  try { await installEv.userChoice; } catch (e) {}
-  installEv = null; $('installBar').classList.remove('show');
-};
-$('instNo').onclick = () => { LS.set('rp_inst_no', Date.now()); $('installBar').classList.remove('show'); };
-if (isIOS) setTimeout(() => showInstall(true), 2500);
+  let ch = null; try { ch = await installEv.userChoice; } catch (e) {}
+  installEv = null;
+  if (ch && ch.outcome === 'accepted') LS.set('rp_installed', 1);
+  showInstall();
+}
+$('instYes').onclick = doInstall;
+$('installBtn2').onclick = doInstall;
+$('instNo').onclick = () => { instHidden = true; showInstall(); };
+setTimeout(showInstall, 1500);
 
 /* ----- 시작 ----- */
 function start(){
   setMusicBtn();
   initStore();
   setInterval(render, 30000);
-  setInterval(remind, 30000);
+  setInterval(remindRooms, 20000);
+  setInterval(remindBox, 30000);
 }
 function begin(){
-  if (!me.name) {
+  const newRoom = urlRoom && !getRooms().some(x => x.id === urlRoom);   // 링크로 처음 들어온 방
+  if (!me.name || newRoom) {
+    $('nameIn').value = me.name || '';
     showOv('nameOv');
     $('nameOk').onclick = () => {
       const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
-      me.name = n; saveMe(); hideOv('nameOv'); start();
+      me.name = n; saveMe(); hideOv('nameOv'); start(); click();
     };
   } else start();
 }
