@@ -25,9 +25,10 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .hbtn.lb{width:auto;min-width:40px;padding:0 4px;flex-direction:column;font-size:15px;line-height:1}
 .hbtn.lb b{font-size:9px;font-weight:400;margin-top:3px;white-space:nowrap}
 .badge{position:absolute;top:-6px;right:-6px;background:var(--red);color:#fff;font-size:11px;border-radius:9px;min-width:18px;height:18px;padding:0 4px;display:none;align-items:center;justify-content:center}
-#moleBtn,#callBtn{flex:none;height:42px;border-radius:12px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:16px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
-#moleBtn b,#callBtn b{font-size:9px;font-weight:400;margin-top:2px}
-#moleBtn{position:absolute;left:8px;top:-50px;height:40px;z-index:5;opacity:.9}
+#tgBtn,#callBtn{flex:none;height:42px;border-radius:12px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:16px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+#tgBtn b,#callBtn b{font-size:9px;font-weight:400;margin-top:2px}
+#tgBtn{position:absolute;left:8px;top:-54px;height:46px;z-index:5;padding:2px 6px}
+#tgMenu{left:8px;bottom:auto;top:-160px}
 .dot{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid #666;background:#222;color:#fff;font-size:15px;padding:0;line-height:1}
 .dot:active{background:var(--blue)}
 /* 방 말풍선 줄: 말풍선은 옆으로 밀리고, 빨간 ＋는 항상 오른쪽 끝 */
@@ -35,7 +36,8 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .rscroll{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto;padding:10px 4px 7px;scrollbar-width:none}
 .rscroll::-webkit-scrollbar{display:none}
 .rb{flex:none;height:32px;min-width:32px;padding:0 10px;border-radius:16px 16px 16px 4px;border:1px solid #444;background:#26262c;color:#fff;font-size:14px;font-weight:700;white-space:nowrap;position:relative;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:pan-x}
-.rb:not(.cur):not(.add){width:44px;padding:0;overflow:visible;text-overflow:clip;font-size:13px}
+.rb:not(.cur):not(.add){min-width:44px;padding:0 7px;overflow:visible;text-overflow:clip;font-size:13px}
+.rb.wait{border-style:dashed;opacity:.8}
 .rb.cur{background:#ffe14d;color:#222;border-color:#ffe14d}
 .rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff;margin-top:3px}
 .rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
@@ -61,7 +63,7 @@ body:not(.dark) .me .bubble{background:var(--t-me);box-shadow:0 2px 6px rgba(120
 body:not(.dark) .who,body:not(.dark) .time,body:not(.dark) .day,body:not(.dark) .sign,body:not(.dark) .mini .st{color:var(--t-sub)}
 body:not(.dark) footer{background:var(--t-bar);border-color:var(--t-line)}
 body:not(.dark) #txt{background:var(--t-field);color:var(--t-fieldink);border-color:var(--t-btnline)}
-body:not(.dark) #moleBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+body:not(.dark) #tgBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
 
 /* 나만의 편지지 · 편지지 가게 */
 .mkhint{font-size:13px;color:#ffd76a;margin:-2px 0 10px;line-height:1.4}
@@ -102,11 +104,29 @@ body:not(.dark) #plusBtn{background:var(--t-btn);color:var(--t-btnink);border-co
 #app>.tpanel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:22;width:300px;max-width:92%;background:rgba(22,22,28,.96);border:1px solid #444;border-radius:18px;padding:16px 14px 12px;box-shadow:0 12px 30px rgba(0,0,0,.6);display:none;color:#fff}
 #app>.tpanel.show{display:block}
 #app>.tpanel.wide{width:94%;max-width:600px}
+/* 노래 막대 */
+#mbar{display:none;align-items:center;gap:4px;margin:4px 10px 0;padding:4px 6px;border-radius:12px;background:#1d1d24;border:1px solid #444;color:#fff;z-index:3}
+#mbar.show{display:flex}
+#mbTitle{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:700;padding-left:4px}
+#mbar button{flex:none;width:36px;height:32px;border-radius:9px;border:1px solid #444;background:#2b2b33;color:#fff;font-size:15px;padding:0}
+#mbPlay{background:var(--red)!important;border-color:var(--red)!important}
+#mYTbox{flex:none;width:56px;height:32px;border-radius:6px;overflow:hidden;display:none}
+#mYTbox.show{display:block}
+#mYTbox iframe{width:100%;height:100%}
+body:not(.dark) #mbar{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+.phead{text-align:center;font-weight:800;font-size:16px;margin-bottom:2px}
+.tsearch{width:100%;margin-top:10px;padding:8px 10px;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:14px}
+.tfind{display:flex;gap:6px;margin-top:8px}
+.tfind button{flex:1;padding:9px 4px;border-radius:10px;border:1px solid #555;background:#2b2b33;color:#fff;font-size:13px}
+/* 영화 볼 때: 화면 꽉, 글 쓰는 칸만 밑에 */
+body.watch header,body.watch .rooms,body.watch #installBar,body.watch #mbar,body.watch #tgBtn,body.watch .sign{display:none!important}
+body.watch #app>#videoPanel{left:0;right:0;top:0;bottom:var(--fh,64px);transform:none;width:100%;max-width:none;border-radius:0;border:none;padding:8px 8px 6px;display:flex;flex-direction:column}
+body.watch #videoPanel .vbox{margin-top:30px;flex:none}
+#vChat{display:none}
+body.watch #vChat{display:block;flex:1;overflow-y:auto;margin-top:6px;font-size:14px;line-height:1.45}
+#vChat div{padding:2px 4px}#vChat b{color:#ffd76a}
+#vChat .me{text-align:right}#vChat .me b{color:#4fc3ff}
 .tx{position:absolute;right:6px;top:4px;background:none;border:none;color:#bbb;font-size:20px;padding:4px 8px}
-.cass{display:block;margin:2px auto 0}
-.reel{transform-box:fill-box;transform-origin:center}
-.cass.spin .reel{animation:reelspin 1.8s linear infinite}
-@keyframes reelspin{to{transform:rotate(360deg)}}
 .tctl{display:flex;justify-content:center;gap:8px;margin-top:10px}
 .tctl button{width:50px;height:42px;border-radius:12px;border:1px solid #555;background:#2b2b33;color:#fff;font-size:18px}
 .tctl button:active{background:#1d4a63}
@@ -117,13 +137,9 @@ body:not(.dark) #plusBtn{background:var(--t-btn);color:var(--t-btnink);border-co
 .tadd{display:flex;gap:6px;margin-top:10px}
 .tadd input{flex:1;min-width:0;padding:9px 10px;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:14px}
 .tadd button{padding:0 12px;border-radius:10px;border:none;background:#ffe14d;color:#222;font-weight:700;font-size:14px}
-.tlist{max-height:92px;overflow-y:auto;margin-top:8px;font-size:13px}
+.tlist{max-height:30vh;overflow-y:auto;margin-top:8px;font-size:13px}
 .tlist div{padding:5px 8px;border-radius:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
 .tlist div.on{background:#1d4a63}
-.tsmall{display:block;margin:8px auto 0;background:none;border:1px dashed #555;color:#aaa;border-radius:10px;padding:6px 10px;font-size:12px}
-.mytbox{width:200px;height:112px;margin:8px auto 0;border-radius:8px;overflow:hidden;display:none}
-.mytbox.show{display:block}
-.mytbox iframe{width:100%;height:100%}
 .vbox{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin-top:16px}
 .vbox iframe{position:absolute;inset:0;width:100%;height:100%}
 .vempty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;text-align:center;padding:10px}
@@ -265,6 +281,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 #recState{font-size:14px;color:#ff6b66;font-weight:700}
 #recStop{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;font-size:16px;padding:9px 16px;animation:blink 1.2s infinite}
 #recState.ok{color:#4cd964}
+.r1{color:#ffc400;font-weight:800;font-size:12px;margin-right:5px}
 /* 우체통 열기 */
 .bigbox{position:relative;width:300px;height:300px;margin-top:20px}
 .bigbox svg{position:absolute;left:0;bottom:0}
@@ -313,31 +330,35 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <h1>빨간 우체통<small id="subTitle">(못다한 그 말)</small></h1>
     <button class="hbtn lb" id="draftBtn" title="쓰던 편지">📝<b>쓰던 편지</b><span class="badge" id="draftBadge"></span></button>
     <button class="hbtn lb" id="pileBtn" title="편지 보관함">📚<b>보관함</b></button>
-    <button class="hbtn on" id="musicBtn" title="음악">🎵</button>
+    <button class="hbtn" id="musicBtn" title="노래 켜기·끄기">🔇</button>
     <button class="dot" id="themeBtn" title="바탕 바꾸기">🎨</button>
     <button class="dot" data-dark title="검은 화면">◐</button>
     <button class="hbtn" id="roomBtn" title="설정">⚙</button>
   </header>
   <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
+  <!-- 노래 막대 (같이 듣는 중) -->
+  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
-  <!-- 노래 같이 듣기 -->
+  <!-- 노래 같이 듣기 (펼친 목록) -->
   <div class="tpanel" id="musicPanel">
     <button class="tx" data-tclose="musicPanel">✕</button>
-    <svg class="cass" id="mCass" viewBox="0 0 220 120" width="200" height="109"><rect x="2" y="2" width="216" height="116" rx="12" fill="#c8302d" stroke="#7a1414" stroke-width="3"/><rect x="18" y="14" width="184" height="58" rx="6" fill="#fff4e0"/><text x="110" y="30" text-anchor="middle" font-size="12" font-family="Nanum Pen Script, cursive" fill="#7a1414">빨간 우체통 테이프</text><rect x="50" y="36" width="120" height="30" rx="15" fill="#3a2a2a"/><g class="reel"><circle cx="72" cy="51" r="12" fill="#fff"/><g stroke="#3a2a2a" stroke-width="3"><path d="M72 41v20M62 51h20M65 44l14 14M79 44 65 58"/></g></g><g class="reel"><circle cx="148" cy="51" r="12" fill="#fff"/><g stroke="#3a2a2a" stroke-width="3"><path d="M148 41v20M138 51h20M141 44l14 14M155 44l-14 14"/></g></g><path d="M40 118 l14-30 h112 l14 30" fill="#a02420"/><circle cx="70" cy="104" r="4" fill="#5a1010"/><circle cx="150" cy="104" r="4" fill="#5a1010"/></svg>
+    <div class="phead">🎵 노래 같이 듣기</div>
     <div class="tctl"><button id="mPrev" title="이전 곡">⏮</button><button id="mPlay" title="재생">▶</button><button id="mNext" title="다음 곡">⏭</button><button id="mStop" title="정지">⏹</button></div>
     <div class="ttitle" id="mTitle">노래를 골라 주세요</div>
     <div class="tby" id="mBy"></div>
-    <div class="mytbox" id="mYTbox"><div id="mYT"></div></div>
+    <input class="tsearch" id="mFind" placeholder="🔍 목록에서 찾기 (제목)">
     <div class="tlist" id="mList"></div>
+    <div class="tfind"><button id="mPhone">📱 내 폰에서 찾기</button><button id="mYTfind">▶ 유튜브에서 찾기</button></div>
+    <input type="file" id="mFiles" accept="audio/*" multiple style="display:none">
     <div class="tadd"><input id="mUrl" placeholder="유튜브 노래 주소 붙여 넣기"><button id="mAdd">넣기</button></div>
-    <button class="tsmall" id="mPhone">📱 내 휴대폰 노래 (곧 열려요)</button>
   </div>
   <!-- 영화 같이 보기 -->
   <div class="tpanel wide" id="videoPanel">
     <button class="tx" data-tclose="videoPanel">✕</button>
     <div class="vbox"><div class="vempty" id="vEmpty">유튜브 주소를 넣으면<br>방 친구와 같은 장면을 같이 봐요</div><div id="vYT"></div></div>
     <div class="tby" id="vBy"></div>
+    <div id="vChat"></div>
     <div class="tadd"><input id="vUrl" placeholder="유튜브 주소 붙여 넣기 (또는 검색어)"><button id="vGo">틀기</button></div>
     <div class="tctl small"><button id="vFind">🔍 유튜브에서 찾기</button><button id="vEnd">⏹ 같이 보기 끝내기</button></div>
   </div>
@@ -345,7 +366,8 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   <div id="msgs"></div>
   <footer>
     <span class="sign">YMwav</span>
-    <button id="moleBtn" title="두더지 게임">🔨<b>두더지</b></button>
+    <button id="tgBtn" title="영화 같이 보기"><svg viewBox="0 0 40 30" width="30" height="22"><rect x="2" y="9" width="30" height="19" rx="3" fill="#ff5a55"/><path d="M2 9 5 2h28l-3 7z" fill="#333"/><path d="M8 2 6 9M15 2l-2 7M22 2l-2 7M29 2l-2 7" stroke="#fff" stroke-width="2.5"/><path d="M14 13v10l9-5z" fill="#fff"/><circle cx="35" cy="22" r="3" fill="#ffe14d"/><path d="M37.5 22V12l2-1" stroke="#ffe14d" stroke-width="1.6" fill="none"/></svg><b>영화 같이 보기</b></button>
+    <div class="pmenu" id="tgMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <button id="mailbox" title="빨간 우체통">
       <svg viewBox="0 0 76 66" width="54" height="47">
         <defs>
@@ -368,7 +390,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
       </svg>
     </button>
     <button id="plusBtn" title="같이 듣기 · 같이 보기">＋</button>
-    <div class="pmenu" id="plusMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="mole">🔨 두더지 게임</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <button id="sendBtn">전송</button>
@@ -505,7 +527,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 <div class="ov" id="newOv">
   <div class="panel">
     <h2>＋ 새 친구 방이 생겼어요</h2>
-    <input class="in" id="newName" maxlength="12" placeholder="친구 이름 (예: 엄마, 철수)">
+    <input class="in" id="newName" maxlength="12" placeholder="누구를 초대해요? (예: 엄마, 철수)">
     <div class="sharerow" data-shares></div>
     <div class="shhint">친구를 초대하세요</div>
     <button class="big" data-share="copy">🔗 방 주소 복사</button>
@@ -624,7 +646,7 @@ const KAKAO_JS_KEY = '';   // 카카오 개발자 JavaScript 키를 넣으면 �
 const MOLE_URL = 'https://kymhka100-byte.github.io/mole';
 const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3KtrcCh3EjeyKlVz0x4c8CDjQjp_OU';  // 웹 푸시 인증서
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
-const BGM_FILE = 'bgm.mp3';     // 내 배경음악
+const BGM_FILE = 'bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'drop.mp3', rustle: 'rustle.mp3', tear: 'tear.mp3' };  // 효과음 (없으면 기본 소리)
 /* ================ */
 
@@ -810,6 +832,16 @@ function joinRoom(id){
 }
 /* 방 사람들 */
 const roomMembers = {};
+const othersIn = id => Object.entries(roomMembers[id] || {}).filter(([u, v]) => !me.ids.includes(u) && v && v.name && v.name !== me.name).map(([, v]) => v);
+/* 내가 이 방을 어디까지 읽었는지 서버에 남겨요 → 친구 화면의 숫자 1이 사라짐 */
+let seenT = 0, seenLast = 0;
+function writeSeen(){
+  if (!FB || me !== realMe || document.hidden || !room) return;
+  clearTimeout(seenT);
+  const go = () => { seenLast = Date.now(); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + me.uid), { seen: Date.now() }).catch(() => {}); };
+  if (Date.now() - seenLast > 3000) go(); else seenT = setTimeout(go, 3000);
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { writeSeen(); queueRender(); } });
 function memberIn(id, uid, v, t0){
   if (!v) return;
   (roomMembers[id] || (roomMembers[id] = {}))[uid] = v;
@@ -901,7 +933,7 @@ function drawBar(){
   const html = list.map(x => {
     const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
     const n = unread[x.id] ? unread[x.id].keys.size : 0;
-    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('');
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
@@ -932,11 +964,17 @@ $('roomBar').addEventListener('click', e => {
 });
 $('delYes').onclick = () => { hideOv('delOv'); if (delId) { removeRoom(delId); toast('방을 지웠어요'); } delId = null; };
 /* ＋ : 새 방이 바로 생기고 초대 창 */
+let newRoomId = null;
 $('addRoom').onclick = () => {
   click();
-  const id = rid(); saveRoom(id, ''); openRoom(id);
-  $('newName').value = ''; showOv('newOv');
+  const id = rid(); saveRoom(id, ''); openRoom(id); newRoomId = id;
+  $('newName').value = ''; showOv('newOv'); setTimeout(() => $('newName').focus(), 300);
 };
+/* 이름 없이 닫으면 빈 방은 지워요 (누구 방인지 모르는 "새 방"이 쌓이지 않게) */
+document.querySelector('#newOv [data-close]').addEventListener('click', () => {
+  const id = newRoomId; newRoomId = null;
+  if (id && !$('newName').value.trim() && !Object.keys(msgs).length && id === room) removeRoom(id);
+});
 $('newName').addEventListener('input', () => {
   const t = $('newName').value.trim(), rooms = getRooms(), r = rooms.find(x => x.id === room);
   if (r) { r.title = t; LS.set('rp_rooms', rooms); pushRoomUp(r); render(); }
@@ -967,6 +1005,7 @@ document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
 /* 공유 창을 먼저 띄우고, 다 보내고 나서 초대 창을 닫아요 (먼저 닫으면 공유 창이 취소돼 친구 고르기가 안 나와요) */
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
+  if (b.closest('#newOv') && !$('newName').value.trim()) { toast('친구 이름을 먼저 적어 주세요 (누구 방인지 알 수 있게)'); $('newName').focus(); return; }
   click();
   await shareInvite(kind);
   if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
@@ -1133,7 +1172,9 @@ function envHTML(m){
 }
 function render(){
   const t = titleFor(room); if (me === realMe) saveRoom(room, t || null);
-  $('subTitle').textContent = `나: ${me.name}` + (t ? ` · ${t}님과 대화` : '');
+  const others = othersIn(room);
+  $('subTitle').textContent = `나: ${me.name}` + (t ? ` · ${t}님과 대화` : '') + (FB && !others.length ? ' · ⏳ 친구가 아직 안 들어왔어요' : '');
+  writeSeen();
   if (!document.hidden) setSeen(room);
   syncWatchers();
   drawBar();
@@ -1152,13 +1193,19 @@ function render(){
     } else {
       html += `<div class="bubble">${esc(m.text)}</div>`;
     }
-    html += `<div class="time">${fmtTime(m.at)}</div></div>`;
+    let r1 = '';
+    if (mine && FB && m.type !== 'letter') {   // 카톡처럼: 아직 안 읽은 사람 수
+      const n = others.length ? others.filter(v => (v.seen || 0) < (m.at || 0)).length : 1;
+      if (n) r1 = `<b class="r1">${n}</b>`;
+    }
+    html += `<div class="time">${r1}${fmtTime(m.at)}</div></div>`;
   });
   box.innerHTML = `<div class="mwrap">${html}</div>`;
   if (atBottom || render.jump) box.scrollTop = box.scrollHeight;
   render.jump = false;
   updateFlag();
   checkArrivals();
+  drawVChat();
 }
 render.jump = true;
 function updateFlag(){
@@ -1216,7 +1263,6 @@ $('testBtn').onclick = () => {
 };
 
 /* ----- 두더지 게임 ----- */
-$('moleBtn').onclick = () => { click(); window.open(MOLE_URL, '_blank'); };
 
 /* ----- 대화 ----- */
 function sendText(){
@@ -1658,13 +1704,13 @@ $('mkSave').onclick = () => {
 
 /* ----- 노래 같이 듣기 · 영화 같이 보기 (방 친구와 같은 곳을 같이) ----- */
 const BASE_SONGS = [{ type: 'mp3', src: BGM_FILE, title: '빨간 우체통 테마곡' }];
-const ytId = t => { const m = String(t).match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(t.trim()) ? t.trim() : null); };
+const ytId = t => { const m = String(t || '').match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(String(t || '').trim()) ? String(t).trim() : null); };
 let YTready = null;
 function loadYT(){
   if (!YTready) YTready = new Promise((ok, no) => {
     if (window.YT && YT.Player) return ok();
     window.onYouTubeIframeAPIReady = ok;
-    loadScript('https://www.youtube.com/iframe_api').catch(no);
+    loadScript('https://www.youtube.com/iframe_api').catch(e => { YTready = null; no(e); });
   });
   return YTready;
 }
@@ -1674,71 +1720,97 @@ function makeYT(el, onState){
       events: { onReady: () => ok(pl), onStateChange: e => onState && onState(e.data), onError: () => toast('이 영상은 다른 앱에서 재생이 막혀 있어요') } });
   }));
 }
-const tgRef = kind => FB ? FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/together/' + kind) : null;
+const tgRef = (kind, id) => FB ? FB.D.ref(FB.db, 'giftstory/rooms/' + (id || room) + '/together/' + kind) : null;
 function tgWrite(kind, st){
   if (FB) FB.D.set(tgRef(kind), st).catch(() => toast('같이 듣기 연결 실패 - 인터넷을 확인해 주세요'));
   else (kind === 'music' ? applyMusic : applyVideo)(st);
 }
 const posNow = st => st ? (st.pos || 0) + (st.playing ? Math.max(0, (Date.now() - (st.at || Date.now())) / 1000) : 0) : 0;
-let tgBusy = false;   // 같이 듣기·보기 중이면 배경음악 쉬기
-function tgMusicPause(on){ tgBusy = on; if (on) bgm.pause(); else if (musicOn && !document.hidden) musicStart(); }
-function showPanel(id, on){ $(id).classList.toggle('show', on); }
-function closePlus(){ $('plusMenu').classList.remove('show'); $('plusBtn').classList.remove('on'); }
-$('plusBtn').onclick = e => { e.stopPropagation(); click(); const on = !$('plusMenu').classList.contains('show'); $('plusMenu').classList.toggle('show', on); $('plusBtn').classList.toggle('on', on); };
-document.addEventListener('click', e => { if (!e.target.closest('#plusMenu,#plusBtn')) closePlus(); });
-$('plusMenu').addEventListener('click', e => {
+function showPanel(id, on){
+  $(id).classList.toggle('show', on);
+  if (id === 'videoPanel') { document.body.classList.toggle('watch', on); if (on) { document.documentElement.style.setProperty('--fh', document.querySelector('footer').offsetHeight + 'px'); drawVChat(); } }
+}
+function closeMenus(){ ['plusMenu', 'tgMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); }
+function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); }
+$('plusBtn').onclick = e => toggleMenu('plusMenu', e);
+$('tgBtn').onclick = e => toggleMenu('tgMenu', e);
+document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn')) closeMenus(); });
+['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
-  click(); closePlus();
-  if (b.dataset.tg === 'music') { showPanel('musicPanel', true); showPanel('videoPanel', false); drawMusic(); syncMusic(); }
-  else { showPanel('videoPanel', true); showPanel('musicPanel', false); syncVideo(); }
-});
+  click(); closeMenus();
+  if (b.dataset.tg === 'mole') window.open(MOLE_URL, '_blank');
+  else if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
+  else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
+}));
 document.querySelectorAll('[data-tclose]').forEach(b => b.onclick = () => {
   click(); showPanel(b.dataset.tclose, false);
-  if (b.dataset.tclose === 'videoPanel' && vPlayer) { vApplying(); vPlayer.pauseVideo(); }   // 나만 닫기 (친구는 계속)
-  if (b.dataset.tclose === 'musicPanel') { tAudio.pause(); if (mPlayer) mPlayer.pauseVideo(); tgMusicPause(false); $('mCass').classList.remove('spin'); }
+  if (b.dataset.tclose === 'videoPanel' && vPlayer) { vApplying(); vPlayer.pauseVideo(); tgVideoOn = false; }   // 나만 닫기 (친구는 계속)
 });
 
 /* --- 노래 --- */
-let M = null, mPlayer = null, mLocalOff = false;
-const tAudio = new Audio(); tAudio.preload = 'auto';
+let M = null, mPlayer = null, mPinned = false, mCollapseT = 0, tgVideoOn = false;
+const tAudio = new Audio(); tAudio.preload = 'auto'; tAudio.crossOrigin = 'anonymous';
+tAudio.addEventListener('error', () => {   // 미리보기·저장공간에서 열면 GitHub 파일로
+  if (tAudio.src && tAudio.src.startsWith('file:')) { const f = tAudio.src.split('/').pop(); tAudio.src = MEDIA_HOME + f; tAudio.load(); }
+});
+const rAudio = new Audio(); rAudio.autoplay = true;   // 친구 폰에서 흘려보내 주는 노래
+const localFiles = {};   // 내 폰에서 고른 노래 (이 화면에만)
 const mList = () => (M && M.list) || BASE_SONGS;
+const curItem = () => M && mList()[M.idx];
+const mOn = () => !!(M && M.playing);
 function drawMusic(){
-  const list = mList(), i = M ? M.idx : -1;
-  $('mList').innerHTML = list.map((x, k) => `<div class="${k === i ? 'on' : ''}" data-k="${k}">${x.type === 'yt' ? '▶ ' : '♪ '}${esc(x.title || '유튜브 노래')}</div>`).join('');
-  $('mTitle').textContent = M && list[M.idx] ? (list[M.idx].title || '유튜브 노래') : '노래를 골라 주세요';
+  const list = mList(), i = M ? M.idx : -1, q = $('mFind').value.trim().toLowerCase();
+  $('mList').innerHTML = list.map((x, k) => ({ x, k })).filter(({ x }) => !q || (x.title || '').toLowerCase().includes(q))
+    .map(({ x, k }) => `<div class="${k === i ? 'on' : ''}" data-k="${k}">${x.type === 'yt' ? '▶ ' : x.type === 'local' ? '📱 ' : '♪ '}${esc(x.title || '유튜브 노래')}${x.type === 'local' && x.hostName ? ` <small style="color:#999">(${esc(x.hostName)} 폰)</small>` : ''}</div>`).join('')
+    || '<div style="color:#888">찾는 노래가 없어요</div>';
+  const it = curItem(), title = it ? (it.title || '유튜브 노래') : '노래를 골라 주세요';
+  $('mTitle').textContent = title;
+  $('mbTitle').textContent = (mOn() ? '♪ ' : '⏸ ') + title;
   $('mBy').textContent = M && M.by ? `${M.by}님이 ${M.playing ? '틀었어요' : '멈췄어요'}` : '';
-  $('mPlay').textContent = M && M.playing && !mLocalOff ? '⏸' : '▶';
-  $('mCass').classList.toggle('spin', !!(M && M.playing && !mLocalOff));
+  $('mPlay').textContent = $('mbPlay').textContent = mOn() ? '⏸' : '▶';
+  $('mbar').classList.toggle('show', !!M);
+  $('musicBtn').textContent = mOn() ? '🎵' : '🔇'; $('musicBtn').classList.toggle('on', mOn());
+}
+function openMusicPanel(){ mPinned = true; clearTimeout(mCollapseT); showPanel('musicPanel', true); drawMusic(); }
+/* 노래가 시작되면: 가운데에 잠깐(1초) 보였다가 위쪽 막대로 */
+function flashMusicPanel(){
+  if (tgVideoOn) return;
+  mPinned = false; showPanel('musicPanel', true); drawMusic();
+  clearTimeout(mCollapseT); mCollapseT = setTimeout(() => { if (!mPinned) showPanel('musicPanel', false); }, 1200);
 }
 function mCurPos(){
-  const it = M && mList()[M.idx]; if (!it) return 0;
-  return it.type === 'yt' ? (mPlayer && mPlayer.getCurrentTime ? mPlayer.getCurrentTime() : posNow(M)) : tAudio.currentTime || posNow(M);
+  const it = curItem(); if (!it) return 0;
+  if (it.type === 'yt') return mPlayer && mPlayer.getCurrentTime ? mPlayer.getCurrentTime() : posNow(M);
+  if (it.type === 'local' && it.host !== me.uid) return posNow(M);
+  return tAudio.currentTime || posNow(M);
 }
 function mSet(ch){ tgWrite('music', { list: mList(), idx: 0, pos: 0, playing: false, ...M, ...ch, at: Date.now(), by: me.name }); }
 function applyMusic(st){
   const prev = M; M = st && st.list ? st : null;
-  if (M && prev && prev.idx === M.idx && prev.playing === M.playing && prev.at === M.at) return;
-  if (M && M.playing && M.by !== me.name && !$('musicPanel').classList.contains('show')) {
-    showBanner(`🎵 ${M.by}님이 노래를 틀었어요 · 눌러서 같이 듣기`); bannerAct = () => { showPanel('musicPanel', true); mLocalOff = false; syncMusic(); drawMusic(); };
-  }
-  if (M && M.by === me.name) mLocalOff = false;
+  const started = M && M.playing && (!prev || !prev.playing || prev.idx !== M.idx);
   drawMusic();
-  if ($('musicPanel').classList.contains('show') || (M && M.by === me.name)) syncMusic();
+  if (started) flashMusicPanel();
+  syncMusic();
 }
+function stopAllMusic(){ tAudio.pause(); rAudio.pause(); try { if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); } catch (e) {} }
 function syncMusic(){
-  const it = M && mList()[M.idx];
-  if (!it || !M.playing || mLocalOff) { tAudio.pause(); if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); $('mYTbox').classList.toggle('show', !!(it && it.type === 'yt')); tgMusicPause(false); drawMusic(); return; }
+  const it = curItem();
+  $('mYTbox').classList.toggle('show', !!(it && it.type === 'yt'));
+  hostStream(it && it.type === 'local' && it.host === me.uid);
+  if (!it || !M.playing) { stopAllMusic(); drawMusic(); return; }
   const at = posNow(M);
-  tgMusicPause(true);
-  if (it.type === 'mp3') {
-    if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo();
-    $('mYTbox').classList.remove('show');
-    const src = new URL(it.src, location.href).href;
+  if (it.type !== 'yt') { try { if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); } catch (e) {} }
+  if (it.type !== 'local' || it.host === me.uid) rAudio.pause();
+  if (it.type === 'mp3' || (it.type === 'local' && it.host === me.uid)) {
+    let src;
+    if (it.type === 'local') { src = localFiles[it.src]; if (!src) { toast('📱 이 노래는 다시 골라 주세요 (화면을 새로 열면 지워져요)'); return; } }
+    else src = new URL(it.src, location.href).href;
     const go = () => { if (Math.abs(tAudio.currentTime - at) > 2) { try { tAudio.currentTime = at; } catch (e) {} } tAudio.play().catch(() => { showBanner('🎵 눌러서 같이 듣기'); bannerAct = () => syncMusic(); }); };
-    if (tAudio.src !== src) { tAudio.src = src; tAudio.addEventListener('loadedmetadata', go, { once: true }); tAudio.load(); } else go();
+    if (tAudio.src !== src && !(tAudio.src.startsWith(MEDIA_HOME) && src.endsWith(it.src))) { tAudio.src = src; tAudio.addEventListener('loadedmetadata', go, { once: true }); tAudio.load(); } else go();
+  } else if (it.type === 'local') {   // 친구 폰 노래 → 흘려받기
+    tAudio.pause(); listenStream(it.host);
   } else {
     tAudio.pause();
-    $('mYTbox').classList.add('show');
     const run = pl => {
       const cur = pl.getVideoData && pl.getVideoData().video_id;
       if (cur !== it.src) pl.loadVideoById(it.src, at);
@@ -1747,7 +1819,8 @@ function syncMusic(){
     if (mPlayer) run(mPlayer);
     else makeYT('mYT', st => {
       if (st === 0) mEnded();
-      if (st === 1 && M && mList()[M.idx] && !mList()[M.idx].title && M.by === me.name) {   // 제목 채우기
+      const c = curItem();
+      if (st === 1 && c && c.type === 'yt' && !c.title && M.by === me.name) {   // 제목 채우기
         const t = mPlayer.getVideoData().title; if (t) { const l = mList().map(x => ({ ...x })); l[M.idx].title = t; mSet({ list: l, pos: mCurPos(), playing: true }); }
       }
     }).then(pl => { mPlayer = pl; run(pl); }).catch(() => toast('유튜브를 불러오지 못했어요'));
@@ -1756,24 +1829,89 @@ function syncMusic(){
 }
 function mEnded(){ if (M && M.by === me.name) mSet({ idx: (M.idx + 1) % mList().length, pos: 0, playing: true }); }
 tAudio.onended = mEnded;
-$('mPlay').onclick = () => {
-  click();
-  if (M && M.playing && !mLocalOff) mSet({ pos: mCurPos(), playing: false });
-  else { mLocalOff = false; mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); }
-};
-$('mStop').onclick = () => { click(); if (M) mSet({ pos: 0, playing: false }); };
-$('mNext').onclick = () => { click(); const n = mList().length; mLocalOff = false; mSet({ idx: ((M ? M.idx : -1) + 1) % n, pos: 0, playing: true }); };
-$('mPrev').onclick = () => { click(); const n = mList().length; mLocalOff = false; mSet({ idx: ((M ? M.idx : 1) - 1 + n) % n, pos: 0, playing: true }); };
-$('mList').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (!d) return; click(); mLocalOff = false; mSet({ idx: +d.dataset.k, pos: 0, playing: true }); });
+const mPlayToggle = () => { click(); if (mOn()) mSet({ pos: mCurPos(), playing: false }); else mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); };
+const mStep = d => { click(); const n = mList().length; mSet({ idx: ((M ? M.idx : (d > 0 ? -1 : 1)) + d + n) % n, pos: 0, playing: true }); };
+$('mPlay').onclick = $('mbPlay').onclick = mPlayToggle;
+$('musicBtn').onclick = mPlayToggle;   // 위쪽 🎵: 같이 듣기 노래 켜기·끄기
+$('mNext').onclick = $('mbNext').onclick = () => mStep(1);
+$('mPrev').onclick = $('mbPrev').onclick = () => mStep(-1);
+$('mbList').onclick = $('mbTitle').onclick = () => { click(); openMusicPanel(); };
+$('mStop').onclick = () => { click(); tgWrite('music', null); showPanel('musicPanel', false); };
+$('mFind').oninput = drawMusic;
+$('mList').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (!d) return; click(); mSet({ idx: +d.dataset.k, pos: 0, playing: true }); });
+function addSongs(items){
+  if (!items.length) return;
+  const l = [...mList(), ...items];
+  mSet({ list: l, idx: l.length - items.length, pos: 0, playing: true });
+}
 $('mAdd').onclick = () => {
   const id = ytId($('mUrl').value); if (!id) { toast('유튜브 주소를 붙여 넣어 주세요'); return; }
-  $('mUrl').value = ''; click();
-  const l = [...mList(), { type: 'yt', src: id, title: '' }];
-  mLocalOff = false; mSet({ list: l, idx: l.length - 1, pos: 0, playing: true });
+  $('mUrl').value = ''; click(); addSongs([{ type: 'yt', src: id, title: '' }]);
 };
-$('mPhone').onclick = () => toast('📱 내 휴대폰 노래 같이 듣기는 곧 열려요!');
+$('mYTfind').onclick = () => { click(); window.open('https://m.youtube.com/', '_blank'); toast('노래에서 공유 → 빨간 우체통을 누르거나, 링크 복사 후 여기 붙여 넣으세요'); };
+$('mPhone').onclick = () => { click(); $('mFiles').click(); };
+$('mFiles').onchange = () => {
+  const fs = [...$('mFiles').files]; $('mFiles').value = ''; if (!fs.length) return;
+  const items = fs.map(f => { const id = rid(); localFiles[id] = URL.createObjectURL(f); return { type: 'local', src: id, title: f.name.replace(/\.[^.]+$/, ''), host: me.uid, hostName: me.name }; });
+  addSongs(items); toast(`📱 ${items.length}곡을 넣었어요 · 친구 폰으로 흘려보내요`);
+};
 
-/* --- 영화 (유튜브) --- */
+/* --- 내 폰 노래를 친구 폰으로 흘려보내기 (저장 안 함 · 파이어베이스는 연결만) --- */
+const ICE = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
+const rtcRef = p => FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/rtc/' + p);
+let hostOn = false, hostPeers = {}, hostUn = null, streamDest = null;
+function waitIce(pc){ return new Promise(ok => { if (pc.iceGatheringState === 'complete') return ok(); const t = setTimeout(ok, 2500); pc.addEventListener('icegatheringstatechange', () => { if (pc.iceGatheringState === 'complete') { clearTimeout(t); ok(); } }); }); }
+function hostStream(on){
+  if (!FB || !window.RTCPeerConnection || on === hostOn) return;
+  hostOn = on;
+  if (!on) { if (hostUn) hostUn(); hostUn = null; Object.values(hostPeers).forEach(pc => pc.close()); hostPeers = {}; return; }
+  const c = ac(); if (!c) return;
+  if (!streamDest) {   // 내 노래 소리 → 스피커 + 친구에게 보낼 줄
+    const src = c.createMediaElementSource(tAudio);
+    streamDest = c.createMediaStreamDestination();
+    src.connect(c.destination); src.connect(streamDest);
+  }
+  const reqs = rtcRef(me.uid + '/req');
+  hostUn = FB.D.onChildAdded(reqs, async snap => {
+    const v = snap.val(), who = snap.key; if (!v || !v.offer || Date.now() - (v.at || 0) > 60000) return;
+    try {
+      if (hostPeers[who]) hostPeers[who].close();
+      const pc = hostPeers[who] = new RTCPeerConnection(ICE);
+      streamDest.stream.getTracks().forEach(t => pc.addTrack(t, streamDest.stream));
+      await pc.setRemoteDescription(v.offer);
+      await pc.setLocalDescription(await pc.createAnswer());
+      await waitIce(pc);
+      await FB.D.set(rtcRef(me.uid + '/ans/' + who), { answer: { type: 'answer', sdp: pc.localDescription.sdp }, at: Date.now() });
+      FB.D.remove(snap.ref);
+    } catch (e) {}
+  });
+}
+let listenPc = null, listenHost = null;
+async function listenStream(host){
+  if (!FB || !window.RTCPeerConnection) { toast('이 화면에서는 친구 폰 노래를 받을 수 없어요'); return; }
+  if (listenPc && listenHost === host && ['connected', 'connecting', 'new'].includes(listenPc.connectionState)) { rAudio.play().catch(() => { showBanner('🎵 눌러서 같이 듣기'); bannerAct = () => rAudio.play(); }); return; }
+  if (listenPc) listenPc.close();
+  listenHost = host;
+  const pc = listenPc = new RTCPeerConnection(ICE);
+  pc.addTransceiver('audio', { direction: 'recvonly' });
+  pc.ontrack = e => { rAudio.srcObject = e.streams[0] || new MediaStream([e.track]); rAudio.play().catch(() => { showBanner('🎵 눌러서 같이 듣기'); bannerAct = () => rAudio.play(); }); };
+  pc.onconnectionstatechange = () => { if (pc.connectionState === 'failed') toast('친구 폰과 연결이 안 됐어요 (와이파이를 바꿔 보세요)'); };
+  try {
+    await pc.setLocalDescription(await pc.createOffer());
+    await waitIce(pc);
+    const ans = rtcRef(host + '/ans/' + me.uid);
+    await FB.D.remove(ans); await FB.D.remove(rtcRef(host + '/req/' + me.uid));
+    await FB.D.set(rtcRef(host + '/req/' + me.uid), { offer: { type: 'offer', sdp: pc.localDescription.sdp }, at: Date.now() });
+    const un = FB.D.onValue(ans, async s => {
+      const v = s.val(); if (!v || !v.answer || pc !== listenPc) return;
+      un(); try { await pc.setRemoteDescription(v.answer); } catch (e) {}
+      FB.D.remove(ans);
+    });
+    unsub.push(un);
+  } catch (e) { toast('친구 폰 노래를 받지 못했어요'); }
+}
+
+/* --- 영화 (유튜브 · 스트림이라 저장 안 함) --- */
 let V = null, vPlayer = null, vApplyT = 0;
 const vApplying = () => { vApplyT = Date.now() + 1500; };
 function vSet(ch){ tgWrite('video', { vid: V && V.vid, pos: 0, playing: false, ...ch, at: Date.now(), by: me.name }); }
@@ -1782,20 +1920,21 @@ function applyVideo(st){
   $('vBy').textContent = V ? `${V.by}님이 ${V.playing ? '틀었어요' : '멈췄어요'}` : '';
   $('vEmpty').style.display = V ? 'none' : '';
   if (V && V.playing && V.by !== me.name && !$('videoPanel').classList.contains('show') && (!prev || prev.vid !== V.vid || !prev.playing)) {
-    showBanner(`🎬 ${V.by}님이 영화를 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('videoPanel', true); showPanel('musicPanel', false); syncVideo(); };
+    showBanner(`🎬 ${V.by}님이 영화를 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); };
   }
   if ($('videoPanel').classList.contains('show')) syncVideo();
 }
 function syncVideo(){
+  tgVideoOn = true;
   $('vEmpty').style.display = V ? 'none' : '';
-  if (!V) { if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } tgMusicPause(false); return; }
+  if (!V) { if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } return; }
   const at = posNow(V);
+  if (V.playing) stopAllMusic();   // 영화 볼 땐 노래 쉬기
   const run = pl => {
     vApplying();
     const cur = pl.getVideoData && pl.getVideoData().video_id;
     if (cur !== V.vid) { V.playing ? pl.loadVideoById(V.vid, at) : pl.cueVideoById(V.vid, at); }
     else { if (Math.abs(pl.getCurrentTime() - at) > 2) pl.seekTo(at, true); V.playing ? pl.playVideo() : pl.pauseVideo(); }
-    tgMusicPause(!!V.playing);
   };
   if (vPlayer) run(vPlayer);
   else makeYT('vYT', st => {
@@ -1804,25 +1943,35 @@ function syncVideo(){
     if (st === 2) vSet({ vid: V.vid, pos: vPlayer.getCurrentTime(), playing: false });
   }).then(pl => { vPlayer = pl; run(pl); }).catch(() => toast('유튜브를 불러오지 못했어요'));
 }
+/* 영화 보면서 대화: 최근 글만 작게 */
+function drawVChat(){
+  if (!document.body.classList.contains('watch')) return;
+  const box = $('vChat'), list = sorted().filter(m => m.type !== 'letter').slice(-6);
+  box.innerHTML = list.map(m => `<div class="${isMine(m) ? 'me' : ''}"><b>${esc(isMine(m) ? '나' : m.name)}</b> ${esc(m.text)}</div>`).join('');
+  box.scrollTop = box.scrollHeight;
+}
 $('vGo').onclick = () => {
   const q = $('vUrl').value.trim(), id = ytId(q);
   if (!id) { if (q) window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(q), '_blank'); else toast('유튜브 주소를 붙여 넣어 주세요'); return; }
   $('vUrl').value = ''; click();
   vSet({ vid: id, pos: 0, playing: true });
-  if (!FB) syncVideo();
 };
-$('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); window.open('https://www.youtube.com/' + (q && !ytId(q) ? 'results?search_query=' + encodeURIComponent(q) : ''), '_blank'); };
-$('vEnd').onclick = () => { click(); tgWrite('video', null); };
+$('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); window.open('https://m.youtube.com/' + (q && !ytId(q) ? 'results?search_query=' + encodeURIComponent(q) : ''), '_blank'); };
+$('vEnd').onclick = () => { click(); tgWrite('video', null); showPanel('videoPanel', false); tgVideoOn = false; };
 
 /* 방이 바뀌면 같이 듣기·보기도 그 방 것으로 */
 function tgListen(){
-  M = null; V = null; tAudio.pause(); if (mPlayer && mPlayer.pauseVideo) mPlayer.pauseVideo(); if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); }
-  showPanel('musicPanel', false); showPanel('videoPanel', false); tgBusy = false;
+  M = null; V = null; stopAllMusic(); hostStream(false); if (listenPc) { listenPc.close(); listenPc = null; }
+  if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); }
+  showPanel('musicPanel', false); showPanel('videoPanel', false); tgVideoOn = false;
   drawMusic(); applyVideo(null);
   if (!FB) return;
   unsub.push(FB.D.onValue(tgRef('music'), s => applyMusic(s.val())));
   unsub.push(FB.D.onValue(tgRef('video'), s => applyVideo(s.val())));
 }
+/* 유튜브 앱에서 공유 → 빨간 우체통 으로 들어온 노래 */
+const sharedYT = (() => { const q = new URLSearchParams(location.search); return ytId(q.get('url') || '') || ytId(q.get('text') || '') || ytId(q.get('title') || ''); })();
+function takeShared(){ if (sharedYT) setTimeout(() => { addSongs([{ type: 'yt', src: sharedYT, title: '' }]); toast('🎵 유튜브 노래를 같이 듣기에 넣었어요'); }, 2500); }
 
 /* ----- 쓰던 편지 ----- */
 function drawDrafts(){
@@ -1883,7 +2032,7 @@ addEventListener('popstate', () => {
 let toastT = 0;
 function toast(t){ const el = $('toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', 2300); }
 
-/* ----- 소리: 배경음악(내 MP3), 바스락, 툭, 띵 ----- */
+/* ----- 소리: 바스락, 툭, 띵 (배경음악은 없앰 · 🎵 버튼은 같이 듣기 노래 켜기·끄기) ----- */
 /* 파일이 옆에 없으면(앱 미리보기·휴대폰 저장공간) GitHub에 올린 파일로 재생 */
 function loadMedia(file, onFail){
   const a = new Audio(file); a.preload = 'auto';
@@ -1891,21 +2040,18 @@ function loadMedia(file, onFail){
   a.addEventListener('error', () => { if (!alt) { alt = true; a.src = MEDIA_HOME + file; a.load(); } else if (onFail) onFail(); });
   return a;
 }
-let actx = null, musicOn = LS.get('rp_music', true);
-const bgm = loadMedia(BGM_FILE);
-bgm.loop = true; bgm.volume = .22;
+let actx = null;
 function ac(){
   if (!actx) { const A = window.AudioContext || window.webkitAudioContext; if (!A) return null; actx = new A(); }
   if (actx.state === 'suspended') actx.resume();
   return actx;
 }
-function musicStart(){ ac(); bgm.play().catch(() => {}); }   // 막히면 다음 터치 때 다시 시도
-function musicStop(){ bgm.pause(); }
-function musicDuck(on){ bgm.volume = on ? .04 : .22; }
-const musicPlaying = () => !bgm.paused;
-function setMusicBtn(){ $('musicBtn').textContent = musicOn ? '🎵' : '🔇'; $('musicBtn').classList.toggle('on', musicOn); }
-$('musicBtn').onclick = () => { musicOn = !musicOn; LS.set('rp_music', musicOn); setMusicBtn(); musicOn ? musicStart() : musicStop(); };
-document.addEventListener('pointerdown', () => { if (musicOn && !musicPlaying() && !tgBusy) musicStart(); }, { capture: true });
+/* 녹음·편지 읽기 중에는 같이 듣는 노래 소리를 줄여요 */
+function musicDuck(on){
+  const v = on ? .12 : 1;
+  tAudio.volume = v; rAudio.volume = v;
+  try { if (mPlayer && mPlayer.setVolume) mPlayer.setVolume(on ? 12 : 100); } catch (e) {}
+}
 
 function noiseBurst(dur, freq, vol){
   const c = ac(); if (!c) return;
@@ -2036,10 +2182,10 @@ setTimeout(showInstall, 1500);
 
 /* ----- 시작 ----- */
 function start(){
-  setMusicBtn();
   initStore();
   setInterval(render, 30000);
   setInterval(remindRooms, 20000);
+  takeShared();
   setInterval(remindBox, 30000);
 }
 function begin(){
