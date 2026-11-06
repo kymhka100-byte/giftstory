@@ -41,9 +41,9 @@ header h1 small{display:block;font-size:12px;color:var(--sub);font-weight:400}
 .rb.cur{background:#ffe14d;color:#222;border-color:#ffe14d}
 .rb.add{border-radius:50%;padding:0;width:32px;font-size:18px;background:var(--red);border:none;color:#fff;margin-top:3px}
 .rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
+.rb.unread{background:#ff4d4a!important;color:#fff!important;border-color:#ff4d4a!important}
 .rb.flash{animation:rbflash 1.8s ease}
-@keyframes rbflash{0%{transform:none}8%{transform:rotate(-9deg) scale(1.08);background:#ff4d4a;color:#fff;border-color:#ff4d4a}16%{transform:rotate(8deg) scale(1.08)}24%{transform:rotate(-6deg)}32%{transform:rotate(4deg)}40%{transform:none;background:#ff4d4a;color:#fff}55%{background:#ff4d4a}70%{background:#ff4d4a;color:#fff}100%{transform:none}}
-body:not(.dark) .rb.flash{animation:rbflash 1.8s ease}
+@keyframes rbflash{0%{transform:none}10%{transform:translateY(-5px) scale(1.12)}20%{transform:rotate(-8deg)}30%{transform:translateY(-3px) rotate(7deg)}40%{transform:rotate(-5deg)}50%{transform:translateY(-2px) rotate(3deg)}65%{transform:none}100%{transform:none}}
 .rb.press{transform:scale(.9)}
 #readOv .dot{width:32px;height:32px}
 #app{position:relative}#app>*{position:relative}
@@ -89,7 +89,6 @@ body:not(.dark) #tgBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:
 .shopTop{background:linear-gradient(#5a3a1c,#3a2614);margin:-16px -16px 12px;padding:16px;border-radius:18px 18px 0 0;text-align:center}
 .shopTop h2{margin:0;font-size:20px}
 .shopTop div{font-size:13px;color:#f3d9b0;margin-top:4px}
-.mrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
 #mkFade{width:100%}
 .mythumb{width:54px;flex:none}.mythumb .pthumb{height:40px;box-shadow:none}
 
@@ -110,6 +109,7 @@ body:not(.dark) #plusBtn{background:var(--t-btn);color:var(--t-btnink);border-co
 #mbTitle{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;font-weight:700;padding-left:4px}
 #mbar button{flex:none;width:36px;height:32px;border-radius:9px;border:1px solid #444;background:#2b2b33;color:#fff;font-size:15px;padding:0}
 #mbPlay{background:var(--red)!important;border-color:var(--red)!important}
+#mbar #mbClose{width:28px;background:none;border:none;color:#bbb}
 #mYTbox{flex:none;width:56px;height:32px;border-radius:6px;overflow:hidden;display:none}
 #mYTbox.show{display:block}
 #mYTbox iframe{width:100%;height:100%}
@@ -143,6 +143,18 @@ body.watch #vChat{display:block;flex:1;overflow-y:auto;margin-top:6px;font-size:
 .vbox{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:10px;overflow:hidden;margin-top:16px}
 .vbox iframe{position:absolute;inset:0;width:100%;height:100%}
 .vempty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#888;font-size:14px;text-align:center;padding:10px}
+/* 영상통화 */
+#callOv{position:fixed;inset:0;z-index:70;background:#000;display:none}
+#callOv.show{display:block}
+#rVid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
+#lVid{position:absolute;right:12px;top:12px;width:28vw;max-width:150px;aspect-ratio:3/4;object-fit:cover;border-radius:12px;border:2px solid #fff;background:#222;transform:scaleX(-1)}
+#lVid.back{transform:none}
+#callInfo{position:absolute;left:0;right:0;top:40%;text-align:center;color:#fff;font-size:18px;text-shadow:0 1px 4px #000}
+#callBtns{position:absolute;left:0;right:0;bottom:28px;display:flex;justify-content:center;gap:16px}
+#callBtns button{width:60px;height:60px;border-radius:50%;border:none;background:rgba(255,255,255,.22);font-size:26px;color:#fff}
+#callBtns button.off{background:rgba(255,255,255,.75)}
+#cEnd{background:#e53935!important;transform:rotate(135deg)}
+@keyframes ring{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
 /* 홈 화면에 추가 안내 */
 #installBar{display:none;align-items:center;gap:6px;margin:6px 10px 0;padding:8px 10px;border-radius:12px;background:#2b2b33;color:#fff;font-size:14px;border:1px solid #555;z-index:3}
 #installBar.show{display:flex}
@@ -330,14 +342,14 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
     <h1>빨간 우체통<small id="subTitle">(못다한 그 말)</small></h1>
     <button class="hbtn lb" id="draftBtn" title="쓰던 편지">📝<b>쓰던 편지</b><span class="badge" id="draftBadge"></span></button>
     <button class="hbtn lb" id="pileBtn" title="편지 보관함">📚<b>보관함</b></button>
-    <button class="hbtn" id="musicBtn" title="노래 켜기·끄기">🔇</button>
+    <button class="hbtn" id="camBtn" title="영상통화">📹</button>
     <button class="dot" id="themeBtn" title="바탕 바꾸기">🎨</button>
     <button class="dot" data-dark title="검은 화면">◐</button>
     <button class="hbtn" id="roomBtn" title="설정">⚙</button>
   </header>
   <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
   <!-- 노래 막대 (같이 듣는 중) -->
-  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button></div>
+  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
   <!-- 노래 같이 듣기 (펼친 목록) -->
@@ -548,6 +560,21 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
   </div>
 </div>
 
+<!-- 영상통화 -->
+<div id="callOv">
+  <video id="rVid" autoplay playsinline></video>
+  <video id="lVid" autoplay playsinline muted></video>
+  <div id="callInfo">📹 연결하는 중…</div>
+  <div id="callBtns"><button id="cMic" title="마이크">🎤</button><button id="cCam" title="카메라">📷</button><button id="cFlip" title="카메라 바꾸기">🔄</button><button id="cEnd" title="끊기">📞</button></div>
+</div>
+<div class="ov" id="ringOv">
+  <div class="panel" style="max-width:340px;text-align:center">
+    <div style="font-size:54px;animation:ring 1s infinite">📹</div>
+    <h2 id="ringTitle">영상통화가 왔어요</h2>
+    <div class="twin"><button class="big" id="ringNo" style="background:#d33;color:#fff;border:none">거절</button><button class="big" id="ringYes" style="background:#2ecc71;color:#fff;border:none">받기</button></div>
+  </div>
+</div>
+
 <!-- 알림이 막혔을 때 -->
 <div class="ov" id="notiHelpOv">
   <div class="panel" style="max-width:380px">
@@ -730,7 +757,8 @@ const who = () => me;
 const isMine = m => me.ids.includes(m.from) || (!!m.name && m.name === me.name);
 
 const urlRoom = new URLSearchParams(location.search).get('room');
-let room = urlRoom || LS.get('rp_room', null) || rid();
+const SS = { get: k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} } };
+let room = urlRoom || SS.get('rp_room') || LS.get('rp_room', null) || rid();
 let msgs = {};
 let fb = null;   // 파이어베이스 연결
 
@@ -785,6 +813,8 @@ async function initStore(){
   openRoom(room);
   if ('Notification' in window && Notification.permission === 'granted') setupPush(false);
   else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js').then(x => swReg = x).catch(() => {});   // 앱 설치용
+  if ('serviceWorker' in navigator)   // 알림을 누르면 그 알림이 온 방으로
+    navigator.serviceWorker.addEventListener('message', e => { const r = e.data && e.data.room; if (r && r !== room && getRooms().some(x => x.id === r)) openRoom(r); });
   if (FB) { authModule().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
   if (LS.get('rp_auth', null)) syncAccount();
 }
@@ -792,7 +822,7 @@ async function initStore(){
 function openRoom(id){
   unsub.forEach(f => { try { f(); } catch (e) {} }); unsub = [];
   if (room !== id) setSeen(room);
-  room = id; LS.set('rp_room', room);
+  room = id; LS.set('rp_room', room); SS.set('rp_room', room);
   try { history.replaceState(history.state, '', location.pathname + '?room=' + room); } catch (e) {}
   msgs = {}; loadedAt = Date.now(); render.jump = true;
   delete unread[room]; setSeen(room);
@@ -909,6 +939,7 @@ function watchRoom(id){
   const mems = D.ref(db, path + '/members');
   un.push(D.onChildAdded(mems, s => memberIn(id, s.key, s.val(), t0)));
   un.push(D.onChildChanged(mems, s => memberIn(id, s.key, s.val(), Infinity)));
+  un.push(watchCall(id));
 }
 /* 말풍선 순서: 누르면 제자리 그대로, 새 메시지가 온 방만 맨 왼쪽으로 */
 const orderedRooms = () => getRooms();
@@ -933,7 +964,7 @@ function drawBar(){
   const html = list.map(x => {
     const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
     const n = unread[x.id] ? unread[x.id].keys.size : 0;
-    return `<button class="rb ${cur ? 'cur' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('');
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
@@ -1005,7 +1036,10 @@ document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
 /* 공유 창을 먼저 띄우고, 다 보내고 나서 초대 창을 닫아요 (먼저 닫으면 공유 창이 취소돼 친구 고르기가 안 나와요) */
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
-  if (b.closest('#newOv') && !$('newName').value.trim()) { toast('친구 이름을 먼저 적어 주세요 (누구 방인지 알 수 있게)'); $('newName').focus(); return; }
+  if (b.closest('#newOv') && !$('newName').value.trim()) {   // 이름이 비었으면 '초대 1' 처럼 자동 이름 (친구가 들어오면 친구 이름으로 바뀜)
+    const n = getRooms().filter(x => /^초대 \d+$/.test(x.title || '')).length + 1;
+    $('newName').value = '초대 ' + n; $('newName').dispatchEvent(new Event('input'));
+  }
   click();
   await shareInvite(kind);
   if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
@@ -1769,7 +1803,6 @@ function drawMusic(){
   $('mBy').textContent = M && M.by ? `${M.by}님이 ${M.playing ? '틀었어요' : '멈췄어요'}` : '';
   $('mPlay').textContent = $('mbPlay').textContent = mOn() ? '⏸' : '▶';
   $('mbar').classList.toggle('show', !!M);
-  $('musicBtn').textContent = mOn() ? '🎵' : '🔇'; $('musicBtn').classList.toggle('on', mOn());
 }
 function openMusicPanel(){ mPinned = true; clearTimeout(mCollapseT); showPanel('musicPanel', true); drawMusic(); }
 /* 노래가 시작되면: 가운데에 잠깐(1초) 보였다가 위쪽 막대로 */
@@ -1827,16 +1860,22 @@ function syncMusic(){
   }
   drawMusic();
 }
-function mEnded(){ if (M && M.by === me.name) mSet({ idx: (M.idx + 1) % mList().length, pos: 0, playing: true }); }
+/* 곡이 끝나면 다음 곡, 마지막 곡이 끝나면 3초 뒤 플레이어가 사라져요 */
+let mEndT = 0;
+function mEnded(){
+  if (!M || M.by !== me.name) return;
+  if (M.idx < mList().length - 1) { mSet({ idx: M.idx + 1, pos: 0, playing: true }); return; }
+  mSet({ pos: 0, playing: false });
+  clearTimeout(mEndT); mEndT = setTimeout(() => { if (M && !M.playing) tgWrite('music', null); }, 3000);
+}
 tAudio.onended = mEnded;
-const mPlayToggle = () => { click(); if (mOn()) mSet({ pos: mCurPos(), playing: false }); else mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); };
+const mPlayToggle = () => { click(); clearTimeout(mEndT); if (mOn()) mSet({ pos: mCurPos(), playing: false }); else mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); };
 const mStep = d => { click(); const n = mList().length; mSet({ idx: ((M ? M.idx : (d > 0 ? -1 : 1)) + d + n) % n, pos: 0, playing: true }); };
 $('mPlay').onclick = $('mbPlay').onclick = mPlayToggle;
-$('musicBtn').onclick = mPlayToggle;   // 위쪽 🎵: 같이 듣기 노래 켜기·끄기
 $('mNext').onclick = $('mbNext').onclick = () => mStep(1);
 $('mPrev').onclick = $('mbPrev').onclick = () => mStep(-1);
 $('mbList').onclick = $('mbTitle').onclick = () => { click(); openMusicPanel(); };
-$('mStop').onclick = () => { click(); tgWrite('music', null); showPanel('musicPanel', false); };
+$('mStop').onclick = $('mbClose').onclick = () => { click(); tgWrite('music', null); showPanel('musicPanel', false); };
 $('mFind').oninput = drawMusic;
 $('mList').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (!d) return; click(); mSet({ idx: +d.dataset.k, pos: 0, playing: true }); });
 function addSongs(items){
@@ -1961,6 +2000,7 @@ $('vEnd').onclick = () => { click(); tgWrite('video', null); showPanel('videoPan
 
 /* 방이 바뀌면 같이 듣기·보기도 그 방 것으로 */
 function tgListen(){
+  if (call && call.room !== room) endCall(true);
   M = null; V = null; stopAllMusic(); hostStream(false); if (listenPc) { listenPc.close(); listenPc = null; }
   if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); }
   showPanel('musicPanel', false); showPanel('videoPanel', false); tgVideoOn = false;
@@ -1968,10 +2008,128 @@ function tgListen(){
   if (!FB) return;
   unsub.push(FB.D.onValue(tgRef('music'), s => applyMusic(s.val())));
   unsub.push(FB.D.onValue(tgRef('video'), s => applyVideo(s.val())));
+  unsub.push(watchCall(room));
 }
 /* 유튜브 앱에서 공유 → 빨간 우체통 으로 들어온 노래 */
 const sharedYT = (() => { const q = new URLSearchParams(location.search); return ytId(q.get('url') || '') || ytId(q.get('text') || '') || ytId(q.get('title') || ''); })();
 function takeShared(){ if (sharedYT) setTimeout(() => { addSongs([{ type: 'yt', src: sharedYT, title: '' }]); toast('🎵 유튜브 노래를 같이 듣기에 넣었어요'); }, 2500); }
+
+
+/* ----- 📹 영상통화 (카메라 영상은 친구 폰으로 바로 · 저장 안 함) ----- */
+let call = null;   // { id, room, pc, stream, mine, un, facing }
+const callRef = id => FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/call');
+const ringing = {};
+function watchCall(id){
+  return FB.D.onValue(callRef(id), s => {
+    const v = s.val();
+    if (call && call.room === id) { onCallState(v); return; }
+    if (v && v.state === 'ring' && v.from !== me.uid && !me.ids.includes(v.from) && Date.now() - (v.at || 0) < 45000 && !call) showRing(id, v);
+    else if (ringing.id === id && (!v || v.state !== 'ring')) hideRing();
+  });
+}
+function showRing(id, v){
+  ringing.id = id; ringing.v = v;
+  $('ringTitle').textContent = `${v.fromName || '친구'}님이 영상통화를 걸었어요`;
+  showOv('ringOv');
+  clearInterval(ringing.t); dingdong(); ringing.t = setInterval(dingdong, 2500);
+  if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
+}
+function hideRing(){ clearInterval(ringing.t); ringing.id = null; hideOv('ringOv'); }
+async function getCam(facing){
+  return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } } });
+}
+function showCall(text){
+  $('callInfo').textContent = text || ''; $('callOv').classList.add('show');
+  stopAllMusic();
+  ['cMic', 'cCam'].forEach(id => $(id).classList.remove('off'));
+}
+function newPc(){
+  const pc = new RTCPeerConnection(ICE);
+  call.stream.getTracks().forEach(t => pc.addTrack(t, call.stream));
+  pc.ontrack = e => { $('rVid').srcObject = e.streams[0] || new MediaStream([e.track]); $('callInfo').textContent = ''; };
+  pc.onconnectionstatechange = () => {
+    if (pc.connectionState === 'failed') { toast('연결이 안 됐어요 (와이파이를 바꿔 보세요)'); endCall(true); }
+  };
+  return pc;
+}
+$('camBtn').onclick = async () => {
+  click();
+  if (!FB) { toast('영상통화는 서버 연결이 필요해요'); return; }
+  if (!window.RTCPeerConnection || !navigator.mediaDevices) { toast('이 화면에서는 영상통화가 안 돼요 (크롬으로 열어 주세요)'); return; }
+  if (call) return;
+  const id = room;
+  try {
+    call = { id: rid(), room: id, mine: true, facing: 'user' };
+    call.stream = await getCam('user');
+    $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
+    showCall(`📹 ${titleFor(id) || '친구'}님을 부르는 중…`);
+    const pc = call.pc = newPc();
+    await pc.setLocalDescription(await pc.createOffer());
+    await waitIce(pc);
+    if (!call) return;
+    await FB.D.set(callRef(id), { id: call.id, from: me.uid, fromName: me.name, state: 'ring', at: Date.now(), offer: { type: 'offer', sdp: pc.localDescription.sdp } });
+    call.sent = true;
+    call.timeout = setTimeout(() => { if (call && call.mine && !call.on) { toast('친구가 받지 않았어요'); endCall(true); } }, 45000);
+  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라를 켤 수 없어요'); endCall(false); }
+};
+async function onCallState(v){
+  if (!call || (call.mine && !call.sent)) return;
+  if (!v || v.id !== call.id || v.state === 'end') { toast(v && v.reason === 'reject' ? '친구가 거절했어요' : '통화가 끝났어요'); endCall(false); return; }
+  if (call.mine && v.state === 'on' && v.answer && !call.on) {
+    call.on = true; clearTimeout(call.timeout);
+    try { await call.pc.setRemoteDescription(v.answer); $('callInfo').textContent = '연결하는 중…'; } catch (e) { endCall(true); }
+  }
+}
+$('ringYes').onclick = async () => {
+  const id = ringing.id, v = ringing.v; hideRing(); click();
+  if (!id || !v) return;
+  if (id !== room) openRoom(id);
+  try {
+    call = { id: v.id, room: id, mine: false, facing: 'user', on: true };
+    call.stream = await getCam('user');
+    $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
+    showCall('연결하는 중…');
+    const pc = call.pc = newPc();
+    await pc.setRemoteDescription(v.offer);
+    await pc.setLocalDescription(await pc.createAnswer());
+    await waitIce(pc);
+    await FB.D.update(callRef(id), { state: 'on', by: me.uid, answer: { type: 'answer', sdp: pc.localDescription.sdp } });
+  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라를 켤 수 없어요'); endCall(true); }
+};
+$('ringNo').onclick = () => {
+  const id = ringing.id; hideRing(); click();
+  if (id && FB) FB.D.update(callRef(id), { state: 'end', reason: 'reject' }).catch(() => {});
+};
+function endCall(tell){
+  const c = call; call = null;
+  hideRing();
+  $('callOv').classList.remove('show');
+  if (!c) return;
+  clearTimeout(c.timeout);
+  try { c.pc && c.pc.close(); } catch (e) {}
+  if (c.stream) c.stream.getTracks().forEach(t => t.stop());
+  $('rVid').srcObject = null; $('lVid').srcObject = null;
+  if (tell && FB) {
+    FB.D.update(callRef(c.room), { state: 'end' }).catch(() => {});
+    setTimeout(() => FB.D.remove(callRef(c.room)).catch(() => {}), 3000);
+  }
+}
+$('cEnd').onclick = () => { click(); endCall(true); };
+$('cMic').onclick = () => { if (!call) return; const t = call.stream.getAudioTracks()[0]; if (t) { t.enabled = !t.enabled; $('cMic').classList.toggle('off', !t.enabled); toast(t.enabled ? '🎤 마이크 켰어요' : '🎤 마이크 껐어요'); } };
+$('cCam').onclick = () => { if (!call) return; const t = call.stream.getVideoTracks()[0]; if (t) { t.enabled = !t.enabled; $('cCam').classList.toggle('off', !t.enabled); } };
+$('cFlip').onclick = async () => {
+  if (!call) return;
+  const facing = call.facing === 'user' ? 'environment' : 'user';
+  try {
+    const ns = await navigator.mediaDevices.getUserMedia({ video: { facingMode: facing } });
+    const nt = ns.getVideoTracks()[0], old = call.stream.getVideoTracks()[0];
+    const snd = call.pc.getSenders().find(x => x.track && x.track.kind === 'video');
+    if (snd) await snd.replaceTrack(nt);
+    if (old) { call.stream.removeTrack(old); old.stop(); }
+    call.stream.addTrack(nt); call.facing = facing;
+    $('lVid').srcObject = call.stream; $('lVid').classList.toggle('back', facing !== 'user');
+  } catch (e) { toast('카메라를 바꿀 수 없어요'); }
+};
 
 /* ----- 쓰던 편지 ----- */
 function drawDrafts(){

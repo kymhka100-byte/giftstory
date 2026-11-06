@@ -24,7 +24,8 @@ self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = (e.notification.data && e.notification.data.url) || self.registration.scope;
   e.waitUntil(self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
-    for (const c of list) if (c.url.startsWith(self.registration.scope)) return c.focus();
+    const room = new URL(url, self.registration.scope).searchParams.get('room');
+    for (const c of list) if (c.url.startsWith(self.registration.scope)) { if (room) c.postMessage({ room }); return c.focus(); }   // 그 알림이 온 방으로
     return self.clients.openWindow(url);
   }));
 });
