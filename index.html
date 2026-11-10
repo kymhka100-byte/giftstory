@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 19번: 18번 정리판 (빈 줄·공백 정리, 에러 검사 완료) -->
+<!-- 빨간 우체통 21번: 실버 음성 대화 · 간단한 처음 화면 · 뒤로 가기 · 사진 보내기 카메라 정리 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
@@ -417,6 +417,14 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 .bubble.voice{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:110px}
 .bubble.voice b{font-size:20px}
 .namerow{display:flex;gap:8px}
+/* 21번: 간단한 처음 화면 */
+.nbtn{display:block;width:100%;margin:0 0 10px;padding:14px 12px;border-radius:14px;border:1px solid #444;background:#26262c;color:#fff;font-size:17px;font-weight:700}
+.nbtn small{font-size:12px;font-weight:500;color:#bbb}
+.nbtn.g{background:#fff;color:#222;border-color:#fff}
+.nbtn.g b{color:#4285f4;font-size:19px;margin-right:4px}
+.nbtn.g small{color:#666}
+.nbtn.sv{margin:14px 0 0;background:#1d2350;border-color:#4a5290;font-size:19px}
+.nlab{margin:6px 2px 6px;color:#ccc;font-size:14px}
 .namerow .in{flex:1;margin:0}
 .namerow button{flex:none;border:none;border-radius:12px;background:#ffe14d;color:#222;font-weight:800;font-size:17px;padding:0 18px}
 #svMusic{display:none;flex:none;font-size:24px;padding:10px 14px;border-radius:16px;border:2px solid #ffd76a;background:#3a3410;color:#ffd76a;font-weight:800}
@@ -449,6 +457,24 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 /* 16번: 위쪽 방 말풍선 - 모두 같은 크기 */
 .rb,.rb:not(.cur):not(.add){width:46px;min-width:46px;height:28px;padding:0 2px;font-size:12px;overflow:visible;white-space:nowrap;border-radius:14px 14px 14px 4px}
 .rb.add{width:28px;min-width:28px;height:28px;border-radius:50%}
+/* 20번: 위쪽 말풍선 5자리 고정 */
+.rooms{position:relative}
+.rscroll{overflow:hidden;justify-content:space-between}
+.rscroll .rb:not(.cur):not(.unread):not(.empty){opacity:.6}
+.rb.empty{opacity:.45;border-style:dashed!important;font-size:11px!important;font-weight:600}
+.rb.more,.rb.more:not(.cur):not(.add){width:auto;min-width:0;padding:0 9px;border-radius:14px;font-size:12px;flex:none}
+.rb.more.has{background:#ff4d4a;color:#fff;border-color:#ff4d4a}
+#morePanel{display:none;position:absolute;right:6px;top:100%;z-index:40;width:min(300px,92vw);max-height:60vh;overflow-y:auto;background:#1b1b20;border:1px solid #444;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.6);padding:4px 0}
+#morePanel.show{display:block}
+.mrow{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid #2c2c33;color:#fff;cursor:pointer}
+.mrow:last-child{border-bottom:none}
+.mrow .mt{flex:1;min-width:0}
+.mrow .mt b{display:block;font-size:15px}
+.mrow .mt small{display:block;color:#aaa;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .mc{color:#ff4d4a;font-weight:800;font-size:13px}
+.mrow.inv{color:#ffe14d;font-weight:700}
+.mrow.on{background:#3a3418}
+.pin-empty{color:#aaa;text-align:center;padding:14px}
 /* 18번: 친구 목록 첫 화면 (카톡처럼) */
 #homeList{display:none;flex:1;overflow-y:auto;padding:6px 0 20px}
 body.home #homeList{display:block}
@@ -488,7 +514,7 @@ body.home #msgs,body.home footer{display:none}
     <button class="dot" data-dark title="검은 화면">◐</button>
     <button class="hbtn" id="roomBtn" title="설정">⚙</button>
   </header>
-  <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
+  <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb more" id="moreBtn">더보기</button><button id="addRoom" hidden></button><div id="morePanel"></div></div>
   <!-- 노래 막대 (같이 듣는 중) -->
   <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
@@ -544,8 +570,9 @@ body.home #msgs,body.home footer{display:none}
       </svg>
     </button>
     <button id="plusBtn" title="같이 듣기 · 같이 보기">＋</button>
-    <div class="pmenu" id="plusMenu"><button data-tg="photo">🖼 사진·동영상 보내기</button><button data-tg="file">📁 파일 보내기</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button><button data-tg="mole">🔨 두더지 게임</button></div>
-    <input type="file" id="sendPhoto" accept="image/*,video/*" multiple style="display:none">
+    <div class="pmenu" id="plusMenu"><button data-tg="photo">🖼 사진 보내기</button><button data-tg="movie">🎞 동영상 보내기</button><button data-tg="file">📁 파일 보내기</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button><button data-tg="mole">🔨 두더지 게임</button></div>
+    <input type="file" id="sendPhoto" accept="image/*" multiple style="display:none">
+    <input type="file" id="sendMovie" accept="video/*" multiple style="display:none">
     <input type="file" id="sendFile" accept=".pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.mp3,.m4a,.wav,.ogg,.aac,.flac" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
@@ -743,6 +770,13 @@ body.home #msgs,body.home footer{display:none}
 </div>
 
 <!-- 방 지우기 (말풍선 길게 누르기) -->
+<div class="ov" id="pinOv">
+  <div class="panel" style="max-width:360px">
+    <h2 id="pinTitle" style="text-align:center"></h2>
+    <div id="pinList"></div>
+    <div class="twin"><button class="big" id="pinClear">자리 비우기</button><button class="big" data-close>닫기</button></div>
+  </div>
+</div>
 <div class="ov" id="delOv">
   <div class="panel" style="max-width:340px;text-align:center">
     <h2 id="delTitle"></h2>
@@ -753,11 +787,13 @@ body.home #msgs,body.home footer{display:none}
 
 <!-- 이름 -->
 <div class="ov" id="nameOv">
-  <div class="panel">
-    <h2>📮 빨간 우체통</h2>
-    <div style="margin-bottom:10px;color:#ccc">친구에게 보일 내 이름(별명)을 적어 주세요.</div>
+  <div class="panel" style="max-width:420px">
+    <h2 style="text-align:center;margin-bottom:14px">📮 빨간 우체통 <span style="font-size:.8em;color:#ffb3b1">(못다한 그 말)</span></h2>
+    <button class="nbtn g" id="nameLogin"><b>G</b> 구글 간편 로그인 <small>(닉네임 자동 입력)</small></button>
+    <button class="nbtn" id="nameInstall">📲 홈 화면에 추가</button>
+    <div class="nlab">이름(별명)</div>
     <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
-    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>📎 사진·파일을 주고받을 수 있어요<br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
+    <button class="nbtn sv" id="nameSilver">👵 실버 모드로 시작</button>
   </div>
 </div>
 
@@ -1013,7 +1049,7 @@ async function loadFirebase(){
 }
 let FB = null, unsub = [], loadedAt = 0;
 async function initStore(){
-  if (FIREBASE_CONFIG) {
+  if (FIREBASE_CONFIG && !FB) {
     try {
       const { A, D, base } = await loadFirebase();
       const app = A.initializeApp(FIREBASE_CONFIG);
@@ -1211,37 +1247,105 @@ function drawRooms(){
   const au = LS.get('rp_auth', null);
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
-/* 위쪽 말풍선 줄: 방마다 하나, 지금 방은 노란색 + 이름 전체, 안 읽은 개수는 귀퉁이 숫자 */
-let barHTML = '', barOrder = '';
+/* 20번: 위쪽 말풍선 5자리 고정 - 자리는 안 바뀜, 빈 자리는 ＋친구, 고정 안 된 방은 더보기로 */
+const PIN_N = 5;
+let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
+function getPins(){
+  const ids = getRooms().map(x => x.id);
+  let p = LS.get('rp_pins', null), seen = LS.get('rp_pinseen', null);
+  if (!Array.isArray(p)) { p = ids.slice(0, PIN_N); seen = ids.slice(); }
+  if (!Array.isArray(seen)) seen = ids.slice();
+  p = Array.from({ length: PIN_N }, (_, i) => (p[i] && ids.includes(p[i])) ? p[i] : null);
+  ids.slice().reverse().forEach(id => {   // 새로 생긴 방은 빈 자리에 자동으로
+    if (seen.includes(id)) return;
+    seen.push(id);
+    if (p.includes(id)) return;
+    let k = p.indexOf(null);
+    if (pinWant !== null) { k = pinWant; pinWant = null; }   // ＋친구·자리 바꾸기에서 초대한 방은 그 자리로
+    if (k >= 0) p[k] = id;
+  });
+  LS.set('rp_pins', p); LS.set('rp_pinseen', seen.filter(x => ids.includes(x)));
+  return p;
+}
+function setPin(i, id){ const p = getPins(); const j = p.indexOf(id); if (j >= 0) p[j] = null; p[i] = id; LS.set('rp_pins', p); barHTML = ''; queueRender(); }
+const roomName = id => titleFor(id) || (getRooms().find(x => x.id === id) || {}).title || '새 방';
+const unreadN = id => unread[id] ? unread[id].keys.size : 0;
+/* 더보기 목록 순서: 안 읽은 메시지 온 방 먼저 → 최근 대화 순 */
+function moreRooms(){
+  const p = getPins();
+  return getRooms().filter(x => !p.includes(x.id)).sort((a, b) =>
+    (unreadN(b.id) ? 1 : 0) - (unreadN(a.id) ? 1 : 0) ||
+    ((unread[b.id] || {}).first || 0) - ((unread[a.id] || {}).first || 0) ||
+    ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
+}
+let barHTML = '';
 function drawBar(){
-  const list = getRooms();
-  const html = list.map(x => {
-    const name = titleFor(x.id) || x.title || '새 방', cur = !homeOn && x.id === room;
-    const n = unread[x.id] ? unread[x.id].keys.size : 0;
-    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+  const p = getPins();
+  const html = p.map((id, i) => {
+    if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;
+    const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
+    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('');
+  const mn = moreRooms().reduce((t, x) => t + (x.id === room && !homeOn ? 0 : unreadN(x.id)), 0);
+  const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
+  mb.innerHTML = '더보기' + (mn ? `<i class="cnt">${mn > 99 ? '99+' : mn}</i>` : '');
+  if ($('morePanel').classList.contains('show')) drawMore();
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
-  const order = list.map(x => x.id).join();
-  if (order !== barOrder) { barOrder = order; $('roomBar').scrollLeft = 0; }
 }
-/* 말풍선: 누르면 방 옮기기, 길게 누르면 지우기 */
+function drawMore(){
+  const list = moreRooms();
+  $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (list.length ? list.map(x => {
+    const n = unreadN(x.id), cur = !homeOn && x.id === room;
+    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><div class="mt"><b>${esc(roomName(x.id))}</b><small>${esc((lastMsg[x.id] || {}).t || '')}</small></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
+  }).join('') : '<div class="pin-empty">말풍선에 없는 친구가 여기에 보여요</div>');
+}
+$('moreBtn').onclick = e => { e.stopPropagation(); click(); const m = $('morePanel'); m.classList.toggle('show'); if (m.classList.contains('show')) drawMore(); };
+$('morePanel').addEventListener('click', e => {
+  e.stopPropagation();
+  const r = e.target.closest('.mrow'); if (!r) return;
+  $('morePanel').classList.remove('show'); click();
+  if (r.dataset.inv) { pinWant = null; $('addRoom').click(); return; }
+  if (r.dataset.go && (homeOn || r.dataset.go !== room)) openRoom(r.dataset.go);
+});
+document.addEventListener('click', e => { if (!e.target.closest('#morePanel,#moreBtn')) $('morePanel').classList.remove('show'); });
+/* 자리 고르기 창: ＋친구 누르거나 말풍선 길게 누르면 */
+let pinSlot = 0;
+function openPin(i){
+  pinSlot = i; const p = getPins(), cur = p[i];
+  $('pinTitle').textContent = cur ? `'${roomName(cur)}' 자리 바꾸기` : '말풍선에 넣을 친구';
+  const list = getRooms().filter(x => x.id !== cur).sort((a, b) => ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
+  $('pinList').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + list.map(x =>
+    `<div class="mrow" data-id="${x.id}"><div class="mt"><b>${esc(roomName(x.id))}</b><small>${p.includes(x.id) ? '지금 다른 자리에 있어요 (이 자리로 옮겨요)' : esc((lastMsg[x.id] || {}).t || '')}</small></div></div>`).join('');
+  $('pinClear').style.display = cur ? '' : 'none';
+  showOv('pinOv');
+}
+$('pinList').addEventListener('click', e => {
+  const r = e.target.closest('.mrow'); if (!r) return;
+  click(); hideOv('pinOv');
+  if (r.dataset.inv) { getPins(); pinWant = pinSlot; $('addRoom').click(); return; }
+  setPin(pinSlot, r.dataset.id); toast('말풍선에 넣었어요');
+});
+$('pinClear').onclick = () => { const p = getPins(); p[pinSlot] = null; LS.set('rp_pins', p); barHTML = ''; hideOv('pinOv'); queueRender(); toast('자리를 비웠어요 (더보기에 있어요)'); };
+/* 말풍선에 고정된 방에 안 읽은 메시지가 있으면 10초마다 빨갛게 깜빡·흔들 */
+setInterval(() => { getPins().forEach(id => { if (id && unreadN(id) && (homeOn || id !== room)) flashRoom(id); }); }, 10000);
+/* 말풍선: 누르면 방 옮기기, 길게 누르면 자리 바꾸기·비우기 */
 let lpT = 0, lpDone = false, lpX = 0, lpBtn = null, delId = null;
 const lpEnd = () => { clearTimeout(lpT); if (lpBtn) lpBtn.classList.remove('press'); lpBtn = null; };
 $('roomBar').addEventListener('pointerdown', e => {
   const b = e.target.closest('[data-go]'); if (!b) return;
   lpDone = false; lpX = e.clientX; lpBtn = b; b.classList.add('press');
   lpT = setTimeout(() => {
-    lpDone = true; lpEnd(); delId = b.dataset.go;
+    lpDone = true; lpEnd();
     if (navigator.vibrate) navigator.vibrate(30);
-    $('delTitle').textContent = `'${b.title}' 방을 지울까요?`;
-    showOv('delOv');
+    openPin(+b.dataset.slot);
   }, 600);
 });
 $('roomBar').addEventListener('pointermove', e => { if (lpBtn && Math.abs(e.clientX - lpX) > 10) lpEnd(); });
 ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('roomBar').addEventListener(t, lpEnd));
 $('roomBar').addEventListener('contextmenu', e => e.preventDefault());
 $('roomBar').addEventListener('click', e => {
+  const em = e.target.closest('[data-pin]'); if (em) { click(); openPin(+em.dataset.pin); return; }
   const b = e.target.closest('[data-go]'); if (!b) return;
   if (lpDone) { lpDone = false; return; }
   click();
@@ -1260,7 +1364,7 @@ function makeNewRoom(){
   const id = newRoomId; if (!id || getRooms().some(x => x.id === id)) return;
   saveRoom(id, $('newName').value.trim()); openRoom(id);
 }
-document.querySelector('#newOv [data-close]').addEventListener('click', () => { newRoomId = null; });
+document.querySelector('#newOv [data-close]').addEventListener('click', () => { newRoomId = null; pinWant = null; });
 $('newName').addEventListener('input', () => {
   if (!newRoomId || newRoomId !== room) return;
   const t = $('newName').value.trim(), rooms = getRooms(), r = rooms.find(x => x.id === room);
@@ -1359,6 +1463,7 @@ async function googleLogin(){
 async function afterLogin(user){
   if (!user) return;
   LS.set('rp_auth', { uid: user.uid, name: user.displayName || '' });
+  if ($('nameOv').classList.contains('show')) { $('nameLogin').innerHTML = '<b>✓</b> 구글 로그인됨'; nameFromLogin(); return; }
   await syncAccount(); toast('✓ 구글로 로그인했어요'); drawRooms();
 }
 async function loginReturn(){   // 페이지 이동 방식으로 로그인하고 돌아왔을 때
@@ -1716,7 +1821,7 @@ async function sendFiles(files){
     if (room === r0 && !homeOn) { addMsg(m); render.jump = true; } else pushTo(r0, m);
   }
 }
-['sendPhoto', 'sendFile'].forEach(id => $(id).onchange = e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) sendFiles(fs); });
+['sendPhoto', 'sendMovie', 'sendFile'].forEach(id => $(id).onchange = e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) sendFiles(fs); });
 $('msgs').addEventListener('click', e => {
   const el = e.target.closest('[data-file]'); if (!el) return;
   const m = msgs[el.dataset.file]; if (!m) return;
@@ -2229,7 +2334,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
 ['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
   click(); closeMenus();
-  if (b.dataset.tg === 'photo' || b.dataset.tg === 'file') { if (homeOn) { toast('친구를 골라 대화방에서 보내 주세요'); return; } $(b.dataset.tg === 'photo' ? 'sendPhoto' : 'sendFile').click(); return; }
+  if (['photo', 'movie', 'file'].includes(b.dataset.tg)) { if (homeOn) { toast('친구를 골라 대화방에서 보내 주세요'); return; } $({ photo: 'sendPhoto', movie: 'sendMovie', file: 'sendFile' }[b.dataset.tg]).click(); return; }
   if (b.dataset.tg === 'mole') window.open(MOLE_URL, '_blank');
   else if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
@@ -2715,14 +2820,15 @@ function showOv(id){ $(id).classList.add('show'); syncLayer(); }
 function hideOv(id){ $(id).classList.remove('show'); syncLayer(); }
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => hideOv(b.closest('.ov').id));
 /* 뒤로 가기 버튼: 열린 창을 닫고 대화창으로 (앱 밖으로 나가지 않게) */
-let inLayer = false, skipPop = false, started = false;
+let hDepth = 0, skipPop = 0, started = false;
 const anyOv = () => $('writer').classList.contains('show') || [...document.querySelectorAll('.ov.show')].some(o => o.id !== 'nameOv') || svLayer() || $('musicPanel').classList.contains('show') || $('videoPanel').classList.contains('show');
-const anyOpen = () => anyOv() || (!homeOn && !S.on && started);   // 18번: 대화창도 한 겹 → 뒤로 가기 하면 친구 목록
+/* 21번: 대화창 한 칸 + 열린 창 한 칸 (누를 때 미리 쌓아 둬서 뒤로 가기가 앱 밖으로 안 나가요) */
+const wantDepth = () => started ? (!homeOn && !S.on ? 1 : 0) + (anyOv() ? 1 : 0) : 0;
 function syncLayer(){
   setTimeout(() => {
-    const open = anyOpen();
-    if (open && !inLayer) { inLayer = true; history.pushState({ rp: 1 }, ''); }
-    else if (!open && inLayer) { inLayer = false; skipPop = true; history.back(); }
+    const w = wantDepth();
+    while (hDepth < w) { hDepth++; history.pushState({ rp: hDepth }, ''); }
+    if (hDepth > w) { const n = hDepth - w; hDepth = w; skipPop++; history.go(-n); }
   }, 0);
 }
 function closeAll(){
@@ -2743,11 +2849,11 @@ function closeAll(){
   updateFlag();
 }
 addEventListener('popstate', () => {
-  if (skipPop) { skipPop = false; return; }
-  if (!inLayer) return;
-  inLayer = false;
+  if (skipPop) { skipPop--; return; }
+  if (hDepth <= 0) return;
+  hDepth--;
   if (anyOv()) { closeAll(); showPanel('musicPanel', false); if ($('videoPanel').classList.contains('show')) document.querySelector('[data-tclose="videoPanel"]').click(); }
-  else if (!homeOn && !S.on) goHome();
+  else if (!homeOn && !S.on) goHome();   // 대화창에서 뒤로 가기 → 친구 목록 메인 화면
   syncLayer();
 });
 let toastT = 0;
@@ -3215,80 +3321,76 @@ function svSpeak(t, done){
   u.lang = 'ko-KR'; u.rate = .9; u.pitch = 1.0; if (v) u.voice = v;
   u.onend = end; u.onerror = end;
   musicDuck(true);
-  setTimeout(() => ss.speak(u), 400);   // 18번: 앞 소리가 완전히 끝난 뒤 읽기 ("임" 소리 막기)
+  const busy = ss.speaking || ss.pending;
+  setTimeout(() => { ss.cancel(); ss.resume(); setTimeout(() => ss.speak(u), 150); }, busy ? 800 : 450);   // 21번: 앞 소리를 완전히 끈 뒤 읽기 ("임" 소리 막기)
   setTimeout(end, Math.min(15000, 2500 + t.length * 260));   // 읽기가 멈춰도 목록은 나오게
 }
 
-/* 🎤 음성 대화 (18번): 어르신은 천천히 말하니까 2.5초 동안 조용하면 저절로 보내요 (전송 버튼 없음)
-   · 말하는 동안 계속 듣기(continuous) → 중간에 끊겨도 다시 켜지 않아서 띵동 소리가 반복되지 않아요
-   · 앞의 마이크를 확실히 끄고(abort) 잠깐 쉬었다 켜서 '한 번 되고 1분 동안 안 되는' 문제를 막아요 */
+/* 🎤 음성 대화 (21번 새로 고침)
+   · 한 번 말하기 방식(continuous 끔): 말이 끝나면 휴대폰이 마이크를 스스로 놓아요
+     → 예전처럼 마이크가 1분 동안 붙잡혀 두 번째부터 안 되던 문제를 막아요
+   · 새로 켜기 전에 앞의 마이크가 완전히 꺼질 때까지 기다려요
+   · 마이크가 바쁘면 딱 한 번만 다시 켜요 (띵동이 계속 나지 않게) */
 const SRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-const SV_WAIT = 2500, SV_MAX = 30000;
-let svRec = null, svPrev = null, svHeardT = 0, svMaxT = 0;
+const SV_QUIET = 3500, SV_MAX = 25000;
+let svRec = null, svHeardT = 0, svMaxT = 0, svMicNow = null, svLastEnd = Promise.resolve();
 function svStopListen(){
   clearTimeout(svHeardT); clearTimeout(svMaxT);
   const r = svRec; svRec = null;
-  if (r) { r._stop = true; try { r.abort(); } catch (e) {} }
+  if (r && r.stop) { r._stop = true; try { r.abort(); } catch (e) {} }
   musicDuck(false);
 }
-let svLastEnd = Promise.resolve();
 function svListen(){
   if (!SRec) { toast('이 휴대폰에서는 말로 하기가 안 돼요 (크롬으로 열어 주세요)'); return; }
   svHush(); svStopListen(); svOv('svSheet', false);
-  if (svPrev) { try { svPrev.abort(); } catch (e) {} }   // 앞의 마이크 완전히 끄기
+  if (svMicNow) { try { svMicNow.abort(); } catch (e) {} }   // 앞의 마이크 완전히 끄기
   $('svHeard').textContent = '말씀하세요…';
-  $('svMicHint').textContent = LS.get('rp_mic_ok', 0) ? '천천히 말씀하세요\n다 말하면 저절로 보내져요' : '휴대폰이 마이크를 물어보면\n[허용]을 눌러 주세요';
   $('svMicHint').style.whiteSpace = 'pre-line';
+  $('svMicHint').textContent = LS.get('rp_mic_ok', 0) ? '마이크 켜는 중…' : '휴대폰이 마이크를 물어보면\n[허용]을 눌러 주세요';
   svOv('svVoice', true);
   const token = {}; svRec = token;
-  musicDuck(true);
-  Promise.race([svLastEnd, new Promise(ok => setTimeout(ok, 1200))]).then(() => setTimeout(() => { if (svRec === token) svGo(0); }, 300));
+  Promise.race([svLastEnd, new Promise(ok => setTimeout(ok, 2000))])   // 앞의 마이크가 꺼질 때까지 (길어야 2초)
+    .then(() => setTimeout(() => { if (svRec === token) svGo(0); }, 350));
 }
 function svGo(n){
-  const r = svRec = svPrev = new SRec(); let txt = '', sent = false, endOk, errCode = '';
+  const r = svRec = svMicNow = new SRec();
+  let txt = '', sent = false, errCode = '', started = false, endOk;
+  svLastEnd = new Promise(ok => { endOk = ok; });
   const t0 = Date.now();
-  svLastEnd = new Promise(ok => { endOk = ok; setTimeout(ok, 3000); });
-  const finish = () => {
-    if (sent || !txt) return false; sent = true;
+  const close = (msg, hint, wait) => { $('svHeard').textContent = msg; $('svMicHint').textContent = hint || ''; setTimeout(() => { if (!svRec) svOv('svVoice', false); }, wait); };
+  const send = () => {
+    if (sent || !txt) return; sent = true; svRec = null;
     clearTimeout(svHeardT); clearTimeout(svMaxT);
-    svSend(txt); S.test = false; $('svHeard').textContent = '✓ 보냈어요'; $('svMicHint').textContent = '';
-    setTimeout(() => svOv('svVoice', false), 900);
-    return true;
+    svSend(txt); S.test = false; close('✓ 보냈어요', '', 900);
   };
-  const done = () => { if (svRec === r) svRec = null; if (!finish()) { $('svHeard').textContent = '잘 못 들었어요'; setTimeout(() => { if (!svRec) svOv('svVoice', false); }, 1500); } try { r.stop(); } catch (e) {} musicDuck(false); };
-  r.lang = 'ko-KR'; r.continuous = true; r.interimResults = true; r.maxAlternatives = 1;
-  r.onstart = () => { LS.set('rp_mic_ok', 1); $('svMicHint').textContent = '천천히 말씀하세요\n다 말하면 저절로 보내져요'; svMaxT = setTimeout(done, SV_MAX); };
+  r.lang = 'ko-KR'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 1;
+  r.onstart = () => { started = true; LS.set('rp_mic_ok', 1); $('svMicHint').textContent = '천천히 말씀하세요\n다 말하면 저절로 보내져요'; svMaxT = setTimeout(() => { try { r.stop(); } catch (e) {} }, SV_MAX); };
   r.onresult = e => {
-    let acc = '';   // 휴대폰에 따라 앞의 말이 겹쳐 오는 것 정리
-    for (const x of e.results) {
-      const t = (x[0].transcript || '').trim(); if (!t) continue;
-      if (acc && t.startsWith(acc)) acc = t; else if (!acc.endsWith(t)) acc = (acc + ' ' + t).trim();
-    }
-    txt = acc;
+    txt = [...e.results].map(x => (x[0].transcript || '').trim()).filter(Boolean).join(' ');
     $('svHeard').textContent = txt || '말씀하세요…';
-    clearTimeout(svHeardT);
-    if (txt) svHeardT = setTimeout(done, SV_WAIT);
+    clearTimeout(svHeardT);   // 휴대폰이 안 끊어 주면 조용해진 뒤 직접 끄기
+    if (txt) svHeardT = setTimeout(() => { try { r.stop(); } catch (e) {} }, SV_QUIET);
   };
   r.onerror = e => {
     errCode = e.error || '';
-    if (errCode === 'not-allowed' || errCode === 'service-not-allowed') { LS.set('rp_mic_ok', 0); $('svMicHint').textContent = '마이크가 막혀 있어요\n휴대폰 설정에서 마이크를 허용해 주세요'; }
+    if (errCode === 'not-allowed' || errCode === 'service-not-allowed') LS.set('rp_mic_ok', 0);
   };
   r.onend = () => {
-    endOk();
-    if (sent || r._stop || svRec !== r) { musicDuck(false); return; }   // '그만'으로 끈 건 보내지 않음
-    if (txt) { done(); return; }   // 휴대폰이 먼저 끊어도 들은 말은 보내요
-    const busy = !/not-allowed|no-speech/.test(errCode) && Date.now() - t0 < 2500;
-    if (busy && n < 2) { $('svHeard').textContent = '마이크 켜는 중…'; setTimeout(() => { if (svRec === r) svGo(n + 1); }, 1200); return; }   // 마이크가 아직 바쁨 → 한두 번만 다시
-    svRec = null; musicDuck(false); clearTimeout(svMaxT);
-    if (/허용/.test($('svMicHint').textContent)) return;
-    $('svHeard').textContent = '잘 못 들었어요';
-    $('svMicHint').textContent = '🎤 음성 대화를 다시 눌러 주세요' + (errCode && errCode !== 'no-speech' ? `\n(${errCode})` : '');
-    setTimeout(() => { if (!svRec) svOv('svVoice', false); }, 2500);
+    endOk(); clearTimeout(svHeardT); clearTimeout(svMaxT); musicDuck(false);
+    if (svMicNow === r) svMicNow = null;
+    if (sent || r._stop || svRec !== r) return;   // '그만'으로 끈 건 보내지 않음
+    if (txt) { send(); return; }   // 들은 말은 보내요
+    if (/not-allowed/.test(errCode)) { svRec = null; close('마이크가 막혀 있어요', '휴대폰 설정 → 앱 → 크롬 → 권한에서\n마이크를 허용해 주세요', 4000); return; }
+    const quick = !started || Date.now() - t0 < 1500 || /aborted|audio-capture|network|busy/.test(errCode);
+    if (quick && n < 1) { $('svHeard').textContent = '마이크 켜는 중…'; setTimeout(() => { if (svRec === r) svGo(n + 1); }, 1200); return; }   // 딱 한 번만 다시
+    svRec = null;
+    close('잘 못 들었어요', '🎤 음성 대화를 다시 눌러 주세요' + (errCode && errCode !== 'no-speech' ? `\n(${errCode})` : ''), 2500);
   };
+  musicDuck(true);
   try { r.start(); } catch (e) {
-    endOk();
-    if (n < 2) { setTimeout(() => { if (svRec === r) svGo(n + 1); }, 1200); return; }
-    svRec = null; musicDuck(false); toast('마이크를 켤 수 없어요 · 잠시 뒤 다시 눌러 주세요'); svOv('svVoice', false);
+    endOk(); musicDuck(false);
+    if (n < 1) { setTimeout(() => { if (svRec === r) svGo(n + 1); }, 1200); return; }
+    svRec = null; toast('마이크를 켤 수 없어요 · 잠시 뒤 다시 눌러 주세요'); svOv('svVoice', false);
   }
 }
 $('svVoiceBtn').onclick = () => { click(); S.test = false; svListen(); };
@@ -3319,14 +3421,38 @@ function begin(){
   if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
   if (!me.name || newRoom) {
     $('nameIn').value = me.name || '';
+    $('nameInstall').style.display = isStandalone() ? 'none' : '';
     showOv('nameOv');
-    $('nameOk').onclick = () => {
-      const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
+    const go = silver => {
+      const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); $('nameIn').focus(); return; }
       $('nameIn').blur(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur();   // 키보드 내리기
-      me.name = n; saveMe(); hideOv('nameOv'); start(); click();
+      me.name = n; saveMe(); hideOv('nameOv');
+      if (silver) LS.set('rp_silver_on', 1);
+      start(); click();
     };
-    $('nameIn').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('nameOk').click(); } };
+    $('nameOk').onclick = () => go(false);
+    $('nameSilver').onclick = () => go(true);
+    $('nameIn').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); go(false); } };
+    $('nameInstall').onclick = doInstall;
+    /* 구글 간편 로그인: 구글 이름이 이름 칸에 들어가요 (고쳐 쓸 수 있음) */
+    $('nameLogin').onclick = async () => {
+      click();
+      if (LS.get('rp_auth', null)) { nameFromLogin(); return; }
+      if (!FB) {   // 서버가 아직 안 열렸으면 잠깐 열어 두기
+        try { const { A, D, base } = await loadFirebase(); const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; }
+        catch (e) { toast('인터넷 연결을 확인해 주세요'); return; }
+      }
+      googleLogin();
+    };
+    if (LS.get('rp_login_wait', 0) && !FB) {   // 구글 로그인 창에서 돌아왔을 때
+      loadFirebase().then(({ A, D, base }) => { const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; loginReturn(); }).catch(() => {});
+    }
   } else start();
+}
+function nameFromLogin(){
+  const au = LS.get('rp_auth', null);
+  if (au && au.name && !$('nameIn').value.trim()) $('nameIn').value = au.name.slice(0, 12);
+  if ($('nameOv').classList.contains('show')) toast('✓ 로그인했어요 · 이름을 확인하고 시작을 눌러 주세요');
 }
 if (inKakao) {   // 카톡 안 창에서는 시작하지 않음 (크롬 쪽에서 열려요)
   showOv('kakaoOv');
