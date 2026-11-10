@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 빨간 우체통 19번: 18번 정리판 (빈 줄·공백 정리, 에러 검사 완료) -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
@@ -759,7 +760,6 @@ body.home #msgs,body.home footer{display:none}
     <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>📎 사진·파일을 주고받을 수 있어요<br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
   </div>
 </div>
-
 
 <!-- 편지지 가게 -->
 <div class="ov" id="shopOv">
@@ -2109,7 +2109,6 @@ $('pileBtn').onclick = () => {
 };
 $('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); curLetter = pileItems[w.dataset.id]; showReader(); } });
 
-
 /* ----- 편지지 가게 ----- */
 const thumbHTML = p => `<div class="pthumb ${pcls(p)}" style="${paperVars(p)}"></div>`;
 function openShop(){
@@ -2193,7 +2192,6 @@ $('mkSave').onclick = () => {
   if (W) { W.paper = p.id; buildPick(); applyW(); }
   toast('✨ 나만의 편지지를 만들었어요');
 };
-
 
 /* ----- 노래 같이 듣기 · 영화 같이 보기 (방 친구와 같은 곳을 같이) ----- */
 const BASE_SONGS = [{ type: 'mp3', src: BGM_FILE, title: '빨간 우체통 테마곡' }];
@@ -2572,7 +2570,6 @@ function takeShared(){
     addSongs([{ type: 'yt', src: sharedYT, title: '' }]); toast('🎵 유튜브 노래를 같이 듣기에 넣었어요');
   }, 2500);
 }
-
 
 /* ----- 📹 영상통화 (카메라 영상은 친구 폰으로 바로 · 저장 안 함) ----- */
 let call = null;   // { id, room, pc, stream, mine, un, facing }
