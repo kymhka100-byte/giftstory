@@ -92,7 +92,7 @@ body:not(.dark) #tgBtn,body:not(.dark) #callBtn,body:not(.dark) .dot{background:
 #mkFade{width:100%}
 .mythumb{width:54px;flex:none}.mythumb .pthumb{height:40px;box-shadow:none}
 
-/* 노래 같이 듣기 · 영화 같이 보기 */
+/* 노래 같이 듣기 · 같이 보기 */
 #plusBtn{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:22px;line-height:1;padding:0;margin-bottom:3px}
 #plusBtn.on{background:var(--red);border-color:var(--red)}
 body:not(.dark) #plusBtn{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
@@ -118,7 +118,7 @@ body:not(.dark) #mbar{background:var(--t-btn);color:var(--t-btnink);border-color
 .tsearch{width:100%;margin-top:10px;padding:8px 10px;border-radius:10px;border:1px solid #444;background:#222;color:#fff;font-size:14px}
 .tfind{display:flex;gap:6px;margin-top:8px}
 .tfind button{flex:1;padding:9px 4px;border-radius:10px;border:1px solid #555;background:#2b2b33;color:#fff;font-size:13px}
-/* 영화 볼 때: 화면 꽉, 글 쓰는 칸만 밑에 */
+/* 같이 볼 때: 화면 꽉, 글 쓰는 칸만 밑에 */
 body.watch header,body.watch .rooms,body.watch #installBar,body.watch #mbar,body.watch #tgBtn,body.watch .sign{display:none!important}
 body.watch #app>#videoPanel{left:0;right:0;top:0;bottom:var(--fh,64px);transform:none;width:100%;max-width:none;border-radius:0;border:none;padding:8px 8px 6px;display:flex;flex-direction:column}
 body.watch #videoPanel .vbox{margin-top:30px;flex:none}
@@ -426,7 +426,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 .sv-voices button.on{background:#ffe14d;color:#111}
 /* 16번: 노래 플레이어 - 재생 · 목록 · ✕ (오른쪽 위에 떠 있고 손가락으로 옮기기) */
 #mbar{position:fixed;top:64px;right:8px;margin:0;z-index:30;gap:6px;padding:5px;border-radius:14px;background:rgba(20,20,26,.92)!important;border:1px solid #444!important;box-shadow:0 4px 14px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none}
-#mbar #mbTitle,#mbar #mbPrev,#mbar #mbNext{display:none}
+#mbar #mbTitle{display:none}
 #mbar button{width:40px;height:40px}
 #mbar #mbPlay{border-radius:50%!important;background:#14532d!important;border:2px solid #1f7a43!important;color:#9fe3b4;font-size:17px}
 #mbar #mbPlay.on{background:#22e05a!important;border-color:#8dffb0!important;color:#06330f;box-shadow:0 0 12px rgba(34,224,90,.7)}
@@ -448,6 +448,36 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 /* 16번: 위쪽 방 말풍선 - 모두 같은 크기 */
 .rb,.rb:not(.cur):not(.add){width:46px;min-width:46px;height:28px;padding:0 2px;font-size:12px;overflow:visible;white-space:nowrap;border-radius:14px 14px 14px 4px}
 .rb.add{width:28px;min-width:28px;height:28px;border-radius:50%}
+/* ===== 17번 ===== */
+#mbar #mbNext{display:block;width:32px;height:32px;font-size:13px;border-radius:8px}
+#mbar #mbPlay{border-radius:10px!important;box-shadow:none!important}
+#mbar #mbPlay.on{background:#22e05a!important;border-color:#1f7a43!important;color:#06330f;box-shadow:none!important}
+#musicPanel #mPlay{border-radius:10px}
+#musicPanel #mNext{display:inline-block;width:40px;height:40px;font-size:15px}
+#liveBtn{flex:none;width:40px;height:40px;border-radius:50%;border:1px solid #2f7a4a;background:#173a25;color:#fff;font-size:19px;padding:0}
+#callOv.voice{background:#0d1a14}
+#callOv.voice #rVid,#callOv.voice #lVid,#callOv.voice #cCam,#callOv.voice #cFlip{display:none}
+#callOv.voice #callInfo{top:34%;font-size:26px;font-weight:700;line-height:1.6;white-space:pre-line}
+.bubble.file{cursor:pointer;display:flex;align-items:center;gap:8px}
+.bubble.file b{font-size:22px}
+.bubble.file small{opacity:.7;font-size:12px}
+.bubble.file.pic{padding:4px;background:none!important}
+.bubble.file.pic img{display:block;max-width:200px;max-height:240px;border-radius:14px}
+.sv-m.file{cursor:pointer}
+.sv-m.file img{display:block;max-width:100%;max-height:50vh;border-radius:16px}
+#imgOv{background:#000;padding:0}
+#imgOv img{max-width:100%;max-height:100%;object-fit:contain}
+/* 실버 아래 버튼: 윗줄 답장 · 음성 대화, 아랫줄 전화 · 편지 */
+.sv-bar{flex-wrap:wrap;gap:8px}
+.sv-bar button{flex:1 1 40%;white-space:nowrap;font-size:26px}
+.sv-bar .sv-phone,.sv-bar .sv-mail{flex:1 1 40%;min-height:64px;flex-direction:row;gap:8px;font-size:30px}
+.sv-bar .sv-phone{background:#1f8a4c;display:flex;align-items:center;justify-content:center;line-height:1}
+.sv-bar .sv-phone small,.sv-bar .sv-mail small{font-size:24px;margin-top:0;font-weight:800}
+.sv-bar .sv-phone.none{opacity:.4}
+.sv-mic{cursor:pointer}
+/* 글 쓰는 동안은 📞 🎤 👥 를 숨겨 글칸을 넓게 (카톡처럼) */
+footer.typing #liveBtn,footer.typing #micBtn,footer.typing #callBtn{display:none}
+#micBtn{width:40px;height:40px}
 </style>
 </head>
 <body>
@@ -463,7 +493,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
   </header>
   <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb add" id="addRoom" title="새 친구 방">＋</button></div>
   <!-- 노래 막대 (같이 듣는 중) -->
-  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
+  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
   <!-- 노래 같이 듣기 (펼친 목록) -->
@@ -479,7 +509,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
     <input type="file" id="mFiles" accept="audio/*" multiple style="display:none">
     <div class="tadd"><input id="mUrl" placeholder="유튜브 노래 주소 붙여 넣기"><button id="mAdd">넣기</button></div>
   </div>
-  <!-- 영화 같이 보기 -->
+  <!-- 같이 보기 -->
   <div class="tpanel wide" id="videoPanel">
     <button class="tx" data-tclose="videoPanel">✕</button>
     <div class="vbox"><div class="vempty" id="vEmpty">유튜브 주소를 넣으면<br>방 친구와 같은 장면을 같이 봐요</div><div id="vYT"></div></div>
@@ -493,7 +523,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
   <footer>
     <span class="sign">YMwav</span>
     <button id="tgBtn" title="같이 보기"><svg viewBox="0 0 40 30" width="30" height="22"><rect x="2" y="9" width="30" height="19" rx="3" fill="#ff5a55"/><path d="M2 9 5 2h28l-3 7z" fill="#333"/><path d="M8 2 6 9M15 2l-2 7M22 2l-2 7M29 2l-2 7" stroke="#fff" stroke-width="2.5"/><path d="M14 13v10l9-5z" fill="#fff"/><circle cx="35" cy="22" r="3" fill="#ffe14d"/><path d="M37.5 22V12l2-1" stroke="#ffe14d" stroke-width="1.6" fill="none"/></svg><b>같이 보기</b></button>
-    <div class="pmenu" id="tgMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
+    <div class="pmenu" id="tgMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 같이 보기</button></div>
     <button id="mailbox" title="빨간 우체통">
       <svg viewBox="0 0 76 66" width="54" height="47">
         <defs>
@@ -515,11 +545,13 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
         </g>
       </svg>
     </button>
-    <button id="plusBtn" title="같이 듣기 · 같이 보기">＋</button>
-    <div class="pmenu" id="plusMenu"><button data-tg="mole">🔨 두더지 게임</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
-    <textarea id="txt" placeholder="메시지 입력"></textarea>
+    <button id="plusBtn" title="파일 · 같이 듣기 · 같이 보기">＋</button>
+    <div class="pmenu" id="plusMenu"><button data-tg="file">📎 파일 보내기</button><button data-tg="mole">🔨 두더지 게임</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 같이 보기</button></div>
+    <input type="file" id="fileIn" multiple style="display:none">
+    <textarea id="txt" placeholder="✏"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
-    <button id="micBtn" title="목소리 보내기">🎤</button>
+    <button id="liveBtn" title="실시간 대화 (전화처럼)">📞</button>
+    <button id="micBtn" title="녹음해서 보내기">🎤</button>
     <button id="sendBtn" title="보내기"><svg viewBox="0 0 24 24"><path class="pf" d="M2.5 11.2 21 3.2c.6-.3 1.2.3.9.9l-8 18.5c-.3.7-1.3.6-1.4-.1l-1.6-7.4-7.4-1.6c-.7-.1-.8-1.1-.1-1.4z"/><path class="pl" d="M10.9 13.1 21.3 3.6" stroke-width="1.6"/></svg></button>
     <div id="recStrip"><span id="recInfo">● 녹음 중 0초</span><button id="recCancel">✕ 취소</button></div>
     <button id="testBtn" aria-hidden="true" tabindex="-1"></button>
@@ -685,7 +717,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 </div>
 <div class="ov" id="ringOv">
   <div class="panel" style="max-width:340px;text-align:center">
-    <div style="font-size:54px;animation:ring 1s infinite">📹</div>
+    <div id="ringIco" style="font-size:54px;animation:ring 1s infinite">📹</div>
     <h2 id="ringTitle">영상통화가 왔어요</h2>
     <div class="twin"><button class="big" id="ringNo" style="background:#d33;color:#fff;border:none">거절</button><button class="big" id="ringYes" style="background:#2ecc71;color:#fff;border:none">받기</button></div>
   </div>
@@ -719,7 +751,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
     <h2>📮 빨간 우체통</h2>
     <div style="margin-bottom:10px;color:#ccc">친구에게 보일 내 이름(별명)을 적어 주세요.</div>
     <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
-    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
+    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영상을 같이 보며 이야기해요<br>📞 전화처럼 말로 대화하고, 📹 영상통화도 할 수 있어요<br>📎 사진·음악·파일을 주고받을 수 있어요<br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
   </div>
 </div>
 
@@ -774,7 +806,7 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
   <div class="sv-top"><button id="svBack" style="display:none">◀ 처음</button><h2 id="svTitle">빨간 우체통</h2><button id="svMusic">🎵 ▶</button></div>
   <div class="sv-body" id="svHome"></div>
   <div class="sv-body sv-chat" id="svChat" style="display:none"></div>
-  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-gray" id="svReplyBtn">💬 답장</button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button><button class="sv-mail" id="svMail">📮<small>편지</small></button></div>
+  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-gray" id="svReplyBtn">💬 답장</button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button><button class="sv-phone" id="svPhone">📞<small>전화</small></button><button class="sv-mail" id="svMail">📮<small>편지</small></button></div>
   <!-- 메시지가 오면: 큰 글씨 + 읽어 주기 → 답장 목록 -->
   <div class="sv-ov" id="svSheet">
     <div class="sv-got" id="svGot"></div>
@@ -813,6 +845,9 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
     </div>
   </div>
 </div>
+
+<!-- 사진 크게 보기 -->
+<div class="ov" id="imgOv"><img id="imgBig" alt=""></div>
 
 <div id="fly"></div>
 <div id="toast"></div>
@@ -1116,8 +1151,20 @@ function drawRooms(){
 }
 /* 위쪽 말풍선 줄: 방마다 하나, 지금 방은 노란색 + 이름 전체, 안 읽은 개수는 귀퉁이 숫자 */
 let barHTML = '', barOrder = '';
+/* 같은 친구와 방이 여러 개면 말풍선은 하나만 (지금 방 > 안 읽은 방 > 최근 방) */
+function barRooms(){
+  const list = [], at = {};
+  const pri = x => (x.id === room ? 2 : 0) + (unread[x.id] && unread[x.id].keys.size ? 1 : 0);
+  getRooms().forEach(x => {
+    const k = Object.entries(roomMembers[x.id] || {}).filter(([u, v]) => !me.ids.includes(u) && v && v.name !== me.name).map(([u]) => u).sort().join();
+    if (!k) { list.push(x); return; }
+    if (at[k] === undefined) { at[k] = list.length; list.push(x); }
+    else if (pri(x) > pri(list[at[k]])) list[at[k]] = x;
+  });
+  return list;
+}
 function drawBar(){
-  const list = getRooms();
+  const list = barRooms();
   const html = list.map(x => {
     const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
     const n = unread[x.id] ? unread[x.id].keys.size : 0;
@@ -1388,6 +1435,8 @@ function render(){
       html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(lp(m.letter))}" style="${paperVars(lp(m.letter))}"></div></div>`;
     } else if (m.type === 'voice') {
       html += `<div class="bubble voice" data-id="${m.id}"><b>▶</b>🎤 목소리 ${m.sec ? m.sec + '초' : ''}</div>`;
+    } else if (m.type === 'file') {
+      html += fileBubble(m, 'bubble');
     } else {
       html += `<div class="bubble">${esc(m.text)}</div>`;
     }
@@ -1470,7 +1519,9 @@ function sendText(){
 }
 /* 보낼 때: 작은 진동 + 작은 소리 (모든 모드) */
 function sentFx(){ if (navigator.vibrate) navigator.vibrate(25); if (!ac()) return; tone(1568, 0, .07, .07); tone(2093, .05, .09, .05); }
-const sendLook = () => $('sendBtn').classList.toggle('has', !!$('txt').value.trim() || !!vm);
+const sendLook = () => { $('sendBtn').classList.toggle('has', !!$('txt').value.trim() || !!vm); document.querySelector('footer').classList.toggle('typing', !vm && (document.activeElement === $('txt') || !!$('txt').value.trim())); };
+$('txt').addEventListener('focus', () => sendLook());
+$('txt').addEventListener('blur', () => setTimeout(sendLook, 150));
 $('sendBtn').onclick = () => {
   if (vm) { vmStop(true); return; }   // 녹음 중이면 목소리 보내기
   const t = $('txt'); if (t.value.trim()) sentFx(); sendText();
@@ -1526,6 +1577,90 @@ function playVoiceMsg(m, el){
 $('msgs').addEventListener('click', e => { const b = e.target.closest('.bubble.voice'); if (b) Promise.resolve(playVoiceMsg(msgs[b.dataset.id])).catch(() => toast('재생이 안 돼요')); });
 $('sendBtn').addEventListener('pointerdown', e => e.preventDefault());   // 키보드가 내려가지 않게
 $('txt').addEventListener('input', e => { sendLook(); e.target.style.height = '42px'; e.target.style.height = Math.min(110, e.target.scrollHeight) + 'px'; });
+
+/* ----- 📎 파일 보내기 (＋ 메뉴 · 사진은 사진으로, 음악은 ♪ 누르면 재생 · 10MB까지) ----- */
+const FILE_MAX = 10 * 1024 * 1024, CHUNK = 400000;
+const fileRef = (r, fid, i) => FB.D.ref(FB.db, 'giftstory/rooms/' + r + '/files/' + fid + (i === undefined ? '' : '/' + i));
+const fmtSize = b => b >= 1048576 ? (b / 1048576).toFixed(1) + 'MB' : Math.max(1, Math.round(b / 1024)) + 'KB';
+function fileBubble(m, cls){
+  if (m.kind === 'image') return `<div class="${cls} file pic" data-fm="${m.id}"><img src="${esc(m.thumb)}" alt="사진"></div>`;
+  const ico = m.kind === 'audio' ? '♪' : '📄';
+  return `<div class="${cls} file" data-fm="${m.id}"><b>${ico}</b>${esc(m.fname || '파일')}${m.size ? ` <small>${fmtSize(m.size)}</small>` : ''}</div>`;
+}
+function shrinkImg(file, n, q){
+  return new Promise((ok, no) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => {
+      const k = Math.min(1, n / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url); ok(c.toDataURL('image/jpeg', q));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); no(); };
+    img.src = url;
+  });
+}
+const readURL = f => new Promise((ok, no) => { const fr = new FileReader(); fr.onload = () => ok(fr.result); fr.onerror = no; fr.readAsDataURL(f); });
+async function sendFile(f){
+  const kind = /^image\//.test(f.type) ? 'image' : (/^audio\//.test(f.type) || /\.(mp3|m4a|wav|ogg|aac|flac)$/i.test(f.name)) ? 'audio' : 'doc';
+  if (kind !== 'image' && f.size > FILE_MAX) { toast(`'${f.name}'은 10MB보다 커서 못 보내요`); return; }
+  const r = room, fid = rid();
+  let data, thumb = '';
+  if (kind === 'image') { data = await shrinkImg(f, 1600, .82); thumb = await shrinkImg(f, 400, .7); }
+  else data = await readURL(f);
+  const parts = [];
+  for (let i = 0; i < data.length; i += CHUNK) parts.push(data.slice(i, i + CHUNK));
+  for (let i = 0; i < parts.length; i++) {
+    if (parts.length > 2) toast(`📎 보내는 중… ${Math.round(i / parts.length * 100)}%`);
+    await FB.D.set(fileRef(r, fid, i), parts[i]);
+  }
+  const m = { from: who().uid, name: who().name, type: 'file', kind, fid, n: parts.length, fname: kind === 'image' ? '사진' : f.name, size: kind === 'image' ? Math.round(data.length * .75) : f.size, thumb,
+    text: kind === 'image' ? '📷 사진' : (kind === 'audio' ? '🎵 ' : '📄 ') + f.name, at: Date.now() };
+  sentFx();
+  if (r === room) addMsg(m); else pushTo(r, m);
+  render.jump = true;
+}
+$('fileIn').onchange = async () => {
+  const fs = [...$('fileIn').files].slice(0, 10); $('fileIn').value = '';
+  if (!fs.length) return;
+  if (!FB) { toast('파일 보내기는 서버 연결이 필요해요'); return; }
+  toast('📎 보내는 중…');
+  let ok = 0;
+  for (const f of fs) { try { await sendFile(f); ok++; } catch (e) { toast('파일을 보내지 못했어요'); } }
+  if (ok) toast(`📎 ${ok}개를 보냈어요`);
+};
+/* 받은 파일 열기: 사진은 크게, 음악은 재생/멈춤, 그 밖의 파일은 내려받기 */
+const fileCache = {};
+async function getFile(m){
+  if (fileCache[m.fid]) return fileCache[m.fid];
+  const v = (await FB.D.get(fileRef(room, m.fid))).val();
+  if (!v) throw new Error('nofile');
+  const data = (Array.isArray(v) ? v : Object.keys(v).sort((a, b) => a - b).map(k => v[k])).join('');
+  const blob = await (await fetch(data)).blob();
+  return fileCache[m.fid] = URL.createObjectURL(blob);
+}
+let fAudio = null;
+async function openFile(m){
+  if (!m || !m.fid) return;
+  if (!FB) { toast('서버 연결이 필요해요'); return; }
+  if (m.kind === 'audio' && fAudio && fAudio._id === m.id && !fAudio.paused) { fAudio.pause(); musicDuck(false); return; }
+  if (!fileCache[m.fid]) toast('📎 여는 중…');
+  try {
+    const url = await getFile(m);
+    if (m.kind === 'image') { $('imgBig').src = url; showOv('imgOv'); return; }
+    if (m.kind === 'audio') {
+      if (fAudio) fAudio.pause();
+      fAudio = new Audio(url); fAudio._id = m.id;
+      musicDuck(true); fAudio.onended = fAudio.onerror = () => musicDuck(false);
+      fAudio.play().then(() => toast('♪ ' + (m.fname || '음악') + ' · 다시 누르면 멈춰요')).catch(() => { musicDuck(false); toast('재생이 안 돼요'); });
+      return;
+    }
+    const a = document.createElement('a'); a.href = url; a.download = m.fname || 'file';
+    document.body.appendChild(a); a.click(); a.remove(); toast('📄 내려받았어요');
+  } catch (e) { toast('파일을 열지 못했어요'); }
+}
+$('msgs').addEventListener('click', e => { const b = e.target.closest('[data-fm]'); if (b) { click(); openFile(msgs[b.dataset.fm]); } });
+$('imgOv').onclick = () => hideOv('imgOv');
 
 /* ----- 우체통 누르기 ----- */
 $('mailbox').onclick = () => {
@@ -1963,7 +2098,7 @@ $('mkSave').onclick = () => {
 };
 
 
-/* ----- 노래 같이 듣기 · 영화 같이 보기 (방 친구와 같은 곳을 같이) ----- */
+/* ----- 노래 같이 듣기 · 같이 보기 (방 친구와 같은 곳을 같이) ----- */
 const BASE_SONGS = [{ type: 'mp3', src: BGM_FILE, title: '빨간 우체통 테마곡' }];
 const ytId = t => { const m = String(t || '').match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/embed\/|\/live\/)([\w-]{11})/); return m ? m[1] : (/^[\w-]{11}$/.test(String(t || '').trim()) ? String(t).trim() : null); };
 let YTready = null;
@@ -1999,6 +2134,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
 ['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
   click(); closeMenus();
+  if (b.dataset.tg === 'file') { $('fileIn').click(); return; }
   if (b.dataset.tg === 'mole') window.open(MOLE_URL, '_blank');
   else if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
@@ -2146,8 +2282,9 @@ const mPlayToggle = () => { click(); clearTimeout(mEndT); if (mOn() && mBlocked)
 const mStep = d => { click(); const n = mList().length; mSet({ idx: ((M ? M.idx : (d > 0 ? -1 : 1)) + d + n) % n, pos: 0, playing: true }); };
 $('mPlay').onclick = mPlayToggle;
 $('mbPlay').onclick = () => { if (!mbDragged) mPlayToggle(); };
-$('mNext').onclick = $('mbNext').onclick = () => mStep(1);
-$('mPrev').onclick = $('mbPrev').onclick = () => mStep(-1);
+$('mNext').onclick = () => mStep(1);
+$('mbNext').onclick = () => { if (!mbDragged) mStep(1); };
+$('mPrev').onclick = () => mStep(-1);
 $('mbList').onclick = $('mbTitle').onclick = () => { if (mbDragged) return; click(); if ($('musicPanel').classList.contains('show')) showPanel('musicPanel', false); else openMusicPanel(); };
 /* 플레이어 옮기기: 꾹 누르고 끌기 (놓은 자리 기억) */
 let mbDragged = false;
@@ -2250,7 +2387,7 @@ async function listenStream(host){
   } catch (e) { toast('친구 폰 노래를 받지 못했어요'); }
 }
 
-/* --- 영화 (유튜브 · 스트림이라 저장 안 함) --- */
+/* --- 같이 보기 (유튜브 · 스트림이라 저장 안 함) --- */
 let V = null, vPlayer = null, vApplyT = 0;
 const vApplying = () => { vApplyT = Date.now() + 1500; };
 function vSet(ch){ tgWrite('video', { vid: V && V.vid, pos: 0, playing: false, ...ch, at: Date.now(), by: me.name }); }
@@ -2259,7 +2396,7 @@ function applyVideo(st){
   $('vBy').textContent = V ? `${V.by}님이 ${V.playing ? '틀었어요' : '멈췄어요'}` : '';
   $('vEmpty').style.display = V ? 'none' : '';
   if (V && V.playing && V.by !== me.name && !$('videoPanel').classList.contains('show') && (!prev || prev.vid !== V.vid || !prev.playing)) {
-    showBanner(`🎬 ${V.by}님이 영화를 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); };
+    showBanner(`🎬 ${V.by}님이 영상을 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); };
   }
   if ($('videoPanel').classList.contains('show')) syncVideo();
 }
@@ -2268,7 +2405,7 @@ function syncVideo(){
   $('vEmpty').style.display = V ? 'none' : '';
   if (!V) { if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } return; }
   const at = posNow(V);
-  if (V.playing) stopAllMusic();   // 영화 볼 땐 노래 쉬기
+  if (V.playing) stopAllMusic();   // 같이 볼 땐 노래 쉬기
   const run = pl => {
     vApplying();
     const cur = pl.getVideoData && pl.getVideoData().video_id;
@@ -2282,7 +2419,7 @@ function syncVideo(){
     if (st === 2) vSet({ vid: V.vid, pos: vPlayer.getCurrentTime(), playing: false });
   }).then(pl => { vPlayer = pl; run(pl); }).catch(() => toast('유튜브를 불러오지 못했어요'));
 }
-/* 영화 보면서 대화: 최근 글만 작게 */
+/* 같이 보면서 대화: 최근 글만 작게 */
 function drawVChat(){
   if (!document.body.classList.contains('watch')) return;
   const box = $('vChat'), list = sorted().filter(m => m.type !== 'letter').slice(-6);
@@ -2332,7 +2469,7 @@ const sharedYT = (() => { const q = new URLSearchParams(location.search); return
 function takeShared(){
   if (!sharedYT) return;
   setTimeout(() => {
-    if (vWanted()) {   // '영화 같이 보기'에서 유튜브로 갔다가 공유한 영상
+    if (vWanted()) {   // '같이 보기'에서 유튜브로 갔다가 공유한 영상
       LS.set('rp_vwant', 0); showPanel('musicPanel', false); showPanel('videoPanel', true);
       vSet({ vid: sharedYT, pos: 0, playing: true }); toast('🎬 유튜브 영상을 같이 보기로 틀었어요'); return;
     }
@@ -2342,7 +2479,7 @@ function takeShared(){
 
 
 /* ----- 📹 영상통화 (카메라 영상은 친구 폰으로 바로 · 저장 안 함) ----- */
-let call = null;   // { id, room, pc, stream, mine, un, facing }
+let call = null;   // { id, room, pc, stream, mine, un, facing, video, who }
 const callRef = id => FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/call');
 const ringing = {};
 function watchCall(id){
@@ -2355,16 +2492,21 @@ function watchCall(id){
 }
 function showRing(id, v){
   ringing.id = id; ringing.v = v;
-  $('ringTitle').textContent = `${v.fromName || '친구'}님이 영상통화를 걸었어요`;
+  const vid = v.video !== false;
+  $('ringIco').textContent = vid ? '📹' : '📞';
+  $('ringTitle').textContent = `${v.fromName || '친구'}님이 ${vid ? '영상통화를' : '음성 대화를'} 걸었어요`;
   showOv('ringOv');
   clearInterval(ringing.t); dingdong(); ringing.t = setInterval(dingdong, 2500);
   if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
 }
 function hideRing(){ clearInterval(ringing.t); ringing.id = null; hideOv('ringOv'); }
-async function getCam(facing){
-  return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } } });
+function getCam(facing, video){
+  const audio = { echoCancellation: true, noiseSuppression: true, autoGainControl: true };
+  return navigator.mediaDevices.getUserMedia(video ? { audio, video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } } } : { audio });
 }
+const camErr = e => toast(e && e.name === 'NotAllowedError' ? (call && !call.video ? '마이크를 허용해 주세요' : '카메라·마이크를 허용해 주세요') : (call && !call.video ? '마이크를 켤 수 없어요' : '카메라를 켤 수 없어요'));
 function showCall(text){
+  $('callOv').classList.toggle('voice', !!call && !call.video);
   $('callInfo').textContent = text || ''; $('callOv').classList.add('show');
   stopAllMusic();
   ['cMic', 'cCam'].forEach(id => $(id).classList.remove('off'));
@@ -2372,32 +2514,40 @@ function showCall(text){
 function newPc(){
   const pc = new RTCPeerConnection(ICE);
   call.stream.getTracks().forEach(t => pc.addTrack(t, call.stream));
-  pc.ontrack = e => { $('rVid').srcObject = e.streams[0] || new MediaStream([e.track]); $('callInfo').textContent = ''; };
+  pc.ontrack = e => {
+    $('rVid').srcObject = e.streams[0] || new MediaStream([e.track]); $('rVid').play().catch(() => {});
+    $('callInfo').textContent = call && !call.video ? `📞 ${call.who || '친구'}님과\n대화 중이에요` : '';
+  };
   pc.onconnectionstatechange = () => {
     if (pc.connectionState === 'failed') { toast('연결이 안 됐어요 (와이파이를 바꿔 보세요)'); endCall(true); }
   };
   return pc;
 }
-$('camBtn').onclick = async () => {
+/* 📹 영상통화 · 📞 실시간 대화(목소리만, 전화처럼) */
+async function startCall(video){
   click();
-  if (!FB) { toast('영상통화는 서버 연결이 필요해요'); return; }
-  if (!window.RTCPeerConnection || !navigator.mediaDevices) { toast('이 화면에서는 영상통화가 안 돼요 (크롬으로 열어 주세요)'); return; }
+  const kind = video ? '영상통화' : '실시간 대화';
+  if (!FB) { toast(kind + '는 서버 연결이 필요해요'); return; }
+  if (!window.RTCPeerConnection || !navigator.mediaDevices) { toast(`이 화면에서는 ${kind}가 안 돼요 (크롬으로 열어 주세요)`); return; }
   if (call) return;
+  if (vm) vmStop(false);
   const id = room;
   try {
-    call = { id: rid(), room: id, mine: true, facing: 'user' };
-    call.stream = await getCam('user');
-    $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
-    showCall(`📹 ${titleFor(id) || '친구'}님을 부르는 중…`);
+    call = { id: rid(), room: id, mine: true, facing: 'user', video, who: titleFor(id) || '친구' };
+    call.stream = await getCam('user', video);
+    $('lVid').srcObject = video ? call.stream : null; $('lVid').classList.remove('back');
+    showCall(`${video ? '📹' : '📞'} ${call.who}님을 부르는 중…`);
     const pc = call.pc = newPc();
     await pc.setLocalDescription(await pc.createOffer());
     await waitIce(pc);
     if (!call) return;
-    await FB.D.set(callRef(id), { id: call.id, from: me.uid, fromName: me.name, state: 'ring', at: Date.now(), offer: { type: 'offer', sdp: pc.localDescription.sdp } });
+    await FB.D.set(callRef(id), { id: call.id, from: me.uid, fromName: me.name, state: 'ring', video, at: Date.now(), offer: { type: 'offer', sdp: pc.localDescription.sdp } });
     call.sent = true;
     call.timeout = setTimeout(() => { if (call && call.mine && !call.on) { toast('친구가 받지 않았어요'); endCall(true); } }, 45000);
-  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라를 켤 수 없어요'); endCall(false); }
-};
+  } catch (e) { camErr(e); endCall(false); }
+}
+$('camBtn').onclick = () => startCall(true);
+$('liveBtn').onclick = () => startCall(false);
 async function onCallState(v){
   if (!call || (call.mine && !call.sent)) return;
   if (!v || v.id !== call.id || v.state === 'end') { toast(v && v.reason === 'reject' ? '친구가 거절했어요' : '통화가 끝났어요'); endCall(false); return; }
@@ -2411,16 +2561,16 @@ $('ringYes').onclick = async () => {
   if (!id || !v) return;
   if (id !== room) openRoom(id);
   try {
-    call = { id: v.id, room: id, mine: false, facing: 'user', on: true };
-    call.stream = await getCam('user');
-    $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
+    call = { id: v.id, room: id, mine: false, facing: 'user', on: true, video: v.video !== false, who: v.fromName || '친구' };
+    call.stream = await getCam('user', call.video);
+    $('lVid').srcObject = call.video ? call.stream : null; $('lVid').classList.remove('back');
     showCall('연결하는 중…');
     const pc = call.pc = newPc();
     await pc.setRemoteDescription(v.offer);
     await pc.setLocalDescription(await pc.createAnswer());
     await waitIce(pc);
     await FB.D.update(callRef(id), { state: 'on', by: me.uid, answer: { type: 'answer', sdp: pc.localDescription.sdp } });
-  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라를 켤 수 없어요'); endCall(true); }
+  } catch (e) { camErr(e); endCall(true); }
 };
 $('ringNo').onclick = () => {
   const id = ringing.id; hideRing(); click();
@@ -2429,7 +2579,7 @@ $('ringNo').onclick = () => {
 function endCall(tell){
   const c = call; call = null;
   hideRing();
-  $('callOv').classList.remove('show');
+  $('callOv').classList.remove('show', 'voice');
   if (!c) return;
   clearTimeout(c.timeout);
   try { c.pc && c.pc.close(); } catch (e) {}
@@ -2866,6 +3016,7 @@ function svEnter(f, quiet){
   S.view = 'chat'; S.room = f.room; S.fam = f;
   $('svHome').style.display = 'none'; $('svChat').style.display = ''; $('svBar').style.display = ''; $('svBack').style.display = '';
   $('svTitle').textContent = f.name;
+  $('svPhone').classList.toggle('none', !f.phone);
   if (room !== f.room) openRoom(f.room);
   const hello = LS.get('rp_sv_hello', {});
   if (!quiet && Date.now() - (hello[f.room] || 0) > 300000) {
@@ -2885,7 +3036,17 @@ $('svMail').onclick = () => {   // 실버 모드 우체통: 편지가 왔으면 
   const un = unreadIn();
   if (un.length) openBox(un); else openWriter({ to: S.fam ? S.fam.name : otherName(), body: '', paper: 'pink', font: 'pen', stickers: [], voice: null, draftId: null, align: '' });
 };
-$('svChat').addEventListener('click', e => { const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); } });
+$('svChat').addEventListener('click', e => {
+  const f = e.target.closest('[data-fm]'); if (f) { click(); openFile(msgs[f.dataset.fm]); return; }
+  const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); }
+});
+/* 📞 전화: 가족 버튼에 적어 둔 번호로 바로 전화 걸기 */
+$('svPhone').onclick = () => {
+  click(); svHush();
+  const p = S.fam && String(S.fam.phone || '').replace(/[^\d+]/g, '');
+  if (!p) { toast('전화번호가 없어요 · 처음 화면에서 가족 버튼을 길게 눌러 적어 주세요'); return; }
+  location.href = 'tel:' + p;
+};
 /* 같이 듣는 노래: 위쪽 큰 ▶/⏸ 버튼 */
 function svMusicDraw(){
   const b = $('svMusic'), on = S.on && S.view === 'chat' && !!M;
@@ -2896,13 +3057,15 @@ $('svMusic').onclick = () => mPlayToggle();
 let svChatHTML = '';
 function svChat(){
   if (S.room !== room) return;
-  const list = sorted().filter(m => m.type === 'text' || m.type === 'voice').slice(-40);
+  const list = sorted().filter(m => m.type === 'text' || m.type === 'voice' || m.type === 'file').slice(-40);
   let html = '', last = '';
   list.forEach(m => {
     const mine = isMine(m);
     if (!mine && m.name !== last) html += `<div class="sv-who">${esc(m.name)}</div>`;
     last = mine ? '' : m.name;
-    html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>` : `<div class="sv-m ${mine ? 'me' : 'them'}">${esc(m.text)}</div>`;
+    html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>`
+      : m.type === 'file' ? fileBubble(m, 'sv-m ' + (mine ? 'me' : 'them'))
+      : `<div class="sv-m ${mine ? 'me' : 'them'}">${esc(m.text)}</div>`;
   });
   html = `<div class="sv-wrap">${html || '<div class="sv-empty">아직 대화가 없어요</div>'}</div>`;
   if (html === svChatHTML) return;
@@ -2979,58 +3142,64 @@ function svSpeak(t, done){
   setTimeout(end, Math.min(15000, 2500 + t.length * 260));   // 읽기가 멈춰도 목록은 나오게
 }
 
-/* 🎤 음성 대화: 말이 끝나고 1초 뒤 저절로 보내요 (전송 버튼 없음) */
+/* 🎤 음성 대화: 말이 끝나고 1초 뒤 저절로 보내요 (전송 버튼 없음)
+   17번: 마이크 하나를 계속 다시 쓰고, 버튼을 누른 그 순간 바로 켜요 (저절로 되풀이하지 않음 → '켜는 중' 띵동 반복 없음) */
 const SRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-let svRec = null, svHeardT = 0;
-function svStopListen(){ clearTimeout(svHeardT); const r = svRec; svRec = null; if (r) { r._stop = true; try { r.abort(); } catch (e) {} } musicDuck(false); }
-let svLastEnd = Promise.resolve();
+let svR = null, svRun = false, svSess = null, svAgain = false, svHeardT = 0;
+function svFinish(s){
+  if (!s || s.sent || !s.txt) return false;
+  s.sent = true; svSend(s.txt); S.test = false;
+  $('svHeard').textContent = '✓ 보냈어요';
+  setTimeout(() => { if (!svSess) svOv('svVoice', false); }, 900);
+  return true;
+}
+function svRecObj(){
+  if (svR) return svR;
+  const r = svR = new SRec();
+  r.lang = 'ko-KR'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 1;
+  r.onstart = () => { svRun = true; LS.set('rp_mic_ok', 1); if (svSess) { $('svHeard').textContent = '말씀하세요…'; $('svMicHint').textContent = ''; } };
+  r.onresult = e => {
+    const s = svSess; if (!s) return;
+    s.txt = [...e.results].map(x => x[0].transcript).join('').trim();
+    $('svHeard').textContent = s.txt || '말씀하세요…';
+    clearTimeout(svHeardT);
+    const fin = e.results[e.results.length - 1].isFinal;
+    if (s.txt) svHeardT = setTimeout(() => { if (svFinish(s)) { try { r.stop(); } catch (x) {} } }, fin ? 1000 : 1800);
+  };
+  r.onerror = e => { if (svSess) svSess.err = e.error; };
+  r.onend = () => {
+    svRun = false; clearTimeout(svHeardT);
+    if (svAgain) { svAgain = false; svStartNow(); return; }   // 앞의 마이크가 꺼지자마자 새로 켜기
+    const s = svSess; svSess = null; musicDuck(false);
+    if (!s || s.sent || svFinish(s)) return;
+    if (s.err === 'not-allowed' || s.err === 'service-not-allowed') { LS.set('rp_mic_ok', 0); $('svHeard').textContent = '마이크가 막혀 있어요'; $('svMicHint').textContent = '휴대폰 설정 → 애플리케이션 →\n빨간 우체통(또는 크롬) → 권한 → 마이크 허용'; return; }
+    $('svHeard').textContent = s.err && s.err !== 'no-speech' && s.err !== 'aborted' ? '마이크가 잠깐 안 됐어요' : '잘 못 들었어요';
+    $('svMicHint').textContent = '🎤 빨간 마이크를 누르고\n다시 말씀하세요';
+  };
+  return r;
+}
+function svStartNow(){
+  if (!svSess) return;
+  try { svRecObj().start(); }
+  catch (e) {
+    if (e && e.name === 'InvalidStateError') { svAgain = true; try { svR.abort(); } catch (x) {} return; }   // 아직 켜져 있음 → 끄고 바로 다시
+    svSess = null; musicDuck(false); $('svHeard').textContent = '마이크를 켤 수 없어요'; $('svMicHint').textContent = '🎤 빨간 마이크를 다시 눌러 주세요';
+  }
+}
+function svStopListen(){ clearTimeout(svHeardT); svSess = null; svAgain = false; if (svRun && svR) { try { svR.abort(); } catch (e) {} } musicDuck(false); }
 function svListen(){
   if (!SRec) { toast('이 휴대폰에서는 말로 하기가 안 돼요 (크롬으로 열어 주세요)'); return; }
-  svHush(); svStopListen(); svOv('svSheet', false);
-  $('svHeard').textContent = '말씀하세요…';
+  svHush(); clearTimeout(svHeardT); svOv('svSheet', false);
+  $('svHeard').textContent = '마이크 켜는 중…';
   $('svMicHint').textContent = LS.get('rp_mic_ok', 0) ? '' : '휴대폰이 마이크를 물어보면\n[허용]을 눌러 주세요';
   $('svMicHint').style.whiteSpace = 'pre-line';
   svOv('svVoice', true);
-  const token = {}; svRec = token;   // 앞의 마이크가 완전히 꺼질 때까지 잠깐 기다렸다가 켜요 (바로 켜면 안 되는 휴대폰이 있어서)
+  svSess = { txt: '', sent: false, err: '' };
   musicDuck(true);
-  Promise.race([svLastEnd, new Promise(ok => setTimeout(ok, 1500))]).then(() => { if (svRec === token) svGo(0); });
+  if (svRun) { svAgain = true; try { svR.abort(); } catch (e) {} }
+  else svStartNow();   // 버튼을 누른 순간 바로 켜기 (기다렸다 켜면 막는 휴대폰이 있어요)
 }
-function svGo(n){
-  const r = svRec = new SRec(); let txt = '', sent = false, endOk;
-  const t0 = Date.now();
-  svLastEnd = new Promise(ok => { endOk = ok; setTimeout(ok, 4000); });
-  const finish = () => {   // 말이 끝나면 한 번만 보내기 (휴대폰에 따라 onend가 안 오는 경우도 있어서)
-    if (sent || !txt) return false; sent = true;
-    svSend(txt); S.test = false; $('svHeard').textContent = '✓ 보냈어요'; setTimeout(() => svOv('svVoice', false), 900);
-    return true;
-  };
-  r.lang = 'ko-KR'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 1;
-  r.onstart = () => { LS.set('rp_mic_ok', 1); $('svMicHint').textContent = ''; };
-  r.onresult = e => {
-    txt = [...e.results].map(x => x[0].transcript).join('').trim();
-    $('svHeard').textContent = txt || '말씀하세요…';
-    clearTimeout(svHeardT);
-    const fin = e.results[e.results.length - 1].isFinal;
-    if (txt) svHeardT = setTimeout(() => { if (svRec === r) svRec = null; finish(); try { r.stop(); } catch (e) {} musicDuck(false); }, fin ? 1000 : 1800);
-  };
-  r.onerror = e => {
-    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { LS.set('rp_mic_ok', 0); $('svMicHint').textContent = '마이크가 막혀 있어요\n휴대폰 설정에서 마이크를 허용해 주세요'; return; }
-    if (!txt && n < 4 && Date.now() - t0 < 3000 && e.error !== 'no-speech') r._retry = true;   // 마이크가 아직 바쁨 → 조금 뒤 다시
-  };
-  r.onend = () => {
-    endOk(); clearTimeout(svHeardT);
-    if (sent || r._stop || svRec !== r) { musicDuck(false); return; }   // '그만'으로 끈 건 보내지 않음
-    if (r._retry) { $('svHeard').textContent = '마이크 켜는 중…'; setTimeout(() => { if (svRec === r) svGo(n + 1); }, 800); return; }
-    svRec = null; musicDuck(false);
-    if (finish()) return;
-    if (!/허용/.test($('svMicHint').textContent)) { $('svHeard').textContent = '잘 못 들었어요'; $('svMicHint').textContent = '🎤 음성 대화를 다시 눌러 주세요'; setTimeout(() => { if (!svRec) svOv('svVoice', false); }, 1800); }
-  };
-  try { r.start(); } catch (e) {
-    endOk();
-    if (n < 4) { setTimeout(() => { if (svRec === r) svGo(n + 1); }, 800); return; }
-    svRec = null; musicDuck(false); toast('마이크를 켤 수 없어요'); svOv('svVoice', false);
-  }
-}
+document.querySelector('#svVoice .sv-mic').onclick = () => { click(); S.test = false; svListen(); };
 $('svVoiceBtn').onclick = () => { click(); S.test = false; svListen(); };
 $('svSheetVoice').onclick = () => { click(); svListen(); };
 $('svVoiceStop').onclick = () => { click(); S.test = false; svStopListen(); svOv('svVoice', false); };
