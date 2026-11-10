@@ -501,6 +501,23 @@ body.home #msgs,body.home footer{display:none}
 #imgOv img{max-width:100%;max-height:72vh;border-radius:10px;display:block;margin:0 auto}
 .sv-top #svPhone{display:none;flex:none;font-size:24px;padding:10px 14px;border-radius:16px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;font-weight:800}
 .sv-top #svPhone.show{display:block}
+/* 22번 */
+.sv-grp h3{display:flex;align-items:center;justify-content:space-between}
+.sv-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sv-add{flex:none;min-height:0;width:54px;height:44px;border-radius:14px;font-size:30px;line-height:1;padding:0;border-width:2px}
+.sv-btn .rn{font-size:20px;color:#ffd76a;font-weight:700}
+.sv-btn.live .rn{color:#7a4a00}
+.lsendrow{flex-wrap:wrap}
+.lsendrow span{flex:1 0 100%}
+.lsendrow .pbox{width:30px;height:30px;border-radius:9px;background:#e3302e;display:flex;align-items:center;justify-content:center;font-size:18px}
+#svInvBox{border:1px dashed #555;border-radius:14px;padding:10px;margin-top:10px}
+#svInvBox .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+#svInvBox .in{margin-top:8px}
+.chip.on{border-color:#ffe14d;background:#3a3410;color:#ffe14d}
+#toList .mrow b{flex:1}
+#toList .ck{font-size:22px;width:28px}
+#homeList .hrow{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#homeList .hrow.press{background:#2a2a32}
 </style>
 </head>
 <body>
@@ -570,10 +587,8 @@ body.home #msgs,body.home footer{display:none}
       </svg>
     </button>
     <button id="plusBtn" title="같이 듣기 · 같이 보기">＋</button>
-    <div class="pmenu" id="plusMenu"><button data-tg="photo">🖼 사진 보내기</button><button data-tg="movie">🎞 동영상 보내기</button><button data-tg="file">📁 파일 보내기</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button><button data-tg="mole">🔨 두더지 게임</button></div>
-    <input type="file" id="sendPhoto" accept="image/*" multiple style="display:none">
-    <input type="file" id="sendMovie" accept="video/*" multiple style="display:none">
-    <input type="file" id="sendFile" accept=".pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.mp3,.m4a,.wav,.ogg,.aac,.flac" multiple style="display:none">
+    <div class="pmenu" id="plusMenu"><button data-tg="file">📁 파일 보내기</button><button data-tg="mole">🔨 두더지 게임</button></div>
+    <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
     <button id="micBtn" title="목소리 보내기">🎤</button>
@@ -607,7 +622,7 @@ body.home #msgs,body.home footer{display:none}
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
     </div>
-    <div class="lsendrow"><span>방에 없는 사람에게 바로 보내기</span><button type="button" data-lsend="kakao"><i></i>카톡</button><button type="button" data-lsend="sms"><i></i>문자</button></div>
+    <div class="lsendrow"><span>여러 명에게 보내기 (빨간 우체통 친구 · 카톡 · 문자)</span><button type="button" id="toBtn"><i class="pbox">📮</i>우체통</button><button type="button" data-lsend="kakao"><i></i>카톡</button><button type="button" data-lsend="sms"><i></i>문자</button></div>
     <div class="chips" style="margin-top:10px"><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button></div>
     <div class="lab">스티커 (편지 끝에 붙어요)</div>
     <div class="chips" id="stkChips"></div>
@@ -631,6 +646,17 @@ body.home #msgs,body.home footer{display:none}
     <button id="wSave">💾 임시 저장</button>
     <button class="send" id="wSend">📮 바로 보내기</button>
     <button class="slow" id="wSlow">🌙 내일 아침</button>
+  </div>
+</div>
+
+<!-- 22번: 빨간 우체통 친구에게 한꺼번에 -->
+<div class="ov" id="toOv">
+  <div class="panel">
+    <h2>📮 누구에게 보낼까요?</h2>
+    <button class="big" id="toAll" style="margin-top:0">☑ 모두 선택</button>
+    <div id="toList"></div>
+    <button class="big r" id="toSend">📮 보내기</button>
+    <button class="big" data-close>닫기</button>
   </div>
 </div>
 
@@ -721,6 +747,16 @@ body.home #msgs,body.home footer{display:none}
   <div class="panel">
     <h2>＋ 새 친구 방이 생겼어요</h2>
     <input class="in" id="newName" maxlength="12" placeholder="누구를 초대해요? (예: 엄마, 철수)">
+    <button class="big" id="svInvBtn">👵 어르신께 실버 모드로 초대하기</button>
+    <div id="svInvBox" style="display:none">
+      <div class="nlab">어르신</div>
+      <div class="chips" id="svInvGen"><button class="chip on" data-ig="f">할머니 · 어머니</button><button class="chip" data-ig="m">할아버지 · 아버지</button></div>
+      <div class="nlab">어르신께 나는</div>
+      <div class="chips" id="svInvRel"><button class="chip on">아들</button><button class="chip">딸</button><button class="chip">손자</button><button class="chip">손녀</button><button class="chip">사위</button><button class="chip">며느리</button><button class="chip">친구</button></div>
+      <input class="in" id="svInvName" maxlength="8" placeholder="내 이름 (예: 영민)">
+      <input class="in" id="svInvPhone" type="tel" maxlength="15" placeholder="내 전화번호 (어르신이 바로 전화)">
+      <div class="shhint">적고 나서 아래 카톡 · 문자로 보내면, 어르신 가족 버튼에 저절로 등록돼요</div>
+    </div>
     <div class="sharerow" data-shares></div>
     <div class="shhint">친구를 초대하세요</div>
     <button class="big" data-share="copy">🔗 방 주소 복사</button>
@@ -989,7 +1025,10 @@ const saveMe = () => LS.set(me === realMe ? 'rp_me' : 'rp_test_me', me);
 const who = () => me;
 const isMine = m => me.ids.includes(m.from) || (!!m.name && m.name === me.name);
 
-const urlRoom = new URLSearchParams(location.search).get('room');
+const urlQ = new URLSearchParams(location.search);
+const urlRoom = urlQ.get('room');
+/* 22번: 가족이 보낸 실버 모드 초대 (호칭 · 이름 · 전화번호 · 닉네임) */
+const svInv = urlRoom && urlQ.get('sv') ? { g: urlQ.get('g') === 'm' ? 'm' : 'f', r: (urlQ.get('r') || '').slice(0, 8), n: (urlQ.get('n') || '').slice(0, 8), p: (urlQ.get('p') || '').slice(0, 15), k: (urlQ.get('k') || '').slice(0, 12) } : null;
 const SS = { get: k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} } };
 let room = urlRoom || SS.get('rp_room') || LS.get('rp_room', null) || rid();
 let msgs = {};
@@ -1053,7 +1092,31 @@ let FB = null, unsub = [], loadedAt = 0;
    · 앱을 열면 눈에 안 보이게 익명 로그인 (구글 로그인했으면 그대로 구글)
    · 방마다 '열쇠'(rooms/방/keys/내 로그인 번호)를 남겨야 그 방을 읽고 쓸 수 있어요
    · 초대 링크(방 번호)를 받은 사람만 열쇠를 만들 수 있고, 방 목록 전체는 아무도 못 봐요 */
-let authUid = null;
+let authUid = null, authP = null;
+/* 22번: 닉네임 중복 금지 - 서버 names/닉네임 = 주인 (한 이름씩만 볼 수 있고, 목록 전체는 못 봐요) */
+const nameKey = n => String(n).trim().toLowerCase().replace(/\s+/g, '').replace(/[.#$\[\]\/]/g, '_');
+const nameRef = n => FB.D.ref(FB.db, 'giftstory/names/' + nameKey(n));
+async function fbReady(){
+  if (!FB) {
+    try { const { A, D, base } = await loadFirebase(); const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; }
+    catch (e) { return false; }
+  }
+  if (!authUid) { if (!authP) authP = ensureAuth(); await authP; }
+  return !!authUid;
+}
+async function nameFree(n){   // 이미 다른 사람이 쓰면 false
+  const chk = (async () => {
+    if (!(await fbReady())) return true;
+    try { const v = (await FB.D.get(nameRef(n))).val(); return !(v && v.u && !realMe.ids.includes(v.u)); }
+    catch (e) { return true; }   // 서버 규칙이 없으면 검사 못 하고 통과
+  })();
+  return Promise.race([chk, new Promise(ok => setTimeout(() => ok(true), 7000))]);
+}
+function claimName(n, old){
+  if (!FB || !authUid || !n) return;
+  FB.D.set(nameRef(n), { a: authUid, u: realMe.uid, at: Date.now() }).catch(() => {});
+  if (old && nameKey(old) !== nameKey(n)) FB.D.get(nameRef(old)).then(s => { const v = s.val(); if (v && realMe.ids.includes(v.u)) FB.D.remove(nameRef(old)).catch(() => {}); }).catch(() => {});
+}
 const keyed = new Set();
 function needKey(id){
   if (!FB || !authUid || !id || keyed.has(id)) return;
@@ -1081,7 +1144,8 @@ async function initStore(){
       FB = { A, D, base, app, db: D.getDatabase(app) };
     } catch (e) { FB = null; toast('서버 연결 실패 - 연습 모드로 열려요'); }
   }
-  if (FB) await ensureAuth();   // 22번: 로그인이 끝난 뒤에 대화 읽기
+  if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
+  if (FB && authUid && me.name && me === realMe) claimName(me.name);   // 내 닉네임 등록 (이미 다른 사람 것이면 그냥 넘어가요)
   /* 18번: 처음엔 친구 목록. 알림을 눌러 들어온 방(이미 있는 방)만 바로 대화창 */
   if (urlRoom && getRooms().some(x => x.id === urlRoom) && !firstVisit) openRoom(urlRoom);
   else {
@@ -1150,7 +1214,7 @@ function goHome(initial){
   render(); syncLayer();
 }
 function drawHome(){
-  const rooms = getRooms().slice();
+  const rooms = visibleRooms();
   const nOf = id => unread[id] ? unread[id].keys.size : 0;
   rooms.sort((a, b) => (nOf(b.id) ? 1 : 0) - (nOf(a.id) ? 1 : 0) || ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
   const row = x => {
@@ -1170,6 +1234,7 @@ const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateSt
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
+  if (hlpDone) { hlpDone = false; return; }
   click(); openRoom(r.dataset.home);
 });
 /* 방에 들어감 표시 - 처음 들어올 때만 joined(들어온 시각)를 남겨요 → 방 만든 사람에게 딩동 */
@@ -1207,6 +1272,17 @@ function memberIn(id, uid, v, t0){
 }
 /* 방 목록 (내 휴대폰에 저장) */
 const getRooms = () => LS.get('rp_rooms', []);
+/* 22번: 같은 친구(같은 사람들)와의 방이 여러 개면 가장 최근 방 하나만 보여요 (방 이름이 아니라 들어온 사람으로 구분) */
+const famKey = id => [...new Set(othersIn(id).map(v => v.name))].sort().join('|');
+function twinMap(){
+  const rooms = getRooms(), best = {}, map = {};
+  rooms.forEach(x => { const k = famKey(x.id); if (!k) return; const t = Math.max((lastMsg[x.id] || {}).at || 0, x.at || 0); if (!best[k] || t > best[k].t) best[k] = { id: x.id, t }; });
+  rooms.forEach(x => { const k = famKey(x.id); map[x.id] = k ? best[k].id : x.id; });
+  return map;
+}
+const visibleRooms = () => { const m = twinMap(); return getRooms().filter(x => m[x.id] === x.id); };
+const keepOf = id => twinMap()[id] || id;
+function removeFriend(id){ const m = twinMap(), k = m[id] || id; getRooms().filter(x => (m[x.id] || x.id) === k).forEach(x => removeRoom(x.id)); }
 function saveRoom(id, title){
   const rooms = getRooms(), r = rooms.find(x => x.id === id);
   if (r) { if (title && r.title !== title) { r.title = title; LS.set('rp_rooms', rooms); pushRoomUp(r); } return; }
@@ -1280,11 +1356,12 @@ function drawRooms(){
 const PIN_N = 5;
 let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
 function getPins(){
-  const ids = getRooms().map(x => x.id);
+  const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
   let p = LS.get('rp_pins', null), seen = LS.get('rp_pinseen', null);
   if (!Array.isArray(p)) { p = ids.slice(0, PIN_N); seen = ids.slice(); }
   if (!Array.isArray(seen)) seen = ids.slice();
-  p = Array.from({ length: PIN_N }, (_, i) => (p[i] && ids.includes(p[i])) ? p[i] : null);
+  p = Array.from({ length: PIN_N }, (_, i) => { const id = p[i] && tw[p[i]]; return id && ids.includes(id) ? id : null; });
+  p = p.map((id, i) => id && p.indexOf(id) !== i ? null : id);   // 같은 친구가 두 자리에 있으면 하나만
   ids.slice().reverse().forEach(id => {   // 새로 생긴 방은 빈 자리에 자동으로
     if (seen.includes(id)) return;
     seen.push(id);
@@ -1302,7 +1379,7 @@ const unreadN = id => unread[id] ? unread[id].keys.size : 0;
 /* 더보기 목록 순서: 안 읽은 메시지 온 방 먼저 → 최근 대화 순 */
 function moreRooms(){
   const p = getPins();
-  return getRooms().filter(x => !p.includes(x.id)).sort((a, b) =>
+  return visibleRooms().filter(x => !p.includes(x.id)).sort((a, b) =>
     (unreadN(b.id) ? 1 : 0) - (unreadN(a.id) ? 1 : 0) ||
     ((unread[b.id] || {}).first || 0) - ((unread[a.id] || {}).first || 0) ||
     ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
@@ -1343,7 +1420,7 @@ let pinSlot = 0;
 function openPin(i){
   pinSlot = i; const p = getPins(), cur = p[i];
   $('pinTitle').textContent = cur ? `'${roomName(cur)}' 자리 바꾸기` : '말풍선에 넣을 친구';
-  const list = getRooms().filter(x => x.id !== cur).sort((a, b) => ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
+  const list = visibleRooms().filter(x => x.id !== cur).sort((a, b) => ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
   $('pinList').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + list.map(x =>
     `<div class="mrow" data-id="${x.id}"><div class="mt"><b>${esc(roomName(x.id))}</b><small>${p.includes(x.id) ? '지금 다른 자리에 있어요 (이 자리로 옮겨요)' : esc((lastMsg[x.id] || {}).t || '')}</small></div></div>`).join('');
   $('pinClear').style.display = cur ? '' : 'none';
@@ -1380,13 +1457,29 @@ $('roomBar').addEventListener('click', e => {
   click();
   if (homeOn || b.dataset.go !== room) openRoom(b.dataset.go);
 });
-$('delYes').onclick = () => { hideOv('delOv'); if (delId) { removeRoom(delId); toast('방을 지웠어요'); } delId = null; };
+$('delYes').onclick = () => { hideOv('delOv'); if (delId) { removeFriend(delId); barHTML = ''; toast('방을 지웠어요'); } delId = null; };
+/* 22번: 아래 친구 목록에서 길게 누르면 지우기 */
+let hlpT = 0, hlpDone = false, hlpY = 0, hlpRow = null;
+const hlpEnd = () => { clearTimeout(hlpT); if (hlpRow) hlpRow.classList.remove('press'); hlpRow = null; };
+$('homeList').addEventListener('pointerdown', e => {
+  const r = e.target.closest('[data-home]'); if (!r) return;
+  hlpDone = false; hlpY = e.clientY; hlpRow = r; r.classList.add('press');
+  hlpT = setTimeout(() => {
+    hlpDone = true; hlpEnd();
+    if (navigator.vibrate) navigator.vibrate(30);
+    delId = r.dataset.home; $('delTitle').textContent = `'${roomName(delId)}' 방을 지울까요?`; showOv('delOv');
+  }, 650);
+});
+$('homeList').addEventListener('pointermove', e => { if (hlpRow && Math.abs(e.clientY - hlpY) > 10) hlpEnd(); });
+['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('homeList').addEventListener(t, hlpEnd));
+$('homeList').addEventListener('contextmenu', e => e.preventDefault());
 /* ＋ : 새 방이 바로 생기고 초대 창 */
 let newRoomId = null;
 /* 방은 카톡·문자·주소 복사를 눌렀을 때만 생겨요 (그냥 닫으면 아무것도 안 생김) */
 $('addRoom').onclick = () => {
   click();
   newRoomId = rid();
+  svInvOn = false; $('svInvBox').style.display = 'none'; $('svInvBtn').textContent = '👵 어르신께 실버 모드로 초대하기';
   $('newName').value = ''; showOv('newOv'); setTimeout(() => $('newName').focus(), 300);
 };
 function makeNewRoom(){
@@ -1406,9 +1499,13 @@ $('roomList').addEventListener('click', e => {
   const r = e.target.closest('[data-go]');
   if (r) { click(); hideOv('roomOv'); openRoom(r.dataset.go); toast('방을 옮겼어요'); }
 });
-$('myNameOk').onclick = () => {
+$('myNameOk').onclick = async () => {
   const n = $('myName').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
-  me.name = n; saveMe(); click();
+  if (n === me.name) return;
+  click(); toast('이름 확인 중…');
+  if (me === realMe && !(await nameFree(n))) { toast('이미 있는 이름이에요 · 다른 이름을 적어 주세요'); return; }
+  const old = me.name; me.name = n; saveMe();
+  if (me === realMe) claimName(n, old);
   if (FB) joinRoom(room);
   render(); toast('이름을 바꿨어요');
 };
@@ -1426,6 +1523,10 @@ document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
   if (b.closest('#newOv')) {
+    if (svInvNow()) {
+      if (!$('newName').value.trim()) $('newName').value = svInvTitle();
+      LS.set('rp_inv_me', { n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim() });
+    }
     if (!$('newName').value.trim()) {   // 이름이 비었으면 '초대 1' 처럼 자동 이름 (친구가 들어오면 친구 이름으로 바뀜)
       const n = getRooms().filter(x => /^초대 \d+$/.test(x.title || '')).length + 1;
       $('newName').value = '초대 ' + n;
@@ -1438,7 +1539,28 @@ document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
 });
 const roomURL = id => location.origin + location.pathname + '?room=' + id;
 const inviteText = () => `📮 ${me.name}님이 빨간 우체통에 초대했어요. 못다한 그 말, 편지로 주고받아요.`;
-const shareInvite = kind => shareTo(kind, roomURL(room), inviteText());
+/* 22번: 어르신 초대 - 링크에 호칭 · 이름 · 전화번호 · 닉네임을 같이 넣어요 → 어르신 가족 버튼에 저절로 */
+let svInvOn = false, svInvG = 'f', svInvR = '아들';
+const svInvNow = () => svInvOn && $('newOv').classList.contains('show');
+const SV_TITLE = { kids: ['엄마', '아빠'], grand: ['할머니', '할아버지'], inlaw: ['장모님', '장인어른'], friend: ['친구', '친구'] };
+const relGroup = r => /아들|딸/.test(r) ? 'kids' : /손자|손녀|손주/.test(r) ? 'grand' : /사위|며느리/.test(r) ? 'inlaw' : /친구/.test(r) ? 'friend' : 'kids';
+const svInvTitle = () => { const t = SV_TITLE[relGroup(svInvR)]; return svInvR === '며느리' ? (svInvG === 'f' ? '어머님' : '아버님') : t[svInvG === 'f' ? 0 : 1]; };
+function svInvURL(){
+  const q = new URLSearchParams({ room, sv: 1, g: svInvG, r: svInvR, n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim(), k: me.name });
+  return location.origin + location.pathname + '?' + q.toString();
+}
+const shareInvite = kind => svInvNow()
+  ? shareTo(kind, svInvURL(), `📮 ${svInvR} ${$('svInvName').value.trim() || me.name}이(가) 빨간 우체통에 초대했어요. 누르면 큰 글씨 화면으로 열려요.`)
+  : shareTo(kind, roomURL(room), inviteText());
+$('svInvBtn').onclick = () => {
+  click(); svInvOn = !svInvOn;
+  $('svInvBox').style.display = svInvOn ? '' : 'none';
+  $('svInvBtn').textContent = svInvOn ? '✕ 어르신 초대 그만두기 (보통 초대)' : '👵 어르신께 실버 모드로 초대하기';
+  if (svInvOn && !$('svInvName').value) $('svInvName').value = LS.get('rp_inv_me', {}).n || '';
+  if (svInvOn && !$('svInvPhone').value) $('svInvPhone').value = LS.get('rp_inv_me', {}).p || '';
+};
+$('svInvGen').addEventListener('click', e => { const b = e.target.closest('[data-ig]'); if (!b) return; click(); svInvG = b.dataset.ig; $('svInvGen').querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); });
+$('svInvRel').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; click(); svInvR = b.textContent; $('svInvRel').querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); });
 /* 공유 창은 누른 순간 바로 띄워야 해요 (먼저 기다리면 휴대폰이 막아요) */
 async function shareTo(kind, url, text){
   if (kind === 'copy') { copy(text + '\n' + url); return; }
@@ -1851,7 +1973,7 @@ async function sendFiles(files){
     if (room === r0 && !homeOn) { addMsg(m); render.jump = true; } else pushTo(r0, m);
   }
 }
-['sendPhoto', 'sendMovie', 'sendFile'].forEach(id => $(id).onchange = e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) sendFiles(fs); });
+['sendFile'].forEach(id => $(id).onchange = e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) sendFiles(fs); });
 $('msgs').addEventListener('click', e => {
   const el = e.target.closest('[data-file]'); if (!el) return;
   const m = msgs[el.dataset.file]; if (!m) return;
@@ -2026,6 +2148,38 @@ async function sendLetterLink(kind){
   closeWriter(); drop(); toast('💌 편지를 보냈어요 · 링크를 열면 우체통에 도착해요');
 }
 $('wSlow').onclick = () => sendLetter(true);
+/* 22번: 빨간 우체통 친구 고르기 (모두 선택 가능) → 친구마다 그 방 우체통으로 */
+const toSel = new Set();
+function drawTo(){
+  const list = visibleRooms();
+  $('toList').innerHTML = list.length ? list.map(x => `<div class="mrow" data-to="${x.id}"><span class="ck">${toSel.has(x.id) ? '☑' : '☐'}</span><b>${esc(roomName(x.id))}</b></div>`).join('')
+    : '<div class="pin-empty">아직 친구가 없어요 · 카톡이나 문자로 보내 주세요</div>';
+  const all = list.length && list.every(x => toSel.has(x.id));
+  $('toAll').textContent = all ? '☐ 모두 빼기' : '☑ 모두 선택';
+  $('toSend').textContent = `📮 보내기${toSel.size ? ' (' + toSel.size + '명)' : ''}`;
+}
+$('toBtn').onclick = () => {
+  click(); readW();
+  if (!W.body.trim()) { toast('편지 내용을 먼저 써 주세요'); return; }
+  toSel.clear();
+  const hit = visibleRooms().find(x => W.to && roomName(x.id) === W.to); if (hit) toSel.add(hit.id);
+  drawTo(); showOv('toOv');
+};
+$('toList').addEventListener('click', e => { const r = e.target.closest('[data-to]'); if (!r) return; click(); const id = r.dataset.to; toSel.has(id) ? toSel.delete(id) : toSel.add(id); drawTo(); });
+$('toAll').onclick = () => { click(); const list = visibleRooms(), all = list.every(x => toSel.has(x.id)); toSel.clear(); if (!all) list.forEach(x => toSel.add(x.id)); drawTo(); };
+$('toSend').onclick = async () => {
+  if (!toSel.size) { toast('보낼 친구를 골라 주세요'); return; }
+  if (rec) await stopRec();
+  readW(); const u = who(), ids = [...toSel];
+  ids.forEach(id => {
+    const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
+      letter: { to: roomName(id), toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
+    if (id === room && !homeOn) addMsg(m); else pushTo(id, m);
+  });
+  if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
+  hideOv('toOv'); closeWriter(); drop(); render.jump = true; queueRender();
+  toast(`📮 ${ids.length}명에게 편지를 보냈어요`);
+};
 function nextMorning(){ const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(8, 0, 0, 0); return d.getTime(); }
 async function sendLetter(slow){
   if (rec) await stopRec();
@@ -2364,7 +2518,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
 ['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
   click(); closeMenus();
-  if (['photo', 'movie', 'file'].includes(b.dataset.tg)) { if (homeOn) { toast('친구를 골라 대화방에서 보내 주세요'); return; } $({ photo: 'sendPhoto', movie: 'sendMovie', file: 'sendFile' }[b.dataset.tg]).click(); return; }
+  if (b.dataset.tg === 'file') { if (homeOn) { toast('친구를 골라 대화방에서 보내 주세요'); return; } $('sendFile').click(); return; }
   if (b.dataset.tg === 'mole') window.open(MOLE_URL, '_blank');
   else if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
@@ -3074,6 +3228,14 @@ const svShown = o => $(o).classList.contains('show');
 const svLayer = () => S.on && (S.view !== 'home' || ['svSheet', 'svVoice', 'svEdit'].some(svShown));
 function svOv(id, on){ $(id).classList.toggle('show', on); syncLayer(); }
 
+/* 22번: 가족 초대 링크로 들어오면 그 가족 버튼을 저절로 만들어요 */
+function svApplyInvite(){
+  const d = svData();
+  if (!d.elder) d.elder = { name: me.name, gen: svInv.g };
+  if (!d.fam.some(f => f.room === urlRoom))
+    d.fam.push({ id: rid(), g: relGroup(svInv.r), name: svInv.r || svInv.n || svInv.k || '가족', rn: svInv.r ? svInv.n : '', phone: svInv.p, room: urlRoom, nick: svInv.k || svInv.n || '대화방', photo: '' });
+  svSave(d); LS.set('rp_silver_on', 1);
+}
 /* 열기 · 닫기 */
 function svOpen(){
   S.on = true; S.view = 'home'; LS.set('rp_silver_on', 1);
@@ -3129,10 +3291,10 @@ $('svSOk').onclick = () => {
 let svHomeHTML = '';
 function svHome(force){
   const fam = svData().fam;
-  const btn = f => `<button class="sv-btn ${svIsLive(f) ? 'live' : ''}" data-fam="${f.id}">${f.photo ? `<img src="${f.photo}" alt="">` : ''}<span class="nm">${esc(f.name)}</span>${f.phone ? `<span class="ph">${esc(f.phone)}</span>` : ''}<span class="nk">${f.room ? '💬 ' + esc(f.nick || '대화방') : '닉네임을 골라 주세요'}</span></button>`;
+  const btn = f => `<button class="sv-btn ${svIsLive(f) ? 'live' : ''}" data-fam="${f.id}">${f.photo ? `<img src="${f.photo}" alt="">` : ''}<span class="nm">${esc(f.name)}</span>${f.rn ? `<span class="rn">${esc(f.rn)}</span>` : ''}${f.phone ? `<span class="ph">${esc(f.phone)}</span>` : ''}<span class="nk">${f.room ? '💬 ' + esc(f.nick || '대화방') : '닉네임을 골라 주세요'}</span></button>`;
   const html = SV_GROUPS.map(([g, label]) => {
     const list = fam.filter(f => f.g === g);
-    return `<div class="sv-grp"><h3>${label}</h3><div class="sv-row">${list.length ? list.map(btn).join('') : `<button class="sv-btn empty" data-new="${g}"><span class="nm">${label}</span><span class="nk">눌러서 이름 적기</span></button>`}<button class="sv-add" data-new="${g}">＋</button></div></div>`;
+    return `<div class="sv-grp"><h3>${label}<button class="sv-add" data-new="${g}">＋</button></h3><div class="sv-row">${list.length ? list.map(btn).join('') : `<button class="sv-btn empty" data-new="${g}"><span class="nm">${label}</span><span class="nk">눌러서 이름 적기</span></button>`}</div></div>`;
   }).join('') + `<div class="sv-foot"><button id="svElder">👵 어르신 정보</button><button id="svOut">일반 화면으로</button></div>`;
   if (!force && html === svHomeHTML) return;
   svHomeHTML = html; $('svHome').innerHTML = html;
@@ -3172,7 +3334,7 @@ function svEditShow(f){
   svOv('svEdit', true);
 }
 function svNickList(){
-  const rooms = getRooms();
+  const rooms = visibleRooms();
   $('svNicks').innerHTML = rooms.map(x => { const t = titleFor(x.id) || x.title || '새 방'; return `<button data-nick="${x.id}" class="${S.edit.room === x.id ? 'on' : ''}">💬 ${esc(t)}</button>`; }).join('')
     + `<div style="font-size:16px;color:#8f96c0;margin-top:6px">목록에 없으면 새로 초대하세요</div><div class="inv"><button data-inv="kakao">카톡으로 초대</button><button data-inv="sms">문자로 초대</button></div>`;
   $('svNicks').style.display = '';
@@ -3194,7 +3356,7 @@ $('svNicks').addEventListener('click', e => {
 });
 $('svESave').onclick = () => {
   const name = $('svEName').value.trim(); if (!name) { toast('이름을 적어 주세요'); return; }
-  const d = svData(), f = { id: S.edit.id, g: S.edit.g, name, phone: $('svEPhone').value.trim(), room: S.edit.room || null, nick: S.edit.nick || '', photo: S.edit.photo || '' };
+  const d = svData(), f = { id: S.edit.id, g: S.edit.g, name, phone: $('svEPhone').value.trim(), room: S.edit.room || null, nick: S.edit.nick || '', photo: S.edit.photo || '', rn: S.edit.rn || '' };
   const i = d.fam.findIndex(x => x.id === f.id);
   if (i >= 0) d.fam[i] = f; else d.fam.push(f);
   svSave(d); click(); svOv('svEdit', false); svHome(true); render();
@@ -3438,6 +3600,7 @@ svH1.addEventListener('contextmenu', e => e.preventDefault());
 function start(){
   started = true;
   initStore();
+  if (svInv) svApplyInvite();
   if (LS.get('rp_silver_on', 0)) svOpen();
   setInterval(render, 30000);
   setInterval(remindRooms, 10000);
@@ -3451,13 +3614,23 @@ function begin(){
   if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
   if (!me.name || newRoom) {
     $('nameIn').value = me.name || '';
+    if (svInv) { $('nameIn').placeholder = '어르신 이름 (예: 순자)'; $('nameOk').textContent = '시작'; $('nameSilver').style.display = 'none'; }
     $('nameInstall').style.display = isStandalone() ? 'none' : '';
     showOv('nameOv');
-    const go = silver => {
+    let going = false;
+    const go = async silver => {
       const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); $('nameIn').focus(); return; }
+      if (going) return; going = true;
       $('nameIn').blur(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur();   // 키보드 내리기
-      me.name = n; saveMe(); hideOv('nameOv');
-      if (silver) LS.set('rp_silver_on', 1);
+      if (n !== me.name) {
+        toast('이름 확인 중…');
+        const ok = await nameFree(n); going = false;
+        if (!ok) { toast('이미 있는 이름이에요 · 다른 이름을 적어 주세요'); $('nameIn').focus(); return; }
+      }
+      going = false;
+      const old = me.name; me.name = n; saveMe(); hideOv('nameOv');
+      claimName(n, old);
+      if (silver || svInv) LS.set('rp_silver_on', 1);
       start(); click();
     };
     $('nameOk').onclick = () => go(false);
