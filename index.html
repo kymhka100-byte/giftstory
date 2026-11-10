@@ -246,7 +246,7 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 .twin{display:flex;gap:8px}.twin .big{flex:1}
 input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;background:#222;color:#fff;font-size:16px}
 /* 편지 쓰기 (1단계 고르기 / 2단계 쓰기) */
-#writer{position:fixed;inset:0;background:#0e0e10;z-index:40;display:none;flex-direction:column}
+#writer{position:fixed;inset:0;background:#0e0e10;z-index:46;display:none;flex-direction:column}
 #writer.show{display:flex}
 .wtop{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line)}
 .wtop h2{flex:1;margin:0;font-size:17px;color:#ff5a55}
@@ -397,6 +397,57 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .sv-pick{flex:1;min-height:76px;border-radius:18px;border:3px solid #4a5290;background:#1d2350;color:#fff;font-size:22px;font-weight:700}
 .sv-pick.on{border-color:#ffe14d;background:#3a3410}
 .sv-del{display:block;margin:18px auto 0;background:none;border:none;color:#ff7a75;font-size:18px;text-decoration:underline}
+/* ===== 15번 ===== */
+html,body{overflow:hidden;overscroll-behavior:none}
+#msgs{overscroll-behavior:contain}
+#sendBtn{width:46px;padding:0;display:flex;align-items:center;justify-content:center;background:transparent!important;border:2px solid #5c6b5f;transition:background .2s,border-color .2s}
+#sendBtn svg{width:24px;height:24px;display:block}
+#sendBtn .pf{fill:none;stroke:#8a988c;stroke-width:1.6;stroke-linejoin:round}
+#sendBtn .pl{stroke:#8a988c}
+#sendBtn.has{background:#22c55e!important;border-color:#22c55e}
+#sendBtn.has .pf{fill:#fff;stroke:#fff}#sendBtn.has .pl{stroke:#22c55e}
+#micBtn{flex:none;width:42px;height:42px;border-radius:50%;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:19px;padding:0}
+#micBtn.on{background:#e0322f;border-color:#ff8a86;animation:svpulse 1.4s infinite}
+body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-color:var(--t-btnline)}
+#recStrip{display:none;position:absolute;left:10px;right:110px;bottom:calc(8px + env(safe-area-inset-bottom));height:42px;border-radius:14px;background:#3a1416;border:1px solid #e0322f;color:#fff;align-items:center;gap:8px;padding:0 6px 0 12px;font-size:15px;z-index:6}
+#recStrip.show{display:flex}
+#recStrip span{flex:1}
+#recStrip button{border:none;background:#555;color:#fff;border-radius:10px;padding:6px 10px;font-size:14px}
+.bubble.voice{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:110px}
+.bubble.voice b{font-size:20px}
+.namerow{display:flex;gap:8px}
+.namerow .in{flex:1;margin:0}
+.namerow button{flex:none;border:none;border-radius:12px;background:#ffe14d;color:#222;font-weight:800;font-size:17px;padding:0 18px}
+#svMusic{display:none;flex:none;font-size:24px;padding:10px 14px;border-radius:16px;border:2px solid #ffd76a;background:#3a3410;color:#ffd76a;font-weight:800}
+#svMusic.show{display:block}
+.sv-m.voice{cursor:pointer}
+.sv-voices{display:flex;flex-direction:column;gap:8px}
+.sv-voices button{padding:12px;border-radius:14px;border:1px solid #4a5290;background:#1d2350;color:#fff;font-size:19px;text-align:left}
+.sv-voices button.on{background:#ffe14d;color:#111}
+/* 16번: 노래 플레이어 - 재생 · 목록 · ✕ (오른쪽 위에 떠 있고 손가락으로 옮기기) */
+#mbar{position:fixed;top:64px;right:8px;margin:0;z-index:30;gap:6px;padding:5px;border-radius:14px;background:rgba(20,20,26,.92)!important;border:1px solid #444!important;box-shadow:0 4px 14px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none}
+#mbar #mbTitle,#mbar #mbPrev,#mbar #mbNext{display:none}
+#mbar button{width:40px;height:40px}
+#mbar #mbPlay{border-radius:50%!important;background:#14532d!important;border:2px solid #1f7a43!important;color:#9fe3b4;font-size:17px}
+#mbar #mbPlay.on{background:#22e05a!important;border-color:#8dffb0!important;color:#06330f;box-shadow:0 0 12px rgba(34,224,90,.7)}
+#mbar #mbList{border-radius:6px;background:#55555e!important;border:1px solid #777!important;color:#fff}
+#mbar #mbClose{width:28px;color:#bbb;font-size:16px}
+#mbar.drag{opacity:.85}
+#musicPanel #mPrev,#musicPanel #mNext,#musicPanel #mStop{display:none}
+#musicPanel #mPlay{border-radius:50%;background:#14532d;border:2px solid #1f7a43;color:#9fe3b4}
+#musicPanel #mPlay.on{background:#22e05a;border-color:#8dffb0;color:#06330f}
+.tlist div.on{background:#22e05a!important;color:#06330f!important;font-weight:800;border-radius:8px}
+/* 16번: 실버 모드 우체통 · 가족 사진 */
+.sv-bar .sv-mail{flex:0 0 96px;background:#8f1d1b;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
+.sv-bar .sv-mail small{font-size:18px;margin-top:4px}
+.sv-bar .sv-mail.has{background:#ff3b36;animation:svpulse 1.4s infinite}
+.sv-btn img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #fff;margin-bottom:4px}
+.sv-photo{display:flex;align-items:center;gap:10px}
+.sv-photo span img{width:70px;height:70px;border-radius:50%;object-fit:cover;display:block}
+.sv-photo button{padding:12px 14px;border-radius:14px;border:1px solid #4a5290;background:#1d2350;color:#fff;font-size:19px}
+/* 16번: 위쪽 방 말풍선 - 모두 같은 크기 */
+.rb,.rb:not(.cur):not(.add){width:46px;min-width:46px;height:28px;padding:0 2px;font-size:12px;overflow:visible;white-space:nowrap;border-radius:14px 14px 14px 4px}
+.rb.add{width:28px;min-width:28px;height:28px;border-radius:50%}
 </style>
 </head>
 <body>
@@ -441,7 +492,7 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   <div id="msgs"></div>
   <footer>
     <span class="sign">YMwav</span>
-    <button id="tgBtn" title="영화 같이 보기"><svg viewBox="0 0 40 30" width="30" height="22"><rect x="2" y="9" width="30" height="19" rx="3" fill="#ff5a55"/><path d="M2 9 5 2h28l-3 7z" fill="#333"/><path d="M8 2 6 9M15 2l-2 7M22 2l-2 7M29 2l-2 7" stroke="#fff" stroke-width="2.5"/><path d="M14 13v10l9-5z" fill="#fff"/><circle cx="35" cy="22" r="3" fill="#ffe14d"/><path d="M37.5 22V12l2-1" stroke="#ffe14d" stroke-width="1.6" fill="none"/></svg><b>영화 같이 보기</b></button>
+    <button id="tgBtn" title="같이 보기"><svg viewBox="0 0 40 30" width="30" height="22"><rect x="2" y="9" width="30" height="19" rx="3" fill="#ff5a55"/><path d="M2 9 5 2h28l-3 7z" fill="#333"/><path d="M8 2 6 9M15 2l-2 7M22 2l-2 7M29 2l-2 7" stroke="#fff" stroke-width="2.5"/><path d="M14 13v10l9-5z" fill="#fff"/><circle cx="35" cy="22" r="3" fill="#ffe14d"/><path d="M37.5 22V12l2-1" stroke="#ffe14d" stroke-width="1.6" fill="none"/></svg><b>같이 보기</b></button>
     <div class="pmenu" id="tgMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <button id="mailbox" title="빨간 우체통">
       <svg viewBox="0 0 76 66" width="54" height="47">
@@ -468,7 +519,9 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
     <div class="pmenu" id="plusMenu"><button data-tg="mole">🔨 두더지 게임</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="callBtn" title="친구 부르기">👥<b>부르기</b></button>
-    <button id="sendBtn">전송</button>
+    <button id="micBtn" title="목소리 보내기">🎤</button>
+    <button id="sendBtn" title="보내기"><svg viewBox="0 0 24 24"><path class="pf" d="M2.5 11.2 21 3.2c.6-.3 1.2.3.9.9l-8 18.5c-.3.7-1.3.6-1.4-.1l-1.6-7.4-7.4-1.6c-.7-.1-.8-1.1-.1-1.4z"/><path class="pl" d="M10.9 13.1 21.3 3.6" stroke-width="1.6"/></svg></button>
+    <div id="recStrip"><span id="recInfo">● 녹음 중 0초</span><button id="recCancel">✕ 취소</button></div>
     <button id="testBtn" aria-hidden="true" tabindex="-1"></button>
   </footer>
 </div>
@@ -665,9 +718,8 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
   <div class="panel">
     <h2>📮 빨간 우체통</h2>
     <div style="margin-bottom:10px;color:#ccc">친구에게 보일 내 이름(별명)을 적어 주세요.</div>
-    <input class="in" id="nameIn" maxlength="12" placeholder="예: 영민">
-    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 나만의 편지지를 만들어 보낼 수 있어요 <small>(곧 열려요)</small><br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
-    <button class="big y" id="nameOk">대화 시작하기</button>
+    <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
+    <div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>💰 내가 만든 편지지를 팔 수도 있어요 <small>(곧 열려요)</small></div>
   </div>
 </div>
 
@@ -719,10 +771,10 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 
 <!-- 실버 모드 (어르신용 · 숨김: 위쪽 '빨간 우체통' 글씨를 길게 누르면 열려요) -->
 <div id="silver">
-  <div class="sv-top"><button id="svBack" style="display:none">◀ 처음</button><h2 id="svTitle">빨간 우체통</h2></div>
+  <div class="sv-top"><button id="svBack" style="display:none">◀ 처음</button><h2 id="svTitle">빨간 우체통</h2><button id="svMusic">🎵 ▶</button></div>
   <div class="sv-body" id="svHome"></div>
   <div class="sv-body sv-chat" id="svChat" style="display:none"></div>
-  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-gray" id="svReplyBtn">💬 답장</button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button></div>
+  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-gray" id="svReplyBtn">💬 답장</button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button><button class="sv-mail" id="svMail">📮<small>편지</small></button></div>
   <!-- 메시지가 오면: 큰 글씨 + 읽어 주기 → 답장 목록 -->
   <div class="sv-ov" id="svSheet">
     <div class="sv-got" id="svGot"></div>
@@ -740,6 +792,7 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
     <div class="sv-panel">
       <h3 id="svEditTitle">자식</h3>
       <label>이름</label><input class="sv-in big" id="svEName" maxlength="8" placeholder="예: 아들, 지영">
+      <label>사진 (없으면 이름만 나와요)</label><div class="sv-photo"><span id="svEPic"></span><button id="svEPicBtn">🖼 사진 고르기</button><button id="svEPicDel">지우기</button></div><input type="file" id="svEPicFile" accept="image/*" style="display:none">
       <label>전화번호</label><input class="sv-in" id="svEPhone" type="tel" maxlength="15" placeholder="010-0000-0000">
       <label>닉네임 (빨간 우체통 대화방)</label><button class="sv-nick" id="svENick">눌러서 고르기</button>
       <div class="sv-nicks" id="svNicks" style="display:none"></div>
@@ -754,6 +807,8 @@ header h1{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
       <label>어르신 이름</label><input class="sv-in big" id="svSName" maxlength="8" placeholder="예: 김순자">
       <label>가족이 부르는 호칭</label>
       <div class="sv-twin" style="margin-top:0"><button class="sv-pick" data-gen="f">👵 엄마 · 할머니</button><button class="sv-pick" data-gen="m">👴 아빠 · 할아버지</button></div>
+      <label>읽어 주는 목소리 (눌러서 들어 보고 고르기)</label>
+      <div class="sv-voices" id="svVoices"></div>
       <div class="sv-twin"><button class="sv-big sv-red" id="svSOk">시작하기</button></div>
     </div>
   </div>
@@ -1041,18 +1096,13 @@ function watchRoom(id){
     if (m.type === 'letter' && m.letter && m.letter.deliverAt > Date.now()) return;   // 아직 도착 안 한 편지
     const u = unread[id] || (unread[id] = { keys: new Set(), first: m.at || Date.now() });
     u.keys.add(snap.key); u.first = Math.min(u.first, m.at || Date.now());
-    if ((m.at || 0) >= t0 - 3000) { toFront(id); flashRoom(id); pop(); svIncoming(id, { ...m, id: snap.key }); }
+    if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); svIncoming(id, { ...m, id: snap.key }); }
     queueRender();
   }));
   const mems = D.ref(db, path + '/members');
   un.push(D.onChildAdded(mems, s => memberIn(id, s.key, s.val(), t0)));
   un.push(D.onChildChanged(mems, s => memberIn(id, s.key, s.val(), Infinity)));
   un.push(watchCall(id));
-}
-/* 말풍선 순서: 누르면 제자리 그대로, 새 메시지가 온 방만 맨 왼쪽으로 */
-function toFront(id){
-  const rooms = getRooms(), i = rooms.findIndex(x => x.id === id);
-  if (i > 0) { rooms.unshift(rooms.splice(i, 1)[0]); LS.set('rp_rooms', rooms); }
 }
 function drawRooms(){
   const rooms = getRooms();
@@ -1071,7 +1121,7 @@ function drawBar(){
   const html = list.map(x => {
     const name = titleFor(x.id) || x.title || '새 방', cur = x.id === room;
     const n = unread[x.id] ? unread[x.id].keys.size : 0;
-    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc(cur ? ([...name].length > 3 ? [...name].slice(0, 3).join('') + '…' : name) : [...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[x.id] ? 'flash' : ''} ${FB && !othersIn(x.id).length ? 'wait' : ''}" data-go="${x.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('');
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
@@ -1103,17 +1153,19 @@ $('roomBar').addEventListener('click', e => {
 $('delYes').onclick = () => { hideOv('delOv'); if (delId) { removeRoom(delId); toast('방을 지웠어요'); } delId = null; };
 /* ＋ : 새 방이 바로 생기고 초대 창 */
 let newRoomId = null;
+/* 방은 카톡·문자·주소 복사를 눌렀을 때만 생겨요 (그냥 닫으면 아무것도 안 생김) */
 $('addRoom').onclick = () => {
   click();
-  const id = rid(); saveRoom(id, ''); openRoom(id); newRoomId = id;
+  newRoomId = rid();
   $('newName').value = ''; showOv('newOv'); setTimeout(() => $('newName').focus(), 300);
 };
-/* 이름 없이 닫으면 빈 방은 지워요 (누구 방인지 모르는 "새 방"이 쌓이지 않게) */
-document.querySelector('#newOv [data-close]').addEventListener('click', () => {
-  const id = newRoomId; newRoomId = null;
-  if (id && !$('newName').value.trim() && !Object.keys(msgs).length && id === room) removeRoom(id);
-});
+function makeNewRoom(){
+  const id = newRoomId; if (!id || getRooms().some(x => x.id === id)) return;
+  saveRoom(id, $('newName').value.trim()); openRoom(id);
+}
+document.querySelector('#newOv [data-close]').addEventListener('click', () => { newRoomId = null; });
 $('newName').addEventListener('input', () => {
+  if (!newRoomId || newRoomId !== room) return;
   const t = $('newName').value.trim(), rooms = getRooms(), r = rooms.find(x => x.id === room);
   if (r) { r.title = t; LS.set('rp_rooms', rooms); pushRoomUp(r); render(); }
 });
@@ -1143,9 +1195,12 @@ document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
 /* 공유 창을 먼저 띄우고, 다 보내고 나서 초대 창을 닫아요 (먼저 닫으면 공유 창이 취소돼 친구 고르기가 안 나와요) */
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
-  if (b.closest('#newOv') && !$('newName').value.trim()) {   // 이름이 비었으면 '초대 1' 처럼 자동 이름 (친구가 들어오면 친구 이름으로 바뀜)
-    const n = getRooms().filter(x => /^초대 \d+$/.test(x.title || '')).length + 1;
-    $('newName').value = '초대 ' + n; $('newName').dispatchEvent(new Event('input'));
+  if (b.closest('#newOv')) {
+    if (!$('newName').value.trim()) {   // 이름이 비었으면 '초대 1' 처럼 자동 이름 (친구가 들어오면 친구 이름으로 바뀜)
+      const n = getRooms().filter(x => /^초대 \d+$/.test(x.title || '')).length + 1;
+      $('newName').value = '초대 ' + n;
+    }
+    makeNewRoom(); $('newName').dispatchEvent(new Event('input'));
   }
   click();
   await shareInvite(kind);
@@ -1331,6 +1386,8 @@ function render(){
     if (m.type === 'letter') {
       const st = !arrived(m) ? '<span class="st wait">내일 아침 도착</span>' : m.read ? '<span class="st read">읽음</span>' : '<span class="st">안 읽음</span>';
       html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(lp(m.letter))}" style="${paperVars(lp(m.letter))}"></div></div>`;
+    } else if (m.type === 'voice') {
+      html += `<div class="bubble voice" data-id="${m.id}"><b>▶</b>🎤 목소리 ${m.sec ? m.sec + '초' : ''}</div>`;
     } else {
       html += `<div class="bubble">${esc(m.text)}</div>`;
     }
@@ -1408,12 +1465,67 @@ $('testBtn').onclick = () => {
 function sendText(){
   const t = $('txt').value.trim(); if (!t) return;
   addMsg({ from: who().uid, name: who().name, type: 'text', text: t, at: Date.now() });
-  $('txt').value = ''; $('txt').style.height = '42px';
+  $('txt').value = ''; $('txt').style.height = '42px'; sendLook();
   render.jump = true;
 }
-$('sendBtn').onclick = () => { sendText(); $('txt').focus(); };
+/* 보낼 때: 작은 진동 + 작은 소리 (모든 모드) */
+function sentFx(){ if (navigator.vibrate) navigator.vibrate(25); if (!ac()) return; tone(1568, 0, .07, .07); tone(2093, .05, .09, .05); }
+const sendLook = () => $('sendBtn').classList.toggle('has', !!$('txt').value.trim() || !!vm);
+$('sendBtn').onclick = () => {
+  if (vm) { vmStop(true); return; }   // 녹음 중이면 목소리 보내기
+  const t = $('txt'); if (t.value.trim()) sentFx(); sendText();
+  t.blur(); t.focus();   // 음성 키보드(마이크)가 계속 켜져 있지 않게 한 번 끊었다가 다시 쓰기 준비
+};
+
+/* ----- 🎤 목소리 보내기 (대화창 · 최대 60초) ----- */
+let vm = null;   // { rec, stream, chunks, sec, timer, send }
+async function vmStart(){
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) { toast('이 화면에서는 녹음이 안 돼요 (크롬으로 열어 주세요)'); return; }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    const mime = pickMime(), opt = { audioBitsPerSecond: 32000 };
+    if (mime) opt.mimeType = mime;
+    const rec = new MediaRecorder(stream, opt), v = vm = { rec, stream, chunks: [], sec: 0, send: false };
+    rec.ondataavailable = e => { if (e.data && e.data.size) v.chunks.push(e.data); };
+    rec.onstop = () => {
+      stream.getTracks().forEach(t => t.stop()); clearInterval(v.timer); musicDuck(false);
+      if (vm === v) vm = null; vmUI();
+      if (!v.send) return;
+      const blob = new Blob(v.chunks, { type: rec.mimeType || mime || 'audio/webm' });
+      if (!blob.size || v.sec < 1) { toast('녹음이 너무 짧아요'); return; }
+      const fr = new FileReader();
+      fr.onload = () => { sentFx(); addMsg({ from: who().uid, name: who().name, type: 'voice', voice: fr.result, sec: v.sec, text: '🎤 목소리 메시지', at: Date.now() }); render.jump = true; queueRender(); toast('🎤 목소리를 보냈어요'); };
+      fr.readAsDataURL(blob);
+    };
+    musicDuck(true); rec.start(250);
+    v.timer = setInterval(() => { v.sec++; vmUI(); if (v.sec >= 60) vmStop(true); }, 1000);
+    vmUI();
+  } catch (e) {
+    vm = null; vmUI();
+    toast(e && e.name === 'NotAllowedError' ? '마이크 권한을 허용해 주세요 (주소창 왼쪽 → 권한)' : '녹음을 시작할 수 없어요');
+  }
+}
+function vmStop(send){ if (!vm) return; vm.send = send; try { vm.rec.stop(); } catch (e) { vm = null; vmUI(); } }
+function vmUI(){
+  $('micBtn').classList.toggle('on', !!vm); sendLook();
+  $('recStrip').classList.toggle('show', !!vm);
+  if (vm) $('recInfo').textContent = `● 녹음 중 ${vm.sec}초 · 🎤나 ➤ 누르면 보내요`;
+}
+$('micBtn').onclick = () => { click(); if (vm) vmStop(true); else vmStart(); };
+$('recCancel').onclick = () => { click(); vmStop(false); toast('녹음을 지웠어요'); };
+/* 목소리 메시지 듣기 */
+let vmAudio = null;
+function playVoiceMsg(m, el){
+  if (!m || !m.voice) return;
+  if (vmAudio && !vmAudio.paused) { vmAudio.pause(); musicDuck(false); if (vmAudio._id === m.id) return; }
+  vmAudio = new Audio(m.voice); vmAudio._id = m.id;
+  musicDuck(true);
+  vmAudio.onended = vmAudio.onerror = () => musicDuck(false);
+  return vmAudio.play().catch(e => { musicDuck(false); throw e; });
+}
+$('msgs').addEventListener('click', e => { const b = e.target.closest('.bubble.voice'); if (b) Promise.resolve(playVoiceMsg(msgs[b.dataset.id])).catch(() => toast('재생이 안 돼요')); });
 $('sendBtn').addEventListener('pointerdown', e => e.preventDefault());   // 키보드가 내려가지 않게
-$('txt').addEventListener('input', e => { e.target.style.height = '42px'; e.target.style.height = Math.min(110, e.target.scrollHeight) + 'px'; });
+$('txt').addEventListener('input', e => { sendLook(); e.target.style.height = '42px'; e.target.style.height = Math.min(110, e.target.scrollHeight) + 'px'; });
 
 /* ----- 우체통 누르기 ----- */
 $('mailbox').onclick = () => {
@@ -1686,7 +1798,7 @@ function readAloud(){
   if (voiceAudio) voiceAudio.pause();
   const L = curLetter.letter;
   const parts = [`${L.to}에게.`, ...L.body.split(/\n+/).map(t => t.trim()).filter(Boolean), `${L.fromName} 씀.`];
-  const voices = ss.getVoices(), v = voices.find(x => x.lang && x.lang.toLowerCase().replace('_', '-').startsWith('ko'));
+  const v = koVoice();
   musicDuck(true);
   ss.cancel();
   setTimeout(() => {
@@ -1700,7 +1812,16 @@ function readAloud(){
     ss.resume();
   }, 200);
 }
-if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices(); }
+if ('speechSynthesis' in window) { speechSynthesis.getVoices(); speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); if (typeof svVoicesDraw === 'function' && $('svSetup').classList.contains('show')) svVoicesDraw(); }; }
+/* 한국어 목소리: 고른 목소리 → 사람 같은(자연스러운) 목소리 → 아무 한국어 목소리 */
+const koVoices = () => ('speechSynthesis' in window ? speechSynthesis.getVoices() : []).filter(x => x.lang && x.lang.toLowerCase().replace('_', '-').startsWith('ko'));
+function koVoice(){
+  const list = koVoices(), saved = LS.get('rp_voice', '');
+  const pick = list.find(x => x.voiceURI === saved || x.name === saved);
+  if (pick) return pick;
+  const score = x => (/natural|neural|online|premium|enhanced|wavenet/i.test(x.name) ? 4 : 0) + (/google/i.test(x.name) ? 2 : 0) + (/samsung/i.test(x.name) ? 2 : 0) + (x.localService === false ? 1 : 0);
+  return list.slice().sort((a, b) => score(b) - score(a))[0] || null;
+}
 $('rTTS').onclick = readAloud;
 $('rClose').onclick = closeReader;
 $('rReply').onclick = () => {
@@ -1894,8 +2015,25 @@ tAudio.addEventListener('error', () => {   // 미리보기·저장공간에서 �
   if (tAudio.src && tAudio.src.startsWith('file:')) { const f = tAudio.src.split('/').pop(); tAudio.src = MEDIA_HOME + f; tAudio.load(); }
 });
 const rAudio = new Audio(); rAudio.autoplay = true;   // 친구 폰에서 흘려보내 주는 노래
-const localFiles = {};   // 내 폰에서 고른 노래 (이 화면에만)
-const mList = () => (M && M.list) || BASE_SONGS;
+const localFiles = {};   // 내 폰에서 고른 노래 (재생 주소)
+/* 내 폰에서 고른 노래는 휴대폰 안(IndexedDB)에 보관 → 앱을 나갔다 와도 목록·노래가 그대로 */
+const MY_SONGS_MAX = 40;
+const mySongs = () => LS.get('rp_mysongs', []);
+let idbP = null;
+function idb(){
+  if (!idbP) idbP = new Promise((ok, no) => {
+    if (!window.indexedDB) return no();
+    const q = indexedDB.open('redpost', 1);
+    q.onupgradeneeded = () => q.result.createObjectStore('songs');
+    q.onsuccess = () => ok(q.result); q.onerror = () => no(q.error);
+  });
+  return idbP;
+}
+const idbDo = (mode, fn) => idb().then(db => new Promise((ok, no) => { const tx = db.transaction('songs', mode), r = fn(tx.objectStore('songs')); tx.oncomplete = () => ok(r && r.result); tx.onerror = () => no(tx.error); }));
+const idbPut = (k, v) => idbDo('readwrite', st => st.put(v, k));
+const idbGet = k => idbDo('readonly', st => st.get(k));
+const idbDel = k => idbDo('readwrite', st => st.delete(k));
+const mList = () => (M && M.list) || [...BASE_SONGS, ...mySongs()];
 const curItem = () => M && mList()[M.idx];
 const mOn = () => !!(M && M.playing);
 function drawMusic(){
@@ -1907,8 +2045,11 @@ function drawMusic(){
   $('mTitle').textContent = title;
   $('mbTitle').textContent = (mOn() ? '♪ ' : '⏸ ') + title;
   $('mBy').textContent = M && M.by ? `${M.by}님이 ${M.playing ? '틀었어요' : '멈췄어요'}` : '';
-  $('mPlay').textContent = $('mbPlay').textContent = mOn() && !mBlocked ? '⏸' : '▶';
+  const pl = mOn() && !mBlocked;
+  $('mPlay').textContent = $('mbPlay').textContent = pl ? '⏸' : '▶';
+  $('mPlay').classList.toggle('on', pl); $('mbPlay').classList.toggle('on', pl);
   $('mbar').classList.toggle('show', !!M);
+  try { svMusicDraw(); } catch (e) {}
 }
 function openMusicPanel(){ mPinned = true; clearTimeout(mCollapseT); showPanel('musicPanel', true); drawMusic(); }
 /* 노래가 시작되면: 가운데에 잠깐(1초) 보였다가 위쪽 막대로 */
@@ -1942,7 +2083,14 @@ function syncMusic(){
   if (it.type !== 'local' || it.host === me.uid) rAudio.pause();
   if (it.type === 'mp3' || (it.type === 'local' && it.host === me.uid)) {
     let src;
-    if (it.type === 'local') { src = localFiles[it.src]; if (!src) { toast('📱 이 노래는 다시 골라 주세요 (화면을 새로 열면 지워져요)'); return; } }
+    if (it.type === 'local') {
+      src = localFiles[it.src];
+      if (!src) {   // 휴대폰 안 보관함에서 다시 꺼내기
+        const want = it.src;
+        idbGet(want).then(b => { if (b) { localFiles[want] = URL.createObjectURL(b); const c = curItem(); if (c && c.src === want) syncMusic(); } else toast('📱 이 노래는 다시 골라 주세요'); }).catch(() => toast('📱 이 노래는 다시 골라 주세요'));
+        return;
+      }
+    }
     else src = new URL(it.src, location.href).href;
     const go = () => { if (Math.abs(tAudio.currentTime - at) > 2) { try { tAudio.currentTime = at; } catch (e) {} } mTry(tAudio.play()); };
     if (tAudio.src !== src && !(tAudio.src.startsWith(MEDIA_HOME) && src.endsWith(it.src))) { tAudio.src = src; tAudio.addEventListener('loadedmetadata', go, { once: true }); tAudio.load(); } else go();
@@ -1996,11 +2144,33 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) setT
 addEventListener('pageshow', e => { if (e.persisted) setTimeout(musicResume, 400); });
 const mPlayToggle = () => { click(); clearTimeout(mEndT); if (mOn() && mBlocked) { mBlocked = false; syncMusic(); return; } if (mOn()) mSet({ pos: mCurPos(), playing: false }); else mSet({ idx: M ? M.idx : 0, pos: M ? mCurPos() : 0, playing: true }); };
 const mStep = d => { click(); const n = mList().length; mSet({ idx: ((M ? M.idx : (d > 0 ? -1 : 1)) + d + n) % n, pos: 0, playing: true }); };
-$('mPlay').onclick = $('mbPlay').onclick = mPlayToggle;
+$('mPlay').onclick = mPlayToggle;
+$('mbPlay').onclick = () => { if (!mbDragged) mPlayToggle(); };
 $('mNext').onclick = $('mbNext').onclick = () => mStep(1);
 $('mPrev').onclick = $('mbPrev').onclick = () => mStep(-1);
-$('mbList').onclick = $('mbTitle').onclick = () => { click(); openMusicPanel(); };
-$('mStop').onclick = $('mbClose').onclick = () => { click(); tgWrite('music', null); showPanel('musicPanel', false); };
+$('mbList').onclick = $('mbTitle').onclick = () => { if (mbDragged) return; click(); if ($('musicPanel').classList.contains('show')) showPanel('musicPanel', false); else openMusicPanel(); };
+/* 플레이어 옮기기: 꾹 누르고 끌기 (놓은 자리 기억) */
+let mbDragged = false;
+(() => {
+  const bar = $('mbar'), pos = LS.get('rp_mbpos', null);
+  const place = (x, y) => { const w = bar.offsetWidth || 150, h = bar.offsetHeight || 50; x = Math.max(4, Math.min(innerWidth - w - 4, x)); y = Math.max(4, Math.min(innerHeight - h - 4, y)); bar.style.left = x + 'px'; bar.style.top = y + 'px'; bar.style.right = 'auto'; return { x, y }; };
+  if (pos) requestAnimationFrame(() => place(pos.x, pos.y));
+  let st = null;
+  bar.addEventListener('pointerdown', e => { const r = bar.getBoundingClientRect(); st = { sx: e.clientX, sy: e.clientY, ox: r.left, oy: r.top, moved: false }; mbDragged = false; });
+  addEventListener('pointermove', e => {
+    if (!st) return;
+    const dx = e.clientX - st.sx, dy = e.clientY - st.sy;
+    if (!st.moved && Math.hypot(dx, dy) < 10) return;
+    st.moved = true; bar.classList.add('drag'); place(st.ox + dx, st.oy + dy);
+  });
+  const end = () => {
+    if (!st) return;
+    if (st.moved) { mbDragged = true; const r = bar.getBoundingClientRect(); LS.set('rp_mbpos', { x: r.left, y: r.top }); setTimeout(() => mbDragged = false, 50); }
+    bar.classList.remove('drag'); st = null;
+  };
+  addEventListener('pointerup', end); addEventListener('pointercancel', end);
+})();
+$('mStop').onclick = $('mbClose').onclick = () => { if (mbDragged) return; click(); tgWrite('music', null); showPanel('musicPanel', false); };
 $('mFind').oninput = drawMusic;
 $('mList').addEventListener('click', e => { const d = e.target.closest('[data-k]'); if (!d) return; click(); mSet({ idx: +d.dataset.k, pos: 0, playing: true }); });
 function addSongs(items){
@@ -2016,7 +2186,10 @@ $('mYTfind').onclick = () => { click(); window.open('https://m.youtube.com/', '_
 $('mPhone').onclick = () => { click(); $('mFiles').click(); };
 $('mFiles').onchange = () => {
   const fs = [...$('mFiles').files]; $('mFiles').value = ''; if (!fs.length) return;
-  const items = fs.map(f => { const id = rid(); localFiles[id] = URL.createObjectURL(f); return { type: 'local', src: id, title: f.name.replace(/\.[^.]+$/, ''), host: me.uid, hostName: me.name }; });
+  const items = fs.map(f => { const id = rid(); localFiles[id] = URL.createObjectURL(f); idbPut(id, f).catch(() => {}); return { type: 'local', src: id, title: f.name.replace(/\.[^.]+$/, ''), host: realMe.uid, hostName: realMe.name }; });
+  let keep = [...mySongs(), ...items];
+  keep.slice(0, Math.max(0, keep.length - MY_SONGS_MAX)).forEach(x => idbDel(x.src).catch(() => {}));
+  LS.set('rp_mysongs', keep.slice(-MY_SONGS_MAX));
   addSongs(items); toast(`📱 ${items.length}곡을 넣었어요 · 친구 폰으로 흘려보내요`);
 };
 
@@ -2041,7 +2214,7 @@ function hostStream(on){
     try {
       if (hostPeers[who]) hostPeers[who].close();
       const pc = hostPeers[who] = new RTCPeerConnection(ICE);
-      streamDest.stream.getTracks().forEach(t => pc.addTrack(t, streamDest.stream));
+      streamDest.stream.getTracks().forEach(t => { const sd = pc.addTrack(t, streamDest.stream); try { const p = sd.getParameters(); p.encodings = p.encodings && p.encodings.length ? p.encodings : [{}]; p.encodings[0].maxBitrate = 96000; sd.setParameters(p).catch(() => {}); } catch (x) {} });
       await pc.setRemoteDescription(v.offer);
       await pc.setLocalDescription(await pc.createAnswer());
       await waitIce(pc);
@@ -2058,7 +2231,9 @@ async function listenStream(host){
   listenHost = host;
   const pc = listenPc = new RTCPeerConnection(ICE);
   pc.addTransceiver('audio', { direction: 'recvonly' });
-  pc.ontrack = e => { rAudio.srcObject = e.streams[0] || new MediaStream([e.track]); mTry(rAudio.play()); };
+  pc.ontrack = e => {   // 넉넉히 모아 두고 틀기 (끊김 줄이기)
+    try { if ('jitterBufferTarget' in e.receiver) e.receiver.jitterBufferTarget = 1500; else e.receiver.playoutDelayHint = 1.5; } catch (x) {}
+    rAudio.srcObject = e.streams[0] || new MediaStream([e.track]); mTry(rAudio.play()); };
   pc.onconnectionstatechange = () => { if (pc.connectionState === 'failed') toast('친구 폰과 연결이 안 됐어요 (와이파이를 바꿔 보세요)'); };
   try {
     await pc.setLocalDescription(await pc.createOffer());
@@ -2116,11 +2291,28 @@ function drawVChat(){
 }
 $('vGo').onclick = () => {
   const q = $('vUrl').value.trim(), id = ytId(q);
-  if (!id) { if (q) window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(q), '_blank'); else toast('유튜브 주소를 붙여 넣어 주세요'); return; }
+  if (!id) { if (q) vGoYT(q); else toast('유튜브 주소를 붙여 넣어 주세요'); return; }
   $('vUrl').value = ''; click();
   vSet({ vid: id, pos: 0, playing: true });
 };
-$('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); window.open('https://m.youtube.com/' + (q && !ytId(q) ? 'results?search_query=' + encodeURIComponent(q) : ''), '_blank'); };
+$('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); vGoYT(q && !ytId(q) ? q : ''); };
+/* 유튜브에서 영상 고르기 → 돌아오면 그 영상을 같이 보기에 바로 넣어요 */
+function vGoYT(q){
+  LS.set('rp_vwant', Date.now());
+  window.open('https://m.youtube.com/' + (q ? 'results?search_query=' + encodeURIComponent(q) : ''), '_blank');
+  toast('영상에서 공유 → 링크 복사 → 빨간 우체통으로 돌아오세요');
+}
+const vWanted = () => Date.now() - LS.get('rp_vwant', 0) < 20 * 60000;
+function vTakeClip(){
+  if (!vWanted() || !navigator.clipboard || !navigator.clipboard.readText) return;
+  navigator.clipboard.readText().then(t => {
+    const id = ytId(t || ''); if (!id || (V && V.vid === id)) return;
+    LS.set('rp_vwant', 0);
+    showPanel('musicPanel', false); showPanel('videoPanel', true);
+    vSet({ vid: id, pos: 0, playing: true }); toast('🎬 복사한 영상을 같이 보기로 틀었어요');
+  }).catch(() => { $('vUrl').placeholder = '여기를 길게 눌러 붙여 넣기 → 틀기'; });
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(vTakeClip, 600); });
 $('vEnd').onclick = () => { click(); tgWrite('video', null); showPanel('videoPanel', false); tgVideoOn = false; };
 
 /* 방이 바뀌면 같이 듣기·보기도 그 방 것으로 */
@@ -2137,7 +2329,16 @@ function tgListen(){
 }
 /* 유튜브 앱에서 공유 → 빨간 우체통 으로 들어온 노래 */
 const sharedYT = (() => { const q = new URLSearchParams(location.search); return ytId(q.get('url') || '') || ytId(q.get('text') || '') || ytId(q.get('title') || ''); })();
-function takeShared(){ if (sharedYT) setTimeout(() => { addSongs([{ type: 'yt', src: sharedYT, title: '' }]); toast('🎵 유튜브 노래를 같이 듣기에 넣었어요'); }, 2500); }
+function takeShared(){
+  if (!sharedYT) return;
+  setTimeout(() => {
+    if (vWanted()) {   // '영화 같이 보기'에서 유튜브로 갔다가 공유한 영상
+      LS.set('rp_vwant', 0); showPanel('musicPanel', false); showPanel('videoPanel', true);
+      vSet({ vid: sharedYT, pos: 0, playing: true }); toast('🎬 유튜브 영상을 같이 보기로 틀었어요'); return;
+    }
+    addSongs([{ type: 'yt', src: sharedYT, title: '' }]); toast('🎵 유튜브 노래를 같이 듣기에 넣었어요');
+  }, 2500);
+}
 
 
 /* ----- 📹 영상통화 (카메라 영상은 친구 폰으로 바로 · 저장 안 함) ----- */
@@ -2530,8 +2731,20 @@ function svSetupShow(){
   const e = svData().elder || { name: me.name || '', gen: 'f' };
   $('svSName').value = e.name; S.gen = e.gen;
   document.querySelectorAll('[data-gen]').forEach(b => b.classList.toggle('on', b.dataset.gen === S.gen));
+  svVoicesDraw();
   svOv('svSetup', true);
 }
+function svVoicesDraw(){
+  const list = koVoices(), cur = koVoice();
+  $('svVoices').innerHTML = list.length ? list.map((x, i) => `<button data-vi="${i}" class="${cur && cur.voiceURI === x.voiceURI ? 'on' : ''}">🔊 목소리 ${i + 1} <small style="opacity:.6">${esc(x.name)}</small></button>`).join('')
+    : '<div style="font-size:17px;color:#8f96c0">한국어 목소리를 찾는 중이에요… (휴대폰 설정 → 텍스트 음성 변환에서 한국어를 받아 주세요)</div>';
+}
+$('svVoices').addEventListener('click', e => {
+  const b = e.target.closest('[data-vi]'); if (!b) return;
+  const x = koVoices()[+b.dataset.vi]; if (!x) return;
+  LS.set('rp_voice', x.voiceURI); svVoicesDraw();
+  svSpeak('안녕하세요. 이 목소리로 읽어 드릴게요.');
+});
 document.querySelectorAll('[data-gen]').forEach(b => b.onclick = () => { S.gen = b.dataset.gen; click(); document.querySelectorAll('[data-gen]').forEach(x => x.classList.toggle('on', x === b)); });
 $('svSOk').onclick = () => {
   const n = $('svSName').value.trim(); if (!n) { toast('어르신 이름을 적어 주세요'); return; }
@@ -2544,7 +2757,7 @@ $('svSOk').onclick = () => {
 let svHomeHTML = '';
 function svHome(force){
   const fam = svData().fam;
-  const btn = f => `<button class="sv-btn ${svIsLive(f) ? 'live' : ''}" data-fam="${f.id}"><span class="nm">${esc(f.name)}</span>${f.phone ? `<span class="ph">${esc(f.phone)}</span>` : ''}<span class="nk">${f.room ? '💬 ' + esc(f.nick || '대화방') : '닉네임을 골라 주세요'}</span></button>`;
+  const btn = f => `<button class="sv-btn ${svIsLive(f) ? 'live' : ''}" data-fam="${f.id}">${f.photo ? `<img src="${f.photo}" alt="">` : ''}<span class="nm">${esc(f.name)}</span>${f.phone ? `<span class="ph">${esc(f.phone)}</span>` : ''}<span class="nk">${f.room ? '💬 ' + esc(f.nick || '대화방') : '닉네임을 골라 주세요'}</span></button>`;
   const html = SV_GROUPS.map(([g, label]) => {
     const list = fam.filter(f => f.g === g);
     return `<div class="sv-grp"><h3>${label}</h3><div class="sv-row">${list.length ? list.map(btn).join('') : `<button class="sv-btn empty" data-new="${g}"><span class="nm">${label}</span><span class="nk">눌러서 이름 적기</span></button>`}<button class="sv-add" data-new="${g}">＋</button></div></div>`;
@@ -2583,6 +2796,7 @@ function svEditShow(f){
   $('svENick').textContent = f.room ? '💬 ' + (f.nick || '대화방') + '  (바꾸려면 누르기)' : '눌러서 고르기';
   $('svNicks').style.display = 'none';
   $('svEDel').style.display = f.isNew ? 'none' : '';
+  svPicDraw();
   svOv('svEdit', true);
 }
 function svNickList(){
@@ -2608,10 +2822,26 @@ $('svNicks').addEventListener('click', e => {
 });
 $('svESave').onclick = () => {
   const name = $('svEName').value.trim(); if (!name) { toast('이름을 적어 주세요'); return; }
-  const d = svData(), f = { id: S.edit.id, g: S.edit.g, name, phone: $('svEPhone').value.trim(), room: S.edit.room || null, nick: S.edit.nick || '' };
+  const d = svData(), f = { id: S.edit.id, g: S.edit.g, name, phone: $('svEPhone').value.trim(), room: S.edit.room || null, nick: S.edit.nick || '', photo: S.edit.photo || '' };
   const i = d.fam.findIndex(x => x.id === f.id);
   if (i >= 0) d.fam[i] = f; else d.fam.push(f);
   svSave(d); click(); svOv('svEdit', false); svHome(true); render();
+};
+/* 가족 사진: 작게 줄여서 이 휴대폰에만 저장 */
+function svPicDraw(){ const p = S.edit && S.edit.photo; $('svEPic').innerHTML = p ? `<img src="${p}" alt="">` : ''; $('svEPicDel').style.display = p ? '' : 'none'; }
+$('svEPicBtn').onclick = () => { click(); $('svEPicFile').click(); };
+$('svEPicDel').onclick = () => { click(); S.edit.photo = ''; svPicDraw(); };
+$('svEPicFile').onchange = () => {
+  const f = $('svEPicFile').files[0]; $('svEPicFile').value = ''; if (!f) return;
+  const img = new Image(), url = URL.createObjectURL(f);
+  img.onload = () => {
+    const n = 220, c = document.createElement('canvas'), k = Math.max(n / img.width, n / img.height);
+    c.width = c.height = n; const w = img.width * k, h = img.height * k;
+    c.getContext('2d').drawImage(img, (n - w) / 2, (n - h) / 2, w, h);
+    S.edit.photo = c.toDataURL('image/jpeg', .8); URL.revokeObjectURL(url); svPicDraw();
+  };
+  img.onerror = () => toast('사진을 열 수 없어요');
+  img.src = url;
 };
 $('svEDel').onclick = () => {
   const d = svData(); d.fam = d.fam.filter(x => x.id !== S.edit.id); svSave(d);
@@ -2629,7 +2859,7 @@ function svWatchLive(){
     if (!svLiveUn[u]) svLiveUn[u] = FB.D.onValue(FB.D.ref(FB.db, 'giftstory/live/' + u), s => { svLive[u] = s.val() || 0; if (S.on && S.view === 'home') svHome(); });
   }); });
 }
-function svRefresh(){ svWatchLive(); if (S.view === 'home') svHome(); else svChat(); }
+function svRefresh(){ svWatchLive(); svMusicDraw(); $('svMail').classList.toggle('has', unreadIn().length > 0); if (S.view === 'home') svHome(); else svChat(); }
 
 /* 대화방: 들어가면 "아들, 엄마 들어왔다. 지금 뭐하니?" 저절로 보내요 (5분 안에 다시 들어가면 안 보냄) */
 function svEnter(f, quiet){
@@ -2642,24 +2872,37 @@ function svEnter(f, quiet){
     hello[f.room] = Date.now(); LS.set('rp_sv_hello', hello);
     svSend(`${svVoc(f.name)}, ${svCall(f.g)} 들어왔다. 지금 뭐하니?`);
   }
-  svChat(); syncLayer();
+  svChat(); svMusicDraw(); syncLayer();
 }
 function svGoHome(){
   S.view = 'home'; S.fam = null;
   $('svHome').style.display = ''; $('svChat').style.display = 'none'; $('svBar').style.display = 'none'; $('svBack').style.display = 'none';
-  $('svTitle').textContent = '빨간 우체통'; svHome(true); syncLayer();
+  $('svTitle').textContent = '빨간 우체통'; svHome(true); svMusicDraw(); syncLayer();
 }
 $('svBack').onclick = () => { click(); svHush(); svGoHome(); };
+$('svMail').onclick = () => {   // 실버 모드 우체통: 편지가 왔으면 열고, 없으면 편지 쓰기 (일반 화면과 같은 방식)
+  click(); svHush();
+  const un = unreadIn();
+  if (un.length) openBox(un); else openWriter({ to: S.fam ? S.fam.name : otherName(), body: '', paper: 'pink', font: 'pen', stickers: [], voice: null, draftId: null, align: '' });
+};
+$('svChat').addEventListener('click', e => { const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); } });
+/* 같이 듣는 노래: 위쪽 큰 ▶/⏸ 버튼 */
+function svMusicDraw(){
+  const b = $('svMusic'), on = S.on && S.view === 'chat' && !!M;
+  b.classList.toggle('show', on);
+  if (on) b.textContent = mOn() && !mBlocked ? '🎵 ⏸' : '🎵 ▶';
+}
+$('svMusic').onclick = () => mPlayToggle();
 let svChatHTML = '';
 function svChat(){
   if (S.room !== room) return;
-  const list = sorted().filter(m => m.type === 'text').slice(-40);
+  const list = sorted().filter(m => m.type === 'text' || m.type === 'voice').slice(-40);
   let html = '', last = '';
   list.forEach(m => {
     const mine = isMine(m);
     if (!mine && m.name !== last) html += `<div class="sv-who">${esc(m.name)}</div>`;
     last = mine ? '' : m.name;
-    html += `<div class="sv-m ${mine ? 'me' : 'them'}">${esc(m.text)}</div>`;
+    html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>` : `<div class="sv-m ${mine ? 'me' : 'them'}">${esc(m.text)}</div>`;
   });
   html = `<div class="sv-wrap">${html || '<div class="sv-empty">아직 대화가 없어요</div>'}</div>`;
   if (html === svChatHTML) return;
@@ -2667,13 +2910,19 @@ function svChat(){
 }
 function svSend(text){
   if (S.test) { toast('🧪 테스트라서 보내지 않았어요: ' + text); return; }
-  addMsg({ from: realMe.uid, name: me.name, type: 'text', text, at: Date.now() });
+  sentFx(); addMsg({ from: realMe.uid, name: me.name, type: 'text', text, at: Date.now() });
   render.jump = true;
 }
 
 /* 메시지가 오면: 큰 글씨로 보여 주고 소리로 읽은 다음 → 답장 목록 */
 const svDone = new Set();
 function svIncoming(id, m){
+  if (S.on && m && m.type === 'voice' && !isMine(m) && !svDone.has(m.id)) {   // 손주 목소리 → 바로 스피커로
+    svDone.add(m.id); if (svShown('svVoice')) return;
+    const f = svFamOf(id); if (f && (S.view !== 'chat' || S.room !== id)) svEnter(f, true);
+    svHush(); Promise.resolve(playVoiceMsg(m)).catch(() => toast('🔊 화면을 누르면 목소리가 나와요'));
+    return;
+  }
   if (!S.on || !m || m.type !== 'text' || isMine(m) || svDone.has(m.id)) return;
   svDone.add(m.id);
   const f = svFamOf(id); if (!f) return;
@@ -2722,8 +2971,8 @@ function svSpeak(t, done){
   let fin = false; const end = () => { if (fin) return; fin = true; musicDuck(false); if (done) done(); };
   if (!('speechSynthesis' in window)) { end(); return; }
   const ss = speechSynthesis; ss.cancel();
-  const u = new SpeechSynthesisUtterance(t), v = ss.getVoices().find(x => x.lang && x.lang.toLowerCase().replace('_', '-').startsWith('ko'));
-  u.lang = 'ko-KR'; u.rate = .9; if (v) u.voice = v;
+  const u = new SpeechSynthesisUtterance(t), v = koVoice();
+  u.lang = 'ko-KR'; u.rate = .92; u.pitch = 1.05; if (v) u.voice = v;
   u.onend = end; u.onerror = end;
   musicDuck(true);
   setTimeout(() => { ss.speak(u); ss.resume(); }, 150);
@@ -2733,7 +2982,8 @@ function svSpeak(t, done){
 /* 🎤 음성 대화: 말이 끝나고 1초 뒤 저절로 보내요 (전송 버튼 없음) */
 const SRec = window.SpeechRecognition || window.webkitSpeechRecognition;
 let svRec = null, svHeardT = 0;
-function svStopListen(){ clearTimeout(svHeardT); const r = svRec; svRec = null; if (r) { try { r.abort(); } catch (e) {} } musicDuck(false); }
+function svStopListen(){ clearTimeout(svHeardT); const r = svRec; svRec = null; if (r) { r._stop = true; try { r.abort(); } catch (e) {} } musicDuck(false); }
+let svLastEnd = Promise.resolve();
 function svListen(){
   if (!SRec) { toast('이 휴대폰에서는 말로 하기가 안 돼요 (크롬으로 열어 주세요)'); return; }
   svHush(); svStopListen(); svOv('svSheet', false);
@@ -2741,27 +2991,48 @@ function svListen(){
   $('svMicHint').textContent = LS.get('rp_mic_ok', 0) ? '' : '휴대폰이 마이크를 물어보면\n[허용]을 눌러 주세요';
   $('svMicHint').style.whiteSpace = 'pre-line';
   svOv('svVoice', true);
-  const r = svRec = new SRec(); let txt = '';
+  const token = {}; svRec = token;   // 앞의 마이크가 완전히 꺼질 때까지 잠깐 기다렸다가 켜요 (바로 켜면 안 되는 휴대폰이 있어서)
+  musicDuck(true);
+  Promise.race([svLastEnd, new Promise(ok => setTimeout(ok, 1500))]).then(() => { if (svRec === token) svGo(0); });
+}
+function svGo(n){
+  const r = svRec = new SRec(); let txt = '', sent = false, endOk;
+  const t0 = Date.now();
+  svLastEnd = new Promise(ok => { endOk = ok; setTimeout(ok, 4000); });
+  const finish = () => {   // 말이 끝나면 한 번만 보내기 (휴대폰에 따라 onend가 안 오는 경우도 있어서)
+    if (sent || !txt) return false; sent = true;
+    svSend(txt); S.test = false; $('svHeard').textContent = '✓ 보냈어요'; setTimeout(() => svOv('svVoice', false), 900);
+    return true;
+  };
   r.lang = 'ko-KR'; r.continuous = false; r.interimResults = true; r.maxAlternatives = 1;
   r.onstart = () => { LS.set('rp_mic_ok', 1); $('svMicHint').textContent = ''; };
   r.onresult = e => {
     txt = [...e.results].map(x => x[0].transcript).join('').trim();
     $('svHeard').textContent = txt || '말씀하세요…';
-    clearTimeout(svHeardT); if (txt) svHeardT = setTimeout(() => { try { r.stop(); } catch (e) {} }, 1000);
+    clearTimeout(svHeardT);
+    const fin = e.results[e.results.length - 1].isFinal;
+    if (txt) svHeardT = setTimeout(() => { if (svRec === r) svRec = null; finish(); try { r.stop(); } catch (e) {} musicDuck(false); }, fin ? 1000 : 1800);
   };
   r.onerror = e => {
-    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { LS.set('rp_mic_ok', 0); $('svMicHint').textContent = '마이크가 막혀 있어요\n휴대폰 설정에서 마이크를 허용해 주세요'; }
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') { LS.set('rp_mic_ok', 0); $('svMicHint').textContent = '마이크가 막혀 있어요\n휴대폰 설정에서 마이크를 허용해 주세요'; return; }
+    if (!txt && n < 4 && Date.now() - t0 < 3000 && e.error !== 'no-speech') r._retry = true;   // 마이크가 아직 바쁨 → 조금 뒤 다시
   };
   r.onend = () => {
-    clearTimeout(svHeardT); musicDuck(false);
-    if (svRec !== r) return; svRec = null;
-    if (txt) { svSend(txt); S.test = false; $('svHeard').textContent = '✓ 보냈어요'; setTimeout(() => svOv('svVoice', false), 900); }
-    else if (!/허용/.test($('svMicHint').textContent)) { $('svHeard').textContent = '잘 못 들었어요'; $('svMicHint').textContent = '🎤 음성 대화를 다시 눌러 주세요'; setTimeout(() => { if (!svRec) svOv('svVoice', false); }, 1800); }
+    endOk(); clearTimeout(svHeardT);
+    if (sent || r._stop || svRec !== r) { musicDuck(false); return; }   // '그만'으로 끈 건 보내지 않음
+    if (r._retry) { $('svHeard').textContent = '마이크 켜는 중…'; setTimeout(() => { if (svRec === r) svGo(n + 1); }, 800); return; }
+    svRec = null; musicDuck(false);
+    if (finish()) return;
+    if (!/허용/.test($('svMicHint').textContent)) { $('svHeard').textContent = '잘 못 들었어요'; $('svMicHint').textContent = '🎤 음성 대화를 다시 눌러 주세요'; setTimeout(() => { if (!svRec) svOv('svVoice', false); }, 1800); }
   };
-  musicDuck(true);
-  try { r.start(); } catch (e) { svRec = null; toast('마이크를 켤 수 없어요'); svOv('svVoice', false); }
+  try { r.start(); } catch (e) {
+    endOk();
+    if (n < 4) { setTimeout(() => { if (svRec === r) svGo(n + 1); }, 800); return; }
+    svRec = null; musicDuck(false); toast('마이크를 켤 수 없어요'); svOv('svVoice', false);
+  }
 }
-$('svVoiceBtn').onclick = $('svSheetVoice').onclick = () => { click(); svListen(); };
+$('svVoiceBtn').onclick = () => { click(); S.test = false; svListen(); };
+$('svSheetVoice').onclick = () => { click(); svListen(); };
 $('svVoiceStop').onclick = () => { click(); S.test = false; svStopListen(); svOv('svVoice', false); };
 
 /* 숨은 입구: 위쪽 '빨간 우체통' 글씨를 길게 누르기 */
@@ -2776,19 +3047,22 @@ function start(){
   initStore();
   if (LS.get('rp_silver_on', 0)) svOpen();
   setInterval(render, 30000);
-  setInterval(remindRooms, 20000);
+  setInterval(remindRooms, 10000);
   takeShared();
   setInterval(remindBox, 30000);
 }
 function begin(){
   const newRoom = urlRoom && !getRooms().some(x => x.id === urlRoom);   // 링크로 처음 들어온 방
+  if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
   if (!me.name || newRoom) {
     $('nameIn').value = me.name || '';
     showOv('nameOv');
     $('nameOk').onclick = () => {
       const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); return; }
+      $('nameIn').blur(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur();   // 키보드 내리기
       me.name = n; saveMe(); hideOv('nameOv'); start(); click();
     };
+    $('nameIn').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); $('nameOk').click(); } };
   } else start();
 }
 if (inKakao) {   // 카톡 안 창에서는 시작하지 않음 (크롬 쪽에서 열려요)
