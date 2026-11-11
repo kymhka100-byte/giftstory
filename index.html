@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 22번: 서버 보안 (익명 로그인 + 방에 들어온 사람만 읽고 쓰기) -->
+<!-- 빨간 우체통 24번: 폰에 설치(몰래 업데이트) · 같이 보기 · 위쪽 4+1칸 · 실버 초대 고침 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
@@ -518,6 +518,20 @@ body.home #msgs,body.home footer{display:none}
 #toList .ck{font-size:22px;width:28px}
 #homeList .hrow{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 #homeList .hrow.press{background:#2a2a32}
+/* 24번 */
+.rb.tmp{border-style:dashed}
+.camico{width:24px;height:24px;display:block}
+#mbar #mbPlay,#musicPanel #mPlay{border-radius:0!important;background:none!important;border:none!important;box-shadow:none!important;width:46px;height:44px;color:#2fbf5c;padding:0;display:flex;align-items:center;justify-content:center}
+#mbar #mbPlay.on,#musicPanel #mPlay.on{color:#5dff8a;filter:drop-shadow(0 0 6px rgba(80,255,130,.7))}
+#mbar #mbNext,#musicPanel #mNext{display:flex!important;align-items:center;justify-content:center;width:34px;height:34px;border-radius:0!important;background:none!important;border:none!important;color:#cfd3e6;padding:0}
+.pico{width:30px;height:30px;display:block}.nico{width:22px;height:22px;display:block}
+.npromo{margin:0 0 12px;padding:10px 12px;border-radius:12px;background:#1d1d24;border:1px solid #3a3a44;color:#f2f2f6;font-size:15px;line-height:1.7}
+#instOv .panel{position:relative;text-align:center;max-width:380px}
+#instOv .ix{position:absolute;top:6px;right:8px;background:none;border:none;color:#bbb;font-size:24px;width:40px;height:40px}
+#instOv p{font-size:18px;line-height:1.5;margin:18px 6px 16px;color:#fff}
+#instGo{width:100%;padding:14px;border:none;border-radius:14px;background:var(--red);color:#fff;font-size:19px;font-weight:800}
+.sv-back{display:block;margin:0 0 10px;padding:10px 14px;border-radius:12px;border:1px solid #666;background:#26262c;color:#fff;font-size:18px}
+#vSound{display:none;margin:6px auto;padding:10px 16px;border:none;border-radius:12px;background:#ffe14d;color:#222;font-size:17px;font-weight:800}
 </style>
 </head>
 <body>
@@ -526,21 +540,21 @@ body.home #msgs,body.home footer{display:none}
     <h1>빨간 우체통<small id="subTitle">(못다한 그 말)</small></h1>
     <button class="hbtn lb" id="draftBtn" title="쓰던 편지">📝<b>쓰던 편지</b><span class="badge" id="draftBadge"></span></button>
     <button class="hbtn lb" id="pileBtn" title="편지 보관함">📚<b>보관함</b></button>
-    <button class="hbtn" id="camBtn" title="영상통화">📹</button>
+    <button class="hbtn" id="camBtn" title="영상통화"><svg class="camico" viewBox="0 0 24 24"><circle cx="12" cy="10" r="8" fill="#e8e8ee"/><circle cx="12" cy="10" r="4.6" fill="#1b1b22"/><circle cx="12" cy="10" r="2.6" fill="#3a6cff"/><circle cx="10.9" cy="8.9" r=".9" fill="#fff"/><circle cx="17.2" cy="5.6" r=".9" fill="#ff4d4a"/><path d="M8 18.5h8l1.5 3.5h-11z" fill="#9a9aa6"/></svg></button>
     <button class="dot" id="themeBtn" title="바탕 바꾸기">🎨</button>
     <button class="dot" data-dark title="검은 화면">◐</button>
     <button class="hbtn" id="roomBtn" title="설정">⚙</button>
   </header>
   <div class="rooms"><div class="rscroll" id="roomBar"></div><button class="rb more" id="moreBtn">더보기</button><button id="addRoom" hidden></button><div id="morePanel"></div></div>
   <!-- 노래 막대 (같이 듣는 중) -->
-  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생">▶</button><button id="mbNext" title="다음 곡">⏭</button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
+  <div id="mbar"><div id="mYTbox"><div id="mYT"></div></div><span id="mbTitle">♪</span><button id="mbPrev" title="이전 곡">⏮</button><button id="mbPlay" title="재생"></button><button id="mbNext" title="다음 곡"></button><button id="mbList" title="목록">☰</button><button id="mbClose" title="끄기">✕</button></div>
   <div id="installBar"><span id="instText">📲 홈 화면에 빨간 우체통을 추가할까요?</span><button id="instYes">추가</button><button id="instNo">✕</button></div>
   <div id="banner"></div>
   <!-- 노래 같이 듣기 (펼친 목록) -->
   <div class="tpanel" id="musicPanel">
     <button class="tx" data-tclose="musicPanel">✕</button>
     <div class="phead">🎵 노래 같이 듣기</div>
-    <div class="tctl"><button id="mPrev" title="이전 곡">⏮</button><button id="mPlay" title="재생">▶</button><button id="mNext" title="다음 곡">⏭</button><button id="mStop" title="정지">⏹</button></div>
+    <div class="tctl"><button id="mPrev" title="이전 곡">⏮</button><button id="mPlay" title="재생"></button><button id="mNext" title="다음 곡"></button><button id="mStop" title="정지">⏹</button></div>
     <div class="ttitle" id="mTitle">노래를 골라 주세요</div>
     <div class="tby" id="mBy"></div>
     <input class="tsearch" id="mFind" placeholder="🔍 목록에서 찾기 (제목)">
@@ -553,6 +567,7 @@ body.home #msgs,body.home footer{display:none}
   <div class="tpanel wide" id="videoPanel">
     <button class="tx" data-tclose="videoPanel">✕</button>
     <div class="vbox"><div class="vempty" id="vEmpty">유튜브 주소를 넣으면<br>방 친구와 같은 장면을 같이 봐요</div><div id="vYT"></div></div>
+    <button id="vSound">🔊 눌러서 소리 켜기</button>
     <div class="tby" id="vBy"></div>
     <div id="vChat"></div>
     <div class="tadd"><input id="vUrl" placeholder="유튜브 주소 붙여 넣기 (또는 검색어)"><button id="vGo">틀기</button></div>
@@ -825,11 +840,20 @@ body.home #msgs,body.home footer{display:none}
 <div class="ov" id="nameOv">
   <div class="panel" style="max-width:420px">
     <h2 style="text-align:center;margin-bottom:14px">📮 빨간 우체통 <span style="font-size:.8em;color:#ffb3b1">(못다한 그 말)</span></h2>
+    <div class="npromo">💌 옛날 감성의 편지로 마음을 전하세요<br>👵 어르신도 편하게 말로 문자하세요<br>📨 한 번에 모두에게 보내기<br>📎 사진 · 노래 · 파일도 보내기</div>
     <button class="nbtn g" id="nameLogin"><b>G</b> 구글 간편 로그인 <small>(닉네임 자동 입력)</small></button>
     <button class="nbtn" id="nameInstall">📲 홈 화면에 추가</button>
     <div class="nlab">이름(별명)</div>
     <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
     <button class="nbtn sv" id="nameSilver">👵 실버 모드로 시작</button>
+  </div>
+</div>
+
+<!-- 24번: 시작하고 나서 홈 화면에 추가 권하기 -->
+<div class="ov" id="instOv">
+  <div class="panel"><button class="ix" id="instX">✕</button>
+    <p>📲 홈 화면에 추가하면<br><b>자동 업데이트</b>를 받으실 수 있어요</p>
+    <button id="instGo">홈 화면에 추가</button>
   </div>
 </div>
 
@@ -1029,6 +1053,7 @@ const urlQ = new URLSearchParams(location.search);
 const urlRoom = urlQ.get('room');
 /* 22번: 가족이 보낸 실버 모드 초대 (호칭 · 이름 · 전화번호 · 닉네임) */
 const svInv = urlRoom && urlQ.get('sv') ? { g: urlQ.get('g') === 'm' ? 'm' : 'f', r: (urlQ.get('r') || '').slice(0, 8), n: (urlQ.get('n') || '').slice(0, 8), p: (urlQ.get('p') || '').slice(0, 15), k: (urlQ.get('k') || '').slice(0, 12) } : null;
+if (svInv) LS.set('rp_sv_pend', { ...svInv, room: urlRoom });   // 24번: 초대 정보를 폰에 먼저 적어 둬요 (도중에 사라지지 않게)
 const SS = { get: k => { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { sessionStorage.setItem(k, v); } catch (e) {} } };
 let room = urlRoom || SS.get('rp_room') || LS.get('rp_room', null) || rid();
 let msgs = {};
@@ -1353,7 +1378,7 @@ function drawRooms(){
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
 /* 20번: 위쪽 말풍선 5자리 고정 - 자리는 안 바뀜, 빈 자리는 ＋친구, 고정 안 된 방은 더보기로 */
-const PIN_N = 5;
+const PIN_N = 4;   // 24번: 고정 4칸 + 지금 대화방 1칸 + 더보기
 let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
 function getPins(){
   const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
@@ -1391,7 +1416,12 @@ function drawBar(){
     if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
     return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
-  }).join('');
+  }).join('') + (() => {   // 24번: 고정 안 된 방에 들어가 있으면 더보기 바로 옆에 잠깐 보여요
+    const tw = twinMap(), cr = tw[room] || room;
+    if (homeOn || !room || p.includes(cr) || !getRooms().some(x => x.id === room)) return '';
+    const name = roomName(room);
+    return `<button class="rb cur tmp" data-go="${room}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}</button>`;
+  })();
   const mn = moreRooms().reduce((t, x) => t + (x.id === room && !homeOn ? 0 : unreadN(x.id)), 0);
   const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
   mb.innerHTML = '더보기' + (mn ? `<i class="cnt">${mn > 99 ? '99+' : mn}</i>` : '');
@@ -1523,6 +1553,10 @@ document.querySelectorAll('[data-shares]').forEach(d => d.innerHTML =
 document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   const kind = b.dataset.share;
   if (b.closest('#newOv')) {
+    if (svInvNow() && (!$('svInvName').value.trim() || !$('svInvPhone').value.trim())) {   // 24번: 이름 · 전화번호 꼭
+      toast('어르신 초대는 내 이름과 핸드폰 번호를 꼭 적어 주세요');
+      $(!$('svInvName').value.trim() ? 'svInvName' : 'svInvPhone').focus(); return;
+    }
     if (svInvNow()) {
       if (!$('newName').value.trim()) $('newName').value = svInvTitle();
       LS.set('rp_inv_me', { n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim() });
@@ -1534,6 +1568,7 @@ document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
     makeNewRoom(); $('newName').dispatchEvent(new Event('input'));
   }
   click();
+  if (b.closest('#newOv') && svInvNow()) svPutInvite(room, { g: svInvG, r: svInvR, n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim(), k: me.name, at: Date.now() });
   await shareInvite(kind);
   if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
 });
@@ -2529,6 +2564,9 @@ document.querySelectorAll('[data-tclose]').forEach(b => b.onclick = () => {
 });
 
 /* --- 노래 --- */
+const PLAY_SVG = '<svg class="pico" viewBox="0 0 30 30"><path d="M8 4.5Q8 3 9.4 3.8L26 13.6q1.4.9 0 1.8L9.4 25.2Q8 26 8 24.5z" fill="currentColor"/></svg>';
+const PAUSE_SVG = '<svg class="pico" viewBox="0 0 30 30"><rect x="7" y="5" width="5.5" height="20" rx="1.5" fill="currentColor"/><rect x="17.5" y="5" width="5.5" height="20" rx="1.5" fill="currentColor"/></svg>';
+const NEXT_SVG = '<svg class="nico" viewBox="0 0 24 24"><path d="M4 5.5Q4 4.3 5.1 5L15 11.2q1 .8 0 1.6L5.1 19Q4 19.7 4 18.5z" fill="currentColor"/><rect x="16.5" y="5" width="3" height="14" rx="1" fill="currentColor"/></svg>';
 let M = null, mPlayer = null, mPinned = false, mCollapseT = 0, tgVideoOn = false;
 const tAudio = new Audio(); tAudio.preload = 'auto'; tAudio.crossOrigin = 'anonymous';
 tAudio.addEventListener('error', () => {   // 미리보기·저장공간에서 열면 GitHub 파일로
@@ -2566,7 +2604,7 @@ function drawMusic(){
   $('mbTitle').textContent = (mOn() ? '♪ ' : '⏸ ') + title;
   $('mBy').textContent = M && M.by ? `${M.by}님이 ${M.playing ? '틀었어요' : '멈췄어요'}` : '';
   const pl = mOn() && !mBlocked;
-  $('mPlay').textContent = $('mbPlay').textContent = pl ? '⏸' : '▶';
+  $('mPlay').innerHTML = $('mbPlay').innerHTML = pl ? PAUSE_SVG : PLAY_SVG;
   $('mPlay').classList.toggle('on', pl); $('mbPlay').classList.toggle('on', pl);
   $('mbar').classList.toggle('show', !!M);
   try { svMusicDraw(); } catch (e) {}
@@ -2667,6 +2705,7 @@ const mStep = d => { click(); const n = mList().length; mSet({ idx: ((M ? M.idx 
 $('mPlay').onclick = mPlayToggle;
 $('mbPlay').onclick = () => { if (!mbDragged) mPlayToggle(); };
 $('mNext').onclick = $('mbNext').onclick = () => mStep(1);
+$('mNext').innerHTML = $('mbNext').innerHTML = NEXT_SVG; $('mPlay').innerHTML = $('mbPlay').innerHTML = PLAY_SVG;
 $('mPrev').onclick = $('mbPrev').onclick = () => mStep(-1);
 $('mbList').onclick = $('mbTitle').onclick = () => { if (mbDragged) return; click(); if ($('musicPanel').classList.contains('show')) showPanel('musicPanel', false); else openMusicPanel(); };
 /* 플레이어 옮기기: 꾹 누르고 끌기 (놓은 자리 기억) */
@@ -2779,7 +2818,8 @@ function applyVideo(st){
   $('vBy').textContent = V ? `${V.by}님이 ${V.playing ? '틀었어요' : '멈췄어요'}` : '';
   $('vEmpty').style.display = V ? 'none' : '';
   if (V && V.playing && V.by !== me.name && !$('videoPanel').classList.contains('show') && (!prev || prev.vid !== V.vid || !prev.playing)) {
-    showBanner(`🎬 ${V.by}님이 영화를 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); };
+    if (!homeOn && !S.on && !$('writer').classList.contains('show')) { showPanel('musicPanel', false); showPanel('videoPanel', true); toast(`🎬 ${V.by}님이 영상을 틀었어요`); }   // 24번: 친구 화면에도 바로 열려요
+    else { showBanner(`🎬 ${V.by}님이 영상을 틀었어요 · 눌러서 같이 보기`); bannerAct = () => { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }; }
   }
   if ($('videoPanel').classList.contains('show')) syncVideo();
 }
@@ -2792,8 +2832,12 @@ function syncVideo(){
   const run = pl => {
     vApplying();
     const cur = pl.getVideoData && pl.getVideoData().video_id;
-    if (cur !== V.vid) { V.playing ? pl.loadVideoById(V.vid, at) : pl.cueVideoById(V.vid, at); }
+    if (cur !== V.vid) { vApplyT = Date.now() + 5000; V.playing ? pl.loadVideoById(V.vid, at) : pl.cueVideoById(V.vid, at); }
     else { if (Math.abs(pl.getCurrentTime() - at) > 2) pl.seekTo(at, true); V.playing ? pl.playVideo() : pl.pauseVideo(); }
+    /* 24번: 폰이 소리 있는 자동 재생을 막으면 → 소리 끄고 틀고 '소리 켜기' 버튼 */
+    if (V.playing) setTimeout(() => {
+      try { if (!V || !V.playing || pl.getPlayerState() === 1) return; vApplying(); pl.mute(); pl.playVideo(); $('vSound').style.display = 'block'; } catch (e) {}
+    }, 2500);
   };
   if (vPlayer) run(vPlayer);
   else makeYT('vYT', st => {
@@ -2815,6 +2859,7 @@ $('vGo').onclick = () => {
   $('vUrl').value = ''; click();
   vSet({ vid: id, pos: 0, playing: true });
 };
+$('vSound').onclick = () => { click(); try { vPlayer.unMute(); vPlayer.setVolume(100); vPlayer.playVideo(); } catch (e) {} $('vSound').style.display = 'none'; };
 $('vFind').onclick = () => { click(); const q = $('vUrl').value.trim(); vGoYT(q && !ytId(q) ? q : ''); };
 /* 유튜브에서 영상 고르기 → 돌아오면 그 영상을 같이 보기에 바로 넣어요 */
 function vGoYT(q){
@@ -3229,12 +3274,29 @@ const svLayer = () => S.on && (S.view !== 'home' || ['svSheet', 'svVoice', 'svEd
 function svOv(id, on){ $(id).classList.toggle('show', on); syncLayer(); }
 
 /* 22번: 가족 초대 링크로 들어오면 그 가족 버튼을 저절로 만들어요 */
-function svApplyInvite(){
+function svApplyInvite(inv){
+  inv = inv || LS.get('rp_sv_pend', null); if (!inv || !inv.room) return;
   const d = svData();
-  if (!d.elder) d.elder = { name: me.name, gen: svInv.g };
-  if (!d.fam.some(f => f.room === urlRoom))
-    d.fam.push({ id: rid(), g: relGroup(svInv.r), name: svInv.r || svInv.n || svInv.k || '가족', rn: svInv.r ? svInv.n : '', phone: svInv.p, room: urlRoom, nick: svInv.k || svInv.n || '대화방', photo: '' });
-  svSave(d); LS.set('rp_silver_on', 1);
+  if (!d.elder) d.elder = { name: me.name, gen: inv.g === 'm' ? 'm' : 'f' };
+  const f = d.fam.find(x => x.room === inv.room);
+  if (!f) d.fam.push({ id: rid(), g: relGroup(inv.r || ''), name: inv.r || inv.n || inv.k || '가족', rn: inv.r ? inv.n : '', phone: inv.p || '', room: inv.room, nick: inv.k || inv.n || '대화방', photo: '' });
+  else {   // 24번: 이미 있는 버튼인데 비어 있으면 채워요
+    if (!f.phone && inv.p) f.phone = inv.p;
+    if (!f.rn && inv.r && inv.n) f.rn = inv.n;
+    if ((!f.nick || f.nick === '대화방') && inv.k) f.nick = inv.k;
+  }
+  svSave(d); LS.set('rp_silver_on', 1); LS.set('rp_sv_pend', null);
+  if (S.on) svHome(true);
+}
+/* 24번: 링크에 정보가 없어도 서버에 적어 둔 초대 정보로 가족 버튼을 채워요 */
+async function svFetchInvite(id){
+  if (!FB || !id) return;
+  try { const v = (await FB.D.get(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/svinv'))).val(); if (v && v.k !== me.name) svApplyInvite({ ...v, room: id }); } catch (e) {}
+}
+function svPutInvite(id, inv){
+  if (!FB || !id) return;
+  const put = () => FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/svinv'), inv);
+  put().catch(() => setTimeout(() => put().catch(() => {}), 2500));
 }
 /* 열기 · 닫기 */
 function svOpen(){
@@ -3297,7 +3359,8 @@ function svHome(force){
     return `<div class="sv-grp"><h3>${label}<button class="sv-add" data-new="${g}">＋</button></h3><div class="sv-row">${list.length ? list.map(btn).join('') : `<button class="sv-btn empty" data-new="${g}"><span class="nm">${label}</span><span class="nk">눌러서 이름 적기</span></button>`}</div></div>`;
   }).join('') + `<div class="sv-foot"><button id="svElder">👵 어르신 정보</button><button id="svOut">일반 화면으로</button></div>`;
   if (!force && html === svHomeHTML) return;
-  svHomeHTML = html; $('svHome').innerHTML = html;
+  svHomeHTML = html; $('svHome').innerHTML = (fam.length ? '' : `<button class="sv-back" id="svFirst">◀ 처음 화면으로</button>`) + html;   // 24번: 잘못 들어온 사람용 (가족이 없을 때만)
+  if (!fam.length) $('svFirst').onclick = () => { click(); svExit(); nameScreen(); };
   $('svElder').onclick = () => { click(); svSetupShow(); };
   $('svOut').onclick = () => { click(); svExit(); };
 }
@@ -3600,7 +3663,8 @@ svH1.addEventListener('contextmenu', e => e.preventDefault());
 function start(){
   started = true;
   initStore();
-  if (svInv) svApplyInvite();
+  if (LS.get('rp_sv_pend', null)) svApplyInvite();
+  if (svInv) [4000, 12000].forEach(t => setTimeout(() => svFetchInvite(urlRoom), t));
   if (LS.get('rp_silver_on', 0)) svOpen();
   setInterval(render, 30000);
   setInterval(remindRooms, 10000);
@@ -3613,8 +3677,14 @@ function begin(){
   firstVisit = !!newRoom;
   if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
   if (!me.name || newRoom) {
+    nameScreen();
+  } else start();
+}
+/* 처음 화면 (이름 · 로그인 · 실버 모드) - 실버 모드에서 '처음 화면으로'를 눌러도 여기로 */
+function nameScreen(){
     $('nameIn').value = me.name || '';
-    if (svInv) { $('nameIn').placeholder = '어르신 이름 (예: 순자)'; $('nameOk').textContent = '시작'; $('nameSilver').style.display = 'none'; }
+    if (svInv && !started) { $('nameIn').placeholder = '어르신 이름 (예: 순자)'; $('nameOk').textContent = '시작'; $('nameSilver').style.display = 'none'; }
+    else { $('nameIn').placeholder = '예: 영민'; $('nameSilver').style.display = ''; }
     $('nameInstall').style.display = isStandalone() ? 'none' : '';
     showOv('nameOv');
     let going = false;
@@ -3630,8 +3700,10 @@ function begin(){
       going = false;
       const old = me.name; me.name = n; saveMe(); hideOv('nameOv');
       claimName(n, old);
-      if (silver || svInv) LS.set('rp_silver_on', 1);
-      start(); click();
+      if (silver || (svInv && !started)) LS.set('rp_silver_on', 1);
+      click();
+      if (!started) start(); else if (silver) svOpen();
+      setTimeout(askInstall, 900);
     };
     $('nameOk').onclick = () => go(false);
     $('nameSilver').onclick = () => go(true);
@@ -3650,8 +3722,14 @@ function begin(){
     if (LS.get('rp_login_wait', 0) && !FB) {   // 구글 로그인 창에서 돌아왔을 때
       loadFirebase().then(({ A, D, base }) => { const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; loginReturn(); }).catch(() => {});
     }
-  } else start();
 }
+/* 24번: 시작을 누르면 홈 화면에 추가 권하기 (✕로 닫기) */
+function askInstall(){
+  if (isStandalone() || LS.get('rp_installed', 0)) return;
+  showOv('instOv');
+}
+$('instGo').onclick = () => { hideOv('instOv'); doInstall(); };
+$('instX').onclick = () => { click(); hideOv('instOv'); };
 function nameFromLogin(){
   const au = LS.get('rp_auth', null);
   if (au && au.name && !$('nameIn').value.trim()) $('nameIn').value = au.name.slice(0, 12);
