@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 24번: 폰에 설치(몰래 업데이트) · 같이 보기 · 위쪽 4+1칸 · 실버 초대 고침 -->
+<!-- 빨간 우체통 25번: 실버 가족 자동 등록(서버로도) · 메인 영화 보기 ＋ · 이름 바꾸면 모든 방 · 위로 스크롤 고침 · 키보드 올라오면 메뉴 숨김 · 파일 한 달 300MB · 알림 켜기 권하기 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
@@ -531,6 +531,8 @@ body.home #msgs,body.home footer{display:none}
 #instOv p{font-size:18px;line-height:1.5;margin:18px 6px 16px;color:#fff}
 #instGo{width:100%;padding:14px;border:none;border-radius:14px;background:var(--red);color:#fff;font-size:19px;font-weight:800}
 .sv-back{display:block;margin:0 0 10px;padding:10px 14px;border-radius:12px;border:1px solid #666;background:#26262c;color:#fff;font-size:18px}
+body.kb header{display:none}
+#homeMovie{background:#1f2a3a;border-color:#3f6aa8}
 #vSound{display:none;margin:6px auto;padding:10px 16px;border:none;border-radius:12px;background:#ffe14d;color:#222;font-size:17px;font-weight:800}
 </style>
 </head>
@@ -849,6 +851,12 @@ body.home #msgs,body.home footer{display:none}
   </div>
 </div>
 
+<!-- 25번: 알림 켜기 권하기 (화면이 꺼져도 띵동) -->
+<div class="ov" id="notiAskOv"><div class="panel" style="position:relative;text-align:center;max-width:380px"><button class="ix" id="notiAskX" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#bbb;font-size:24px;width:40px;height:40px">✕</button>
+  <p style="font-size:18px;line-height:1.5;margin:18px 6px 16px;color:#fff">🔔 알림을 켜면<br>화면이 꺼져 있어도<br><b>띵동</b> 하고 알려 드려요</p>
+  <button class="big y" id="notiAskGo">알림 켜기</button></div></div>
+<!-- 25번: 파일 용량 다 썼을 때 -->
+<div class="ov" id="fqOv"><div class="panel" style="text-align:center;max-width:380px"><p id="fqText" style="font-size:17px;line-height:1.6;color:#fff;margin:10px 4px 16px"></p><button class="big" id="fqCopy">📋 메일 주소 복사</button><button class="big" data-close>닫기</button></div></div>
 <!-- 24번: 시작하고 나서 홈 화면에 추가 권하기 -->
 <div class="ov" id="instOv">
   <div class="panel"><button class="ix" id="instX">✕</button>
@@ -1171,6 +1179,7 @@ async function initStore(){
   }
   if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
   if (FB && authUid && me.name && me === realMe) claimName(me.name);   // 내 닉네임 등록 (이미 다른 사람 것이면 그냥 넘어가요)
+  if (FB && me.name && LS.get('rp_name_synced', '') !== me.name) setTimeout(renameAll, 3000);   // 25번: 예전 이름으로 남은 방도 한 번에 고쳐요
   /* 18번: 처음엔 친구 목록. 알림을 눌러 들어온 방(이미 있는 방)만 바로 대화창 */
   if (urlRoom && getRooms().some(x => x.id === urlRoom) && !firstVisit) openRoom(urlRoom);
   else {
@@ -1209,7 +1218,7 @@ function openRoom(id){
       msgs[snap.key] = { ...snap.val(), id: snap.key };
       if (isNew) {
         const nm = msgs[snap.key]; noteLast(room, nm); notifyNew(nm);
-        if (nm.at >= t0 - 3000) { svIncoming(room, nm); if (!isMine(nm)) render.jump = true; }   // 새 메시지는 키보드 위로 보이게
+        if (nm.at >= t0 - 3000) { svIncoming(room, nm); if (!isMine(nm)) { const b = $('msgs'); if (b.scrollHeight - b.scrollTop - b.clientHeight < 160) render.jump = true; else toast('💬 새 메시지가 왔어요 · 맨 아래에 있어요'); } }   // 새 메시지는 키보드 위로 보이게
         if (nm.type === 'file' && !isMine(nm)) fileFetch(room, nm).then(queueRender).catch(() => {});   // 사진·파일은 내 폰에 받아 두기
       }
       queueRender();
@@ -1236,6 +1245,7 @@ function goHome(initial){
   try { history.replaceState(history.state, '', location.pathname); } catch (e) {}
   if (call) endCall(true);
   showPanel('videoPanel', false); showPanel('musicPanel', false); tgVideoOn = false;
+  if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } vSolo = false; V = null;
   render(); syncLayer();
 }
 function drawHome(){
@@ -1251,13 +1261,14 @@ function drawHome(){
   };
   let html = `<div class="hhead">나: ${esc(me.name)} · 친구 ${rooms.length}</div>` + rooms.map(row).join('');
   if (rooms.length < 3) html += `<div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>📎 사진·파일도 주고받을 수 있어요</div>`;
-  html += `<button class="hinv" id="homeInv">＋ 친구 초대하기</button>`;
+  html += `<button class="hinv" id="homeInv">＋ 친구 초대하기</button><button class="hinv" id="homeMovie">🎬 ＋ 영화 같이 보기 (혼자서도 봐요)</button>`;
   const box = $('homeList');
   if (box._h !== html) { box._h = html; box.innerHTML = html; }
 }
 const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? fmtTime(t) : `${d.getMonth() + 1}/${d.getDate()}`; };
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
+  if (e.target.closest('#homeMovie')) { click(); soloVideo(); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
   if (hlpDone) { hlpDone = false; return; }
   click(); openRoom(r.dataset.home);
@@ -1268,6 +1279,17 @@ function joinRoom(id){
   if (me !== realMe) return;   // 테스트 친구는 방 사람 목록에 안 남김
   const { D, db } = FB, r = D.ref(db, 'giftstory/rooms/' + id + '/members/' + me.uid), now = Date.now();
   D.get(r).then(s => D.update(r, s.exists() ? { name: me.name, at: now } : { name: me.name, at: now, joined: now })).catch(() => {});
+}
+/* 25번: 이름을 바꾸면 내가 들어간 모든 방에 새 이름으로 (예전 이름 YM → 영민) */
+function renameAll(){
+  if (!FB || me !== realMe || !me.name) return;
+  getRooms().forEach(x => {
+    needKey(x.id);
+    const mem = roomMembers[x.id] || {};
+    const uids = realMe.ids.filter(u => u === realMe.uid || (mem[u] && mem[u].name !== me.name));   // 다른 폰에서 쓰던 내 번호도
+    uids.forEach(u => FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + x.id + '/members/' + u), { name: me.name, at: Date.now() }).catch(() => {}));
+  });
+  LS.set('rp_name_synced', me.name);
 }
 /* 방 사람들 */
 const roomMembers = {};
@@ -1293,6 +1315,10 @@ function memberIn(id, uid, v, t0){
     flashRoom(id);
   }
   if (me === realMe) saveRoom(id, titleFor(id));
+  if (!mine && v.sv && (id === urlRoom || svData().elder)) {   // 25번: 가족이 실버 모드로 초대한 방 → 어르신 가족 버튼 자동 등록
+    const f = svFamOf(id);
+    if (!f || !f.phone || !f.rn) svApplyInvite({ ...v.sv, k: v.sv.k || v.name, room: id });
+  }
   queueRender();
 }
 /* 방 목록 (내 휴대폰에 저장) */
@@ -1536,8 +1562,8 @@ $('myNameOk').onclick = async () => {
   if (me === realMe && !(await nameFree(n))) { toast('이미 있는 이름이에요 · 다른 이름을 적어 주세요'); return; }
   const old = me.name; me.name = n; saveMe();
   if (me === realMe) claimName(n, old);
-  if (FB) joinRoom(room);
-  render(); toast('이름을 바꿨어요');
+  renameAll();
+  render(); toast('이름을 바꿨어요 · 모든 방에 바뀌어요');
 };
 $('callBtn').onclick = () => {
   click();
@@ -1568,7 +1594,11 @@ document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
     makeNewRoom(); $('newName').dispatchEvent(new Event('input'));
   }
   click();
-  if (b.closest('#newOv') && svInvNow()) svPutInvite(room, { g: svInvG, r: svInvR, n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim(), k: me.name, at: Date.now() });
+  if (b.closest('#newOv') && svInvNow()) {
+    const inv = { g: svInvG, r: svInvR, n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim(), k: me.name, at: Date.now() };
+    svPutInvite(room, inv);
+    if (FB && me === realMe) { needKey(room); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + realMe.uid), { name: me.name, at: Date.now(), sv: inv }).catch(() => {}); }   // 25번: 방 사람 정보에도 적어 둬요 (어르신 폰이 꼭 받게)
+  }
   await shareInvite(kind);
   if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
 });
@@ -1796,10 +1826,11 @@ function render(){
     }
     html += `<div class="time">${r1}${fmtTime(m.at)}</div></div>`;
   });
-  box.innerHTML = `<div class="mwrap">${html}</div>`;
+  const full = `<div class="mwrap">${html}</div>`;
+  if (box._h !== full) { box._h = full; box.innerHTML = full; }   // 25번: 바뀐 게 없으면 그대로 (위 글 보는 중에 안 흔들리게)
   const r0 = room;
   sorted().forEach(m => { if (m.type === 'file' && !fileUrls[m.fid] && !filePend[m.fid] && !fileFail[m.fid]) fileFetch(r0, m).then(queueRender, queueRender); });
-  if (atBottom || render.jump || document.activeElement === $('txt')) box.scrollTop = box.scrollHeight;
+  if (atBottom || render.jump) box.scrollTop = box.scrollHeight;   // 25번: 위로 올려 보는 중엔 끌어내리지 않아요
   render.jump = false;
   updateFlag();
   checkArrivals();
@@ -1867,7 +1898,22 @@ function sendText(){
   addMsg({ from: who().uid, name: who().name, type: 'text', text: t, at: Date.now() });
   $('txt').value = ''; $('txt').style.height = '42px'; sendLook();
   render.jump = true;
+  askNoti();
 }
+/* 25번: 화면이 꺼져 있어도 띵동 하려면 알림이 켜져 있어야 해요 → 처음 보낼 때 한 번 물어봐요 */
+function askNoti(){
+  if (!('Notification' in window) || Notification.permission !== 'default' || LS.get('rp_noti_asked', 0)) return;
+  LS.set('rp_noti_asked', 1);
+  setTimeout(() => showOv('notiAskOv'), 600);
+}
+$('notiAskGo').onclick = () => { hideOv('notiAskOv'); setupPush(true); };
+$('notiAskX').onclick = () => { click(); hideOv('notiAskOv'); };
+/* 다시 화면을 켜면 알림 등록을 새로 고쳐 둬요 (오래 꺼져 있으면 등록이 풀릴 수 있어서) */
+let pushFresh = Date.now();
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden || !FB || !('Notification' in window) || Notification.permission !== 'granted' || Date.now() - pushFresh < 3600000) return;
+  pushFresh = Date.now(); setupPush(false);
+});
 /* 보낼 때: 작은 진동 + 작은 소리 (모든 모드) */
 function sentFx(){ if (navigator.vibrate) navigator.vibrate(25); if (!ac()) return; tone(1568, 0, .07, .07); tone(2093, .05, .09, .05); }
 const sendLook = () => $('sendBtn').classList.toggle('has', !!$('txt').value.trim() || !!vm);
@@ -1984,12 +2030,29 @@ function shrinkImg(f, max, q, tmax){
     img.src = url;
   });
 }
+/* 25번: 파일 보내기 한 달 300MB (허락한 사람은 서버 giftstory/quota/<내 번호> 에 적은 MB만큼) */
+const FQ_BASE = 300, FQ_MAIL = 'kymhka100@gmail.com';
+const fqMonth = () => { const d = new Date(); return d.getFullYear() + '-' + (d.getMonth() + 1); };
+const fqUsed = () => { const q = LS.get('rp_fq', {}); return q.m === fqMonth() ? q.b || 0 : 0; };
+const fqAdd = b => LS.set('rp_fq', { m: fqMonth(), b: fqUsed() + b });
+async function fqLimit(){
+  let mb = FQ_BASE;
+  if (FB && authUid) try { const v = (await FB.D.get(FB.D.ref(FB.db, 'giftstory/quota/' + authUid))).val(); if (+v > 0) mb = +v; } catch (e) {}
+  return mb * 1048576;
+}
+function fqFull(){
+  $('fqText').innerHTML = `이번 달 파일 보내기 용량<br><b>${FQ_BASE}MB</b>를 다 썼어요.<br><br>용량이 더 필요하면 연락 주세요.<br><b>${FQ_MAIL}</b><br><small>(내 번호: ${esc(authUid || realMe.uid)})</small>`;
+  showOv('fqOv');
+}
+$('fqCopy').onclick = () => { click(); copy(FQ_MAIL); };
 async function sendFiles(files){
   if (homeOn) return;
   const r0 = room;
+  const lim = await fqLimit();
   if (files.reduce((a, f) => a + f.size, 0) > 5 * 1048576) toast('와이파이가 아니면 데이터가 많이 쓰일 수 있어요');
   for (const f of files) {
     if (f.size > FILE_MAX) { toast(`${f.name} - 20MB보다 커서 못 보내요`); continue; }
+    if (fqUsed() + f.size > lim) { fqFull(); break; }
     let blob = f, mime = f.type || '', thumb = '';
     const kind = fileKind(mime, f.name);
     if (kind === 'image' && !/gif/i.test(mime)) { const r = await shrinkImg(f, 1600, .82, 240); if (r) { blob = r.blob; mime = 'image/jpeg'; thumb = r.thumb; } }   // 사진은 크기를 줄여서
@@ -2004,7 +2067,7 @@ async function sendFiles(files){
         await FB.D.set(fileRef(r0, fid), { c, from: realMe.uid, at: Date.now() });
       } catch (e) { toast('보내기 실패 - 인터넷을 확인해 주세요'); continue; }
     }
-    m.at = Date.now(); sentFx();
+    m.at = Date.now(); sentFx(); fqAdd(blob.size);
     if (room === r0 && !homeOn) { addMsg(m); render.jump = true; } else pushTo(r0, m);
   }
 }
@@ -2041,11 +2104,17 @@ async function songFromFile(m){
 
 /* 키보드가 올라와도 새 메시지가 가려지지 않게: 보이는 화면 높이에 맞추고 맨 아래로 */
 if (window.visualViewport) {
+  let lastH = 0, maxH = 0;
   const fit = () => {
+    const h = Math.round(visualViewport.height); if (h === lastH) return;   // 25번: 높이가 그대로면 아무것도 안 해요 (스크롤해도 안 내려감)
     const box = $('msgs'), near = box.scrollHeight - box.scrollTop - box.clientHeight < 160;
-    $('app').style.height = visualViewport.height + 'px';
-    if (near || document.activeElement === $('txt')) requestAnimationFrame(() => box.scrollTop = box.scrollHeight);
+    lastH = h; maxH = Math.max(maxH, h);
+    const ae = document.activeElement, typing = ae && /^(TEXTAREA|INPUT)$/.test(ae.tagName);
+    document.body.classList.toggle('kb', typing && h < maxH * .8);   // 25번: 키보드가 올라오면 위쪽 메뉴 숨기고 고정 말풍선 줄만
+    $('app').style.height = h + 'px';
+    if (near) requestAnimationFrame(() => box.scrollTop = box.scrollHeight);
   };
+  document.addEventListener('focusout', () => setTimeout(() => { const ae = document.activeElement; if (!ae || !/^(TEXTAREA|INPUT)$/.test(ae.tagName)) document.body.classList.remove('kb'); }, 200));
   visualViewport.addEventListener('resize', fit); fit();
 }
 $('txt').addEventListener('focus', () => setTimeout(() => { const b = $('msgs'); b.scrollTop = b.scrollHeight; }, 350));
@@ -2536,7 +2605,15 @@ function makeYT(el, onState){
   }));
 }
 const tgRef = (kind, id) => FB ? FB.D.ref(FB.db, 'giftstory/rooms/' + (id || room) + '/together/' + kind) : null;
+/* 25번: 메인 화면에서 혼자 영화 보기 (서버에 안 보내고 내 폰에서만) */
+let vSolo = false;
+function soloVideo(){
+  vSolo = true; V = null; applyVideo(null);
+  showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo();
+  toast('🎬 혼자 보기 · 친구와 보려면 대화방에서 열어 주세요');
+}
 function tgWrite(kind, st){
+  if (kind === 'video' && vSolo) { applyVideo(st); return; }
   if (FB) FB.D.set(tgRef(kind), st).catch(() => toast('같이 듣기 연결 실패 - 인터넷을 확인해 주세요'));
   else (kind === 'music' ? applyMusic : applyVideo)(st);
 }
@@ -2882,6 +2959,7 @@ $('vEnd').onclick = () => { click(); tgWrite('video', null); showPanel('videoPan
 
 /* 방이 바뀌면 같이 듣기·보기도 그 방 것으로 */
 function tgListen(){
+  vSolo = false;
   if (call && call.room !== room) endCall(true);
   M = null; mBlocked = false; V = null; stopAllMusic(); hostStream(false); if (listenPc) { listenPc.close(); listenPc = null; }
   if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); }
