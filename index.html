@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
+<!-- 빨간 우체통 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
+<!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
@@ -433,9 +434,9 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 #musicPanel #mPlay.on{background:#22e05a;border-color:#8dffb0;color:#06330f}
 .tlist div.on{background:#22e05a!important;color:#06330f!important;font-weight:800;border-radius:8px}
 /* 16번: 실버 모드 우체통 · 가족 사진 */
-.sv-bar .sv-mail{flex:0 0 96px;background:#8f1d1b;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
-.sv-bar .sv-mail small{font-size:18px;margin-top:4px}
-.sv-bar .sv-mail.has{background:#ff3b36;animation:svpulse 1.4s infinite}
+.sv-top #svMail{display:none;flex:none;font-size:24px;padding:10px 14px;border-radius:16px;border:2px solid #ff8a86;background:#8f1d1b;color:#fff;font-weight:800}
+.sv-top #svMail.show{display:block}
+.sv-top #svMail.has{background:#ff3b36;animation:svpulse 1.4s infinite}
 .sv-btn img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #fff;margin-bottom:4px}
 .sv-photo{display:flex;align-items:center;gap:10px}
 .sv-photo span img{width:70px;height:70px;border-radius:50%;object-fit:cover;display:block}
@@ -485,8 +486,9 @@ body.home #msgs{display:none}
 .fimg{max-width:62%;max-height:260px;border-radius:14px;display:block;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);background:#333;min-width:80px;min-height:60px;object-fit:cover}
 .fst{font-size:11px;opacity:.6;margin:2px 6px 0}
 #imgOv img{max-width:100%;max-height:72vh;border-radius:10px;display:block;margin:0 auto}
-.sv-top #svPhone{display:none;flex:none;font-size:24px;padding:10px 14px;border-radius:16px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;font-weight:800}
-.sv-top #svPhone.show{display:block}
+.sv-bar .sv-call{display:none;flex:0 0 96px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
+.sv-bar .sv-call small{font-size:18px;margin-top:4px}
+.sv-bar .sv-call.show{display:flex}
 /* 22번 */
 .sv-grp h3{display:flex;align-items:center;justify-content:space-between}
 .sv-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -565,6 +567,25 @@ footer.typing #mailbox,footer.typing #micBtn,body.typing #tgBtn{display:none}
 .invpic{display:flex;align-items:center;gap:8px}
 .invpic img{width:46px;height:46px;border-radius:50%;object-fit:cover;display:block}
 #pickList .mrow b{flex:1}
+/* ===== 27번 ===== */
+/* 실버 모드: 상대 말은 밝은 말풍선(왼쪽 + 이름), 내 말은 노란 말풍선(오른쪽), 답장 목록은 네모 버튼 */
+.sv-m.them{background:#eef0ff;color:#111}
+.sv-got{background:none;padding:0;border-radius:0;display:flex;flex-direction:column;align-items:flex-start}
+.sv-got small{margin:0 6px 4px}
+.sv-got .sv-gb{max-width:92%;background:#eef0ff;color:#111;border-radius:24px;border-bottom-left-radius:6px;padding:14px 18px;font-size:30px;line-height:1.4;font-weight:700;white-space:pre-wrap;word-break:break-word}
+.sv-got .sv-gq{font-size:28px;color:#ffd76a;font-weight:800;margin:0 4px}
+.sv-list button{border-radius:8px;border:3px solid #8a8fa8;background:#16171f}
+.sv-list .sv-rtools{display:flex;gap:10px;flex:none;margin-top:4px}
+.sv-list .sv-rtools button{flex:1;min-height:60px;font-size:22px;text-align:center;border:2px dashed #5a6299;background:none;color:#ffd76a;border-radius:12px}
+.sv-list .sv-rtools .ok{border-style:solid;background:#2e7d32;border-color:#4cd964;color:#fff}
+.sv-list .sv-erow{display:flex;gap:8px;flex:none;align-items:stretch}
+.sv-list .sv-erow textarea{flex:1;min-width:0;min-height:76px;border-radius:8px;border:3px solid #ffd76a;background:#0f1020;color:#fff;font-size:24px;font-family:inherit;padding:8px 12px;resize:none}
+.sv-list .sv-erow button{flex:0 0 64px;min-height:76px;text-align:center;font-size:26px;padding:0;border-color:#a33;color:#ff8a86}
+/* 더보기 목록: 더보기 버튼 바로 밑에서 아래로 (화면 반 정도) */
+#morePanel{position:fixed;right:auto;top:auto;width:50vw;max-width:320px;min-width:170px}
+#morePanel .mrow{gap:10px;padding:9px 12px;text-align:left}
+#morePanel .mav{flex:none;width:30px;height:30px;border-radius:10px;background:#ff5a55;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+#morePanel .mt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 </style>
 </head>
 <body>
@@ -953,10 +974,10 @@ footer.typing #mailbox,footer.typing #micBtn,body.typing #tgBtn{display:none}
 
 <!-- 실버 모드 (어르신용 · 맨 위 작은 우체통을 길게 누르면 열려요) -->
 <div id="silver">
-  <div class="sv-top"><button id="svBack" style="display:none">◀ 처음</button><h2 id="svTitle">실버톡톡</h2><button id="svMusic">🎵 ▶</button><button id="svPhone">📞 전화</button></div>
+  <div class="sv-top"><button id="svBack" style="display:none">◀ 처음</button><h2 id="svTitle">실버톡톡</h2><button id="svMusic">🎵 ▶</button><button id="svMail">📮 편지</button></div>
   <div class="sv-body" id="svHome"></div>
   <div class="sv-body sv-chat" id="svChat" style="display:none"></div>
-  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-gray" id="svReplyBtn">💬 답장</button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button><button class="sv-mail" id="svMail">📮<small>편지</small></button></div>
+  <div class="sv-bar" id="svBar" style="display:none"><button class="sv-call" id="svPhone">📞<small>전화</small></button><button class="sv-red" id="svVoiceBtn">🎤 음성 대화</button><button class="sv-gray" id="svReplyBtn">💬 답장</button></div>
   <!-- 메시지가 오면: 큰 글씨 + 읽어 주기 → 답장 목록 -->
   <div class="sv-ov" id="svSheet">
     <div class="sv-got" id="svGot"></div>
@@ -1245,6 +1266,7 @@ async function initStore(){
   if (FB) { authModule().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
   if (FB) { try { FB.D.onDisconnect(FB.D.ref(FB.db, 'giftstory/live/' + realMe.uid)).set(0); } catch (e) {} livePing(); setInterval(livePing, 60000); }
   if (LS.get('rp_auth', null)) syncAccount();
+  if (LS.get('rp_silver_on', 0) && !S.on) svOpen();   // 27번: 실버 모드로 쓰던 폰은 늘 실버 화면으로
 }
 /* 방 열기 (방마다 따로 대화) - 방은 이름이 아니라 고유 번호(room)로 찾아요 */
 function openRoom(id){
@@ -1312,7 +1334,7 @@ function drawHome(){
       <div class="hside">${L ? fmtShort(L.at) : ''}${n ? `<br><i>${n > 99 ? '99+' : n}</i>` : ''}${L && L.me && FB && !n && (othersIn(x.id).length ? othersIn(x.id).some(v => (v.seen || 0) < L.at) : true) ? '<b class="r1">1</b>' : ''}</div></div>`;   // 26번: 내가 보낸 글을 아직 안 읽었으면 1
   };
   let html = `<div class="hhead">나: ${esc(me.name)} · 친구 ${rooms.length}</div>` + rooms.map(row).join('');
-  if (rooms.length < 3) html += `<div class="intro">💌 옛날 감성 그대로, 손편지를 주고받아요<br>📮 우체통을 누르면 예쁜 편지지와 손글씨를 골라 써요<br>🎨 내 사진으로 나만의 편지지를 만들어 보내요<br>🎵 친구와 같은 노래를 같이 들어요<br>🎬 유튜브 영화를 같이 보며 이야기해요<br>📹 얼굴 보며 영상통화도 할 수 있어요<br>📎 사진·파일도 주고받을 수 있어요</div>`;
+  html += `<div class="intro">📮 우체통 들어가면 예쁜 편지지로 손편지 쓸 수 있어요<br>👵 실버 모드 들어가면 어르신도 실버톡톡 가능해요<br>💬 상단에 말풍선 고정되어 있어 대화창 빠르게 이동해요<br>📹 빠른 화상 채팅 가능해요</div>`;   // 27번: 짧은 홍보 4줄 (친구가 늘면 아래로 밀려요)
   html += `<button class="hinv" id="homeInv">＋ 친구 초대하기</button>`;
   const box = $('homeList');
   if (box._h !== html) { box._h = html; box.innerHTML = html; }
@@ -1393,6 +1415,7 @@ function saveRoom(id, title){
 }
 function removeRoom(id){
   LS.set('rp_rooms', getRooms().filter(x => x.id !== id));
+  const rmv = LS.get('rp_removed', {}); rmv[id] = Date.now(); LS.set('rp_removed', rmv);   // 27번: 지운 친구도 새 메시지가 오면 다시 보여요
   stopWatch(id); delete unread[id];
   const seen = LS.get('rp_seen', {}); delete seen[id]; LS.set('rp_seen', seen);
   const au = LS.get('rp_auth', null);
@@ -1423,6 +1446,27 @@ function syncWatchers(){
   const ids = getRooms().map(x => x.id).filter(x => homeOn || x !== room);
   Object.keys(watch).forEach(id => { if (!ids.includes(id)) stopWatch(id); });
   ids.forEach(id => { if (!watch[id]) watchRoom(id); });
+  syncRemoved();
+}
+/* 27번: 지운 친구 방은 마지막 메시지 하나만 지켜봐요 → 새 메시지가 오면 목록에 다시 */
+const rwatch = {};
+function syncRemoved(){
+  const rmv = LS.get('rp_removed', {}), ids = getRooms().map(x => x.id), old = Date.now() - 180 * 864e5;
+  let ch = false;
+  Object.keys(rmv).forEach(id => { if (ids.includes(id) || rmv[id] < old) { delete rmv[id]; ch = true; } });
+  if (ch) LS.set('rp_removed', rmv);
+  Object.keys(rwatch).forEach(id => { if (!rmv[id]) { try { rwatch[id](); } catch (e) {} delete rwatch[id]; } });
+  Object.entries(rmv).forEach(([id, t]) => {
+    if (rwatch[id]) return;
+    needKey(id);
+    rwatch[id] = FB.D.onChildAdded(FB.D.query(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/msgs'), FB.D.limitToLast(1)), snap => {
+      const m = snap.val(), r = LS.get('rp_removed', {});
+      if (!m || isMine(m) || !r[id] || (m.at || 0) <= r[id]) return;
+      const s = getSeen(); s[id] = r[id]; LS.set('rp_seen', s);   // 지운 뒤에 온 메시지만 안 읽음으로
+      delete r[id]; LS.set('rp_removed', r);
+      saveRoom(id, m.name || ''); queueRender();
+    });
+  });
 }
 function watchRoom(id){
   needKey(id);
@@ -1510,10 +1554,19 @@ function drawMore(){
   const list = moreRooms();
   $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (list.length ? list.map(x => {
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
-    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><div class="mt"><b>${esc(roomName(x.id))}</b><small>${esc((lastMsg[x.id] || {}).t || '')}</small></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
+    const nm = roomName(x.id);
+    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}</span><div class="mt"><b>${esc(nm)}</b></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
   }).join('') : '<div class="pin-empty">말풍선에 없는 친구가 여기에 보여요</div>');
 }
-$('moreBtn').onclick = e => { e.stopPropagation(); click(); const m = $('morePanel'); m.classList.toggle('show'); if (m.classList.contains('show')) drawMore(); };
+/* 27번: 더보기 버튼 바로 밑에서 아래로 */
+function placeMore(){
+  const r = $('moreBtn').getBoundingClientRect(), m = $('morePanel'), w = m.offsetWidth || 180;
+  m.style.top = Math.round(r.bottom + 4) + 'px';
+  m.style.left = Math.round(Math.max(4, Math.min(r.right - w, innerWidth - w - 4))) + 'px';
+  m.style.maxHeight = Math.max(160, innerHeight - r.bottom - 20) + 'px';
+}
+$('moreBtn').onclick = e => { e.stopPropagation(); click(); const m = $('morePanel'); m.classList.toggle('show'); if (m.classList.contains('show')) { drawMore(); placeMore(); } };
+addEventListener('resize', () => { if ($('morePanel').classList.contains('show')) placeMore(); });
 $('morePanel').addEventListener('click', e => {
   e.stopPropagation();
   const r = e.target.closest('.mrow'); if (!r) return;
@@ -3476,6 +3529,7 @@ let installEv = null;
 const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 const isStandalone = () => matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 let instHidden = false;   // ✕ 는 이번에만 숨김
+if (isStandalone()) LS.set('rp_installed', 1);   // 27번: 홈 화면 아이콘으로 한 번이라도 열었으면 설치된 것
 function showInstall(){
   const done = isStandalone() || LS.get('rp_installed', 0);
   $('installBtn2').style.display = isStandalone() ? 'none' : '';
@@ -3484,11 +3538,12 @@ function showInstall(){
   $('instYes').style.display = isIOS ? 'none' : '';
   $('installBar').classList.add('show');
 }
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEv = e; LS.set('rp_installed', 0); showInstall(); });
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); installEv = e; showInstall(); });   // 27번: 이미 설치했으면 다시 권하지 않아요 (홈 화면에 두 개 생기지 않게)
 addEventListener('appinstalled', () => { LS.set('rp_installed', 1); showInstall(); toast('📮 홈 화면에 추가했어요 · 아이콘이 안 보이면 앱 목록(앱스)에서 찾아 보세요'); });
 async function doInstall(){
   click();
   if (isIOS) { toast('아래 공유 버튼(□↑) → "홈 화면에 추가"를 눌러 주세요'); return; }
+  if (isStandalone() || LS.get('rp_installed', 0)) { toast('이미 홈 화면에 있어요 · 홈 화면에 없으면 앱 목록(앱스)에서 빨간 우체통을 찾아 보세요'); showInstall(); return; }
   if (!installEv) {
     toast(LS.get('rp_installed', 0) ? '이미 추가돼 있어요 · 홈 화면에 없으면 앱 목록(앱스)에서 빨간 우체통을 찾아 보세요' : '크롬 메뉴(⋮) → "홈 화면에 추가" 또는 "앱 설치"를 눌러 주세요');
     return;
@@ -3732,7 +3787,7 @@ function svEnter(f, quiet){
   S.view = 'chat'; S.room = f.room; S.fam = f;
   $('svHome').style.display = 'none'; $('svChat').style.display = ''; $('svBar').style.display = ''; $('svBack').style.display = '';
   $('svTitle').textContent = f.name;
-  $('svPhone').classList.toggle('show', !!(f.phone && f.phone.replace(/\D/g, '')));
+  $('svPhone').classList.toggle('show', !!(f.phone && f.phone.replace(/\D/g, ''))); $('svMail').classList.add('show');
   if (room !== f.room || homeOn) openRoom(f.room);
   const hello = LS.get('rp_sv_hello', {});
   if (!quiet && Date.now() - (hello[f.room] || 0) > 300000) {
@@ -3744,7 +3799,7 @@ function svEnter(f, quiet){
 function svGoHome(){
   S.view = 'home'; S.fam = null;
   $('svHome').style.display = ''; $('svChat').style.display = 'none'; $('svBar').style.display = 'none'; $('svBack').style.display = 'none';
-  $('svTitle').textContent = '실버톡톡'; $('svPhone').classList.remove('show'); svHome(true); svMusicDraw(); syncLayer();
+  $('svTitle').textContent = '실버톡톡'; $('svPhone').classList.remove('show'); $('svMail').classList.remove('show'); svHome(true); svMusicDraw(); syncLayer();
 }
 $('svBack').onclick = () => { click(); svHush(); svGoHome(); };
 $('svMail').onclick = () => {   // 실버 모드 우체통: 편지가 왔으면 열고, 없으면 편지 쓰기 (일반 화면과 같은 방식)
@@ -3799,24 +3854,51 @@ function svIncoming(id, m){
   if (S.view !== 'chat' || S.room !== id) svEnter(f, true);
   svShowMsg(m, f);
 }
+/* 27번: 답장 문구는 사람마다 따로 (추가 · 수정) */
+const svRepAll = () => LS.get('rp_sv_reps', {});
+function svReps(f){ const a = svRepAll()[f.id]; if (Array.isArray(a) && a.length) return a; const v = svVoc(f.name), c = svCall(f.g); return SV_REPLIES.map(r => r(v, c)); }
+let svREdit = false, svRepF = null;
+function svRepDraw(focusLast){
+  const f = svRepF; if (!f) return;
+  const list = svReps(f);
+  $('svList').innerHTML = svREdit
+    ? list.map(t => `<div class="sv-erow"><textarea maxlength="60">${esc(t)}</textarea><button data-rdel>✕</button></div>`).join('') + `<div class="sv-rtools"><button data-radd>＋ 추가</button><button class="ok" data-rsave>✓ 저장</button></div>`
+    : list.map(t => `<button data-rep>${esc(t)}</button>`).join('') + `<div class="sv-rtools"><button data-radd>＋ 추가</button><button data-redit>✏ 수정</button></div>`;
+  if (focusLast) { const ts = $('svList').querySelectorAll('textarea'), t = ts[ts.length - 1]; if (t) { t.focus(); $('svList').scrollTop = $('svList').scrollHeight; } }
+}
+function svRepSave(){
+  const f = svRepF; if (!f) return;
+  const list = [...$('svList').querySelectorAll('textarea')].map(t => t.value.trim()).filter(Boolean);
+  const all = svRepAll(); if (list.length) all[f.id] = list; else delete all[f.id];
+  LS.set('rp_sv_reps', all);
+}
+const svGotHTML = (name, text) => `<small>${esc(name)}</small><div class="sv-gb">${esc(text)}</div>`;
 function svShowMsg(m, f){
-  $('svGot').innerHTML = `<small>${esc(m.name || f.name)}</small>${esc(m.text)}`;
-  const v = svVoc(f.name), c = svCall(f.g);
-  $('svList').innerHTML = SV_REPLIES.map((r, i) => `<button data-rep="${i}">${esc(r(v, c))}</button>`).join('');
+  $('svGot').innerHTML = svGotHTML(m.name || f.name, m.text);
+  svRepF = f; svREdit = false; svRepDraw();
   $('svList').classList.add('wait');
   svOv('svSheet', true);
   svSpeak(`${f.name}, ${m.text}`, () => $('svList').classList.remove('wait'));
 }
 $('svList').addEventListener('click', e => {
+  if (e.target.closest('[data-redit]')) { click(); svREdit = true; svRepDraw(); return; }
+  if (e.target.closest('[data-rsave]')) { click(); svRepSave(); svREdit = false; svRepDraw(); toast('답장 문구를 저장했어요'); return; }
+  if (e.target.closest('[data-radd]')) {
+    click();
+    if (svREdit) svRepSave();
+    const f = svRepF; if (!f) return;
+    const all = svRepAll(); all[f.id] = [...svReps(f), '']; LS.set('rp_sv_reps', all);
+    svREdit = true; svRepDraw(true); return;
+  }
+  const d = e.target.closest('[data-rdel]'); if (d) { click(); d.closest('.sv-erow').remove(); return; }
   const b = e.target.closest('[data-rep]'); if (!b) return;
   click(); svHush(); svSend(b.textContent); svOv('svSheet', false); S.test = false;
 });
 $('svReplyBtn').onclick = () => {
   click(); S.test = false; if (!S.fam) return;
   const last = sorted().filter(m => m.type === 'text' && !isMine(m)).pop();
-  const f = S.fam, v = svVoc(f.name), c = svCall(f.g);
-  $('svGot').innerHTML = last ? `<small>${esc(last.name)}</small>${esc(last.text)}` : `<small>${esc(f.name)}</small>무슨 말을 보낼까요?`;
-  $('svList').innerHTML = SV_REPLIES.map((r, i) => `<button data-rep="${i}">${esc(r(v, c))}</button>`).join('');
+  $('svGot').innerHTML = last ? svGotHTML(last.name, last.text) : `<div class="sv-gq">${esc(S.fam.name)}에게 무슨 말을 보낼까요?</div>`;
+  svRepF = S.fam; svREdit = false; svRepDraw();
   $('svList').classList.remove('wait'); svOv('svSheet', true);
 };
 /* 테스트: 실버 모드 제목을 길게 누르면 가족 메시지가 온 것처럼 (보내지 않음) */
@@ -3953,7 +4035,7 @@ function start(){
   initStore();
   if (LS.get('rp_sv_pend', null)) svApplyInvite();
   if (svInv) [4000, 12000].forEach(t => setTimeout(() => svFetchInvite(urlRoom), t));
-  if (LS.get('rp_silver_on', 0)) svOpen();
+  if (LS.get('rp_silver_on', 0) || LS.get('rp_sv_pend', null)) svOpen();
   setInterval(render, 30000);
   setInterval(remindRooms, 10000);
   takeShared();
