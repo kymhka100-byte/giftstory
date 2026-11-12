@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
+<!-- 빨간 우체통 28번: 화면 꺼져도 알림(급한 알림 · 안 읽으면 5분마다 15분까지) · 초대 링크/알림 누르면 바로 그 대화방 · 목록에 없던 방도 메시지 오면 자동으로 생김 · 글 쓸 때도 마이크 그대로 -->
+<!-- 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
 <!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <link rel="manifest" href="manifest.json">
@@ -551,7 +552,8 @@ footer{gap:6px;padding:7px 8px calc(7px + env(safe-area-inset-bottom));align-ite
 #txt{flex:1 1 0;width:0;min-width:0;height:36px;max-height:36px;border:1px solid #3a3a42;border-radius:12px;padding:7px 10px;font-size:15px;line-height:20px;outline:none;box-shadow:none;-webkit-appearance:none;appearance:none;margin-bottom:1px;overflow-y:hidden}
 #txt:focus{outline:none;border-color:#55555f}
 footer.typing #txt{max-height:96px;overflow-y:auto}
-footer.typing #mailbox,footer.typing #micBtn,body.typing #tgBtn{display:none}
+footer.typing #mailbox,body.typing #tgBtn{display:none}
+footer #micBtn{margin-right:-4px}
 #micBtn{width:36px;height:36px;margin-bottom:1px;display:flex;align-items:center;justify-content:center;color:#d8d8e0}
 #sendBtn{width:40px;height:36px;border-width:1.5px;margin-bottom:1px;border-radius:12px}
 /* 노래 플레이어: 재생 중엔 삼각형만 밝게 */
@@ -1253,16 +1255,18 @@ async function initStore(){
   if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
   if (FB && authUid && me.name && me === realMe) claimName(me.name);   // 내 닉네임 등록 (이미 다른 사람 것이면 그냥 넘어가요)
   if (FB && me.name && LS.get('rp_name_synced', '') !== me.name) setTimeout(renameAll, 3000);   // 25번: 예전 이름으로 남은 방도 한 번에 고쳐요
-  /* 18번: 처음엔 친구 목록. 알림을 눌러 들어온 방(이미 있는 방)만 바로 대화창 */
-  if (urlRoom && getRooms().some(x => x.id === urlRoom) && !firstVisit) openRoom(urlRoom);
-  else {
-    if (urlRoom) { saveRoom(urlRoom, null); if (FB) joinRoom(urlRoom); }   // 링크로 들어온 방 → 목록에 넣고 보낸 사람에게 딩동
-    goHome(true);
-  }
+  /* 28번: 초대 링크·알림을 누르고 들어오면 목록이 아니라 바로 그 대화방 */
+  if (urlRoom) { unRemove(urlRoom); saveRoom(urlRoom, null); openRoom(urlRoom); }   // openRoom 안에서 들어왔다고 딩동(joinRoom)
+  else goHome(true);
+  readInbox();
   if ('Notification' in window && Notification.permission === 'granted') setupPush(false);
   else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js').then(x => swReg = x).catch(() => {});   // 앱 설치용
   if ('serviceWorker' in navigator)   // 알림을 누르면 그 알림이 온 방으로
-    navigator.serviceWorker.addEventListener('message', e => { const r = e.data && e.data.room; if (r && (homeOn || r !== room) && getRooms().some(x => x.id === r)) openRoom(r); });
+    navigator.serviceWorker.addEventListener('message', e => {
+      const d = e.data || {};
+      if (d.inbox) { readInbox(); return; }   // 28번: 알림이 온 방이 목록에 없으면 바로 넣어요
+      const r = d.room; if (r && (homeOn || r !== room)) { unRemove(r); saveRoom(r, d.name || null); openRoom(r); }
+    });
   if (FB) { authModule().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
   if (FB) { try { FB.D.onDisconnect(FB.D.ref(FB.db, 'giftstory/live/' + realMe.uid)).set(0); } catch (e) {} livePing(); setInterval(livePing, 60000); }
   if (LS.get('rp_auth', null)) syncAccount();
@@ -1375,7 +1379,7 @@ function writeSeen(){
   const go = () => { seenLast = Date.now(); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + me.uid), { seen: Date.now() }).catch(() => {}); };
   if (Date.now() - seenLast > 3000) go(); else seenT = setTimeout(go, 3000);
 }
-document.addEventListener('visibilitychange', () => { livePing(); if (!document.hidden) { writeSeen(); queueRender(); } });
+document.addEventListener('visibilitychange', () => { livePing(); if (!document.hidden) { writeSeen(); readInbox(); queueRender(); } });
 /* 지금 앱을 보고 있는지 (1분마다 · 실버 모드에서 가족 버튼이 노랗게) */
 function livePing(){ if (FB) FB.D.set(FB.D.ref(FB.db, 'giftstory/live/' + realMe.uid), document.hidden ? 0 : Date.now()).catch(() => {}); }
 function memberIn(id, uid, v, t0){
@@ -1405,7 +1409,6 @@ function twinMap(){
   return map;
 }
 const visibleRooms = () => { const m = twinMap(); return getRooms().filter(x => m[x.id] === x.id); };
-const keepOf = id => twinMap()[id] || id;
 function removeFriend(id){ const m = twinMap(), k = m[id] || id; getRooms().filter(x => (m[x.id] || x.id) === k).forEach(x => removeRoom(x.id)); }
 function saveRoom(id, title){
   const rooms = getRooms(), r = rooms.find(x => x.id === id);
@@ -1423,6 +1426,24 @@ function removeRoom(id){
   if (homeOn) { delete lastMsg[id]; render(); }
   else if (id === room) goHome();
   else render();
+}
+/* 28번: 지운 방 표시 풀기 · 알림으로 온 방(목록에 없던 방)을 목록에 넣기 */
+function unRemove(id){ const r = LS.get('rp_removed', {}); if (r[id]) { delete r[id]; LS.set('rp_removed', r); } }
+async function readInbox(){
+  if (!('caches' in window)) return;
+  try {
+    const c = await caches.open('rp-inbox'), res = await c.match('/rp-inbox');
+    if (!res) return;
+    const list = await res.json(); await c.delete('/rp-inbox');
+    const ids = getRooms().map(x => x.id); let ch = false;
+    (Array.isArray(list) ? list : []).forEach(x => {
+      if (!x || !x.room || ids.includes(x.room)) return;
+      const rmv = LS.get('rp_removed', {});
+      if (rmv[x.room] && (x.at || 0) <= rmv[x.room]) return;   // 지우기 전에 온 메시지
+      unRemove(x.room); saveRoom(x.room, x.name || ''); ids.push(x.room); ch = true;
+    });
+    if (ch) { syncWatchers(); queueRender(); }
+  } catch (e) {}
 }
 /* 방 이름: 들어온 친구가 적은 이름 → 미리 적어 둔 이름 → 대화한 사람 이름 */
 function titleFor(id){
@@ -1870,6 +1891,7 @@ async function syncAccount(){
     local.forEach(x => up[x.id] = { title: x.title || '', at: x.at });
     if (local.length) await D.update(D.ref(db, base + '/rooms'), up);
     const remote = (await D.get(D.ref(db, base + '/rooms'))).val() || {};
+    getRooms().forEach(x => { if (!local.find(y => y.id === x.id)) local.push(x); });   // 28번: 기다리는 동안 새로 생긴 방도 지우지 않게
     Object.entries(remote).forEach(([id, v]) => { if (!local.find(x => x.id === id)) local.push({ id, title: v.title || '', at: v.at || Date.now() }); });
     local.sort((a, b) => b.at - a.at); LS.set('rp_rooms', local);
     render();
@@ -1906,7 +1928,7 @@ async function setupPush(ask){
       const M = await import(FB.base + 'firebase-messaging.js');
       const token = await M.getToken(M.getMessaging(FB.app), { vapidKey: VAPID_KEY, serviceWorkerRegistration: swReg });
       if (token) {
-        await FB.D.set(FB.D.ref(FB.db, 'giftstory/tokens/' + me.uid + '/' + token.replace(/[.#$\[\]\/]/g, '_')), { token, at: Date.now() });
+        await FB.D.set(FB.D.ref(FB.db, 'giftstory/tokens/' + me.uid + '/' + token.replace(/[.#$\[\]\/]/g, '_')), { token, at: Date.now(), url: location.origin + location.pathname });   // 28번: 알림 누르면 열 주소
         LS.set('rp_push_ok', 1);
       }
     } catch (e) { if (ask) toast('알림은 켜졌는데 서버 등록이 안 됐어요 · 잠시 뒤 다시 눌러 주세요'); }
@@ -4041,12 +4063,10 @@ function start(){
   takeShared();
   setInterval(remindBox, 30000);
 }
-let firstVisit = false;
 function begin(){
   const newRoom = urlRoom && !getRooms().some(x => x.id === urlRoom);   // 링크로 처음 들어온 방
-  firstVisit = !!newRoom;
   if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
-  if (!me.name || newRoom) {
+  if (!me.name || (svInv && newRoom)) {   // 28번: 이름이 있으면 이름 화면 없이 바로 그 방으로
     nameScreen();
   } else start();
 }
