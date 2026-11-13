@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 28번: 화면 꺼져도 알림(급한 알림 · 안 읽으면 5분마다 15분까지) · 초대 링크/알림 누르면 바로 그 대화방 · 목록에 없던 방도 메시지 오면 자동으로 생김 · 글 쓸 때도 마이크 그대로 -->
+<!-- 빨간 우체통 29번: ＋ 메뉴 가위바위보·제비뽑기 자리 · 두더지는 아래 우체통 5번 · 고정 말풍선 4칸 빈칸 없이 + 새 메시지 1칸 + 더보기 · 목록 순서 맞춤 · 구글 로그인 바로 열기 · 지운 사람 메시지 바로 뜨게 -->
+<!-- 28번: 화면 꺼져도 알림(급한 알림 · 안 읽으면 5분마다 15분까지) · 초대 링크/알림 누르면 바로 그 대화방 · 목록에 없던 방도 메시지 오면 자동으로 생김 · 글 쓸 때도 마이크 그대로 -->
 <!-- 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
 <!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
 <title>빨간 우체통 (못다한 그 말)</title>
@@ -532,6 +533,9 @@ body:not(.dark) #topMenu,body:not(.dark) .pmenu{background:var(--t-btn);border-c
 body:not(.dark) .pmenu button{color:var(--t-btnink)}
 /* 편지가 오면 우체통에 편지가 꽂히고 10초마다 흔들 */
 #mailbox.shake,#topBox.shake{transform-origin:50% 90%}
+.rscroll{gap:4px;padding-left:2px;padding-right:2px}
+.rscroll .rb,.rscroll .rb:not(.cur):not(.add){width:42px;min-width:42px;font-size:12px}
+#nameOv{z-index:70}
 #mailbox .mlet{display:none}#mailbox.has .mlet{display:inline}
 #mailbox .flag.down{display:none}
 .shake{animation:shake .9s ease}
@@ -665,7 +669,7 @@ footer #micBtn{margin-right:-4px}
       </svg>
     </button>
     <button id="plusBtn" title="파일 · 게임 · 친구 초대">＋</button>
-    <div class="pmenu" id="plusMenu"><button data-tg="file">📁 파일 보내기</button><button data-tg="mole">🎮 게임 같이 하기</button><button data-tg="invite">👥 친구 초대</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="file">📁 파일 보내기</button><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎟 제비뽑기</button><button data-tg="invite">👥 친구 초대</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="micBtn" title="목소리 보내기"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1195,7 +1199,15 @@ async function loadFirebase(){
   }
   throw new Error('firebase');
 }
-let FB = null, unsub = [], loadedAt = 0;
+let FB = null, unsub = [], loadedAt = 0, fbInitP = null;
+/* 29번: 서버 열기는 한 곳에서 한 번만 (로그인 준비와 겹쳐도 안전하게) */
+function fbInit(){
+  if (FB) return Promise.resolve(FB);
+  return fbInitP || (fbInitP = loadFirebase().then(({ A, D, base }) => {
+    if (!FB) { const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; }
+    return FB;
+  }).catch(e => { fbInitP = null; throw e; }));
+}
 /* ----- 22번: 서버 보안 -----
    · 앱을 열면 눈에 안 보이게 익명 로그인 (구글 로그인했으면 그대로 구글)
    · 방마다 '열쇠'(rooms/방/keys/내 로그인 번호)를 남겨야 그 방을 읽고 쓸 수 있어요
@@ -1206,8 +1218,7 @@ const nameKey = n => String(n).trim().toLowerCase().replace(/\s+/g, '').replace(
 const nameRef = n => FB.D.ref(FB.db, 'giftstory/names/' + nameKey(n));
 async function fbReady(){
   if (!FB) {
-    try { const { A, D, base } = await loadFirebase(); const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; }
-    catch (e) { return false; }
+    try { await fbInit(); } catch (e) { return false; }
   }
   if (!authUid) { if (!authP) authP = ensureAuth(); await authP; }
   return !!authUid;
@@ -1246,11 +1257,7 @@ async function ensureAuth(){
 }
 async function initStore(){
   if (FIREBASE_CONFIG && !FB) {
-    try {
-      const { A, D, base } = await loadFirebase();
-      const app = A.initializeApp(FIREBASE_CONFIG);
-      FB = { A, D, base, app, db: D.getDatabase(app) };
-    } catch (e) { FB = null; toast('서버 연결 실패 - 연습 모드로 열려요'); }
+    try { await fbInit(); } catch (e) { FB = null; toast('서버 연결 실패 - 연습 모드로 열려요'); }
   }
   if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
   if (FB && authUid && me.name && me === realMe) claimName(me.name);   // 내 닉네임 등록 (이미 다른 사람 것이면 그냥 넘어가요)
@@ -1267,7 +1274,7 @@ async function initStore(){
       if (d.inbox) { readInbox(); return; }   // 28번: 알림이 온 방이 목록에 없으면 바로 넣어요
       const r = d.room; if (r && (homeOn || r !== room)) { unRemove(r); saveRoom(r, d.name || null); openRoom(r); }
     });
-  if (FB) { authModule().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
+  if (FB) { loginPrep().catch(() => {}); loginReturn(); }   // 로그인 미리 준비
   if (FB) { try { FB.D.onDisconnect(FB.D.ref(FB.db, 'giftstory/live/' + realMe.uid)).set(0); } catch (e) {} livePing(); setInterval(livePing, 60000); }
   if (LS.get('rp_auth', null)) syncAccount();
   if (LS.get('rp_silver_on', 0) && !S.on) svOpen();   // 27번: 실버 모드로 쓰던 폰은 늘 실버 화면으로
@@ -1328,8 +1335,8 @@ function goHome(initial){
 }
 function drawHome(){
   const rooms = visibleRooms();
-  const nOf = id => unread[id] ? unread[id].keys.size : 0;
-  rooms.sort((a, b) => (nOf(b.id) ? 1 : 0) - (nOf(a.id) ? 1 : 0) || ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
+  const nOf = unreadN;
+  rooms.sort(roomOrder);
   const row = x => {
     const name = titleFor(x.id) || x.title || '새 방', n = nOf(x.id), L = lastMsg[x.id];
     const sub = L ? L.t : (FB && !othersIn(x.id).length ? '⏳ 친구가 아직 안 들어왔어요' : '대화를 시작해 보세요');
@@ -1379,7 +1386,7 @@ function writeSeen(){
   const go = () => { seenLast = Date.now(); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + me.uid), { seen: Date.now() }).catch(() => {}); };
   if (Date.now() - seenLast > 3000) go(); else seenT = setTimeout(go, 3000);
 }
-document.addEventListener('visibilitychange', () => { livePing(); if (!document.hidden) { writeSeen(); readInbox(); queueRender(); } });
+document.addEventListener('visibilitychange', () => { livePing(); if (!document.hidden) { writeSeen(); readInbox(); checkRemoved(); queueRender(); } });
 /* 지금 앱을 보고 있는지 (1분마다 · 실버 모드에서 가족 버튼이 노랗게) */
 function livePing(){ if (FB) FB.D.set(FB.D.ref(FB.db, 'giftstory/live/' + realMe.uid), document.hidden ? 0 : Date.now()).catch(() => {}); }
 function memberIn(id, uid, v, t0){
@@ -1419,6 +1426,9 @@ function saveRoom(id, title){
 function removeRoom(id){
   LS.set('rp_rooms', getRooms().filter(x => x.id !== id));
   const rmv = LS.get('rp_removed', {}); rmv[id] = Date.now(); LS.set('rp_removed', rmv);   // 27번: 지운 친구도 새 메시지가 오면 다시 보여요
+  if (FB) FB.D.get(FB.D.query(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/msgs'), FB.D.limitToLast(1))).then(sn => {   // 29번: 지울 때 마지막 메시지 번호 (폰 시계가 달라도 정확하게)
+    let k = ''; sn.forEach(c => { k = c.key; }); const rk = LS.get('rp_removed_k', {}); rk[id] = k; LS.set('rp_removed_k', rk);
+  }).catch(() => {});
   stopWatch(id); delete unread[id];
   const seen = LS.get('rp_seen', {}); delete seen[id]; LS.set('rp_seen', seen);
   const au = LS.get('rp_auth', null);
@@ -1439,7 +1449,7 @@ async function readInbox(){
     (Array.isArray(list) ? list : []).forEach(x => {
       if (!x || !x.room || ids.includes(x.room)) return;
       const rmv = LS.get('rp_removed', {});
-      if (rmv[x.room] && (x.at || 0) <= rmv[x.room]) return;   // 지우기 전에 온 메시지
+      if (rmv[x.room]) { checkRemoved(x.room); return; }   // 29번: 지운 방은 서버에서 새 메시지인지 확인
       unRemove(x.room); saveRoom(x.room, x.name || ''); ids.push(x.room); ch = true;
     });
     if (ch) { syncWatchers(); queueRender(); }
@@ -1471,6 +1481,25 @@ function syncWatchers(){
 }
 /* 27번: 지운 친구 방은 마지막 메시지 하나만 지켜봐요 → 새 메시지가 오면 목록에 다시 */
 const rwatch = {};
+const afterRemove = (id, key, m, t) => { const k = LS.get('rp_removed_k', {})[id]; return k !== undefined ? key > k : (m.at || 0) > t; };   // 29번
+function backFromRemoved(id, m){
+  const r = LS.get('rp_removed', {}); if (!r[id]) return;
+  const s = getSeen(); s[id] = Math.min(r[id], (m.at || Date.now()) - 1); LS.set('rp_seen', s);   // 지운 뒤에 온 메시지만 안 읽음으로
+  delete r[id]; LS.set('rp_removed', r);
+  const rk = LS.get('rp_removed_k', {}); delete rk[id]; LS.set('rp_removed_k', rk);
+  saveRoom(id, m.name || ''); syncWatchers(); queueRender();
+}
+/* 29번: 앱을 다시 볼 때·알림이 왔을 때 지운 방을 한 번 더 확인 (늦게 뜨던 문제) */
+function checkRemoved(only){
+  if (!FB) return;
+  Object.entries(LS.get('rp_removed', {})).forEach(([id, t]) => {
+    if (only && only !== id) return;
+    needKey(id);
+    FB.D.get(FB.D.query(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/msgs'), FB.D.limitToLast(1))).then(sn => sn.forEach(c => {
+      const m = c.val(); if (m && !isMine(m) && afterRemove(id, c.key, m, t)) backFromRemoved(id, m);
+    })).catch(() => {});
+  });
+}
 function syncRemoved(){
   const rmv = LS.get('rp_removed', {}), ids = getRooms().map(x => x.id), old = Date.now() - 180 * 864e5;
   let ch = false;
@@ -1482,10 +1511,8 @@ function syncRemoved(){
     needKey(id);
     rwatch[id] = FB.D.onChildAdded(FB.D.query(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/msgs'), FB.D.limitToLast(1)), snap => {
       const m = snap.val(), r = LS.get('rp_removed', {});
-      if (!m || isMine(m) || !r[id] || (m.at || 0) <= r[id]) return;
-      const s = getSeen(); s[id] = r[id]; LS.set('rp_seen', s);   // 지운 뒤에 온 메시지만 안 읽음으로
-      delete r[id]; LS.set('rp_removed', r);
-      saveRoom(id, m.name || ''); queueRender();
+      if (!m || isMine(m) || !r[id] || !afterRemove(id, snap.key, m, r[id])) return;
+      backFromRemoved(id, m);
     });
   });
 }
@@ -1520,7 +1547,7 @@ function drawRooms(){
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
 /* 20번: 위쪽 말풍선 5자리 고정 - 자리는 안 바뀜, 빈 자리는 ＋친구, 고정 안 된 방은 더보기로 */
-const PIN_N = 3;   // 26번: 고정 3칸 + 지금 대화방 1칸 + 더보기
+const PIN_N = 4;   // 29번: 고정 4칸(왼쪽부터 빈칸 없이) + 새 메시지·지금 대화방 1칸 + 더보기
 let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
 function getPins(){
   const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
@@ -1529,6 +1556,7 @@ function getPins(){
   if (!Array.isArray(seen)) seen = ids.slice();
   p = Array.from({ length: PIN_N }, (_, i) => { const id = p[i] && tw[p[i]]; return id && ids.includes(id) ? id : null; });
   p = p.map((id, i) => id && p.indexOf(id) !== i ? null : id);   // 같은 친구가 두 자리에 있으면 하나만
+  p = p.filter(Boolean).concat(Array(PIN_N).fill(null)).slice(0, PIN_N);   // 29번: 빈자리 없이 왼쪽으로 붙이기
   ids.slice().reverse().forEach(id => {   // 새로 생긴 방은 빈 자리에 자동으로
     if (seen.includes(id)) return;
     seen.push(id);
@@ -1540,29 +1568,34 @@ function getPins(){
   LS.set('rp_pins', p); LS.set('rp_pinseen', seen.filter(x => ids.includes(x)));
   return p;
 }
-function setPin(i, id){ const p = getPins(); const j = p.indexOf(id); if (j >= 0) p[j] = null; p[i] = id; LS.set('rp_pins', p); barHTML = ''; queueRender(); }
+function setPin(i, id){ const p = getPins(); const j = p.indexOf(id); if (j >= 0) p[j] = null; p[i] = id; LS.set('rp_pins', p.filter(Boolean).concat(Array(PIN_N).fill(null)).slice(0, PIN_N)); barHTML = ''; queueRender(); }
 const roomName = id => titleFor(id) || (getRooms().find(x => x.id === id) || {}).title || '새 방';
 const unreadN = id => unread[id] ? unread[id].keys.size : 0;
 /* 더보기 목록 순서: 안 읽은 메시지 온 방 먼저 → 최근 대화 순 */
+const roomOrder = (a, b) => (unreadN(b.id) ? 1 : 0) - (unreadN(a.id) ? 1 : 0) ||
+  ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0);   // 29번: 아래 목록·더보기 같은 순서
 function moreRooms(){
   const p = getPins();
-  return visibleRooms().filter(x => !p.includes(x.id)).sort((a, b) =>
-    (unreadN(b.id) ? 1 : 0) - (unreadN(a.id) ? 1 : 0) ||
-    ((unread[b.id] || {}).first || 0) - ((unread[a.id] || {}).first || 0) ||
-    ((lastMsg[b.id] || {}).at || b.at || 0) - ((lastMsg[a.id] || {}).at || a.at || 0));
+  return visibleRooms().filter(x => !p.includes(x.id)).sort(roomOrder);
 }
 let barHTML = '';
 function drawBar(){
   const p = getPins();
+  const e0 = p.indexOf(null);   // 29번: ＋친구는 고정 말풍선 바로 뒤에 하나만
   const html = p.map((id, i) => {
-    if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;
+    if (!id) return i === e0 ? `<button class="rb empty" data-pin="${i}">＋친구</button>` : '';
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
     return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('') + (() => {   // 24번: 고정 안 된 방에 들어가 있으면 더보기 바로 옆에 잠깐 보여요
     const tw = twinMap(), cr = tw[room] || room;
-    if (homeOn || !room || p.includes(cr) || !getRooms().some(x => x.id === room)) return '';
-    const name = roomName(room);
-    return `<button class="rb cur tmp" data-go="${room}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}</button>`;
+    if (!homeOn && room && !p.includes(cr) && getRooms().some(x => x.id === room)) {
+      const name = roomName(room);
+      return `<button class="rb cur tmp" data-go="${room}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}</button>`;
+    }
+    const nw = moreRooms().find(x => unreadN(x.id));   // 29번: 말풍선에 없는 사람이 보낸 새 메시지
+    if (!nw) return '';
+    const name = roomName(nw.id), n = unreadN(nw.id);
+    return `<button class="rb tmp unread ${flashing[nw.id] ? 'flash' : ''}" data-go="${nw.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}<i class="cnt">${n > 99 ? '99+' : n}</i></button>`;
   })();
   const mn = moreRooms().reduce((t, x) => t + (x.id === room && !homeOn ? 0 : unreadN(x.id)), 0);
   const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
@@ -1625,7 +1658,7 @@ $('roomBar').addEventListener('pointerdown', e => {
   lpT = setTimeout(() => {
     lpDone = true; lpEnd();
     if (navigator.vibrate) navigator.vibrate(30);
-    openPin(+b.dataset.slot);
+    openPin(b.dataset.slot != null ? +b.dataset.slot : Math.max(0, getPins().indexOf(null)));
   }, 600);
 });
 $('roomBar').addEventListener('pointermove', e => { if (lpBtn && Math.abs(e.clientX - lpX) > 10) lpEnd(); });
@@ -1848,21 +1881,27 @@ function kakaoShare(url, text){
 /* ----- 구글 로그인: 어느 기기에서나 같은 방 목록 ----- */
 let AU = null;
 async function authModule(){ if (!AU && FB) AU = await import(FB.base + 'firebase-auth.js'); return AU; }
-async function googleLogin(){
-  if (!FB) { toast('서버 연결이 필요해요'); return; }
-  let A, auth, prov;
-  try { A = await authModule(); auth = A.getAuth(FB.app); prov = new A.GoogleAuthProvider(); prov.setCustomParameters({ prompt: 'select_account' }); }
-  catch (e) { toast('로그인을 불러오지 못했어요'); return; }
-  try {
-    const res = await A.signInWithPopup(auth, prov);
-    await afterLogin(res.user);
-  } catch (e) {
+/* 29번: 로그인 창은 버튼을 누른 그 순간에 바로 열어야 해요 (미리 준비해 두기)
+   - 준비 없이 누르면 폰이 창을 막고, 다른 주소로 갔다 오는 방식은 처음 설치한 폰에서 로그인이 풀려 처음 화면으로 돌아왔어요 */
+let LG = null, lgP = null;
+function loginPrep(){
+  if (LG) return Promise.resolve(LG);
+  if (!lgP) lgP = (async () => {
+    await fbInit();
+    const A = await authModule(), auth = A.getAuth(FB.app), prov = new A.GoogleAuthProvider();
+    prov.setCustomParameters({ prompt: 'select_account' });
+    return LG = { A, auth, prov };
+  })().catch(e => { lgP = null; throw e; });
+  return lgP;
+}
+function googleLogin(){
+  if (!LG) { toast('로그인 준비 중이에요 · 잠깐 뒤 한 번 더 눌러 주세요'); loginPrep().catch(() => toast('인터넷 연결을 확인해 주세요')); return; }
+  const { A, auth, prov } = LG;
+  A.signInWithPopup(auth, prov).then(res => afterLogin(res.user)).catch(e => {
     const code = (e && e.code) || '';
-    if (/popup-blocked|operation-not-supported|web-storage-unsupported/.test(code)) {
-      LS.set('rp_login_wait', 1); A.signInWithRedirect(auth, prov).catch(() => toast('로그인이 안 됐어요')); return;
-    }
-    if (!/popup-closed|cancelled-popup/.test(code)) toast('로그인이 안 됐어요 ' + (code ? '(' + code + ')' : ''));
-  }
+    if (/popup-blocked/.test(code)) toast('로그인 창이 막혔어요 · 한 번 더 눌러 주세요');
+    else if (!/popup-closed|cancelled-popup/.test(code)) toast('로그인이 안 됐어요 ' + (code ? '(' + code + ')' : ''));
+  });
 }
 async function afterLogin(user){
   if (!user) return;
@@ -1876,7 +1915,7 @@ async function loginReturn(){   // 페이지 이동 방식으로 로그인하고
   LS.set('rp_login_wait', 0);
   try { const A = await authModule(), r = await A.getRedirectResult(A.getAuth(FB.app)); if (r) await afterLogin(r.user); } catch (e) { toast('로그인이 안 됐어요'); }
 }
-$('loginBtn').onclick = () => { if (!LS.get('rp_auth', null)) googleLogin(); else syncAccount().then(() => toast('방 목록을 맞췄어요')); };
+$('loginBtn').onclick = () => { if (!LS.get('rp_auth', null)) { if (!LG) loginPrep().catch(() => {}); googleLogin(); } else syncAccount().then(() => toast('방 목록을 맞췄어요')); };
 async function syncAccount(){
   const au = LS.get('rp_auth', null); if (!FB || !au || me !== realMe) return;
   try {
@@ -2365,10 +2404,16 @@ $('txt').addEventListener('focus', () => setTimeout(() => { const b = $('msgs');
 $('msgs').addEventListener('load', e => { if (e.target.tagName === 'IMG') { const b = $('msgs'); if (b.scrollHeight - b.scrollTop - b.clientHeight < 400) b.scrollTop = b.scrollHeight; } }, true);
 
 /* ----- 우체통 누르기 ----- */
+/* 29번: 빠르게 5번 누르면 숨은 두더지 게임 */
+let mbTaps = 0, mbT = 0;
 $('mailbox').onclick = () => {
-  click();
-  const un = unreadIn();
-  if (un.length) openBox(un); else openWriter();
+  click(); clearTimeout(mbT);
+  if (++mbTaps >= 5) { mbTaps = 0; window.open(MOLE_URL, '_blank'); return; }
+  mbT = setTimeout(() => {
+    mbTaps = 0;
+    const un = unreadIn();
+    if (un.length) openBox(un); else openWriter();
+  }, 330);
 };
 function openBox(list){
   const d = $('door'), pe = $('popEnv'), pl = $('popList'), many = list.length > 1;
@@ -2895,8 +2940,8 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
   click(); closeMenus();
   if (b.dataset.tg === 'file') { if (homeOn) { pickFriend('📁 누구에게 파일을 보낼까요?', id => { openRoom(id); $('sendFile').click(); }); return; } $('sendFile').click(); return; }
   if (b.dataset.tg === 'invite') { openInvite(); return; }
-  if (b.dataset.tg === 'mole') window.open(MOLE_URL, '_blank');
-  else if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
+  if (b.dataset.tg === 'rps' || b.dataset.tg === 'lot') { toast((b.dataset.tg === 'rps' ? '✊ 가위바위보' : '🎟 제비뽑기') + '는 곧 나와요'); return; }   // 29번: 자리만 먼저
+  if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
   else if (homeOn) soloVideo();   // 메인 화면에서는 혼자 보기
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
 }));
@@ -4062,6 +4107,7 @@ function start(){
   setInterval(remindRooms, 10000);
   takeShared();
   setInterval(remindBox, 30000);
+  setInterval(() => { if (!document.hidden) checkRemoved(); }, 30000);   // 29번
 }
 function begin(){
   const newRoom = urlRoom && !getRooms().some(x => x.id === urlRoom);   // 링크로 처음 들어온 방
@@ -4100,18 +4146,13 @@ function nameScreen(){
     $('nameIn').onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); go(false); } };
     $('nameInstall').onclick = doInstall;
     /* 구글 간편 로그인: 구글 이름이 이름 칸에 들어가요 (고쳐 쓸 수 있음) */
-    $('nameLogin').onclick = async () => {
+    $('nameLogin').onclick = () => {   // 29번: 기다리지 않고 바로 로그인 창
       click();
       if (LS.get('rp_auth', null)) { nameFromLogin(); return; }
-      if (!FB) {   // 서버가 아직 안 열렸으면 잠깐 열어 두기
-        try { const { A, D, base } = await loadFirebase(); const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; }
-        catch (e) { toast('인터넷 연결을 확인해 주세요'); return; }
-      }
       googleLogin();
     };
-    if (LS.get('rp_login_wait', 0) && !FB) {   // 구글 로그인 창에서 돌아왔을 때
-      loadFirebase().then(({ A, D, base }) => { const app = A.initializeApp(FIREBASE_CONFIG); FB = { A, D, base, app, db: D.getDatabase(app) }; loginReturn(); }).catch(() => {});
-    }
+    $('nameIn').readOnly = false; $('nameIn').disabled = false;
+    loginPrep().then(() => { if (LS.get('rp_login_wait', 0)) loginReturn(); }).catch(() => {});   // 처음 화면이 뜨면 로그인 미리 준비
 }
 /* 24번: 시작을 누르면 홈 화면에 추가 권하기 (✕로 닫기) */
 function askInstall(){
