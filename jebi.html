@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>제비뽑기</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:#000;color:#fff;font-family:sans-serif;font-size:20px;min-height:100vh;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+h1{text-align:center;font-size:30px;margin:10px 0 18px;color:#ff4d4d}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:18px;font-size:24px;font-weight:bold;margin:10px 0;color:#fff;cursor:pointer}
+.red{background:#d62828}.blue{background:#1d6fd6}.gray{background:#333}.gold{background:#e0a800;color:#000}
+.row{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0}
+.row button{width:56px;height:56px;font-size:30px;border-radius:50%;border:0;background:#333;color:#fff}
+#cnt{font-size:34px;font-weight:bold;min-width:70px;text-align:center}
+.names input{width:100%;font-size:22px;padding:12px;margin:5px 0;border-radius:10px;border:2px solid #444;background:#111;color:#fff}
+.hide{display:none!important}
+#turn{text-align:center;font-size:28px;font-weight:bold;margin:8px 0 14px;color:#ffd166;min-height:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:12px}
+.card{position:relative;aspect-ratio:3/4;border-radius:14px;perspective:600px;cursor:pointer}
+.in{position:absolute;inset:0;transition:transform .7s;transform-style:preserve-3d}
+.card.open .in{transform:rotateY(180deg)}
+.f,.b{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px}
+.f{background:linear-gradient(135deg,#b00020,#ff4d4d);border:3px solid #fff;font-size:42px;font-weight:bold}
+.b{background:#fff;color:#000;transform:rotateY(180deg);font-size:22px;font-weight:bold}
+.card.taken .f{background:#444;border-color:#777}
+.who{font-size:16px;margin-top:6px;color:#fff;word-break:keep-all}
+.b .who{color:#000}
+.card.win .b{background:#ffd166;box-shadow:0 0 25px #ffd166}
+.big{font-size:40px}
+#cover{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:20;text-align:center}
+#cover .t{font-size:40px;font-weight:bold;color:#ffd166;padding:20px}
+#cover .n{font-size:140px;font-weight:bold;color:#ff4d4d}
+#result{margin-top:18px;text-align:center}
+.winname{font-size:56px;font-weight:bold;color:#ff3b3b;margin:6px 0}
+.msg{font-size:26px;font-weight:bold;line-height:1.5}
+.safe{font-size:22px;color:#8be78b;margin:6px 0}
+.pair{background:#1a1a1a;border-radius:12px;padding:12px;margin:8px 0;font-size:24px}
+.alone{font-size:30px;font-weight:bold;color:#ffd166;margin:10px 0;line-height:1.4}
+.conf{position:fixed;top:-20px;width:12px;height:18px;z-index:30;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+#mark{position:fixed;right:8px;bottom:6px;font-size:12px;color:#777;z-index:40}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- 1. 사람 정하기 -->
+  <div id="setup">
+    <h1>🐦 제비뽑기 · 파트너 정하기</h1>
+    <div style="text-align:center">몇 명이에요?</div>
+    <div class="row"><button onclick="chg(-1)">−</button><div id="cnt">4명</div><button onclick="chg(1)">＋</button></div>
+    <div class="names" id="names"></div>
+    <button class="btn red" onclick="go('jebi')">🐦 제비뽑기</button>
+    <button class="btn blue" onclick="go('pair')">💑 파트너 정하기</button>
+  </div>
+
+  <!-- 2. 카드 뽑기 -->
+  <div id="game" class="hide">
+    <h1 id="gtitle"></h1>
+    <div id="turn"></div>
+    <div class="grid" id="grid"></div>
+    <button class="btn gold hide" id="openBtn" onclick="reveal()">🎉 공개!</button>
+    <div id="result"></div>
+    <div id="after" class="hide">
+      <button class="btn red" onclick="go(mode)">다시 하기</button>
+      <button class="btn gray" onclick="home()">처음으로</button>
+    </div>
+  </div>
+</div>
+<div id="cover" class="hide"><div class="t" id="ct"></div><div class="n" id="cn"></div></div>
+<div id="mark">69KYM</div>
+
+<script>
+// 같은 폴더에 올릴 MP3 파일 이름
+const SND={bgm:'jebi_bgm.mp3',start:'jebi_start.mp3',hurry:'jebi_hurry.mp3',last:'jebi_last.mp3',win:'jebi_win.mp3'};
+const BGM_VOL=0.25, BGM_LOW=0.08;
+
+let n=4, names=[], mode='jebi', cards=[], turn=0, timers=[], bgm=null, voice=null;
+try{names=JSON.parse(localStorage.getItem('jebiNames'))||[];n=Math.min(10,Math.max(2,names.length||4))}catch(e){}
+
+const $=id=>document.getElementById(id);
+function drawNames(){
+  $('cnt').textContent=n+'명';
+  let h='';for(let i=0;i<n;i++)h+=`<input id="nm${i}" value="${(names[i]||'').replace(/"/g,'')}" placeholder="${i+1}번 사람">`;
+  $('names').innerHTML=h;
+}
+function readNames(){names=[];for(let i=0;i<n;i++)names.push(($('nm'+i).value.trim())||(i+1)+'번');try{localStorage.setItem('jebiNames',JSON.stringify(names))}catch(e){}}
+function chg(d){readNames();n=Math.min(10,Math.max(2,n+d));drawNames()}
+drawNames();
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+const SWALLOW='<svg viewBox="0 0 100 60" width="70"><path d="M50 30C40 20 25 12 5 10C20 18 30 24 38 30C28 34 18 44 10 56C26 48 40 40 50 36C60 40 74 48 90 56C82 44 72 34 62 30C70 24 80 18 95 10C75 12 60 20 50 30Z" fill="#111"/></svg>';
+
+// ---------- 소리 ----------
+function startBgm(){stopBgm();bgm=new Audio(SND.bgm);bgm.loop=true;bgm.volume=BGM_VOL;bgm.play().catch(()=>{})}
+function stopBgm(){if(bgm){bgm.pause();bgm=null}}
+function play(key,done){
+  if(voice)voice.pause();
+  if(bgm)bgm.volume=BGM_LOW;
+  voice=new Audio(SND[key]);
+  let fin=false;const end=()=>{if(fin)return;fin=true;if(bgm)bgm.volume=BGM_VOL;done&&done()};
+  voice.onended=end;voice.onerror=()=>setTimeout(end,1500);
+  voice.play().catch(()=>setTimeout(end,1500));
+}
+function clearT(){timers.forEach(clearTimeout);timers=[]}
+
+// ---------- 시작 ----------
+function go(m){
+  if(!$('setup').classList.contains('hide'))readNames();
+  mode=m;clearT();
+  $('setup').classList.add('hide');$('game').classList.remove('hide');
+  $('result').innerHTML='';$('after').classList.add('hide');$('openBtn').classList.add('hide');
+  $('gtitle').textContent=m==='jebi'?'🐦 제비뽑기':'💑 파트너 정하기';
+  if(m==='jebi'){
+    cards=names.map((_,i)=>({jebi:i===0}));
+  }else{
+    let nums=shuffle([...Array(20)].map((_,i)=>i+1)).slice(0,Math.ceil(n/2)),v=[];
+    for(let i=0;i<n;i++)v.push(nums[Math.floor(i/2)]);
+    cards=v.map(x=>({num:x}));
+  }
+  shuffle(cards).forEach(c=>c.owner=null);
+  turn=0;drawCards();startBgm();
+  if(m==='jebi')play('start',nextTurn);else nextTurn();
+}
+function home(){clearT();stopBgm();if(voice)voice.pause();$('game').classList.add('hide');$('setup').classList.remove('hide');drawNames()}
+
+function drawCards(){
+  $('grid').innerHTML=cards.map((c,i)=>{
+    let back=mode==='jebi'?(c.jebi?SWALLOW+'<div>제비!</div>':'<div class="big">😮‍💨</div><div>통과</div>'):`<div class="big">${c.num}</div>`;
+    return `<div class="card${c.owner!==null?' taken':''}" id="c${i}" onclick="pick(${i})"><div class="in">
+      <div class="f">${c.owner!==null?'✔':'?'}<div class="who">${c.owner!==null?names[c.owner]:''}</div></div>
+      <div class="b">${back}<div class="who">${c.owner!==null?names[c.owner]:''}</div></div></div></div>`}).join('');
+}
+
+// ---------- 차례 / 재촉 ----------
+function nextTurn(){
+  clearT();
+  if(turn>=n){$('turn').textContent='모두 뽑았어요!';$('openBtn').classList.remove('hide');return}
+  $('turn').textContent=`👉 ${names[turn]} 님 차례예요`;
+  const left=cards.filter(c=>c.owner===null).length;
+  if(mode==='pair'){timers.push(setTimeout(()=>play('hurry'),8000));return}
+  if(left===1){timers.push(setTimeout(()=>play('last',autoPick),5000));return}
+  timers.push(setTimeout(()=>play('hurry'),7000));
+  timers.push(setTimeout(()=>play('last',autoPick),17000));
+}
+function autoPick(){
+  const free=cards.map((c,i)=>c.owner===null?i:-1).filter(i=>i>=0);
+  if(free.length&&turn<n)pick(free[Math.floor(Math.random()*free.length)]);
+}
+function pick(i){
+  if(turn>=n||cards[i].owner!==null||!$('cover').classList.contains('hide'))return;
+  clearT();if(voice)voice.pause();if(bgm)bgm.volume=BGM_VOL;
+  cards[i].owner=turn;turn++;drawCards();nextTurn();
+}
+
+// ---------- 공개 ----------
+function reveal(){
+  clearT();$('openBtn').classList.add('hide');
+  const cv=$('cover');cv.classList.remove('hide');$('ct').textContent='자, 이제 공개합니다!';$('cn').textContent='';
+  let k=3;
+  const tick=()=>{
+    if(k>0){$('cn').textContent=k;k--;setTimeout(tick,1000)}
+    else{cv.classList.add('hide');showAll()}
+  };
+  setTimeout(tick,1200);
+}
+function showAll(){
+  cards.forEach((c,i)=>{const e=$('c'+i);e.classList.add('open');if(c.jebi)e.classList.add('win')});
+  confetti();
+  let h='';
+  if(mode==='jebi'){
+    stopBgm();play('win');
+    const w=cards.find(c=>c.jebi).owner;
+    h=`<div class="msg">🎉 제비 당첨 🎉</div><div class="winname">${names[w]}</div>
+       <div class="msg" style="color:#ff6b6b">축하합니다! 제비 당첨이에요!<br>자, 오늘은 당신이 쏘세요!</div><br>`;
+    names.forEach((nm,i)=>{if(i!==w)h+=`<div class="safe">${nm} : 휴~ 살았다!</div>`});
+  }else{
+    const g={};cards.forEach(c=>(g[c.num]=g[c.num]||[]).push(names[c.owner]));
+    Object.keys(g).forEach(k=>{
+      if(g[k].length===1)h=`<div class="alone">${k}번 ${g[k][0]}<br>축하해요!<br>원래 사실은 혼자가 편하답니다 😊</div>`+h;
+      else h+=`<div class="pair">${k}번 : ${g[k].join(' ❤ ')}<br><b style="color:#ffd166">짝꿍이 만들어졌어요! 축하해요!</b></div>`;
+    });
+  }
+  $('result').innerHTML=h;$('after').classList.remove('hide');
+  setTimeout(()=>$('result').scrollIntoView({behavior:'smooth'}),800);
+}
+function confetti(){
+  const col=['#ff4d4d','#ffd166','#06d6a0','#4dabf7','#f783ac','#fff'];
+  for(let i=0;i<90;i++){const d=document.createElement('div');d.className='conf';
+    d.style.left=Math.random()*100+'vw';d.style.background=col[i%col.length];
+    d.style.animationDuration=(2.5+Math.random()*2.5)+'s';d.style.animationDelay=Math.random()*1.5+'s';
+    document.body.appendChild(d);setTimeout(()=>d.remove(),7000)}
+}
+</script>
+</body>
+</html>
