@@ -1,8 +1,8 @@
-/* 빨간 우체통 알림·설치 도우미 (29번)
+/* 빨간 우체통 알림·설치 도우미 (30번)
    - 화면이 꺼져 있어도 서버가 보낸 알림을 띄워요
    - 알림이 온 방이 목록에 없으면 앱이 열릴 때 넣도록 적어 둬요
    - 앱 파일은 폰에 저장해 두고, 열 때마다 몰래 새 버전을 받아 다음에 바뀌어요 */
-const APP_CACHE = 'rp-app-29';
+const APP_CACHE = 'rp-app-30';
 const INBOX = 'rp-inbox';
 
 self.addEventListener('install', () => self.skipWaiting());

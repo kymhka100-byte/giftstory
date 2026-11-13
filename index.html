@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 29번: ＋ 메뉴 가위바위보·제비뽑기 자리 · 두더지는 아래 우체통 5번 · 고정 말풍선 4칸 빈칸 없이 + 새 메시지 1칸 + 더보기 · 목록 순서 맞춤 · 구글 로그인 바로 열기 · 지운 사람 메시지 바로 뜨게 -->
+<!-- 빨간 우체통 30번: ＋ 메뉴 🎟 제비뽑기·파트너 정하기 넣음 (등수 카드, 모양 짝, 이름 표시) -->
+<!-- (29번: ＋ 메뉴 가위바위보·제비뽑기 자리 · 두더지는 아래 우체통 5번 · 고정 말풍선 4칸 빈칸 없이 + 새 메시지 1칸 + 더보기 · 목록 순서 맞춤 · 구글 로그인 바로 열기 · 지운 사람 메시지 바로 뜨게 -->
 <!-- 28번: 화면 꺼져도 알림(급한 알림 · 안 읽으면 5분마다 15분까지) · 초대 링크/알림 누르면 바로 그 대화방 · 목록에 없던 방도 메시지 오면 자동으로 생김 · 글 쓸 때도 마이크 그대로 -->
 <!-- 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
 <!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
@@ -2940,7 +2941,8 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
   click(); closeMenus();
   if (b.dataset.tg === 'file') { if (homeOn) { pickFriend('📁 누구에게 파일을 보낼까요?', id => { openRoom(id); $('sendFile').click(); }); return; } $('sendFile').click(); return; }
   if (b.dataset.tg === 'invite') { openInvite(); return; }
-  if (b.dataset.tg === 'rps' || b.dataset.tg === 'lot') { toast((b.dataset.tg === 'rps' ? '✊ 가위바위보' : '🎟 제비뽑기') + '는 곧 나와요'); return; }   // 29번: 자리만 먼저
+  if (b.dataset.tg === 'lot') { JB.open(); return; }   // 30번: 제비뽑기
+  if (b.dataset.tg === 'rps') { toast('✊ 가위바위보는 곧 나와요'); return; }
   if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
   else if (homeOn) soloVideo();   // 메인 화면에서는 혼자 보기
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
@@ -4170,6 +4172,231 @@ if (inKakao) {   // 카톡 안 창에서는 시작하지 않음 (크롬 쪽에�
   showOv('kakaoOv');
   $('kakaoStay').onclick = () => { hideOv('kakaoOv'); begin(); };
 } else begin();
+</script>
+<!-- 30번: 제비뽑기 · 파트너 정하기 (jebi 2번째 버전) -->
+<style>
+#jbP{position:fixed;inset:0;z-index:9000;background:#000;color:#fff;font-family:sans-serif;font-size:20px;overflow-y:auto;overflow-x:hidden}
+#jbP.hide,#jbP .hide{display:none!important}
+#jbP *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+#jbP .jw{max-width:560px;margin:0 auto;padding:16px 16px 60px}
+#jbP h1{text-align:center;font-size:28px;margin:10px 40px 18px;color:#ff4d4d}
+#jbX{position:fixed;top:10px;right:12px;z-index:9001;width:44px;height:44px;border-radius:50%;border:0;background:#333;color:#fff;font-size:24px}
+#jbP .jb{display:block;width:100%;border:0;border-radius:16px;padding:18px;font-size:24px;font-weight:bold;margin:10px 0;color:#fff;cursor:pointer}
+#jbP .red{background:#d62828}#jbP .blue{background:#1d6fd6}#jbP .gray{background:#333}#jbP .gold{background:#e0a800;color:#000}
+#jbP .row{display:flex;align-items:center;justify-content:center;gap:16px;margin:10px 0}
+#jbP .row button{width:56px;height:56px;font-size:30px;border-radius:50%;border:0;background:#333;color:#fff}
+#jbCnt{font-size:34px;font-weight:bold;min-width:70px;text-align:center}
+#jbNames input{width:100%;font-size:22px;padding:12px;margin:5px 0;border-radius:10px;border:2px solid #444;background:#111;color:#fff}
+#jbTurn{text-align:center;font-size:28px;font-weight:bold;margin:8px 0 14px;color:#ffd166;min-height:40px}
+#jbGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:12px}
+#jbP .cd{position:relative;aspect-ratio:3/4;border-radius:14px;perspective:600px;cursor:pointer}
+#jbP .ci{position:absolute;inset:0;transition:transform .7s;transform-style:preserve-3d}
+#jbP .cd.open .ci{transform:rotateY(180deg)}
+#jbP .f,#jbP .b{position:absolute;inset:0;border-radius:14px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:4px}
+#jbP .f{background:linear-gradient(135deg,#b00020,#ff4d4d);border:3px solid #fff;font-size:42px;font-weight:bold}
+#jbP .b{background:#fff;color:#000;transform:rotateY(180deg);font-size:22px;font-weight:bold}
+#jbP .cd.taken .f{background:#3a3a3a;border-color:#777}
+#jbP .who{font-size:19px;font-weight:bold;margin-top:4px;color:#fff;word-break:keep-all;line-height:1.2}
+#jbP .b .who{color:#333;font-size:17px}
+#jbP .cd.win .b{background:#ffd166;box-shadow:0 0 25px #ffd166}
+#jbP .rank{font-size:40px;font-weight:bold;color:#1d6fd6}
+#jbP .shp{font-size:58px;line-height:1}
+#jbCover{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9002;text-align:center}
+#jbCover .t{font-size:40px;font-weight:bold;color:#ffd166;padding:20px}
+#jbCover .n{font-size:140px;font-weight:bold;color:#ff4d4d}
+#jbRes{margin-top:18px;text-align:center}
+#jbP .winname{font-size:56px;font-weight:bold;color:#ff3b3b;margin:6px 0}
+#jbP .msg{font-size:26px;font-weight:bold;line-height:1.5}
+#jbP .safe{font-size:22px;color:#8be78b;margin:6px 0}
+#jbP .pair{background:#1a1a1a;border-radius:12px;padding:12px;margin:8px 0;font-size:24px}
+#jbP .alone{font-size:30px;font-weight:bold;color:#ffd166;margin:10px 0;line-height:1.4}
+.jbConf{position:fixed;top:-20px;width:12px;height:18px;z-index:9003;animation:jbFall linear forwards;pointer-events:none}
+@keyframes jbFall{to{transform:translateY(110vh) rotate(720deg)}}
+#jbMark{position:fixed;right:8px;bottom:6px;font-size:12px;color:#777;z-index:9001}
+</style>
+<div id="jbP" class="hide">
+  <button id="jbX" title="닫기">✕</button>
+  <div class="jw">
+    <div id="jbSetup">
+      <h1>🐦 제비뽑기 · 파트너 정하기</h1>
+      <div style="text-align:center">몇 명이에요?</div>
+      <div class="row"><button id="jbMinus">−</button><div id="jbCnt">4명</div><button id="jbPlus">＋</button></div>
+      <div id="jbNames"></div>
+      <button class="jb red" id="jbGoJ">🐦 제비뽑기</button>
+      <button class="jb blue" id="jbGoP">💑 파트너 정하기</button>
+    </div>
+    <div id="jbGame" class="hide">
+      <h1 id="jbTitle"></h1>
+      <div id="jbTurn"></div>
+      <div id="jbGrid"></div>
+      <button class="jb gold hide" id="jbOpen">🎉 공개!</button>
+      <div id="jbRes"></div>
+      <div id="jbAfter" class="hide">
+        <button class="jb red" id="jbAgain">다시 하기</button>
+        <button class="jb gray" id="jbHome">처음으로</button>
+      </div>
+    </div>
+  </div>
+  <div id="jbCover" class="hide"><div class="t" id="jbCt"></div><div class="n" id="jbCn"></div></div>
+  <div id="jbMark">69KYM</div>
+</div>
+<script>
+/* 30번: 제비뽑기 (jebi 2번째 버전) - ＋ 메뉴 🎟 제비뽑기로 열려요. 소리 파일은 giftstory 저장소에 */
+const JB = (() => {
+  const g = id => document.getElementById(id);
+  const MH = (typeof MEDIA_HOME !== 'undefined') ? MEDIA_HOME : './';
+  const SND = { bgm: 'jebi_bgm.mp3', start: 'jebi_start.mp3', hurry: 'jebi_hurry.mp3', last: 'jebi_last.mp3', win: 'jebi_win.mp3' };
+  const VOL = 0.25, LOW = 0.08;
+  const SHAPES = [['♥', '#e63946'], ['♠', '#111'], ['♣', '#2a9d3f'], ['★', '#e0a800'], ['◆', '#1d6fd6']];
+  const SWALLOW = '<svg viewBox="0 0 100 60" width="70"><path d="M50 30C40 20 25 12 5 10C20 18 30 24 38 30C28 34 18 44 10 56C26 48 40 40 50 36C60 40 74 48 90 56C82 44 72 34 62 30C70 24 80 18 95 10C75 12 60 20 50 30Z" fill="#111"/></svg>';
+  const E = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  let n = 4, names = [], mode = 'jebi', cards = [], turn = 0, timers = [], bgm = null, voice = null, busy = false;
+
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const clearT = () => { timers.forEach(clearTimeout); timers = []; };
+  function stopBgm(){ if (bgm) { bgm.pause(); bgm = null; } }
+  function startBgm(){ stopBgm(); bgm = new Audio(MH + SND.bgm); bgm.loop = true; bgm.volume = VOL; bgm.play().catch(() => {}); }
+  function play(key, done){
+    if (voice) voice.pause();
+    if (bgm) bgm.volume = LOW;
+    voice = new Audio(MH + SND[key]);
+    let fin = false; const end = () => { if (fin) return; fin = true; if (bgm) bgm.volume = VOL; if (done && !g('jbP').classList.contains('hide')) done(); };
+    voice.onended = end; voice.onerror = () => setTimeout(end, 1500);
+    voice.play().catch(() => setTimeout(end, 1500));
+  }
+
+  function drawNames(){
+    g('jbCnt').textContent = n + '명';
+    let h = ''; for (let i = 0; i < n; i++) h += `<input id="jbNm${i}" maxlength="8" value="${E(names[i] || '')}" placeholder="${i + 1}번 사람">`;
+    g('jbNames').innerHTML = h;
+  }
+  function readNames(){
+    names = []; for (let i = 0; i < n; i++) names.push((g('jbNm' + i).value.trim()) || (i + 1) + '번');
+    try { localStorage.setItem('jebiNames', JSON.stringify(names)); } catch (e) {}
+  }
+  function chg(d){ readNames(); n = Math.min(10, Math.max(2, n + d)); drawNames(); }
+
+  /* 대화방 사람 이름을 미리 채워요 (방이 없으면 지난번 이름) */
+  function open(){
+    let list = [];
+    try {
+      if (typeof homeOn !== 'undefined' && !homeOn && typeof othersIn === 'function') {
+        list = [me.name].concat(othersIn(room).map(v => v.name)).filter(Boolean);
+        list = [...new Set(list)];
+      }
+    } catch (e) { list = []; }
+    if (list.length < 2) { try { list = JSON.parse(localStorage.getItem('jebiNames')) || list; } catch (e) {} }
+    names = list.slice(0, 10); n = Math.min(10, Math.max(2, names.length || 4));
+    g('jbGame').classList.add('hide'); g('jbSetup').classList.remove('hide');
+    drawNames(); g('jbP').classList.remove('hide'); g('jbP').scrollTop = 0;
+  }
+  function close(){ clearT(); stopBgm(); if (voice) voice.pause(); busy = false; g('jbCover').classList.add('hide'); g('jbP').classList.add('hide'); }
+
+  function go(m){
+    if (!g('jbSetup').classList.contains('hide')) readNames();
+    mode = m; clearT(); busy = false;
+    g('jbSetup').classList.add('hide'); g('jbGame').classList.remove('hide');
+    g('jbRes').innerHTML = ''; g('jbAfter').classList.add('hide'); g('jbOpen').classList.add('hide');
+    g('jbTitle').textContent = m === 'jebi' ? '🐦 제비뽑기' : '💑 파트너 정하기';
+    if (m === 'jebi') {
+      const ranks = shuffle([...Array(n - 1)].map((_, i) => i + 1));
+      cards = [{ jebi: true }].concat(ranks.map(r => ({ rank: r })));   // 제비 카드는 꼭 1장
+    } else {
+      const sh = shuffle([...Array(SHAPES.length).keys()]).slice(0, Math.ceil(n / 2)), v = [];
+      for (let i = 0; i < n; i++) v.push(sh[Math.floor(i / 2)]);   // 같은 모양 2장씩 (홀수면 한 모양은 1장)
+      cards = v.map(x => ({ shp: x }));
+    }
+    shuffle(cards).forEach(c => c.owner = null);
+    turn = 0; drawCards(); g('jbP').scrollTop = 0; startBgm();
+    if (m === 'jebi') play('start', nextTurn); else nextTurn();
+  }
+  function home(){ clearT(); stopBgm(); if (voice) voice.pause(); g('jbGame').classList.add('hide'); g('jbSetup').classList.remove('hide'); drawNames(); }
+
+  function backOf(c){
+    if (mode === 'jebi') return c.jebi ? SWALLOW + '<div>제비!</div>' : `<div class="rank">${c.rank}등</div>`;
+    const [s, col] = SHAPES[c.shp]; return `<div class="shp" style="color:${col}">${s}</div>`;
+  }
+  function drawCards(){
+    g('jbGrid').innerHTML = cards.map((c, i) => {
+      const nm = c.owner !== null ? E(names[c.owner]) : '';
+      return `<div class="cd${c.owner !== null ? ' taken' : ''}" id="jbC${i}" data-i="${i}"><div class="ci">
+        <div class="f">${nm ? `<div class="who">${nm}</div>` : '?'}</div>
+        <div class="b">${backOf(c)}<div class="who">${nm}</div></div></div></div>`;
+    }).join('');
+  }
+
+  function nextTurn(){
+    clearT();
+    if (turn >= n) { g('jbTurn').textContent = '모두 뽑았어요!'; g('jbOpen').classList.remove('hide'); return; }
+    g('jbTurn').textContent = `👉 ${names[turn]} 님 차례예요`;
+    const left = cards.filter(c => c.owner === null).length;
+    if (mode === 'pair') { timers.push(setTimeout(() => play('hurry'), 8000)); return; }
+    if (left === 1) { timers.push(setTimeout(() => play('last', autoPick), 5000)); return; }
+    timers.push(setTimeout(() => play('hurry'), 7000));
+    timers.push(setTimeout(() => play('last', autoPick), 17000));
+  }
+  function autoPick(){
+    const free = cards.map((c, i) => c.owner === null ? i : -1).filter(i => i >= 0);
+    if (free.length && turn < n) pick(free[Math.floor(Math.random() * free.length)]);
+  }
+  function pick(i){
+    if (busy || turn >= n || !cards[i] || cards[i].owner !== null) return;
+    clearT(); if (voice) voice.pause(); if (bgm) bgm.volume = VOL;
+    cards[i].owner = turn; turn++; drawCards(); nextTurn();
+  }
+
+  function reveal(){
+    clearT(); busy = true; g('jbOpen').classList.add('hide');
+    const cv = g('jbCover'); cv.classList.remove('hide'); g('jbCt').textContent = '자, 이제 공개합니다!'; g('jbCn').textContent = '';
+    let k = 3;
+    const tick = () => {
+      if (g('jbP').classList.contains('hide')) return;
+      if (k > 0) { g('jbCn').textContent = k; k--; timers.push(setTimeout(tick, 1000)); }
+      else { cv.classList.add('hide'); showAll(); }
+    };
+    timers.push(setTimeout(tick, 1200));
+  }
+  function showAll(){
+    cards.forEach((c, i) => { const e = g('jbC' + i); e.classList.add('open'); if (c.jebi) e.classList.add('win'); });
+    confetti();
+    let h = '';
+    if (mode === 'jebi') {
+      stopBgm(); play('win');
+      const w = cards.find(c => c.jebi).owner;
+      h = `<div class="msg">🎉 제비 당첨 🎉</div><div class="winname">${E(names[w])}</div>
+           <div class="msg" style="color:#ff6b6b">축하합니다! 제비 당첨이에요!<br>자, 오늘은 당신이 쏘세요!</div><br>`;
+      cards.filter(c => !c.jebi).sort((a, b) => a.rank - b.rank)
+        .forEach(c => h += `<div class="safe">${c.rank}등 ${E(names[c.owner])} : 휴~ 살았다!</div>`);
+    } else {
+      stopBgm();
+      const grp = {}; cards.forEach(c => (grp[c.shp] = grp[c.shp] || []).push(E(names[c.owner])));
+      Object.keys(grp).forEach(k => {
+        const [s, col] = SHAPES[k], ic = `<span style="color:${col === '#111' ? '#fff' : col}">${s}</span>`;
+        if (grp[k].length === 1) h = `<div class="alone">${ic} ${grp[k][0]}<br>축하해요!<br>원래 사실은 혼자가 편하답니다 😊</div>` + h;
+        else h += `<div class="pair">${ic} ${grp[k].join(' ❤ ')}<br><b style="color:#ffd166">짝꿍이 만들어졌어요! 축하해요!</b></div>`;
+      });
+    }
+    g('jbRes').innerHTML = h; g('jbAfter').classList.remove('hide'); busy = false;
+    timers.push(setTimeout(() => g('jbRes').scrollIntoView({ behavior: 'smooth' }), 800));
+  }
+  function confetti(){
+    const col = ['#ff4d4d', '#ffd166', '#06d6a0', '#4dabf7', '#f783ac', '#fff'];
+    for (let i = 0; i < 90; i++) {
+      const d = document.createElement('div'); d.className = 'jbConf';
+      d.style.left = Math.random() * 100 + 'vw'; d.style.background = col[i % col.length];
+      d.style.animationDuration = (2.5 + Math.random() * 2.5) + 's'; d.style.animationDelay = Math.random() * 1.5 + 's';
+      document.body.appendChild(d); setTimeout(() => d.remove(), 7000);
+    }
+  }
+
+  g('jbMinus').onclick = () => chg(-1); g('jbPlus').onclick = () => chg(1);
+  g('jbGoJ').onclick = () => go('jebi'); g('jbGoP').onclick = () => go('pair');
+  g('jbOpen').onclick = reveal; g('jbAgain').onclick = () => go(mode); g('jbHome').onclick = home;
+  g('jbX').onclick = close;
+  g('jbGrid').onclick = e => { const c = e.target.closest('.cd'); if (c) pick(+c.dataset.i); };
+  document.addEventListener('visibilitychange', () => { if (document.hidden && !g('jbP').classList.contains('hide')) { stopBgm(); if (voice) voice.pause(); } });
+  return { open, close };
+})();
 </script>
 </body>
 </html>
