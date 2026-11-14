@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 빨간 우체통 30번: ＋ 메뉴 🎟 제비뽑기·파트너 정하기 넣음 (등수 카드, 모양 짝, 이름 표시) -->
+<!-- 빨간 우체통 31번: 새 버전 자동 받기 · ＋친구 빈칸 4개 · 고정 말풍선 회색 캡·이름 바꾸기 · 고정 안 한 사람은 새로 온 칸에만 · 빈 새방 숨기기 · 같은 구글 계정 = 같은 사람 · 로그아웃 · 방 여러 개 지우기 · 친구 초대 버튼 위로 · 메인 화면으로·English 버튼 · 마이크(음성 통화·통화+자막·녹음) · 알림 안내 -->
+<!-- 30번: ＋ 메뉴 🎟 제비뽑기·파트너 정하기 넣음 (등수 카드, 모양 짝, 이름 표시) -->
 <!-- (29번: ＋ 메뉴 가위바위보·제비뽑기 자리 · 두더지는 아래 우체통 5번 · 고정 말풍선 4칸 빈칸 없이 + 새 메시지 1칸 + 더보기 · 목록 순서 맞춤 · 구글 로그인 바로 열기 · 지운 사람 메시지 바로 뜨게 -->
 <!-- 28번: 화면 꺼져도 알림(급한 알림 · 안 읽으면 5분마다 15분까지) · 초대 링크/알림 누르면 바로 그 대화방 · 목록에 없던 방도 메시지 오면 자동으로 생김 · 글 쓸 때도 마이크 그대로 -->
 <!-- 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
@@ -452,6 +453,20 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 .rscroll{overflow:hidden;justify-content:space-between}
 .rscroll .rb:not(.cur):not(.unread):not(.empty){opacity:.6}
 .rb.empty{opacity:.45;border-style:dashed!important;font-size:11px!important;font-weight:600}
+/* 31번: 빈칸 ＋친구는 잘 보이게, 고정한 칸은 회색 캡 */
+.rscroll .rb.empty{opacity:.9;color:#ffd76a;background:transparent;border:1.5px dashed #c9a94a!important}
+body:not(.dark) .rscroll .rb.empty{color:#a06a00;border-color:#c9a94a!important}
+.rscroll .rb.pin{opacity:1;background:#6a6a74;color:#fff;font-weight:800;border:1px solid #9a9aa6;box-shadow:inset 0 4px 0 #3a3a44}
+.rscroll .rb.pin.cur{background:#ffe14d;color:#222;border-color:#ffe14d;box-shadow:inset 0 4px 0 #c9a400}
+#micMenu{left:auto;right:8px;bottom:56px}
+#callOv.audio #rVid,#callOv.audio #lVid{opacity:0}
+#callOv.audio #cCam,#callOv.audio #cFlip{display:none}
+#callOv.audio{background:#14161f}
+#callCap{position:absolute;left:12px;right:12px;bottom:110px;display:none;flex-direction:column;gap:6px;font-size:22px;line-height:1.35}
+#callCap.show{display:flex}
+#callCap div{background:rgba(0,0,0,.55);color:#fff;border-radius:12px;padding:6px 10px;align-self:flex-start;max-width:92%}
+#callCap div.me{align-self:flex-end;background:rgba(255,225,77,.85);color:#111}
+#callCap b{font-size:15px;opacity:.75;margin-right:6px}
 .rb.more,.rb.more:not(.cur):not(.add){width:auto;min-width:0;padding:0 9px;border-radius:14px;font-size:12px;flex:none}
 .rb.more.has{background:#ff4d4a;color:#fff;border-color:#ff4d4a}
 #morePanel{display:none;position:absolute;right:6px;top:100%;z-index:40;width:min(300px,92vw);max-height:60vh;overflow-y:auto;background:#1b1b20;border:1px solid #444;border-radius:14px;box-shadow:0 8px 24px rgba(0,0,0,.6);padding:4px 0}
@@ -604,12 +619,14 @@ footer #micBtn{margin-right:-4px}
     <button class="hbtn" id="camBtn" title="영상통화"><svg class="camico" viewBox="0 0 24 24"><circle cx="12" cy="10" r="8" fill="#e8e8ee"/><circle cx="12" cy="10" r="4.6" fill="#1b1b22"/><circle cx="12" cy="10" r="2.6" fill="#3a6cff"/><circle cx="10.9" cy="8.9" r=".9" fill="#fff"/><circle cx="17.2" cy="5.6" r=".9" fill="#ff4d4a"/><path d="M8 18.5h8l1.5 3.5h-11z" fill="#9a9aa6"/></svg></button>
     <div class="rscroll" id="roomBar"></div><button class="rb more" id="moreBtn">더보기</button><button id="addRoom" hidden></button><div id="morePanel"></div>
     <div class="pmenu" id="topMenu">
+      <button id="tmHome">🏠 메인 화면으로</button>
       <button id="tmWrite">✏ 편지 쓰기</button>
       <button id="pileBtn">📚 편지함</button>
       <button id="draftBtn">📝 쓰던 편지<span class="badge" id="draftBadge"></span></button>
       <button id="themeBtn">🎨 색상 바꾸기</button>
       <button data-dark>◐ 검은 화면</button>
       <button id="roomBtn">⚙ 설정</button>
+      <button id="tmEng">🌐 English</button>
     </div>
   </div>
   <div id="homeLogo">📮<br>빨간 우체통<br><small>(못다한 그 말)</small></div>
@@ -670,6 +687,7 @@ footer #micBtn{margin-right:-4px}
       </svg>
     </button>
     <button id="plusBtn" title="파일 · 게임 · 친구 초대">＋</button>
+    <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="cap">💬 음성 통화 + 자막</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
     <div class="pmenu" id="plusMenu"><button data-tg="file">📁 파일 보내기</button><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎟 제비뽑기</button><button data-tg="invite">👥 친구 초대</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
@@ -814,12 +832,14 @@ footer #micBtn{margin-right:-4px}
     <div style="display:flex;gap:8px"><input class="in" id="myName" maxlength="12"><button class="big y" id="myNameOk" style="width:auto;margin:0;padding:0 16px">바꾸기</button></div>
     <div class="lab">대화방 (줄을 누르면 들어가요)</div>
     <div id="roomList"></div>
+    <button class="big r" id="rmSelBtn" style="display:none"></button>
     <div class="lab">알림</div>
     <button class="big" id="notiBtn" style="margin-top:0">🔔 알림</button>
     <button class="big" id="notiTest" style="display:none">📳 시험 알림 보내 보기</button>
     <div class="lab">앱</div>
     <button class="big" id="installBtn2" style="margin-top:0">📲 홈 화면에 추가</button>
     <button class="big" id="loginBtn">G 구글로 로그인 (다른 기기에서도 방 목록 보기)</button>
+    <button class="big" id="logoutBtn" style="display:none">로그아웃</button>
     <button class="big" data-close>닫기</button>
   </div>
 </div>
@@ -868,6 +888,7 @@ footer #micBtn{margin-right:-4px}
   <video id="rVid" autoplay playsinline></video>
   <video id="lVid" autoplay playsinline muted></video>
   <div id="callInfo">📹 연결하는 중…</div>
+  <div id="callCap"></div>
   <div id="callBtns"><button id="cMic" title="마이크">🎤</button><button id="cCam" title="카메라">📷</button><button id="cFlip" title="카메라 바꾸기">🔄</button><button id="cEnd" title="끊기">📞</button></div>
 </div>
 <div class="ov" id="ringOv">
@@ -881,7 +902,7 @@ footer #micBtn{margin-right:-4px}
 <!-- 알림이 막혔을 때 -->
 <div class="ov" id="notiHelpOv">
   <div class="panel" style="max-width:380px">
-    <h2>🚫 알림이 막혀 있어요</h2>
+    <h2 id="notiHelpTitle">🚫 알림이 막혀 있어요</h2>
     <div style="color:#ddd;line-height:1.8">
       <b>크롬으로 열었을 때</b><br>주소창 왼쪽 동그란 아이콘(또는 자물쇠) → 권한 → 알림 → <b>허용</b><br><br>
       <b>홈 화면 앱으로 열었을 때</b><br>휴대폰 설정 → 애플리케이션 → 빨간 우체통 → 알림 → <b>허용</b><br><br>
@@ -896,6 +917,7 @@ footer #micBtn{margin-right:-4px}
   <div class="panel" style="max-width:360px">
     <h2 id="pinTitle" style="text-align:center"></h2>
     <div id="pinList"></div>
+    <button class="big y" id="pinName" style="display:none">✏ 말풍선 이름 바꾸기</button>
     <div class="twin"><button class="big" id="pinClear">자리 비우기</button><button class="big" data-close>닫기</button></div>
   </div>
 </div>
@@ -1054,6 +1076,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'drop.mp3', rustle: 'rustle.mp3', tear: 'tear.mp3' };  // 효과음 (없으면 기본 소리)
+const APP_VER = '31';   // 31번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1268,7 +1291,7 @@ async function initStore(){
   else goHome(true);
   readInbox();
   if ('Notification' in window && Notification.permission === 'granted') setupPush(false);
-  else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js').then(x => swReg = x).catch(() => {});   // 앱 설치용
+  else if ('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js', { updateViaCache: 'none' }).then(x => { swReg = x; x.update().catch(() => {}); }).catch(() => {});   // 앱 설치용
   if ('serviceWorker' in navigator)   // 알림을 누르면 그 알림이 온 방으로
     navigator.serviceWorker.addEventListener('message', e => {
       const d = e.data || {};
@@ -1339,15 +1362,14 @@ function drawHome(){
   const nOf = unreadN;
   rooms.sort(roomOrder);
   const row = x => {
-    const name = titleFor(x.id) || x.title || '새 방', n = nOf(x.id), L = lastMsg[x.id];
+    const name = roomName(x.id), n = nOf(x.id), L = lastMsg[x.id];
     const sub = L ? L.t : (FB && !othersIn(x.id).length ? '⏳ 친구가 아직 안 들어왔어요' : '대화를 시작해 보세요');
     return `<div class="hrow" data-home="${x.id}"><div class="hav">${esc([...name.replace(/\s+/g, '')].slice(0, 2).join(''))}</div>
       <div class="htx"><b>${esc(name)}</b><small>${esc(sub)}</small></div>
       <div class="hside">${L ? fmtShort(L.at) : ''}${n ? `<br><i>${n > 99 ? '99+' : n}</i>` : ''}${L && L.me && FB && !n && (othersIn(x.id).length ? othersIn(x.id).some(v => (v.seen || 0) < L.at) : true) ? '<b class="r1">1</b>' : ''}</div></div>`;   // 26번: 내가 보낸 글을 아직 안 읽었으면 1
   };
-  let html = `<div class="hhead">나: ${esc(me.name)} · 친구 ${rooms.length}</div>` + rooms.map(row).join('');
+  let html = `<div class="hhead">나: ${esc(me.name)} · 친구 ${rooms.length}</div><button class="hinv" id="homeInv" style="margin:4px 14px 8px">＋ 친구 초대하기</button>` + rooms.map(row).join('');   // 31번: 초대 버튼은 맨 위
   html += `<div class="intro">📮 우체통 들어가면 예쁜 편지지로 손편지 쓸 수 있어요<br>👵 실버 모드 들어가면 어르신도 실버톡톡 가능해요<br>💬 상단에 말풍선 고정되어 있어 대화창 빠르게 이동해요<br>📹 빠른 화상 채팅 가능해요</div>`;   // 27번: 짧은 홍보 4줄 (친구가 늘면 아래로 밀려요)
-  html += `<button class="hinv" id="homeInv">＋ 친구 초대하기</button>`;
   const box = $('homeList');
   if (box._h !== html) { box._h = html; box.innerHTML = html; }
 }
@@ -1375,6 +1397,8 @@ function renameAll(){
     uids.forEach(u => FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + x.id + '/members/' + u), { name: me.name, at: Date.now() }).catch(() => {}));
   });
   LS.set('rp_name_synced', me.name);
+  const au = LS.get('rp_auth', null);   // 31번: 바뀐 이름을 구글 계정에도
+  if (au) FB.D.update(FB.D.ref(FB.db, 'giftstory/users/' + au.uid + '/main'), { name: me.name, at: Date.now() }).catch(() => {});
 }
 /* 방 사람들 */
 const roomMembers = {};
@@ -1416,7 +1440,7 @@ function twinMap(){
   rooms.forEach(x => { const k = famKey(x.id); map[x.id] = k ? best[k].id : x.id; });
   return map;
 }
-const visibleRooms = () => { const m = twinMap(); return getRooms().filter(x => m[x.id] === x.id); };
+const visibleRooms = () => { const m = twinMap(); return getRooms().filter(x => m[x.id] === x.id && (x.id === room || x.title || lastMsg[x.id] || othersIn(x.id).length || aliasOf(x.id))); };   // 31번: 저절로 생긴 빈 새방은 안 보여요
 function removeFriend(id){ const m = twinMap(), k = m[id] || id; getRooms().filter(x => (m[x.id] || x.id) === k).forEach(x => removeRoom(x.id)); }
 function saveRoom(id, title){
   const rooms = getRooms(), r = rooms.find(x => x.id === id);
@@ -1537,11 +1561,15 @@ function watchRoom(id){
   un.push(D.onChildChanged(mems, s => memberIn(id, s.key, s.val(), Infinity)));
   un.push(watchCall(id));
 }
+const rmSel = new Set();   // 31번: 지울 방 고르기
 function drawRooms(){
   const rooms = getRooms();
   $('roomList').innerHTML = rooms.map(x => `<div class="drow ${x.id === room ? '' : 'go'}" ${x.id === room ? '' : `data-go="${x.id}"`}>
     <div class="dt">${esc(titleFor(x.id) || x.title || '새 방')}<br><small>${x.id === room ? '● 지금 보는 방' : fmtDate(x.at) + ' 만듦'}</small></div>
-    ${x.id === room ? '' : `<button data-rm="${x.id}">지우기</button>`}</div>`).join('');
+    <button data-ck="${x.id}" style="font-size:20px;min-width:44px">${rmSel.has(x.id) ? '☑' : '☐'}</button></div>`).join('');
+  $('rmSelBtn').style.display = rmSel.size ? '' : 'none';
+  $('rmSelBtn').textContent = `🗑 고른 방 ${rmSel.size}개 지우기`;
+  $('logoutBtn').style.display = LS.get('rp_auth', null) ? '' : 'none';
   $('myName').value = me.name;
   notiState();
   const au = LS.get('rp_auth', null);
@@ -1553,7 +1581,7 @@ let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을
 function getPins(){
   const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
   let p = LS.get('rp_pins', null), seen = LS.get('rp_pinseen', null);
-  if (!Array.isArray(p)) { p = ids.slice(0, PIN_N); seen = ids.slice(); }
+  if (!Array.isArray(p)) { p = []; seen = ids.slice(); }   // 31번: 고정은 내가 고른 사람만
   if (!Array.isArray(seen)) seen = ids.slice();
   p = Array.from({ length: PIN_N }, (_, i) => { const id = p[i] && tw[p[i]]; return id && ids.includes(id) ? id : null; });
   p = p.map((id, i) => id && p.indexOf(id) !== i ? null : id);   // 같은 친구가 두 자리에 있으면 하나만
@@ -1562,15 +1590,16 @@ function getPins(){
     if (seen.includes(id)) return;
     seen.push(id);
     if (p.includes(id)) return;
-    let k = p.indexOf(null);
-    if (pinWant !== null) { k = pinWant; pinWant = null; }   // ＋친구·자리 바꾸기에서 초대한 방은 그 자리로
+    if (pinWant === null) return;   // 31번: 고정 안 한 사람은 고정 칸에 안 들어가요 (새로 온 칸·더보기로)
+    const k = p.indexOf(null); pinWant = null;   // ＋친구에서 초대한 방만 빈칸에
     if (k >= 0) p[k] = id;
   });
   LS.set('rp_pins', p); LS.set('rp_pinseen', seen.filter(x => ids.includes(x)));
   return p;
 }
 function setPin(i, id){ const p = getPins(); const j = p.indexOf(id); if (j >= 0) p[j] = null; p[i] = id; LS.set('rp_pins', p.filter(Boolean).concat(Array(PIN_N).fill(null)).slice(0, PIN_N)); barHTML = ''; queueRender(); }
-const roomName = id => titleFor(id) || (getRooms().find(x => x.id === id) || {}).title || '새 방';
+const aliasOf = id => (LS.get('rp_alias', {})[id] || '');   // 31번: 내가 정한 말풍선 이름 (울엄마·왠수…)
+const roomName = id => aliasOf(id) || titleFor(id) || (getRooms().find(x => x.id === id) || {}).title || '새 방';
 const unreadN = id => unread[id] ? unread[id].keys.size : 0;
 /* 더보기 목록 순서: 안 읽은 메시지 온 방 먼저 → 최근 대화 순 */
 const roomOrder = (a, b) => (unreadN(b.id) ? 1 : 0) - (unreadN(a.id) ? 1 : 0) ||
@@ -1582,11 +1611,10 @@ function moreRooms(){
 let barHTML = '';
 function drawBar(){
   const p = getPins();
-  const e0 = p.indexOf(null);   // 29번: ＋친구는 고정 말풍선 바로 뒤에 하나만
   const html = p.map((id, i) => {
-    if (!id) return i === e0 ? `<button class="rb empty" data-pin="${i}">＋친구</button>` : '';
+    if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;   // 31번: 빈칸은 모두 ＋친구
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
-    return `<button class="rb ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb pin ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('') + (() => {   // 24번: 고정 안 된 방에 들어가 있으면 더보기 바로 옆에 잠깐 보여요
     const tw = twinMap(), cr = tw[room] || room;
     if (!homeOn && room && !p.includes(cr) && getRooms().some(x => x.id === room)) {
@@ -1639,6 +1667,7 @@ function openPin(i){
   $('pinList').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + list.map(x =>
     `<div class="mrow" data-id="${x.id}"><div class="mt"><b>${esc(roomName(x.id))}</b><small>${p.includes(x.id) ? '지금 다른 자리에 있어요 (이 자리로 옮겨요)' : esc((lastMsg[x.id] || {}).t || '')}</small></div></div>`).join('');
   $('pinClear').style.display = cur ? '' : 'none';
+  $('pinName').style.display = cur ? '' : 'none';
   showOv('pinOv');
 }
 $('pinList').addEventListener('click', e => {
@@ -1647,6 +1676,14 @@ $('pinList').addEventListener('click', e => {
   if (r.dataset.inv) { getPins(); pinWant = pinSlot; $('addRoom').click(); return; }
   setPin(pinSlot, r.dataset.id); toast('말풍선에 넣었어요');
 });
+$('pinName').onclick = () => {
+  const id = getPins()[pinSlot]; if (!id) return;
+  const t = prompt('말풍선에 보일 이름 (예: 울엄마, 착한 딸)\n비우면 원래 이름으로 돌아가요', aliasOf(id));
+  if (t === null) return;
+  const a = LS.get('rp_alias', {}), v = t.trim().slice(0, 8);
+  if (v) a[id] = v; else delete a[id];
+  LS.set('rp_alias', a); barHTML = ''; hideOv('pinOv'); queueRender(); toast(v ? `'${v}'(으)로 바꿨어요` : '원래 이름으로 돌아갔어요');
+};
 $('pinClear').onclick = () => { const p = getPins(); p[pinSlot] = null; LS.set('rp_pins', p); barHTML = ''; hideOv('pinOv'); queueRender(); toast('자리를 비웠어요 (더보기에 있어요)'); };
 /* 말풍선에 고정된 방에 안 읽은 메시지가 있으면 10초마다 빨갛게 깜빡·흔들 */
 setInterval(() => { getPins().forEach(id => { if (id && unreadN(id) && (homeOn || id !== room)) flashRoom(id); }); }, 10000);
@@ -1707,10 +1744,20 @@ $('newName').addEventListener('input', () => {
   const t = $('newName').value.trim(), rooms = getRooms(), r = rooms.find(x => x.id === room);
   if (r) { r.title = t; LS.set('rp_rooms', rooms); pushRoomUp(r); render(); }
 });
-$('roomBtn').onclick = () => { drawRooms(); showOv('roomOv'); };
+$('roomBtn').onclick = () => { rmSel.clear(); drawRooms(); showOv('roomOv'); };
+$('rmSelBtn').onclick = () => {
+  if (!rmSel.size || !confirm(`고른 방 ${rmSel.size}개를 지울까요? (내 목록에서만 지워져요)`)) return;
+  click(); [...rmSel].forEach(removeRoom); rmSel.clear(); barHTML = ''; drawRooms(); toast('방을 지웠어요');
+};
+$('logoutBtn').onclick = async () => {
+  if (!confirm('로그아웃할까요?')) return;
+  click();
+  try { const A = await authModule(); if (A) await A.signOut(A.getAuth(FB.app)); } catch (e) {}
+  LS.set('rp_auth', null); toast('로그아웃했어요'); setTimeout(() => location.reload(), 900);
+};
 $('roomList').addEventListener('click', e => {
-  const rm = e.target.closest('[data-rm]');
-  if (rm) { removeRoom(rm.dataset.rm); drawRooms(); return; }
+  const ck = e.target.closest('[data-ck]');
+  if (ck) { click(); const id = ck.dataset.ck; rmSel.has(id) ? rmSel.delete(id) : rmSel.add(id); drawRooms(); return; }
   const r = e.target.closest('[data-go]');
   if (r) { click(); hideOv('roomOv'); openRoom(r.dataset.go); toast('방을 옮겼어요'); }
 });
@@ -1907,7 +1954,11 @@ function googleLogin(){
 async function afterLogin(user){
   if (!user) return;
   LS.set('rp_auth', { uid: user.uid, name: user.displayName || '' });
-  if ($('nameOv').classList.contains('show')) { $('nameLogin').innerHTML = '<b>✓</b> 구글 로그인됨'; nameFromLogin(); return; }
+  if ($('nameOv').classList.contains('show')) {
+    $('nameLogin').innerHTML = '<b>✓</b> 구글 로그인됨'; toast('예전 대화를 찾는 중…');
+    await syncAccount();   // 31번: 예전 번호·방·이름을 먼저 불러와요 → 원래 이름 그대로
+    nameFromLogin(); return;
+  }
   await syncAccount(); toast('✓ 구글로 로그인했어요'); drawRooms();
   if (started) setTimeout(() => location.reload(), 1200);   // 22번: 새 로그인 번호로 방을 다시 열기
 }
@@ -1926,6 +1977,16 @@ async function syncAccount(){
     const { D, db } = FB, base = 'giftstory/users/' + au.uid;
     await D.update(D.ref(db, base + '/ids'), { [realMe.uid]: Date.now() });
     const ids = (await D.get(D.ref(db, base + '/ids'))).val() || {};
+    /* 31번: 이 구글 계정의 대표 번호와 이름 (앱을 지웠다 깔아도, 폰이 두 대여도 같은 사람) */
+    try {
+      const mr = D.ref(db, base + '/main'), main = (await D.get(mr)).val();
+      if (main && main.uid) {
+        if (main.uid !== realMe.uid) { realMe.ids = [...new Set([main.uid, ...realMe.ids])]; realMe.uid = main.uid; }
+        if (main.name) au.main = main.name;
+      } else await D.set(mr, { uid: realMe.uid, name: realMe.name || au.name || '', at: Date.now() });
+      if (realMe.name && (!main || main.name !== realMe.name)) D.update(mr, { name: realMe.name, at: Date.now() }).catch(() => {});
+      LS.set('rp_auth', au);
+    } catch (e) {}
     realMe.ids = [...new Set([realMe.uid, ...realMe.ids, ...Object.keys(ids)])]; LS.set('rp_me', realMe);
     const local = getRooms(), up = {};
     local.forEach(x => up[x.id] = { title: x.title || '', at: x.at });
@@ -1962,7 +2023,7 @@ async function setupPush(ask){
   if (perm !== 'granted' && ask) perm = await Notification.requestPermission();
   notiState();
   if (perm !== 'granted') { if (ask) toast(perm === 'denied' ? '알림을 막았어요 · 다시 켜는 방법을 볼 수 있어요' : '알림을 켜지 않았어요'); return; }
-  try { swReg = await navigator.serviceWorker.register('firebase-messaging-sw.js'); } catch (e) { swReg = null; }
+  try { swReg = await navigator.serviceWorker.register('firebase-messaging-sw.js', { updateViaCache: 'none' }); } catch (e) { swReg = null; }
   if (FB && swReg) {
     try {
       const M = await import(FB.base + 'firebase-messaging.js');
@@ -1976,9 +2037,18 @@ async function setupPush(ask){
   notiState();
   if (ask && LS.get('rp_push_ok', 0)) toast('🔔 알림이 켜졌어요');
 }
-$('notiBtn').onclick = () => setupPush(true);
+$('notiBtn').onclick = async () => {
+  const was = 'Notification' in window && Notification.permission === 'granted';
+  await setupPush(true);
+  if (was || ('Notification' in window && Notification.permission === 'granted')) {   // 31번: 켜져 있는데도 안 올 때 (폰 설정의 앱 알림이 꺼진 경우)
+    $('notiHelpTitle').textContent = '🔔 알림이 켜졌는데 안 올 때';
+    showOv('notiHelpOv');
+  } else $('notiHelpTitle').textContent = '🚫 알림이 막혀 있어요';
+};
 $('notiTest').onclick = () => {
-  const opt = { body: '알림이 잘 와요 📮', tag: 'rp-test' };
+  const opt = { body: '알림이 잘 와요 📮', tag: 'rp-test', renotify: true, silent: false, vibrate: [300, 150, 300] };
+  if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
+  setTimeout(() => toast('📳 알림을 보냈어요 · 소리·진동이 없으면 폰 설정 → 애플리케이션 → 빨간 우체통 → 알림을 켜 주세요'), 800);
   (swReg ? swReg.showNotification('빨간 우체통', opt) : Promise.reject()).catch(() => { try { new Notification('빨간 우체통', opt); } catch (e) { toast('시험 알림을 띄우지 못했어요'); } });
 };
 function notifyNew(m){
@@ -2032,12 +2102,13 @@ function render(){
   const box = $('msgs');
   const atBottom = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
   let html = '', lastDay = '';
+  const alias1 = aliasOf(room) && new Set(others.map(v => v.name)).size <= 1 ? aliasOf(room) : '';   // 31번: 1:1 방은 내가 정한 이름으로
   sorted().forEach(m => {
     const mine = isMine(m);
     if (m.type === 'letter' && !mine) return;          // 받은 편지는 대화창에 안 보임 (우체통으로만)
     const day = fmtDate(m.at);
     if (day !== lastDay) { html += `<div class="day">${day}</div>`; lastDay = day; }
-    html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? '' : `<div class="who">${esc(m.name)}</div>`}`;
+    html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? '' : `<div class="who">${esc(alias1 || m.name)}</div>`}`;
     if (m.type === 'letter') {
       const st = !arrived(m) ? '<span class="st wait">내일 아침 도착</span>' : m.read ? '<span class="st read">읽음</span>' : '<span class="st">안 읽음</span>';
       html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(lp(m.letter))}" style="${paperVars(lp(m.letter))}"></div></div>`;
@@ -2046,7 +2117,7 @@ function render(){
     } else if (m.type === 'file') {
       html += fileHTML(m, mine);
     } else {
-      html += `<div class="bubble">${esc(m.text)}</div>`;
+      html += `<div class="bubble">${m.cap ? '🎙 ' : ''}${esc(m.text)}</div>`;
     }
     let r1 = '';
     if (mine && FB && m.type !== 'letter') {   // 카톡처럼: 아직 안 읽은 사람 수
@@ -2064,6 +2135,7 @@ function render(){
   updateFlag();
   checkArrivals();
   drawVChat();
+  if (call) drawCallCap();
   if (S.on) svRefresh();
 }
 render.jump = true;
@@ -2202,11 +2274,22 @@ function vmUI(){
   $('recStrip').classList.toggle('show', !!vm);
   if (vm) $('recInfo').textContent = `● 녹음 중 ${vm.sec}초 · 🎤나 ➤ 누르면 보내요`;
 }
-$('micBtn').onclick = () => {
-  click(); if (vm) { vmStop(true); return; }
+$('micBtn').onclick = e => {
+  if (vm) { click(); vmStop(true); return; }
+  toggleMenu('micMenu', e);
+};
+$('micMenu').addEventListener('click', e => {
+  const b = e.target.closest('[data-mic]'); if (!b) return;
+  click(); closeMenus();
+  const k = b.dataset.mic;
+  if (k === 'rec') { micRec(); return; }
+  if (homeOn) { pickFriend(k === 'cap' ? '💬 누구와 통화할까요? (자막도 같이)' : '📞 누구와 통화할까요?', id => { openRoom(id); startCall('audio', k === 'cap'); }); return; }
+  startCall('audio', k === 'cap');
+});
+function micRec(){
   if (homeOn) { pickFriend('🎤 누구에게 목소리를 보낼까요?', id => { openRoom(id); vmStart(); }); return; }
   vmStart();
-};
+}
 $('recCancel').onclick = () => { click(); vmStop(false); toast('녹음을 지웠어요'); };
 /* 목소리 메시지 듣기 */
 let vmAudio = null;
@@ -2931,11 +3014,11 @@ function showPanel(id, on){
   $(id).classList.toggle('show', on);
   if (id === 'videoPanel') { document.body.classList.toggle('watch', on); if (on) { document.documentElement.style.setProperty('--fh', document.querySelector('footer').offsetHeight + 'px'); drawVChat(); } }
 }
-function closeMenus(){ ['plusMenu', 'tgMenu', 'topMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); }
+function closeMenus(){ ['plusMenu', 'tgMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); }
 function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); }
 $('plusBtn').onclick = e => toggleMenu('plusMenu', e);
 $('tgBtn').onclick = e => toggleMenu('tgMenu', e);
-document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#topBox')) closeMenus(); });
+document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#topBox,#micBtn')) closeMenus(); });
 ['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
   click(); closeMenus();
@@ -3309,50 +3392,59 @@ function watchCall(id){
 }
 function showRing(id, v){
   ringing.id = id; ringing.v = v;
-  $('ringTitle').textContent = `${v.fromName || '친구'}님이 영상통화를 걸었어요`;
+  $('ringTitle').textContent = `${v.fromName || '친구'}님이 ${v.kind === 'audio' ? '📞 음성 통화' : '영상통화'}를 걸었어요${v.cap ? ' (자막)' : ''}`;
   showOv('ringOv');
   clearInterval(ringing.t); dingdong(); ringing.t = setInterval(dingdong, 2500);
   if (navigator.vibrate) navigator.vibrate([400, 200, 400]);
 }
 function hideRing(){ clearInterval(ringing.t); ringing.id = null; hideOv('ringOv'); }
-async function getCam(facing){
-  return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } } });
+async function getCam(facing, kind){
+  return navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true }, video: kind === 'audio' ? false : { facingMode: facing, width: { ideal: 640 }, height: { ideal: 480 } } });
 }
 function showCall(text){
   $('callInfo').textContent = text || ''; $('callOv').classList.add('show');
+  $('callOv').classList.toggle('audio', !!(call && call.kind === 'audio'));
+  drawCallCap();
   stopAllMusic();
   ['cMic', 'cCam'].forEach(id => $(id).classList.remove('off'));
 }
 function newPc(){
   const pc = new RTCPeerConnection(ICE);
   call.stream.getTracks().forEach(t => pc.addTrack(t, call.stream));
-  pc.ontrack = e => { $('rVid').srcObject = e.streams[0] || new MediaStream([e.track]); $('callInfo').textContent = ''; };
+  pc.ontrack = e => {
+    $('rVid').srcObject = e.streams[0] || new MediaStream([e.track]);
+    $('callInfo').textContent = call && call.kind === 'audio' ? '📞 ' + (roomName(call.room) || '통화 중') : '';
+    if (call && call.cap && !capOn) capStart();   // 31번: 통화하면서 말이 글씨로도
+  };
   pc.onconnectionstatechange = () => {
     if (pc.connectionState === 'failed') { toast('연결이 안 됐어요 (와이파이를 바꿔 보세요)'); endCall(true); }
   };
   return pc;
 }
-$('camBtn').onclick = async () => {
+$('camBtn').onclick = () => {
   click();
   if (homeOn) { toast('친구를 골라 대화방에서 눌러 주세요'); return; }
-  if (!FB) { toast('영상통화는 서버 연결이 필요해요'); return; }
+  startCall('video', false);
+};
+async function startCall(kind, cap){
+  if (!FB) { toast('통화는 서버 연결이 필요해요'); return; }
   if (!window.RTCPeerConnection || !navigator.mediaDevices) { toast('이 화면에서는 영상통화가 안 돼요 (크롬으로 열어 주세요)'); return; }
   if (call) return;
   const id = room;
   try {
-    call = { id: rid(), room: id, mine: true, facing: 'user' };
-    call.stream = await getCam('user');
+    call = { id: rid(), room: id, mine: true, facing: 'user', kind, cap: !!cap, t0: Date.now() };
+    call.stream = await getCam('user', kind);
     $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
-    showCall(`📹 ${titleFor(id) || '친구'}님을 부르는 중…`);
+    showCall(`${kind === 'audio' ? '📞' : '📹'} ${roomName(id) || '친구'}님을 부르는 중…`);
     const pc = call.pc = newPc();
     await pc.setLocalDescription(await pc.createOffer());
     await waitIce(pc);
     if (!call) return;
-    await FB.D.set(callRef(id), { id: call.id, from: me.uid, fromName: me.name, state: 'ring', at: Date.now(), offer: { type: 'offer', sdp: pc.localDescription.sdp } });
+    await FB.D.set(callRef(id), { id: call.id, from: me.uid, fromName: me.name, kind, cap: !!cap, state: 'ring', at: Date.now(), offer: { type: 'offer', sdp: pc.localDescription.sdp } });
     call.sent = true;
     call.timeout = setTimeout(() => { if (call && call.mine && !call.on) { toast('친구가 받지 않았어요'); endCall(true); } }, 45000);
-  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라를 켤 수 없어요'); endCall(false); }
-};
+  } catch (e) { toast(e && e.name === 'NotAllowedError' ? '카메라·마이크를 허용해 주세요' : '카메라·마이크를 켤 수 없어요'); endCall(false); }
+}
 async function onCallState(v){
   if (!call || (call.mine && !call.sent)) return;
   if (!v || v.id !== call.id || v.state === 'end') { toast(v && v.reason === 'reject' ? '친구가 거절했어요' : '통화가 끝났어요'); endCall(false); return; }
@@ -3366,8 +3458,8 @@ $('ringYes').onclick = async () => {
   if (!id || !v) return;
   if (id !== room) openRoom(id);
   try {
-    call = { id: v.id, room: id, mine: false, facing: 'user', on: true };
-    call.stream = await getCam('user');
+    call = { id: v.id, room: id, mine: false, facing: 'user', on: true, kind: v.kind || 'video', cap: !!v.cap, t0: Date.now() };
+    call.stream = await getCam('user', call.kind);
     $('lVid').srcObject = call.stream; $('lVid').classList.remove('back');
     showCall('연결하는 중…');
     const pc = call.pc = newPc();
@@ -3383,8 +3475,9 @@ $('ringNo').onclick = () => {
 };
 function endCall(tell){
   const c = call; call = null;
+  capStop();
   hideRing();
-  $('callOv').classList.remove('show');
+  $('callOv').classList.remove('show', 'audio'); $('callCap').classList.remove('show');
   if (!c) return;
   clearTimeout(c.timeout);
   try { c.pc && c.pc.close(); } catch (e) {}
@@ -3411,6 +3504,44 @@ $('cFlip').onclick = async () => {
     $('lVid').srcObject = call.stream; $('lVid').classList.toggle('back', facing !== 'user');
   } catch (e) { toast('카메라를 바꿀 수 없어요'); }
 };
+
+/* 31번: 통화 자막 - 말이 끝나면 저절로 대화방에 글씨로 남아요 (폰마다 안 될 수 있어요) */
+let capRec = null, capOn = false, capFail = 0;
+function capStart(){
+  const R0 = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!R0) { toast('이 폰에서는 자막이 안 돼요 (통화는 그대로 돼요)'); return; }
+  capOn = true; capFail = 0; capGo();
+}
+function capGo(){
+  if (!capOn || !call) return;
+  const R0 = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const r = capRec = new R0();
+  r.lang = 'ko-KR'; r.continuous = true; r.interimResults = false; r.maxAlternatives = 1;
+  r.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) {
+      if (!e.results[i].isFinal || !call) continue;
+      const t = (e.results[i][0].transcript || '').trim(); if (!t) continue;
+      capFail = 0;
+      const m = { from: realMe.uid, name: me.name, type: 'text', text: t, cap: 1, at: Date.now() };
+      if (call.room === room && !homeOn) addMsg(m); else pushTo(call.room, m);
+    }
+  };
+  r.onerror = e => { if (e.error !== 'no-speech' && e.error !== 'aborted') capFail++; };
+  r.onend = () => {
+    if (capRec !== r || !capOn || !call) return;
+    if (capFail >= 4) { capOn = false; toast('이 폰에서는 통화 중 자막이 잘 안 돼요 (통화는 그대로 돼요)'); return; }
+    setTimeout(capGo, 300);
+  };
+  try { r.start(); } catch (e) { capFail++; setTimeout(capGo, 800); }
+}
+function capStop(){ capOn = false; const r = capRec; capRec = null; if (r) { try { r.abort(); } catch (e) {} } }
+function drawCallCap(){
+  const box = $('callCap'), on = !!(call && call.cap);
+  box.classList.toggle('show', on); if (!on) return;
+  const list = Object.values(msgs).filter(m => m.type === 'text' && (m.at || 0) >= call.t0).sort((a, b) => a.at - b.at).slice(-4);
+  const h = list.map(m => `<div class="${isMine(m) ? 'me' : ''}"><b>${esc(isMine(m) ? '나' : m.name)}</b>${esc(m.text)}</div>`).join('');
+  if (box._h !== h) { box._h = h; box.innerHTML = h; }
+}
 
 /* ----- 쓰던 편지 ----- */
 function drawDrafts(){
@@ -3476,7 +3607,7 @@ addEventListener('popstate', () => {
   syncLayer();
 });
 let toastT = 0;
-function toast(t){ const el = $('toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', 2300); }
+function toast(t){ const el = $('toast'); el.textContent = t; el.style.display = 'block'; clearTimeout(toastT); toastT = setTimeout(() => el.style.display = 'none', Math.max(2300, t.length * 80)); }
 
 /* ----- 소리: 바스락, 툭, 띵 (배경음악은 없앰 · 🎵 버튼은 같이 듣기 노래 켜기·끄기) ----- */
 /* 파일이 옆에 없으면(앱 미리보기·휴대폰 저장공간) GitHub에 올린 파일로 재생 */
@@ -4096,10 +4227,26 @@ svH1.addEventListener('pointerdown', () => { svOpenDone = false; clearTimeout(sv
 svH1.addEventListener('contextmenu', e => e.preventDefault());
 svH1.addEventListener('click', e => { if (svOpenDone) { svOpenDone = false; return; } toggleMenu('topMenu', e); });
 $('tmWrite').onclick = () => { click(); openWriter(); };
+$('tmHome').onclick = () => { click(); closeAll(); if (!homeOn) goHome(); syncLayer(); };
+$('tmEng').onclick = () => { click(); toast('🌐 English version is coming soon · 준비 중이에요'); };
 $('topMenu').addEventListener('click', e => { if (e.target.closest('button')) setTimeout(closeMenus, 0); });
 
+/* 31번: 서버의 새 버전 번호를 보고 다르면 저장된 옛 파일을 지우고 다시 열어요 (한 번만) */
+function checkUpdate(){
+  if (call || $('writer').classList.contains('show') || vm) return;
+  fetch(location.pathname + '?v=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => {
+    const m = String(t).match(/const APP_VER = '(\d+)'/);
+    if (!m || m[1] === APP_VER || LS.get('rp_upd_try', '') === m[1]) return;
+    LS.set('rp_upd_try', m[1]); toast('🔄 새 버전으로 바꾸는 중…');
+    const sw = 'serviceWorker' in navigator ? navigator.serviceWorker.getRegistrations().then(rs => Promise.all(rs.map(x => x.update().catch(() => {})))).catch(() => {}) : Promise.resolve();
+    const cc = 'caches' in window ? caches.keys().then(ks => Promise.all(ks.filter(k => k !== 'rp-inbox').map(k => caches.delete(k)))).catch(() => {}) : Promise.resolve();
+    Promise.all([sw, cc]).then(() => setTimeout(() => location.reload(), 600));
+  }).catch(() => {});
+}
+document.addEventListener('visibilitychange', () => { if (!document.hidden) setTimeout(checkUpdate, 1500); });
 /* ----- 시작 ----- */
 function start(){
+  setTimeout(checkUpdate, 3000);
   started = true;
   initStore();
   if (LS.get('rp_sv_pend', null)) svApplyInvite();
@@ -4165,6 +4312,7 @@ $('instGo').onclick = () => { hideOv('instOv'); doInstall(); };
 $('instX').onclick = () => { click(); hideOv('instOv'); };
 function nameFromLogin(){
   const au = LS.get('rp_auth', null);
+  if (au && au.main) { $('nameIn').value = au.main.slice(0, 12); if ($('nameOv').classList.contains('show')) toast(`✓ 예전 이름 '${au.main}'(으)로 들어가요 · 시작을 눌러 주세요`); return; }   // 31번
   if (au && au.name && !$('nameIn').value.trim()) $('nameIn').value = au.name.slice(0, 12);
   if ($('nameOv').classList.contains('show')) toast('✓ 로그인했어요 · 이름을 확인하고 시작을 눌러 주세요');
 }
