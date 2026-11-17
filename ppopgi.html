@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>뽑기 - 빨간 우체통</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:#111;color:#fff;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;min-height:100vh;overflow-x:hidden;user-select:none}
+.scr{display:none;padding:16px;min-height:100vh;flex-direction:column;align-items:center}
+.scr.on{display:flex}
+h1{font-size:28px;margin:14px 0 6px;text-align:center}
+.sub{color:#ccc;font-size:18px;text-align:center;margin-bottom:14px}
+.pts{background:#222;border:2px solid #444;border-radius:14px;padding:10px 18px;font-size:20px;margin:6px 0 16px}
+.pts b{color:#ffd54a}
+.row3{display:flex;gap:10px;width:100%;max-width:520px;justify-content:center}
+.cute{flex:1;aspect-ratio:1/1;border:none;border-radius:22px;color:#fff;font-size:19px;font-weight:800;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 7px 0 rgba(0,0,0,.45);transition:transform .08s,box-shadow .08s;cursor:pointer}
+.cute span{font-size:40px}
+.cute:active,.cute.press{transform:translateY(6px);box-shadow:0 1px 0 rgba(0,0,0,.45)}
+.c1{background:linear-gradient(160deg,#ff6b81,#d63050)}
+.c2{background:linear-gradient(160deg,#ffb347,#e07a10)}
+.c3{background:linear-gradient(160deg,#7d8bff,#4a55d6)}
+.btn{border:none;border-radius:14px;padding:14px 20px;font-size:20px;font-weight:700;color:#fff;background:#333;margin:6px;cursor:pointer;box-shadow:0 4px 0 #000}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #000}
+.red{background:#d63050}.blue{background:#3a6fd8}.green{background:#2e9b55}
+.box{background:#1d1d1d;border:2px solid #444;border-radius:16px;padding:14px;width:100%;max-width:520px;margin:8px 0}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.plist div{background:#333;border-radius:20px;padding:6px 12px;font-size:17px}
+.top{width:100%;max-width:560px;display:flex;justify-content:space-between;align-items:center}
+.x{background:#333;border:none;color:#fff;font-size:18px;border-radius:12px;padding:8px 14px}
+.msg{font-size:22px;font-weight:800;text-align:center;min-height:34px;margin:8px 0;color:#ffd54a}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;width:100%;max-width:560px}
+.card{aspect-ratio:2/3;border-radius:10px;position:relative;perspective:600px;cursor:pointer}
+.in{position:absolute;inset:0;transition:transform .7s;transform-style:preserve-3d}
+.card.flip .in{transform:rotateY(180deg)}
+.f,.b{position:absolute;inset:0;border-radius:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.f{background:repeating-linear-gradient(45deg,#b3122e 0 8px,#c8203d 8px 16px);border:3px solid #fff3}
+.f .q{font-size:28px;opacity:.85}
+.card.taken .f{filter:brightness(.55)}
+.card.mine .f{outline:4px solid #ffd54a}
+.nm{position:absolute;bottom:4px;left:2px;right:2px;font-size:13px;text-align:center;background:#000a;border-radius:6px;padding:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b{transform:rotateY(180deg);background:#fdf6e3;color:#222;font-weight:900}
+.b .rk{font-size:24px}
+.b img{width:100%;height:100%;object-fit:cover}
+.b.win{background:#fff0a8}
+.pg{display:flex;align-items:center;gap:14px;margin-top:10px;font-size:18px}
+#count{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20}
+#count .t{font-size:30px;font-weight:800;margin-bottom:10px}
+#count .n{font-size:120px;font-weight:900;color:#ffd54a}
+#res{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:30;padding:20px;text-align:center}
+#res .big{font-size:44px;font-weight:900;color:#ffd54a;margin:10px 0}
+#res .me{font-size:28px;font-weight:900;margin:10px 0}
+#res .lst{font-size:18px;color:#ddd;max-height:40vh;overflow:auto;margin:10px 0;line-height:1.6}
+#res img{width:120px;border-radius:10px}
+.conf{position:fixed;top:-20px;width:10px;height:14px;z-index:40;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.sel{font-size:20px;padding:8px;border-radius:10px;background:#222;color:#fff;border:2px solid #555}
+.mark{position:fixed;right:8px;bottom:6px;font-size:11px;color:#666;z-index:50}
+#login{text-align:center}
+#pop{position:fixed;left:50%;top:40%;transform:translateX(-50%);background:#222;border:3px solid #ffd54a;border-radius:16px;padding:16px 20px;font-size:20px;font-weight:700;z-index:60;display:none;max-width:88vw;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- 메뉴 -->
+<div class="scr on" id="sMenu">
+  <h1>🎲 뽑기</h1>
+  <div class="pts">내 점수 <b id="myPts">-</b> 점</div>
+  <div class="row3">
+    <button class="cute c1" data-g="jebi"><span>🐦</span>제비뽑기</button>
+    <button class="cute c2" data-g="pig"><span>🐗</span>돼지뽑기</button>
+    <button class="cute c3" data-g="partner"><span>💞</span>파트너<br>정하기</button>
+  </div>
+  <div class="box" id="login" style="display:none">
+    <div style="font-size:19px;margin-bottom:8px">로그인이 돼 있어야 참가할 수 있어요</div>
+    <button class="btn blue" id="gLogin">구글로 로그인</button>
+  </div>
+  <div class="sub" id="srvMsg" style="margin-top:14px"></div>
+</div>
+
+<!-- 방식 고르기 -->
+<div class="scr" id="sMode">
+  <div class="top"><button class="x" onclick="goMenu()">← 나가기</button><span></span></div>
+  <h1 id="modeTitle"></h1>
+  <div class="sub" id="modeSub"></div>
+  <button class="btn green" style="width:90%;max-width:400px" onclick="makeGame()">👥 같이 하기 (각자 휴대폰)</button>
+  <div class="box" style="text-align:center">
+    <div style="font-size:19px;margin-bottom:8px">🤖 혼자 연습 (컴퓨터 친구들)</div>
+    인원 <select class="sel" id="botN"></select>
+    <button class="btn" onclick="startPractice()">연습 시작</button>
+  </div>
+</div>
+
+<!-- 대기실 -->
+<div class="scr" id="sWait">
+  <div class="top"><button class="x" onclick="leaveGame()">← 나가기</button><span id="wCode" style="color:#888"></span></div>
+  <h1 id="wTitle"></h1>
+  <div class="sub" id="wSub"></div>
+  <button class="btn blue" onclick="shareLink()">📨 친구 부르기 (링크 보내기)</button>
+  <div class="box"><div style="font-size:19px">들어온 사람 <b id="wCnt">0</b>명</div><div class="plist" id="wList"></div></div>
+  <button class="btn red" id="wStart" style="width:90%;max-width:400px">시작하기</button>
+  <div class="sub" id="wInfo"></div>
+</div>
+
+<!-- 카드판 -->
+<div class="scr" id="sPlay">
+  <div class="top"><button class="x" onclick="leaveGame()">← 나가기</button><span id="pPot" style="color:#ffd54a;font-size:18px"></span></div>
+  <h1 id="pTitle" style="font-size:24px"></h1>
+  <div class="msg" id="pMsg"></div>
+  <div class="grid" id="grid"></div>
+  <div class="pg" id="pager"><button class="x" id="pgPrev">◀</button><span id="pgTxt"></span><button class="x" id="pgNext">▶</button></div>
+</div>
+
+<div id="count"><div class="t" id="cT">자, 이제 공개됩니다!</div><div class="n" id="cN">3</div></div>
+<div id="res">
+  <div id="rImg"></div>
+  <div class="big" id="rBig"></div>
+  <div class="me" id="rMe"></div>
+  <div class="lst" id="rLst"></div>
+  <div><button class="btn" onclick="closeRes()">카드 보기</button><button class="btn red" onclick="leaveGame()">나가기</button></div>
+</div>
+<div id="pop"></div>
+<div class="mark">69KYM</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+// ===== 설정 =====
+const MEDIA = 'https://kymhka100-byte.github.io/giftstory/';   // 제비뽑기 소리 파일이 있는 곳 (index 와 같음)
+const SND = {bgm:'jebi_bgm.mp3', start:'jebi_start.mp3', hurry:'jebi_hurry.mp3', last:'jebi_last.mp3', win:'jebi_win.mp3'};
+const PIG_IMG = 'pig.jpg', BET = 500, START_PTS = 10000, PER_PAGE = 15;
+const NAMES = {jebi:'🐦 제비뽑기', pig:'🐗 돼지뽑기', partner:'💞 파트너 정하기'};
+const SUBS = {jebi:'제비 카드를 뽑은 사람이 오늘 쏘는 거예요!', pig:'모두 500점씩 걸고, 돼지 뽑은 사람이 다 가져가요', partner:'같은 모양끼리 짝꿍이 돼요'};
+const SHAPES = ['♥','♠','♣','★','◆'], SCOL = ['#e0284f','#222','#1d8a3f','#e0a000','#2f6fe0'];
+const BOTS = ['철수','영희','민수','지영','동현','수진','현우','미나','준호','은지','태호','소라','재민','하늘','보람','건우','다은','시우','유나'];
+
+// ===== 소리 =====
+let AC; function ac(){ if(!AC) AC = new (window.AudioContext||window.webkitAudioContext)(); return AC; }
+function beep(f1,f2,dur,type='sine',vol=.25){ try{ const c=ac(),o=c.createOscillator(),g=c.createGain(); o.type=type; o.frequency.setValueAtTime(f1,c.currentTime); o.frequency.exponentialRampToValueAtTime(f2,c.currentTime+dur); g.gain.setValueAtTime(vol,c.currentTime); g.gain.exponentialRampToValueAtTime(.001,c.currentTime+dur); o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+dur);}catch(e){} }
+const ssuk = ()=>beep(700,180,.18,'sine',.35);      // 쑥
+const tick = ()=>beep(900,900,.08,'square',.12);
+let bgm=null, voice=null;
+function playBgm(){ stopBgm(); bgm=new Audio(MEDIA+SND.bgm); bgm.loop=true; bgm.volume=.25; bgm.play().catch(()=>{}); }
+function stopBgm(){ if(bgm){ bgm.pause(); bgm=null; } if(voice){ voice.pause(); voice=null; } }
+function playV(k,done){   // 멘트: 나오는 동안 배경음악 작게
+  if(voice) voice.pause(); if(bgm) bgm.volume=.08;
+  voice=new Audio(MEDIA+SND[k]); let fin=false;
+  const end=()=>{ if(fin) return; fin=true; if(bgm) bgm.volume=.25; if(done) done(); };
+  voice.onended=end; voice.onerror=()=>setTimeout(end,1500); voice.play().catch(()=>setTimeout(end,1500));
+}
+function playWin(){ const a=new Audio(MEDIA+SND.win); a.volume=.9; a.play().catch(()=>{ [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,f,.3,'triangle',.3),i*180)); }); }
+
+// ===== 화면 =====
+const $ = id=>document.getElementById(id);
+function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); }
+function toast(t){ $('srvMsg').textContent=t; }
+function say(t){ const d=$('pop'); d.textContent=t; d.style.display='block'; clearTimeout(say.t); say.t=setTimeout(()=>d.style.display='none',2600); }
+const H={push(){ try{history.pushState({p:1},'');}catch(e){} }, url(q){ try{history.replaceState(null,'',location.pathname+q);}catch(e){} }};
+
+// ===== 서버 (index.html 과 같은 파이어베이스) =====
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",
+  authDomain: "giftwav-9ab6b.firebaseapp.com",
+  databaseURL: "https://giftwav-9ab6b-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "giftwav-9ab6b",
+  storageBucket: "giftwav-9ab6b.firebasestorage.app",
+  messagingSenderId: "790729206880",
+  appId: "1:790729206880:web:173a3a34e29e49a0b0a705"
+};
+let auth=null, DB=null, me=null, myPts=null;
+const ROOM = id=>'giftstory/rooms/'+id+'/game';           // 뽑기 판은 대화방 아래에 저장
+const PTS  = ()=>'giftstory/users/'+me.uid+'/my/points';  // 모든 게임이 같이 쓰는 점수
+function myNick(u){ try{ const m=JSON.parse(localStorage.getItem('rp_me')); if(m&&m.name) return m.name; }catch(e){} return u.displayName||'나'; }
+function initServer(){
+  try{
+    firebase.initializeApp(FIREBASE_CONFIG); auth=firebase.auth(); DB=rtdb();
+    auth.onAuthStateChanged(async u=>{
+      me = (u && !u.isAnonymous) ? {uid:u.uid, name:myNick(u)} : null;   // 게임은 구글 로그인한 사람만
+      $('login').style.display = me ? 'none' : 'block';
+      if(me){ await loadPts(); const g=new URLSearchParams(location.search).get('g'); if(g && !gameId) joinGame(g); }
+      else $('myPts').textContent='-';
+    });
+  }catch(e){ toast('서버 연결이 안 돼서 지금은 "혼자 연습"만 돼요'); }
+}
+$('gLogin').onclick=()=>{ const p=new firebase.auth.GoogleAuthProvider(); auth.signInWithPopup(p).catch(()=>auth.signInWithRedirect(p)); };
+
+function rtdb(){ const d=firebase.database(); return {
+  get:async p=>(await d.ref(p).get()).val(),
+  set:(p,v)=>d.ref(p).set(v),
+  watch:(p,cb)=>{ const r=d.ref(p),h=s=>cb(s.val()); r.on('value',h,()=>say('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요')); return ()=>r.off('value',h); },
+  tx:(p,fn)=>d.ref(p).transaction(fn).then(r=>r.committed)
+};}
+const key = id=>DB.set('giftstory/rooms/'+id+'/keys/'+me.uid,true);   // index 와 같은 '열쇠' 방식
+
+async function loadPts(){ let v=await DB.get(PTS()).catch(()=>null); if(typeof v!=='number'){ v=START_PTS; await DB.set(PTS(),v).catch(()=>{}); } myPts=v; $('myPts').textContent=myPts.toLocaleString(); }
+async function addPts(n){ await DB.tx(PTS(),v=>(typeof v==='number'?v:START_PTS)+n).catch(()=>{}); await loadPts(); }
+
+// ===== 메뉴 =====
+let gType='jebi';
+document.querySelectorAll('.cute').forEach(b=>b.onclick=()=>{ ssuk(); gType=b.dataset.g; $('modeTitle').textContent=NAMES[gType]; $('modeSub').textContent=SUBS[gType]; show('sMode'); H.push(); });
+for(let i=2;i<=20;i++) $('botN').innerHTML+=`<option ${i==5?'selected':''}>${i}</option>`;
+function goMenu(){ stopAll(); show('sMenu'); }
+window.onpopstate=()=>{ if($('res').style.display==='flex') closeRes(); else leaveGame(); };
+
+// ===== 카드 만들기 =====
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function makeCards(type,n){
+  let c=[];
+  if(type==='partner'){
+    const pairs=n>>1, many=n>10;
+    for(let i=0;i<pairs;i++){ const k={s:i%5,no:many?(i/5|0)+1:0}; c.push(k,{...k}); }
+    if(n%2) c.push({s:-1});
+  } else { c.push({win:1}); for(let i=1;i<n;i++) c.push({rk:i}); }
+  return shuffle(c);
+}
+
+// ===== 게임 상태 =====
+// G = {type,host,status:'wait'|'pick'|'reveal',players:{uid:{name}},cards:[],picks:{idx:uid},pot}
+let G=null, gameId=null, unwatch=null, local=false, myId=null, page=0, hurryT=[], revealed=false, paidFor=null;
+
+function stopAll(){ lastStatus=null; stopBgm(); hurryT.forEach(clearTimeout); hurryT=[]; if(unwatch){unwatch();unwatch=null;} botT.forEach(clearTimeout); botT=[]; $('count').style.display='none'; $('res').style.display='none'; G=null; gameId=null; revealed=false; }
+function leaveGame(){ goMenu(); H.url(''); }
+
+// --- 같이 하기 ---
+async function makeGame(){
+  if(!DB){ say('서버 연결이 안 돼요. 혼자 연습으로 해 보세요.'); return; }
+  if(!me){ show('sMenu'); $('login').style.display='block'; return; }
+  if(gType==='pig' && myPts<BET){ say('점수가 모자라요 (500점 필요)'); return; }
+  const id='pg_'+Math.random().toString(36).slice(2,9);
+  try{ await key(id); await DB.set(ROOM(id),{type:gType,host:me.uid,status:'wait',players:{[me.uid]:{name:me.name}},picks:{},created:Date.now()}); }catch(e){ say('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요'); return; }
+  H.url('?g='+id); joinGame(id);
+}
+async function joinGame(id){
+  await key(id).catch(()=>{}); const g=await DB.get(ROOM(id)).catch(()=>null);
+  if(!g){ say('없는 뽑기 방이에요'); return; }
+  if(g.status!=='wait' && !(g.players&&g.players[me.uid])){ say('이미 시작한 뽑기예요'); return; }
+  if(g.type==='pig' && myPts<BET){ say('점수가 모자라서 돼지뽑기에 못 들어가요 (500점 필요)'); return; }
+  local=false; gameId=id; myId=me.uid; gType=g.type;
+  if(!(g.players&&g.players[me.uid])) await DB.set(ROOM(id)+'/players/'+me.uid,{name:me.name}).catch(()=>say('서버에서 막혔어요'));
+  unwatch=DB.watch(ROOM(id),v=>{ if(v){ G=v; G.picks=G.picks||{}; onState(); } });
+}
+$('wStart').onclick=async()=>{
+  const n=Object.keys(G.players).length; if(n<2){ say('2명 이상 들어와야 해요'); return; }
+  ssuk(); const cards=makeCards(G.type,n);
+  await DB.tx(ROOM(gameId),v=>{ if(!v||v.status!=='wait') return; v.status='pick'; v.cards=cards; v.picks={}; v.pot=v.type==='pig'?n*BET:0; return v; });
+};
+function shareLink(){
+  const url=location.origin+location.pathname+'?g='+gameId, t=NAMES[G.type]+' 같이 해요! 눌러서 들어오세요';
+  if(navigator.share) navigator.share({title:'뽑기',text:t,url}).catch(()=>{});
+  else navigator.clipboard.writeText(t+' '+url).then(()=>say('링크를 복사했어요. 대화방에 붙여 넣으세요'));
+}
+
+// --- 혼자 연습 ---
+let botT=[];
+function startPractice(){
+  ssuk(); const n=+$('botN').value; local=true; myId='me'; gameId=null; revealed=false;
+  const players={me:{name:'나'}}; for(let i=1;i<n;i++) players['b'+i]={name:BOTS[i-1]};
+  G={type:gType,host:'me',status:'pick',players,cards:makeCards(gType,n),picks:{},pot:gType==='pig'?n*BET:0};
+  H.push(); onState();
+  Object.keys(players).filter(u=>u!=='me').forEach(u=>botT.push(setTimeout(()=>{ if(!G) return; const free=G.cards.map((_,i)=>i).filter(i=>G.picks[pk(i)]==null); if(free.length) pick(free[Math.random()*free.length|0],u); },1500+Math.random()*9000)));
+}
+
+// --- 카드 고르기 ---
+async function pick(i,uid=myId){
+  if(!G||G.status!=='pick'||G.picks[pk(i)]!=null||Object.values(G.picks).includes(uid)) return;
+  if(uid===myId){ ssuk(); hurryT.forEach(clearTimeout); hurryT=[]; $('pMsg').textContent='다른 사람을 기다리는 중…'; }
+  if(local){ G.picks[pk(i)]=uid; onState(); return; }
+  await DB.tx(ROOM(gameId),v=>{ if(!v||v.status!=='pick') return; v.picks=v.picks||{}; if(v.picks[pk(i)]!=null||Object.values(v.picks).includes(uid)) return; v.picks[pk(i)]=uid; if(Object.keys(v.picks).length>=v.cards.length) v.status='reveal'; return v; });
+}
+function autoPick(){ const free=G.cards.map((_,i)=>i).filter(i=>G.picks[pk(i)]==null); if(free.length) pick(free[Math.random()*free.length|0]); }
+function startHurry(){
+  hurryT.forEach(clearTimeout); hurryT=[];
+  const t=(txt,ms,fn)=>hurryT.push(setTimeout(()=>{ if(iPicked()) return; $('pMsg').textContent=txt; if(fn) fn(); },ms));
+  t('빨리 뽑아요! 시간이 없어요!',12000,()=>playV('hurry'));
+  t('지금 선택 안 하면 당신이 당첨입니다! 하나, 둘, 셋…',25000,()=>playV('last',()=>{ if(!iPicked()) autoPick(); }));
+}
+const iPicked=()=>!G||Object.values(G.picks).includes(myId);
+
+// ===== 상태가 바뀔 때 =====
+let lastStatus=null;
+function onState(){
+  if(!G) return;
+  const n=Object.keys(G.players).length;
+  if(G.status==='wait'){
+    show('sWait'); $('wTitle').textContent=NAMES[G.type]; $('wSub').textContent=SUBS[G.type]; $('wCode').textContent='방 '+gameId;
+    $('wCnt').textContent=n; $('wList').innerHTML=Object.values(G.players).map(p=>`<div>${esc(p.name)}</div>`).join('');
+    const host=G.host===myId; $('wStart').style.display=host?'block':'none';
+    $('wInfo').textContent=host?'다 모이면 시작을 눌러 주세요':'방장이 시작하길 기다리는 중…';
+  }
+  if(G.status==='pick'||G.status==='reveal'){
+    if(lastStatus!=='pick'&&lastStatus!=='reveal'){ // 카드판 처음 열림
+      show('sPlay'); H.push(); page=0; revealed=false; playBgm();
+      $('pTitle').textContent = G.type==='pig'?'🐗 오늘의 행운의 돼지 누구일까요?':NAMES[G.type];
+      $('pMsg').textContent='이제 추첨하겠습니다! 카드를 하나 골라 주세요'; playV('start'); startHurry();
+      if(G.type==='pig' && !local && paidFor!==gameId){ paidFor=gameId; addPts(-BET); }
+    }
+    $('pPot').textContent = G.type==='pig' ? '판돈 '+(G.pot||0).toLocaleString()+'점' : '';
+    if(local && G.status==='pick' && Object.keys(G.picks).length>=G.cards.length) G.status='reveal';
+    drawGrid();
+    if(G.status==='reveal' && !revealed){ revealed=true; doReveal(); }
+  }
+  lastStatus=G.status;
+}
+const pk=i=>'c'+i;
+const esc=s=>String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+function owner(i){ const u=G.picks[pk(i)]; return u!=null?G.players[u]:null; }
+
+function faceHtml(c){
+  if(G.type==='partner'){ if(c.s<0) return `<div style="font-size:30px">🙋</div><div>혼자</div>`; return `<div style="font-size:40px;color:${SCOL[c.s]}">${SHAPES[c.s]}</div>${c.no?`<div class="rk">${c.no}</div>`:''}`; }
+  if(c.win) return G.type==='pig' ? `<img src="${PIG_IMG}" onerror="this.outerHTML='<div style=font-size:44px>🐗</div>'">` : `<div style="font-size:40px">🐦</div><div style="color:#d63050">제비!</div>`;
+  return `<div class="rk">${c.rk}등</div>`;
+}
+function drawGrid(){
+  const tot=G.cards.length, pages=Math.ceil(tot/PER_PAGE); page=Math.min(page,pages-1);
+  $('pager').style.display=pages>1?'flex':'none'; $('pgTxt').textContent=(page+1)+' / '+pages;
+  const flip=revealed&&$('count').style.display!=='flex';
+  let h='';
+  for(let i=page*PER_PAGE;i<Math.min(tot,(page+1)*PER_PAGE);i++){
+    const c=G.cards[i], o=owner(i), mine=G.picks[pk(i)]===myId;
+    const label = o ? (G.type==='pig'&&!flip ? (mine?'나':'고름') : esc(o.name)) : '';
+    h+=`<div class="card${o?' taken':''}${mine?' mine':''}${flip?' flip':''}" onclick="pick(${i})"><div class="in">
+      <div class="f"><div class="q">${o?'✓':'?'}</div>${label?`<div class="nm">${label}</div>`:''}</div>
+      <div class="b${c.win?' win':''}">${faceHtml(c)}${o?`<div class="nm" style="color:#fff">${esc(o.name)}</div>`:''}</div></div></div>`;
+  }
+  $('grid').innerHTML=h;
+}
+$('pgPrev').onclick=()=>{ if(page>0){page--;drawGrid();} };
+$('pgNext').onclick=()=>{ if((page+1)*PER_PAGE<G.cards.length){page++;drawGrid();} };
+
+// ===== 공개 =====
+function doReveal(){
+  hurryT.forEach(clearTimeout); hurryT=[];
+  $('cT').textContent = G.type==='pig'?'자, 공개!':'자, 이제 공개됩니다!';
+  $('count').style.display='flex'; let k=3; $('cN').textContent=k; tick();
+  const iv=setInterval(()=>{ k--; if(k>0){ $('cN').textContent=k; tick(); } else { clearInterval(iv); $('count').style.display='none'; stopBgm(); drawGrid(); setTimeout(showResult,1200); } },1000);
+}
+function showResult(){
+  if(!G) return;
+  const name=u=>u===myId?'나':(G.players[u]?.name||'?');
+  let big='',meTxt='',lst='',img='',iWin=false;
+  if(G.type==='partner'){
+    const groups={}; G.cards.forEach((c,i)=>{ const key=c.s<0?'solo':c.s+'-'+(c.no||0); (groups[key]=groups[key]||[]).push(G.picks[pk(i)]); });
+    big='짝꿍이 만들어졌어요! 💞';
+    lst=Object.entries(groups).filter(([k])=>k!=='solo').map(([k,us])=>{ const [s,no]=k.split('-'); return `<span style="color:${SCOL[s]}">${SHAPES[s]}${+no?no:''}</span> ${us.map(u=>esc(name(u))).join(' ❤ ')}`; }).join('<br>');
+    if(groups.solo) lst+=`<br>🙋 ${esc(name(groups.solo[0]))} (혼자)`;
+    if(groups.solo&&groups.solo[0]===myId) meTxt='<span style="font-size:34px">축하해요!<br>원래 사실은 혼자가 편하답니다 😎</span>';
+    else{ const mk=Object.values(groups).find(us=>us.includes(myId)); meTxt='내 짝꿍은 '+esc(name(mk.find(u=>u!==myId)))+' 님!'; }
+    confetti();
+  } else {
+    const wi=G.cards.findIndex(c=>c.win), wu=G.picks[pk(wi)]; iWin=wu===myId;
+    lst=G.cards.map((c,i)=>({c,u:G.picks[pk(i)]})).filter(x=>!x.c.win).sort((a,b)=>a.c.rk-b.c.rk).map(x=>`${x.c.rk}등 ${esc(name(x.u))}`).join(' · ');
+    if(G.type==='pig'){
+      img=`<img src="${PIG_IMG}" onerror="this.remove()">`;
+      big=`🐗 오늘의 행운의 돼지는<br>${esc(G.players[wu]?.name||'?')} 님!`;
+      meTxt=iWin?`<span style="color:#7fff7f">🎉 판돈 ${(G.pot||0).toLocaleString()}점을 다 가져가요!</span>`:'아쉽다~ 다음엔 돼지 잡자!';
+      if(iWin&&!local) addPts(G.pot||0);
+    } else {
+      big=`🐦 제비 당첨!<br>${esc(G.players[wu]?.name||'?')} 님`;
+      meTxt=iWin?'<span style="color:#ff4d4d;font-size:34px">당신이 당첨!<br>오늘은 당신이 쏘세요!</span>':'<span style="color:#7fd0ff">휴~ 살았다!</span>';
+    }
+    confetti();
+    if(iWin) setTimeout(playWin,1000);
+  }
+  $('rImg').innerHTML=img; $('rBig').innerHTML=big; $('rMe').innerHTML=meTxt; $('rLst').innerHTML=lst;
+  $('res').style.display='flex';
+}
+function closeRes(){ $('res').style.display='none'; }
+function confetti(){
+  const cols=['#ff4d6d','#ffd54a','#4dd2ff','#7fff7f','#c77dff'];
+  for(let i=0;i<90;i++){ const d=document.createElement('div'); d.className='conf'; d.style.left=Math.random()*100+'vw'; d.style.background=cols[i%5]; d.style.animationDuration=2+Math.random()*2.5+'s'; d.style.animationDelay=Math.random()*1.2+'s'; document.body.appendChild(d); setTimeout(()=>d.remove(),5500); }
+}
+
+initServer();
+</script>
+</body>
+</html>
