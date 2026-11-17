@@ -39,14 +39,32 @@ h1{font-size:28px;margin:14px 0 6px;text-align:center}
 .card.taken .f{filter:brightness(.55)}
 .card.mine .f{outline:4px solid #ffd54a}
 .nm{position:absolute;bottom:4px;left:2px;right:2px;font-size:13px;text-align:center;background:#000a;border-radius:6px;padding:2px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.b{transform:rotateY(180deg);background:#fdf6e3;color:#222;font-weight:900}
-.b .rk{font-size:24px}
+.b{transform:rotateY(180deg);background:#d8202a;color:#222;font-weight:900;padding:7%}
+.b .w{width:100%;height:100%;background:#fff;border:2px solid #111;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.b.pigf{padding:0}
+.b .rk{font-size:24px;color:#1d4fd6}
 .b img{width:100%;height:100%;object-fit:cover}
-.b.win{background:#fff0a8}
+.b.win .w{background:#fff0a8}
 .pg{display:flex;align-items:center;gap:14px;margin-top:10px;font-size:18px}
 #count{position:fixed;inset:0;background:#000c;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:20}
 #count .t{font-size:30px;font-weight:800;margin-bottom:10px}
-#count .n{font-size:120px;font-weight:900;color:#ffd54a}
+#count #cBox{margin-bottom:50px}
+#count .n{font-size:80px;font-weight:900;color:#ffd54a}
+#myWrap{display:none;flex-direction:column;align-items:center;margin-top:14px}
+.mylab{font-size:20px;font-weight:800;color:#ffd54a;margin-bottom:6px}
+#myWrap{padding-bottom:50px}
+.bc{position:relative;width:46vw;max-width:210px;aspect-ratio:2/3;border-radius:14px}
+.bc .fc{position:absolute;inset:0;border-radius:14px;overflow:hidden;font-size:34px;transform:none}
+.bc .fc .rk{font-size:44px}
+.bc .cv{position:absolute;inset:0;border-radius:14px;background:repeating-linear-gradient(45deg,#b3122e 0 10px,#c8203d 10px 20px);border:4px solid #ddd;display:flex;align-items:center;justify-content:center;font-size:54px;transition:transform .6s}
+.bc.peek .cv{clip-path:polygon(0 0,100% 0,100% 84%,74% 100%,0 100%)}
+.bc .fold{display:none;position:absolute;right:26%;bottom:16%;width:26%;height:16%;background:linear-gradient(315deg,#fff,#aaa);clip-path:polygon(100% 0,100% 100%,0 100%);pointer-events:none}
+.bc.peek .fold{display:block}
+.bc.flip .cv{transform:scaleX(0)}
+.bc.flip .fc{animation:pop .6s .3s both}
+@keyframes pop{0%{transform:scaleX(0)}100%{transform:scaleX(1)}}
+.bc .pk{position:absolute;right:0;bottom:-46px;background:#ffd54a;color:#000;font-size:15px;font-weight:900;border-radius:10px 4px 14px 4px;padding:8px 10px;touch-action:none;z-index:3}
+.bc.flip .pk{display:none}
 #res{position:fixed;inset:0;background:#000e;display:none;align-items:center;justify-content:center;flex-direction:column;z-index:30;padding:20px;text-align:center}
 #res .big{font-size:44px;font-weight:900;color:#ffd54a;margin:10px 0}
 #res .me{font-size:28px;font-weight:900;margin:10px 0}
@@ -108,10 +126,11 @@ h1{font-size:28px;margin:14px 0 6px;text-align:center}
   <h1 id="pTitle" style="font-size:24px"></h1>
   <div class="msg" id="pMsg"></div>
   <div class="grid" id="grid"></div>
+  <div id="myWrap"><div class="mylab">내 카드</div><div id="myBox"></div></div>
   <div class="pg" id="pager"><button class="x" id="pgPrev">◀</button><span id="pgTxt"></span><button class="x" id="pgNext">▶</button></div>
 </div>
 
-<div id="count"><div class="t" id="cT">자, 이제 공개됩니다!</div><div class="n" id="cN">3</div></div>
+<div id="count"><div class="t" id="cT">자, 이제 공개됩니다!</div><div id="cBox"></div><div class="n" id="cN">3</div></div>
 <div id="res">
   <div id="rImg"></div>
   <div class="big" id="rBig"></div>
@@ -168,7 +187,7 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "790729206880",
   appId: "1:790729206880:web:173a3a34e29e49a0b0a705"
 };
-let auth=null, DB=null, me=null, myPts=null;
+let auth=null, DB=null, me=null, myPts=null, roomParam=null;
 const ROOM = id=>'giftstory/rooms/'+id+'/game';           // 뽑기 판은 대화방 아래에 저장
 const PTS  = ()=>'giftstory/users/'+me.uid+'/my/points';  // 모든 게임이 같이 쓰는 점수
 function myNick(u){ try{ const m=JSON.parse(localStorage.getItem('rp_me')); if(m&&m.name) return m.name; }catch(e){} return u.displayName||'나'; }
@@ -227,13 +246,13 @@ async function makeGame(){
   if(!DB){ say('서버 연결이 안 돼요. 혼자 연습으로 해 보세요.'); return; }
   if(!me){ show('sMenu'); $('login').style.display='block'; return; }
   if(gType==='pig' && myPts<BET){ say('점수가 모자라요 (500점 필요)'); return; }
-  const id='pg_'+Math.random().toString(36).slice(2,9);
+  const id=roomParam||'pg_'+Math.random().toString(36).slice(2,9);
   try{ await key(id); await DB.set(ROOM(id),{type:gType,host:me.uid,status:'wait',players:{[me.uid]:{name:me.name}},picks:{},created:Date.now()}); }catch(e){ say('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요'); return; }
   H.url('?g='+id); joinGame(id);
 }
 async function joinGame(id){
   await key(id).catch(()=>{}); const g=await DB.get(ROOM(id)).catch(()=>null);
-  if(!g){ say('없는 뽑기 방이에요'); return; }
+  if(!g || g.status==='reveal'){ roomParam=id; toast('이 대화방에서 새 뽑기를 시작해 보세요'); return; }   // 대화방에서 열었을 때
   if(g.status!=='wait' && !(g.players&&g.players[me.uid])){ say('이미 시작한 뽑기예요'); return; }
   if(g.type==='pig' && myPts<BET){ say('점수가 모자라서 돼지뽑기에 못 들어가요 (500점 필요)'); return; }
   local=false; gameId=id; myId=me.uid; gType=g.type;
@@ -306,10 +325,26 @@ const pk=i=>'c'+i;
 const esc=s=>String(s).replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
 function owner(i){ const u=G.picks[pk(i)]; return u!=null?G.players[u]:null; }
 
-function faceHtml(c){
-  if(G.type==='partner'){ if(c.s<0) return `<div style="font-size:30px">🙋</div><div>혼자</div>`; return `<div style="font-size:40px;color:${SCOL[c.s]}">${SHAPES[c.s]}</div>${c.no?`<div class="rk">${c.no}</div>`:''}`; }
-  if(c.win) return G.type==='pig' ? `<img src="${PIG_IMG}" onerror="this.outerHTML='<div style=font-size:44px>🐗</div>'">` : `<div style="font-size:40px">🐦</div><div style="color:#d63050">제비!</div>`;
-  return `<div class="rk">${c.rk}등</div>`;
+function faceHtml(c){ const W=x=>`<div class="w">${x}</div>`;
+  if(G.type==='partner'){ if(c.s<0) return W(`<div style="font-size:1.2em">🙋</div><div style="font-size:.6em">혼자</div>`); return W(`<div style="font-size:1.4em;color:${SCOL[c.s]}">${SHAPES[c.s]}</div>${c.no?`<div class="rk">${c.no}</div>`:''}`); }
+  if(c.win) return G.type==='pig' ? `<img src="${PIG_IMG}" onerror="this.outerHTML='<div style=font-size:44px>🐗</div>'" style="width:100%;height:100%;object-fit:cover">` : W(`<div style="font-size:1.4em">🐦</div><div style="color:#d63050;font-size:.7em">제비!</div>`);
+  return W(`<div class="rk">${c.rk}등</div>`);
+}
+function myIdx(){ return G.cards.findIndex((_,i)=>G.picks[pk(i)]===myId); }
+function faceCls(c){ return 'b'+(c.win?' win':'')+(c.win&&G.type==='pig'?' pigf':''); }
+function bigCard(i){   // 내 카드 크게 (쪼기: 모퉁이를 누르고 있으면 살짝 보여요)
+  const c=G.cards[i];
+  return `<div class="bc"><div class="fc ${faceCls(c)}">${faceHtml(c)}</div><div class="cv">?</div><div class="fold"></div><div class="pk">쪼기</div></div>`;
+}
+function peekOn(box){
+  const b=box.querySelector('.bc'), k=box.querySelector('.pk'); if(!b||!k) return;
+  k.addEventListener('pointerdown',e=>{ e.preventDefault(); b.classList.add('peek'); });
+  ['pointerup','pointerleave','pointercancel'].forEach(t=>k.addEventListener(t,()=>b.classList.remove('peek')));
+}
+function drawMine(){
+  const i=myIdx(), w=$('myWrap');
+  if(i<0||revealed){ w.style.display='none'; return; }
+  if(w.style.display!=='flex'||w.dataset.i!=i){ w.dataset.i=i; $('myBox').innerHTML=bigCard(i); peekOn($('myBox')); w.style.display='flex'; }
 }
 function drawGrid(){
   const tot=G.cards.length, pages=Math.ceil(tot/PER_PAGE); page=Math.min(page,pages-1);
@@ -321,9 +356,9 @@ function drawGrid(){
     const label = o ? (G.type==='pig'&&!flip ? (mine?'나':'고름') : esc(o.name)) : '';
     h+=`<div class="card${o?' taken':''}${mine?' mine':''}${flip?' flip':''}" onclick="pick(${i})"><div class="in">
       <div class="f"><div class="q">${o?'✓':'?'}</div>${label?`<div class="nm">${label}</div>`:''}</div>
-      <div class="b${c.win?' win':''}">${faceHtml(c)}${o?`<div class="nm" style="color:#fff">${esc(o.name)}</div>`:''}</div></div></div>`;
+      <div class="${faceCls(c)}">${faceHtml(c)}${o?`<div class="nm" style="color:#fff">${esc(o.name)}</div>`:''}</div></div></div>`;
   }
-  $('grid').innerHTML=h;
+  $('grid').innerHTML=h; drawMine();
 }
 $('pgPrev').onclick=()=>{ if(page>0){page--;drawGrid();} };
 $('pgNext').onclick=()=>{ if((page+1)*PER_PAGE<G.cards.length){page++;drawGrid();} };
@@ -332,8 +367,12 @@ $('pgNext').onclick=()=>{ if((page+1)*PER_PAGE<G.cards.length){page++;drawGrid()
 function doReveal(){
   hurryT.forEach(clearTimeout); hurryT=[];
   $('cT').textContent = G.type==='pig'?'자, 공개!':'자, 이제 공개됩니다!';
+  const mi=myIdx(); $('cBox').innerHTML = mi>=0 ? bigCard(mi) : ''; if(mi>=0) peekOn($('cBox')); $('myWrap').style.display='none';
   $('count').style.display='flex'; let k=3; $('cN').textContent=k; tick();
-  const iv=setInterval(()=>{ k--; if(k>0){ $('cN').textContent=k; tick(); } else { clearInterval(iv); $('count').style.display='none'; stopBgm(); drawGrid(); setTimeout(showResult,1200); } },1000);
+  const iv=setInterval(()=>{ k--; if(k>0){ $('cN').textContent=k; tick(); return; }
+    clearInterval(iv); $('cN').textContent=''; stopBgm(); const b=$('cBox').querySelector('.bc'); if(b){ b.classList.remove('peek'); b.classList.add('flip'); }
+    setTimeout(()=>{ $('count').style.display='none'; drawGrid(); setTimeout(showResult,1200); }, b?1600:0);
+  },1000);
 }
 function showResult(){
   if(!G) return;
