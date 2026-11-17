@@ -1,8 +1,8 @@
-/* 빨간 우체통 알림·설치 도우미 (30번)
+/* 빨간 우체통 알림·설치 도우미 (34번: 알림마다 이름표를 달리 해서 매번 소리가 나요)
    - 화면이 꺼져 있어도 서버가 보낸 알림을 띄워요
    - 알림이 온 방이 목록에 없으면 앱이 열릴 때 넣도록 적어 둬요
    - 앱 파일은 폰에 저장해 두고, 열 때마다 몰래 새 버전을 받아 다음에 바뀌어요 */
-const APP_CACHE = 'rp-app-30';
+const APP_CACHE = 'rp-app-34';
 const INBOX = 'rp-inbox';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -51,7 +51,7 @@ self.addEventListener('push', e => {
     wins.forEach(w => w.postMessage({ inbox: 1 }));
     if (wins.some(w => w.visibilityState === 'visible' && w.focused)) return;   // 앱을 보고 있으면 알림 안 띄움
     await self.registration.showNotification(title, {
-      body, tag: 'rp-' + room, renotify: true, icon: 'icon-192.png', badge: 'icon-192.png',
+      body, tag: 'rp-' + room + '-' + (d.at || Date.now()), renotify: true, silent: false, icon: 'icon-192.png', badge: 'icon-192.png',
       vibrate: [120, 60, 120], requireInteraction: false,
       data: { room, name: d.name || title, url: d.url || '' }
     });
