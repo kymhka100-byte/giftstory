@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 37번: 우리 모임 (모임 만들기 · 초대 링크로 들어오면 모임 사람 이름이 저절로 · 전체 대화방 · 방장 공지·모두에게 따로 보내기·사람 빼기 · 여러 모임 · 실버 모드 가족 버튼 자동) -->
 <!-- 36번: 가위바위보는 따로 (gawibawibo.html) · 편지·메시지 "모든 친구에게" 버튼 · 키보드 올라오면 큰·친구 초대 버튼 숨김 · 할 일 ＋ 버튼 작게 -->
 <!-- 빨간 우체통 32번: 기본 다크 모드 · 메인 화면(나와의 대화 고정 · 할 일 기본 / 친구 목록 전환 · 홍보 글 · 친구 초대 아래 가운데) · 할 일(체크 · 별표 · 알림 시간 · 장소 · 대화방 연결) · 일기장(암호 4자리 · 달력 · 사진 1장) · 말로 쓰기 · 받은 파일 저장 · 메뉴 열면 뒤 화면 어둡게 · 뒤로 가기로 메뉴 닫기 · 알림 등록 보강 -->
 <!-- 31번: 새 버전 자동 받기 · ＋친구 빈칸 4개 · 고정 말풍선 회색 캡·이름 바꾸기 · 고정 안 한 사람은 새로 온 칸에만 · 빈 새방 숨기기 · 같은 구글 계정 = 같은 사람 · 로그아웃 · 방 여러 개 지우기 · 친구 초대 버튼 위로 · 메인 화면으로·English 버튼 · 마이크(음성 통화·통화+자막·녹음) · 알림 안내 -->
@@ -735,6 +736,29 @@ body:not(.dark) .htab.on{background:#ffe14d;color:#222}
 body:not(.dark) .tdadd input{background:#fff;color:#222;border-color:var(--t-btnline)}
 body:not(.dark) .hinvBar{background:none}
 body:not(.dark) #selfBar{background:var(--t-bar)}
+/* ===== 37번: 우리 모임 ===== */
+#grpBar{display:none;gap:6px;padding:6px 8px;overflow-x:auto;border-bottom:1px solid var(--line);background:#141417;scrollbar-width:none;z-index:5}
+#grpBar::-webkit-scrollbar{display:none}
+body.home #grpBar{display:flex}
+body.kb #grpBar{display:none!important}
+.gtab{flex:none;height:30px;padding:0 12px;border-radius:15px;border:1px solid #444;background:#22232c;color:#fff;font-size:13px;font-weight:700;position:relative;white-space:nowrap}
+.gtab.on{background:#4fc3ff;color:#062033;border-color:#4fc3ff}
+.gtab.add{border-style:dashed;color:#ffd76a;background:none;border-color:#c9a94a}
+.gtab i{position:absolute;top:-7px;right:-4px;font-style:normal;background:#ff3b36;color:#fff;border-radius:9px;padding:0 5px;font-size:11px}
+body.grpon #hTodo,body.grpon #hFriends,body.grpon .hadd{display:none!important}
+#hGroup{display:none;margin-bottom:8px}
+body.grpon #hGroup{display:block}
+.ghead{display:flex;align-items:center;gap:8px;padding:8px 6px 6px;font-size:17px;font-weight:800}
+.ghead small{font-size:12px;color:#9fa2b4;font-weight:400}
+.gnote{margin:4px 2px 8px;padding:10px 12px;border-radius:12px;background:#3a3418;border:1px solid #c9a94a;color:#ffe9a6;font-size:15px;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+.gall{background:#1d3a4d!important;border-radius:12px;border-bottom:none!important;margin-bottom:4px}
+.gall .hav{background:#4fc3ff;color:#062033}
+.gtools{display:flex;flex-wrap:wrap;gap:6px;padding:8px 2px 4px}
+.gtools button{flex:1 1 45%;padding:10px 6px;border-radius:12px;border:1px solid #3a3b46;background:#22232c;color:#fff;font-size:14px;font-weight:700}
+.gtools .y{background:#ffe14d;color:#222;border:none}
+#gNote{display:none;padding:8px 12px;background:#3a3418;border-bottom:1px solid #c9a94a;color:#ffe9a6;font-size:14px;line-height:1.4;white-space:pre-wrap;z-index:4}
+body.gnote:not(.home) #gNote{display:block}
+body:not(.dark) #grpBar{background:var(--t-bar)}
 </style>
 </head>
 <body>
@@ -756,6 +780,8 @@ body:not(.dark) #selfBar{background:var(--t-bar)}
       <button id="tmEng">🌐 English</button>
     </div>
   </div>
+  <div id="grpBar"></div>
+  <div id="gNote"></div>
   <div id="selfBar"><span>📝 나와의 대화</span><button id="sbTodo">✅ 할 일</button><button id="sbDiary">📒 일기장</button></div>
   <div id="menuDim"></div>
   <div id="homeLogo">📮<br>빨간 우체통<br><small>(못다한 그 말)</small></div>
@@ -790,6 +816,7 @@ body:not(.dark) #selfBar{background:var(--t-bar)}
   <!-- 32번: 메인 화면 (나와의 대화 고정 · 할 일 / 친구 · 홍보 · 친구 초대) -->
   <div id="homeList">
     <div id="hTop"></div>
+    <div id="hGroup" class="hsec"></div>
     <div class="tdadd hadd"><input id="hTdIn" maxlength="80" placeholder="할 일 적기" enterkeyhint="done"><button class="mic" data-dict="hTdIn" title="말로 쓰기">🎤</button><button class="ok" data-tdadd="hTdIn" title="넣기">＋</button><button class="hlist" id="hListBtn" data-hv="friends" title="친구 목록 · 할 일 바꾸기">👥</button></div>
     <div id="hTodo" class="hsec"><div id="hTodoList"></div>
       <button class="tdcal" data-gcal>📅 구글 캘린더 (일정) 열기</button></div>
@@ -1265,6 +1292,19 @@ body:not(.dark) #selfBar{background:var(--t-bar)}
   </div>
 </div>
 
+<!-- 37번: 우리 모임 만들기 · 초대 -->
+<div class="ov" id="grpNewOv"><div class="panel" style="max-width:380px">
+  <h2>👥 우리 모임 만들기</h2>
+  <div style="color:#ccc;font-size:14px;line-height:1.6">모임 이름을 정하고 초대 링크를 보내면,<br>들어온 사람들 이름이 서로 저절로 생겨요.</div>
+  <input class="in" id="grpName" maxlength="14" placeholder="예: 영민의 가족, 영업 1팀" style="margin-top:12px">
+  <button class="big y" id="grpMake">만들기</button><button class="big" data-close>닫기</button>
+</div></div>
+<div class="ov" id="grpInvOv"><div class="panel" style="max-width:380px">
+  <h2 id="grpInvTitle">👥 모임에 초대하기</h2>
+  <div class="sharerow"><button class="shico" data-ginvk="kakao">KAKAO</button><button class="shico" data-ginvk="sms">SMS</button></div>
+  <div class="shhint">링크를 단체방에 한 번만 올려도 돼요</div>
+  <button class="big" data-ginvk="copy">🔗 모임 주소 복사</button><button class="big" data-close>닫기</button>
+</div></div>
 <div id="fly"></div>
 <div id="toast"></div>
 
@@ -1286,7 +1326,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '34';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '37';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1374,6 +1414,7 @@ const selfL = () => LS.get('rp_selfletters', []);   // 26번: 나에게 쓴 편�
 const demoKey = () => 'rp_msgs_' + room;
 const saveDemo = () => LS.set(demoKey(), msgs);
 function addMsg(m){
+  if (fb && pairInfo[room]) grpPing(room);   // 37번: 모임 사람에게 처음 보내면 그 사람 목록에도
   if (fb) { fb.push(m).catch(() => toast('보내기 실패 - 인터넷을 확인해 주세요')); return; }
   m.id = rid(); msgs[m.id] = m; saveDemo(); render();
 }
@@ -1471,7 +1512,8 @@ async function initStore(){
   if (FB && authUid && me.name && me === realMe) claimName(me.name);   // 내 닉네임 등록 (이미 다른 사람 것이면 그냥 넘어가요)
   if (FB && me.name && LS.get('rp_name_synced', '') !== me.name) setTimeout(renameAll, 3000);   // 25번: 예전 이름으로 남은 방도 한 번에 고쳐요
   /* 28번: 초대 링크·알림을 누르고 들어오면 목록이 아니라 바로 그 대화방 */
-  if (urlRoom) { unRemove(urlRoom); saveRoom(urlRoom, urlFrom || null); openRoom(urlRoom); }   // openRoom 안에서 들어왔다고 딩동(joinRoom)
+  if (urlRoom && isGroup(urlRoom)) { grpJoin(urlRoom, urlQ.get('gn') || ''); grpSel = urlRoom; goHome(true); }   // 37번: 모임 초대 링크
+  else if (urlRoom) { unRemove(urlRoom); saveRoom(urlRoom, urlFrom || null); openRoom(urlRoom); }   // openRoom 안에서 들어왔다고 딩동(joinRoom)
   else goHome(true);
   readInbox();
   if ('Notification' in window && Notification.permission === 'granted') setupPush(false);
@@ -1550,6 +1592,8 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
     + (letters || (mN && view === 'todo') ? `<div class="hchips">${letters ? `<button class="hchip" data-hmail>💌 새 편지 ${letters}통</button>` : ''}${mN && view === 'todo' ? `<button class="hchip" data-hv="friends">💬 새 메시지 ${mN > 99 ? '99+' : mN}</button>` : ''}</div>` : '');
   setHTML('hTop', top);
   { const lb = $('hListBtn'); lb.dataset.hv = view === 'todo' ? 'friends' : 'todo'; lb.innerHTML = view === 'todo' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view === 'todo' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
+  grpDrawBar(); grpDrawPanel();
+  if (grpSel) return;
   $('hTodo').style.display = view === 'todo' ? '' : 'none';
   $('hFriends').style.display = view === 'friends' ? '' : 'none';
   if (view === 'todo') { tdDraw(); return; }
@@ -1614,7 +1658,7 @@ function memberIn(id, uid, v, t0){
   const mine = me.ids.includes(uid) || v.name === me.name;
   if (mine && me === realMe && !me.ids.includes(uid)) { me.ids.push(uid); saveMe(); }   // 다른 브라우저에서 쓰던 내 번호도 내 것으로
   if (!mine && v.joined && v.joined > t0) {
-    showBanner(`🔔 ${v.name}님이 들어왔어요`); dingdong();
+    showBanner(isGroup(id) ? `👥 ${v.name}님이 '${grpName(id)}' 모임에 들어왔어요` : `🔔 ${v.name}님이 들어왔어요`); dingdong();
     flashRoom(id);
   }
   if (me === realMe) saveRoom(id, titleFor(id));
@@ -1637,7 +1681,7 @@ function twinMap(){
 const visibleRooms = () => { const m = twinMap(); return getRooms().filter(x => m[x.id] === x.id && (x.id === room || x.title || lastMsg[x.id] || othersIn(x.id).length || aliasOf(x.id))); };   // 31번: 저절로 생긴 빈 새방은 안 보여요
 function removeFriend(id){ const m = twinMap(), k = m[id] || id; getRooms().filter(x => (m[x.id] || x.id) === k).forEach(x => removeRoom(x.id)); }
 function saveRoom(id, title){
-  if (isSelf(id)) return;   // 32번: 나와의 대화방은 친구 목록에 안 넣어요
+  if (isSelf(id) || isGroup(id)) return;   // 37번: 모임 전체방은 모임 탭에서   // 32번: 나와의 대화방은 친구 목록에 안 넣어요
   const rooms = getRooms(), r = rooms.find(x => x.id === id);
   if (r) { if (title && r.title !== title) { r.title = title; LS.set('rp_rooms', rooms); pushRoomUp(r); } return; }
   const n = { id, title: title || '', at: Date.now() };
@@ -1694,7 +1738,7 @@ function flashRoom(id){ flashing[id] = Date.now(); queueRender(); setTimeout(() 
 function stopWatch(id){ (watch[id] || []).forEach(f => { try { f(); } catch (e) {} }); delete watch[id]; }
 function syncWatchers(){
   if (!FB) return;
-  const ids = getRooms().map(x => x.id).filter(x => homeOn || x !== room);
+  const ids = [...getRooms().map(x => x.id), ...grpList().map(g => g.id)].filter(x => homeOn || x !== room);   // 37번: 모임 전체방도
   Object.keys(watch).forEach(id => { if (!ids.includes(id)) stopWatch(id); });
   ids.forEach(id => { if (!watch[id]) watchRoom(id); });
   syncRemoved();
@@ -2301,13 +2345,14 @@ function envHTML(m){
 function render(){
   if (homeOn) {
     $('subTitle').textContent = `나: ${me.name} · 친구 목록`;
-    syncWatchers(); drawBar(); drawHome(); updateFlag();
+    grpRoomNote(); syncWatchers(); drawBar(); drawHome(); updateFlag();
     if (S.on) svRefresh();
     return;
   }
   const t = titleFor(room); if (me === realMe) saveRoom(room, t || null);
   const others = othersIn(room);
   $('subTitle').textContent = `나: ${me.name}` + (t ? ` · ${t}님과 대화` : '') + (FB && !others.length ? ' · ⏳ 친구가 아직 안 들어왔어요' : '');
+  grpRoomNote();
   writeSeen();
   if (!document.hidden) setSeen(room);
   syncWatchers();
@@ -4965,6 +5010,194 @@ $('pingTest').onclick = () => {
   click(); myPut('ping', { u: me.uid, at: Date.now() });
   toast('🕑 지금 화면을 끄고 기다려 보세요 · 2분 30초 뒤에 알림이 와요');
 };
+/* ===== 37번: 👥 우리 모임 =====
+   · 모임 = 전체 대화방 하나 (방 번호가 grp로 시작) · 사람 목록은 그 방의 members
+   · 초대 링크로 들어오면 모임 사람들 이름이 저절로 생기고, 누르면 그 사람과 1:1 대화
+   · 방장: 공지(회식 장소 등) · 모두에게 따로 보내기 · 사람 빼기 */
+const isGroup = id => typeof id === 'string' && id.startsWith('grp');
+const grpList = () => LS.get('rp_groups', []);
+const grpMeta = {};   // 모임 → { name, owner, notice, out }
+let grpSel = null;
+const pairInfo = {};   // 1:1 방 → { gid, uid, name, sent }
+const grpName = id => (grpMeta[id] && grpMeta[id].name) || (grpList().find(g => g.id === id) || {}).name || '우리 모임';
+const pairId = u => 'gp' + [realMe.uid, u].sort().join('');
+const grpIsOwner = id => { const o = (grpMeta[id] || {}).owner; return !!o && realMe.ids.includes(o); };
+function grpPeople(id){
+  const out = (grpMeta[id] || {}).out || {}, by = {};
+  Object.entries(roomMembers[id] || {}).forEach(([u, v]) => {
+    if (!v || !v.name || me.ids.includes(u) || v.name === me.name || out[u]) return;
+    if (!by[v.name] || (v.at || 0) > (by[v.name].at || 0)) by[v.name] = { uid: u, name: v.name, at: v.at || 0 };
+  });
+  return Object.values(by).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+}
+function grpSaveList(l){ LS.set('rp_groups', l); }
+function grpAdd(id, name){
+  const l = grpList(); const g = l.find(x => x.id === id);
+  if (g) { if (name && g.name !== name) { g.name = name; grpSaveList(l); } } else { l.push({ id, name: name || '우리 모임', at: Date.now() }); grpSaveList(l); }
+  grpWatch(id);
+}
+function grpJoin(id, name){
+  grpAdd(id, name);
+  if (FB) { needKey(id); joinRoom(id); }
+}
+/* 모임 정보 듣기 (이름 · 방장 · 공지 · 뺀 사람) + 나에게 온 1:1 대화 알림 */
+const gwatch = {};
+function grpWatch(id){
+  if (!FB || gwatch[id]) return;
+  needKey(id);
+  const un = gwatch[id] = [];
+  un.push(FB.D.onValue(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group'), s => {
+    const v = s.val() || {}; grpMeta[id] = v;
+    if (v.name) grpAdd(id, v.name);
+    if (v.out && realMe.ids.some(u => v.out[u])) { grpDrop(id); toast(`'${v.name || '모임'}' 모임에서 빠졌어요`); return; }
+    grpSilver(id); queueRender();
+  }));
+  un.push(FB.D.onChildAdded(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/pings/' + realMe.uid), s => {
+    const v = s.val() || {}, pid = s.key;
+    if (!pid || getRooms().some(x => x.id === pid)) return;
+    unRemove(pid); saveRoom(pid, v.n || ''); syncWatchers(); queueRender();
+  }));
+  un.push(FB.D.onChildAdded(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members'), () => grpSilver(id)));
+}
+function grpDrop(id){
+  (gwatch[id] || []).forEach(f => { try { f(); } catch (e) {} }); delete gwatch[id];
+  stopWatch(id); grpSaveList(grpList().filter(g => g.id !== id));
+  if (grpSel === id) grpSel = null;
+  if (!homeOn && room === id) goHome(); else queueRender();
+}
+/* 모임 사람과 1:1 대화방 열기 (두 사람에게 늘 같은 방 번호) */
+function grpOpenPerson(gid, p){
+  const pid = pairId(p.uid);
+  pairInfo[pid] = { gid, uid: p.uid, name: p.name, sent: false };
+  unRemove(pid); saveRoom(pid, p.name); openRoom(pid);
+}
+/* 처음 보낼 때: 상대도 그 방 사람으로 적어 두고(알림이 가게), 모임에 '대화 왔어요' 표시 */
+function grpPing(pid){
+  const pi = pairInfo[pid]; if (!pi || pi.sent || !FB) return;
+  pi.sent = true; needKey(pid);
+  const mr = FB.D.ref(FB.db, 'giftstory/rooms/' + pid + '/members/' + pi.uid);
+  FB.D.get(mr).then(s => { if (!s.exists()) return FB.D.set(mr, { name: pi.name, at: Date.now() }); }).catch(() => {});
+  FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + pi.gid + '/pings/' + pi.uid + '/' + pid), { n: me.name, at: Date.now() }).catch(() => {});
+}
+/* 실버 모드 어르신: 모임 사람이 가족 버튼으로 저절로 */
+function grpSilver(gid){
+  const d = svData(); if (!d.elder || !LS.get('rp_silver_on', 0)) return;
+  let ch = false;
+  grpPeople(gid).forEach(p => {
+    const pid = pairId(p.uid);
+    if (d.fam.some(f => f.room === pid || (f.nick === p.name && f.gid === gid))) return;
+    d.fam.push({ id: rid(), g: 'kids', name: p.name, rn: '', phone: '', room: pid, nick: p.name, photo: '', gid });
+    pairInfo[pid] = { gid, uid: p.uid, name: p.name, sent: false };
+    saveRoom(pid, p.name); ch = true;
+  });
+  if (ch) { svSave(d); if (S.on) svHome(true); }
+}
+/* 위쪽 모임 탭 줄 */
+function grpDrawBar(){
+  const h = grpList().map(g => { const n = unreadN(g.id); return `<button class="gtab ${grpSel === g.id ? 'on' : ''}" data-gtab="${g.id}">👥 ${esc(grpName(g.id))}${n ? `<i>${n > 99 ? '99+' : n}</i>` : ''}</button>`; }).join('')
+    + `<button class="gtab add" data-gnew>＋ 모임 만들기</button>`;
+  setHTML('grpBar', h);
+  document.body.classList.toggle('grpon', !!grpSel);
+}
+function grpDrawPanel(){
+  if (!grpSel) return;
+  const id = grpSel, own = grpIsOwner(id), meta = grpMeta[id] || {}, ppl = grpPeople(id), n = unreadN(id), L = lastMsg[id];
+  const ini = t => esc([...String(t).replace(/\s+/g, '')].slice(0, 2).join(''));
+  setHTML('hGroup', `<div class="ghead">👥 ${esc(grpName(id))} <small>${ppl.length + 1}명${own ? ' · 내가 방장' : ''}</small></div>`
+    + (meta.notice && meta.notice.text ? `<div class="gnote" ${own ? 'data-gnote' : ''}>📢 ${esc(meta.notice.text)}</div>` : '')
+    + `<div class="hrow gall" data-gall><div class="hav">전체</div><div class="htx"><b>${esc(grpName(id))} 전체 대화방</b><small>${esc(L ? L.t : '모두 같이 이야기해요')}</small></div><div class="hside">${n ? `<i>${n > 99 ? '99+' : n}</i>` : ''}</div></div>`
+    + (ppl.length ? ppl.map(p => { const pid = pairId(p.uid), m = unreadN(pid), pl = lastMsg[pid];
+        return `<div class="hrow" data-gmem="${p.uid}"><div class="hav">${ini(p.name)}</div><div class="htx"><b>${esc(p.name)}</b><small>${esc(pl ? pl.t : '눌러서 바로 대화')}</small></div><div class="hside">${m ? `<i>${m > 99 ? '99+' : m}</i>` : ''}</div></div>`; }).join('')
+      : '<div class="tdempty">아직 아무도 안 들어왔어요 · 아래 초대하기로 링크를 보내 주세요</div>')
+    + `<div class="gtools"><button class="y" data-ginv>＋ 사람 초대하기</button>`
+    + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gsend>📨 모두에게 따로 보내기</button>` : `<button data-gleave>모임 나가기</button>`)
+    + `</div>` + (own && ppl.length ? '<div class="tdempty" style="font-size:12px">사람을 길게 누르면 모임에서 뺄 수 있어요</div>' : ''));
+}
+/* 대화방 위 공지 (모임 전체방) */
+function grpRoomNote(){
+  const on = !homeOn && isGroup(room) && grpMeta[room] && grpMeta[room].notice && grpMeta[room].notice.text;
+  document.body.classList.toggle('gnote', !!on);
+  if (on) { const t = '📢 ' + grpMeta[room].notice.text; if ($('gNote').textContent !== t) $('gNote').textContent = t; }
+}
+$('grpBar').addEventListener('click', e => {
+  if (e.target.closest('[data-gnew]')) { if (!FB) { toast('모임은 서버 연결이 필요해요'); return; } click(); $('grpName').value = ''; showOv('grpNewOv'); setTimeout(() => $('grpName').focus(), 300); return; }
+  const t = e.target.closest('[data-gtab]'); if (!t) return;
+  click(); grpSel = grpSel === t.dataset.gtab ? null : t.dataset.gtab; drawHome();
+});
+$('grpMake').onclick = () => {
+  const n = $('grpName').value.trim(); if (!n) { toast('모임 이름을 적어 주세요'); $('grpName').focus(); return; }
+  if (!FB) { toast('서버 연결이 안 됐어요'); return; }
+  click();
+  const id = 'grp' + rid();
+  needKey(id);
+  FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group'), { name: n, owner: realMe.uid, at: Date.now() })
+    .then(() => { grpJoin(id, n); grpSel = id; hideOv('grpNewOv'); drawHome(); grpInvite(id); toast(`👥 '${n}' 모임을 만들었어요 · 초대 링크를 보내 주세요`); })
+    .catch(() => toast('모임을 못 만들었어요 · 데이터베이스 규칙을 확인해 주세요'));
+};
+$('grpName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('grpMake').click(); } });
+let grpInvId = null;
+function grpInvite(id){
+  grpInvId = id; $('grpInvTitle').textContent = `👥 '${grpName(id)}'에 초대하기`;
+  document.querySelectorAll('#grpInvOv .shico').forEach(b => { b.innerHTML = (b.dataset.ginvk === 'kakao' ? ICON_KAKAO + '카카오톡' : ICON_SMS + '문자'); });
+  showOv('grpInvOv');
+}
+document.querySelectorAll('[data-ginvk]').forEach(b => b.onclick = () => {
+  if (!grpInvId) return; click();
+  const url = location.origin + location.pathname + '?room=' + grpInvId + '&gn=' + encodeURIComponent(grpName(grpInvId)) + '&f=' + encodeURIComponent(me.name || '');
+  shareTo(b.dataset.ginvk, url, `👥 ${me.name}님이 '${grpName(grpInvId)}' 모임에 초대했어요. 누르면 모임 사람들 이름이 저절로 생겨요.`);
+});
+$('hGroup').addEventListener('click', e => {
+  const id = grpSel; if (!id) return;
+  if (glpDone) { glpDone = false; return; }
+  if (e.target.closest('[data-gall]')) { click(); openRoom(id); return; }
+  if (e.target.closest('[data-ginv]')) { click(); grpInvite(id); return; }
+  if (e.target.closest('[data-gnote]')) {
+    if (!grpIsOwner(id)) return; click();
+    const old = ((grpMeta[id] || {}).notice || {}).text || '';
+    const t = prompt('모임 공지 (예: 금요일 7시 회식 · 강남역 ○○식당)\n비우면 공지를 내려요', old);
+    if (t === null) return;
+    const v = t.trim().slice(0, 200);
+    FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group/notice'), v ? { text: v, by: me.name, at: Date.now() } : null).catch(() => toast('공지를 못 올렸어요'));
+    if (v) pushTo(id, { from: realMe.uid, name: me.name, type: 'text', text: '📢 공지: ' + v, at: Date.now() });   // 모두에게 알림도
+    toast(v ? '📢 공지를 올렸어요 · 모두에게 알림이 가요' : '공지를 내렸어요'); return;
+  }
+  if (e.target.closest('[data-gsend]')) {
+    const ppl = grpPeople(id); if (!ppl.length) { toast('아직 모임에 들어온 사람이 없어요'); return; }
+    click();
+    const t = prompt(`모임 사람 ${ppl.length}명에게 각자 따로 보낼 말`, ''); if (!t || !t.trim()) return;
+    ppl.forEach(p => { const pid = pairId(p.uid); pairInfo[pid] = { gid: id, uid: p.uid, name: p.name, sent: false }; grpPing(pid); saveRoom(pid, p.name); pushTo(pid, { from: realMe.uid, name: me.name, type: 'text', text: t.trim(), at: Date.now() }); });
+    sentFx(); toast(`📨 ${ppl.length}명에게 따로 보냈어요`); return;
+  }
+  if (e.target.closest('[data-gleave]')) {
+    if (!confirm(`'${grpName(id)}' 모임에서 나갈까요?`)) return;
+    click(); FB.D.remove(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members/' + realMe.uid)).catch(() => {});
+    grpDrop(id); toast('모임에서 나왔어요'); return;
+  }
+  const r = e.target.closest('[data-gmem]'); if (!r) return;
+  const p = grpPeople(id).find(x => x.uid === r.dataset.gmem); if (!p) return;
+  click(); grpOpenPerson(id, p);
+});
+/* 방장: 사람을 길게 누르면 빼기 */
+let glpT = 0, glpDone = false, glpY = 0;
+$('hGroup').addEventListener('pointerdown', e => {
+  const r = e.target.closest('[data-gmem]'); if (!r || !grpIsOwner(grpSel)) return;
+  glpDone = false; glpY = e.clientY; clearTimeout(glpT);
+  glpT = setTimeout(() => {
+    glpDone = true; if (navigator.vibrate) navigator.vibrate(30);
+    const id = grpSel, p = grpPeople(id).find(x => x.uid === r.dataset.gmem); if (!p) return;
+    if (!confirm(`'${p.name}'님을 모임에서 뺄까요?`)) return;
+    FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group/out/' + p.uid), true).catch(() => toast('빼지 못했어요'));
+    FB.D.remove(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members/' + p.uid)).catch(() => {});
+    if (roomMembers[id]) delete roomMembers[id][p.uid];
+    toast(`${p.name}님을 모임에서 뺐어요`); queueRender();
+  }, 700);
+});
+$('hGroup').addEventListener('pointermove', e => { if (Math.abs(e.clientY - glpY) > 10) clearTimeout(glpT); });
+['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('hGroup').addEventListener(t, () => clearTimeout(glpT)));
+$('hGroup').addEventListener('contextmenu', e => e.preventDefault());
+/* 앱을 열면 내 모임들 듣기 시작 */
+(function grpBoot(){ const go = () => { if (FB && authUid) grpList().forEach(g => grpWatch(g.id)); else setTimeout(go, 1500); }; setTimeout(go, 1500); })();
+
 kakaoBack();
 if (inKakao) {   // 카톡 안 창에서는 시작하지 않음 (크롬 쪽에서 열려요)
   showOv('kakaoOv');
