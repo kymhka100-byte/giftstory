@@ -32,7 +32,8 @@ button{font-family:inherit;cursor:pointer}
 #tgBtn{flex:none;height:42px;border-radius:12px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:16px;padding:0 6px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
 #tgBtn b{font-size:9px;font-weight:400;margin-top:2px}
 #tgBtn{position:absolute;left:8px;top:-54px;height:46px;z-index:5;padding:2px 6px}
-#tgMenu{left:8px;bottom:auto;top:-160px}
+#tgMenu{left:58px;top:auto;bottom:62px}
+#gameMenu{left:58px;top:auto;bottom:62px}
 /* 방 말풍선 줄: 말풍선은 옆으로 밀리고, 빨간 ＋는 항상 오른쪽 끝 */
 .rooms{display:flex;align-items:center;gap:8px;padding:0 10px 0 6px;border-bottom:1px solid var(--line);background:#141417}
 .rscroll{flex:1;min-width:0;display:flex;gap:6px;overflow-x:auto;padding:10px 4px 7px;scrollbar-width:none}
@@ -444,6 +445,8 @@ body:not(.dark) #micBtn{background:var(--t-btn);color:var(--t-btnink);border-col
 /* 20번: 위쪽 말풍선 5자리 고정 */
 .rooms{position:relative}
 .rscroll{overflow:hidden;justify-content:space-between}
+.rscroll .rb{flex:1 1 0;min-width:0;max-width:72px;overflow:hidden;text-overflow:clip;padding:0 4px}
+html,body{max-width:100%;overflow-x:hidden}
 .rscroll .rb:not(.cur):not(.unread):not(.empty){opacity:.6}
 .rb.empty{opacity:.45;border-style:dashed!important;font-size:11px!important;font-weight:600}
 /* 31번: 빈칸 ＋친구는 잘 보이게, 고정한 칸은 회색 캡 */
@@ -622,12 +625,13 @@ body.menuon #menuDim{display:block}
 .hchips{display:flex;gap:6px;margin:0 12px 8px;flex-wrap:wrap}
 .hchip{border:none;border-radius:20px;padding:7px 12px;font-size:14px;font-weight:700;background:#ff4d4a;color:#fff;animation:blink 1.6s infinite}
 .hsec{margin:0 12px;padding:4px 6px 8px;border-radius:16px;background:var(--card);border:1px solid #2c2d38}
-.hpromo{text-align:center;margin:14px 12px 8px;padding:12px 14px;border-radius:14px;background:#17181e;border:1px dashed #3a3b46;font-size:14px;line-height:1.9;color:#d8d8e2}
+.hpromo{text-align:left;display:table;margin-left:auto!important;margin-right:auto!important;margin:14px 12px 8px;padding:12px 14px;border-radius:14px;background:#17181e;border:1px dashed #3a3b46;font-size:14px;line-height:1.9;color:#d8d8e2}
 .hinvBar{margin-top:auto;position:sticky;bottom:0;padding:12px 0 12px;text-align:center;background:linear-gradient(rgba(17,18,23,0),var(--bg) 45%);z-index:2}
 .hinvBar .hinv{display:inline-block;margin:0;padding:7px 16px;font-size:14px;border-radius:24px;box-shadow:0 4px 14px rgba(224,50,47,.4)}
 .hadd{margin:6px 12px 6px;padding:0}
 .hadd input{padding:9px 12px;font-size:16px}
-.hadd .ok{font-size:17px;padding:0 12px}
+.hadd .ok{flex:none;width:42px;height:42px;min-height:0;padding:0;border-radius:50%;font-size:20px;line-height:1;display:flex;align-items:center;justify-content:center}
+.hadd .mic,.hadd .hlist{width:42px;height:42px;min-height:0;padding:0;border-radius:50%}
 /* 36번: 키보드가 올라오면 큰·친구 초대 버튼 숨김 · 모든 친구에게 버튼 */
 body.kb #tgBtn,body.kb .hinvBar{display:none!important}
 #allBtn{display:none;position:absolute;left:8px;top:-44px;z-index:5;height:36px;padding:0 12px;border-radius:18px;border:1px solid #555;background:#232328;color:#fff;font-size:14px;font-weight:700}
@@ -639,12 +643,6 @@ body.typing #allBtn{display:block}
 .mic svg{vertical-align:middle}
 /* 34번: 받은 말풍선 또렷하게 */
 .them .bubble{background:#1d1e24;border:1.5px solid #8a8da0;color:#fff;font-weight:600}
-/* 34번: 큰 글씨 막대 */
-#bigOv .panel{max-width:400px;text-align:center}
-#bigOv input[type=range]{width:100%;height:36px;accent-color:#ffe14d}
-#bigPrev{font-size:18px;margin:10px 0 14px;padding:12px;border-radius:12px;background:#121318;border:1px solid #3a3b46}
-#bigLight{display:flex;align-items:center;justify-content:center;gap:10px;font-size:18px;margin:10px 0}
-#bigLight input{width:24px;height:24px}
 #easyOv .panel{max-width:380px;text-align:center;position:relative}
 #easyOv .ix{position:absolute;top:6px;right:8px;background:none;border:none;color:#bbb;font-size:24px;width:40px;height:40px}
 .nbtn.kk{background:#fee500;color:#191600;border-color:#fee500}
@@ -854,7 +852,8 @@ body:not(.dark) #grpBar{background:var(--t-bar)}
     </button>
     <button id="plusBtn" title="파일 · 게임 · 친구 초대">＋</button>
     <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="cap">💬 음성 통화 + 자막</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
-    <div class="pmenu" id="plusMenu"><button data-tg="file">📁 파일 보내기</button><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button><button data-tg="invite">👥 친구 초대</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="invite">👥 친구 초대</button></div>
+    <div class="pmenu" id="gameMenu"><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="micBtn" title="목소리 보내기"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1114,15 +1113,6 @@ body:not(.dark) #grpBar{background:var(--t-bar)}
 <!-- 25번: 파일 용량 다 썼을 때 -->
 <div class="ov" id="fqOv"><div class="panel" style="text-align:center;max-width:380px"><p id="fqText" style="font-size:17px;line-height:1.6;color:#fff;margin:10px 4px 16px"></p><button class="big" id="fqCopy">📋 메일 주소 복사</button><button class="big" data-close>닫기</button></div></div>
 <!-- 24번: 시작하고 나서 홈 화면에 추가 권하기 -->
-<div class="ov" id="bigOv">
-  <div class="panel"><div style="font-size:20px;font-weight:800">🔠 글씨 크기</div>
-    <div id="bigPrev">가나다 글씨가 이만큼 커져요</div>
-    <input type="range" id="bigRange" min="90" max="160" step="5">
-    <div id="bigVal" style="color:#bbb"></div>
-    <label id="bigLight"><input type="checkbox" id="bigLightCk"> ☀ 밝은 모드</label>
-    <button class="big" data-close>확인</button>
-  </div>
-</div>
 <div class="ov" id="easyOv">
   <div class="panel"><button class="ix" data-close>✕</button>
     <p style="font-size:18px;line-height:1.6;margin:10px 0 16px">🔐 로그인이 돼 있어야<br>쓸 수 있어요</p>
@@ -1326,7 +1316,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '37';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '38';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -3322,15 +3312,16 @@ function showPanel(id, on){
   $(id).classList.toggle('show', on);
   if (id === 'videoPanel') { document.body.classList.toggle('watch', on); if (on) { document.documentElement.style.setProperty('--fh', document.querySelector('footer').offsetHeight + 'px'); drawVChat(); } }
 }
-function closeMenus(){ ['plusMenu', 'tgMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
+function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
 /* 32번: 메뉴가 열리면 뒤 화면을 어둡게 (뒤로 가기는 메뉴부터 닫아요) */
 function menuDim(){ const on = !!document.querySelector('.pmenu.show,#morePanel.show'); if (document.body.classList.contains('menuon') !== on) { document.body.classList.toggle('menuon', on); syncLayer(); } }
 function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $('morePanel').classList.remove('show'); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); menuDim(); }
 $('plusBtn').onclick = e => toggleMenu('plusMenu', e);
-$('tgBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); bigShow(); };   // 34번: 같이 보기는 ＋ 안으로, 여기는 '큰' 글씨
+$('tgBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); const big = LS.get('rp_zoom', 100) > 100; LS.set('rp_zoom', big ? 100 : BIG_Z); zoomApply(); toast(big ? '보통 글씨' : '큰 글씨'); };   // 38번: 한 번 누르면 큰 글씨 ⇄ 보통   // 34번: 같이 보기는 ＋ 안으로, 여기는 '큰' 글씨
 document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#topBox,#micBtn')) closeMenus(); });
-['plusMenu', 'tgMenu'].forEach(id => $(id).addEventListener('click', e => {
+['plusMenu', 'tgMenu', 'gameMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
+  if (b.dataset.tg === 'watch' || b.dataset.tg === 'game') { e.stopPropagation(); click(); closeMenus(); const m = $(b.dataset.tg === 'watch' ? 'tgMenu' : 'gameMenu'); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로
   click(); closeMenus();
   if (b.dataset.tg === 'file') { if (homeOn) { pickFriend('📁 누구에게 파일을 보낼까요?', id => { openRoom(id); $('sendFile').click(); }); return; } $('sendFile').click(); return; }
   if (b.dataset.tg === 'invite') { openInvite(); return; }
@@ -4986,16 +4977,9 @@ async function kakaoBack(){
     toast('✓ 카카오로 로그인했어요');
   } catch (e) { toast('카카오 로그인이 안 됐어요 (' + ((e && e.message) || e) + ')'); }
 }
-/* '큰' 버튼: 막대로 글씨 크기 + 밝은 모드 */
-function zoomApply(){ const z = LS.get('rp_zoom', 100); document.body.style.zoom = z === 100 ? '' : (z / 100); }
-function bigShow(){
-  const z = LS.get('rp_zoom', 100); $('bigRange').value = z; $('bigVal').textContent = z + '%';
-  $('bigPrev').style.fontSize = (18 * z / 100) + 'px'; $('bigLightCk').checked = !!LS.get('rp_light', false);
-  showOv('bigOv');
-}
-$('bigRange').oninput = () => { const z = +$('bigRange').value; $('bigVal').textContent = z + '%'; $('bigPrev').style.fontSize = (18 * z / 100) + 'px'; };
-$('bigRange').onchange = () => { LS.set('rp_zoom', +$('bigRange').value); zoomApply(); };
-$('bigLightCk').onchange = () => { LS.set('rp_light', $('bigLightCk').checked); applyDark(); };
+/* 38번 '큰' 버튼: 한 번 누르면 큰 글씨, 다시 누르면 보통 */
+const BIG_Z = 120;   // 38번: 화면이 깨지지 않는 가장 큰 글씨
+function zoomApply(){ const z = Math.min(LS.get('rp_zoom', 100), BIG_Z); document.body.style.zoom = z === 100 ? '' : (z / 100); }
 zoomApply();
 /* 편지 쓰기 위 버튼 */
 $('wPick').onclick = () => { click(); step(1); };
