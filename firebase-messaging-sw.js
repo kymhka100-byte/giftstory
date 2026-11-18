@@ -1,9 +1,9 @@
-/* 빨간 우체통 알림·설치 도우미 (35번: 알림을 가장 먼저 띄워서 첫 번째 알림부터 울려요)
+/* 빨간 우체통 알림·설치 도우미 (36번: 앱을 보고 있어도 알림은 조용히 띄워서 폰이 우리 알림을 낮춰 보지 않게)
+   (34번: 알림마다 이름표를 달리 해서 매번 소리가 나요)
    - 화면이 꺼져 있어도 서버가 보낸 알림을 띄워요
-   - 앱을 보고 있으면 앱이 그 알림을 바로 지워요
    - 알림이 온 방이 목록에 없으면 앱이 열릴 때 넣도록 적어 둬요
    - 앱 파일은 폰에 저장해 두고, 열 때마다 몰래 새 버전을 받아 다음에 바뀌어요 */
-const APP_CACHE = 'rp-app-35';
+const APP_CACHE = 'rp-app-36';
 const INBOX = 'rp-inbox';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -46,18 +46,17 @@ self.addEventListener('push', e => {
   try { p = e.data ? e.data.json() : {}; } catch (x) {}
   const d = p.data || {}, n = p.notification || {};
   const room = d.room || '', title = d.title || n.title || '빨간 우체통', body = d.body || n.body || '새 메시지가 왔어요';
-  const tag = 'rp-' + room + '-' + (d.at || Date.now());
-  /* 35번: 기다리지 않고 알림부터 띄워요 (폰이 깊이 잠들어 있어도 첫 번째부터 울려요) */
-  const shown = self.registration.showNotification(title, {
-    body, tag, renotify: true, silent: false, icon: 'icon-192.png', badge: 'icon-192.png',
-    vibrate: [120, 60, 120], requireInteraction: false,
-    data: { room, name: d.name || title, url: d.url || '' }
-  });
-  e.waitUntil(Promise.all([shown, (async () => {
+  e.waitUntil((async () => {
     if (room) await noteInbox(room, d.name || title, +d.at || Date.now());
     const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    wins.forEach(w => w.postMessage({ inbox: 1, tag }));   // 앱을 보고 있으면 앱이 알림을 지워요
-  })()]));
+    wins.forEach(w => w.postMessage({ inbox: 1 }));
+    const looking = wins.some(w => w.visibilityState === 'visible' && w.focused);   // 36번: 앱을 보고 있으면 소리 없이 띄움
+    await self.registration.showNotification(title, {
+      body, tag: 'rp-' + room + '-' + (d.at || Date.now()), renotify: !looking, silent: looking, icon: 'icon-192.png', badge: 'icon-192.png',
+      vibrate: [120, 60, 120], requireInteraction: false,
+      data: { room, name: d.name || title, url: d.url || '' }
+    });
+  })());
 });
 
 /* 알림을 누르면 그 대화방으로 */
