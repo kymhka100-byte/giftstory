@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 42번: 할 일 ＋ 누르면 마이크 꺼짐·다음 말은 새로 · 할 일 줄 버튼 원 없이 같은 크기 · ＋모임 → 모임 N · 고정 말풍선: 상대 정하면 테두리 진하게, 들어오면 밝은 노랑 · 편지 기본 손글씨(글씨체 적용 버그) · 스티커 누를수록 늘고 꾹 누르면 다 지움 · 받는 사람 고르기 뒤로 가기는 편지로 · 확인·닫기 버튼 고정 · 카톡·문자 바로 열림·돌아오면 편지로 · 긴 편지는 여러 장 · 편지 우체통 아이콘 까만 배경 없앰 · 더보기 이름 말풍선에 새 메시지·임시 표시 · 노래 끝나도 플레이어 그대로 · 알림 두 번(조용히 깨우고 → 소리) -->
 <!-- 41번: 첫 알림부터 소리 (알림 도우미가 물어보면 진짜 보고 있는지 대답) · 할 일 넣으면 입력창 바로 밑에 쌓임 · 오늘 할 일 있으면 내 이름 버튼 10분마다 흔들+띵동(한 번 들어가면 그날은 멈춤) · 모임 공지 쓰기 창(저장 버튼) · 모임 "저장하고 나가기" · 빨간 우체통 친구 골라 모임 초대 -->
 <!-- 40번: 맨 위 한 줄 = 내 이름(하늘색·나와의 창) · ＋모임 · ＋친구 3칸 · 더보기 / 나와의 대화 카드·모임 줄 없앰 / 설정은 ＋ 메뉴 안으로 / 웹캠은 아래 마이크 옆 / 처음 화면 고르기 일반·다크·실버 한 줄 / 마이크 메뉴 "음성 문자" / 두더지는 큰 버튼 위 투명 버튼 3번 / 안 쓰는 코드 정리 -->
 <!-- 39번: 큰 글씨여도 화면이 폰에 꼭 맞고 '큰' 버튼 늘 보임 · 폰이 글씨 키우는 것 막기 · 뒤로 가기는 어디서든 메인 화면으로 (모임 방·게임 갔다 와도) · 할 일 ＋ 버튼 분홍 테두리 · 내 말풍선 연한 노랑+분홍 테두리+진한 글씨 · 입력칸 은은한 테두리 · 메뉴 버튼 테두리 · 파일 보내기 오디오·사진·일반 파일 · 처음에 다크·큰 글씨·실버 모드 고르기 · 가위바위보·뽑기 게임으로 잘 넘어가게 -->
@@ -268,8 +269,9 @@ input.in{width:100%;padding:12px;border-radius:12px;border:1px solid #444;backgr
 .paperbox:after{right:-6px;bottom:-8px;transform:rotate(168deg)}
 .ptop{font-size:22px;margin-bottom:6px;position:relative;z-index:1;padding-left:52px}
 .ptop input{border:none;background:transparent;border-bottom:1.5px dashed var(--lc);font:inherit;color:inherit;width:62%;outline:none}
-.lined{display:block;width:100%;border:none;outline:none;resize:none;background-color:transparent;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,var(--lc) 33px 34px);background-attachment:local;line-height:34px;color:inherit;padding:0 4px;white-space:pre-wrap;word-break:break-word;position:relative;z-index:1}
+.lined{display:block;width:100%;font-family:inherit;border:none;outline:none;resize:none;background-color:transparent;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,var(--lc) 33px 34px);background-attachment:local;line-height:34px;color:inherit;padding:0 4px;white-space:pre-wrap;word-break:break-word;position:relative;z-index:1}
 textarea.lined{min-height:48vh}
+#wBody{background-image:repeating-linear-gradient(to bottom,transparent 0 474px,rgba(224,50,47,.55) 474px 476px),repeating-linear-gradient(to bottom,transparent 0 33px,var(--lc) 33px 34px)}
 textarea.lined::placeholder{color:var(--ink);opacity:.38}
 .pfrom{text-align:right;font-size:22px;margin-top:6px;position:relative;z-index:1}
 .pstk{font-size:30px;text-align:center;letter-spacing:6px;position:relative;z-index:1}
@@ -777,6 +779,27 @@ footer #camBtn{width:36px;height:36px;border-radius:50%;margin-bottom:1px}
 footer.typing #camBtn{display:none}
 #moleBtn{position:absolute;left:8px;top:-110px;width:46px;height:50px;background:none;border:none;opacity:0;z-index:4}
 body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
+/* ===== 42번 ===== */
+.hadd{gap:0}
+.hadd .ok,.hadd .mic,.hadd .hlist{width:38px;height:40px;border:none!important;background:none;border-radius:10px}
+.hadd .ok{font-size:19px;font-weight:900;-webkit-text-stroke:1.2px var(--pink);color:var(--pink)}
+.hadd .mic.on{background:#e0322f}
+.rscroll .rb.pin{background:#ffe14d;color:#222;border:1.5px solid #ffe14d;box-shadow:none;opacity:1!important}
+.rscroll .rb.pin.wait{background:#6a6a74;color:#fff;border:2px solid #e8e8ee!important;border-style:solid!important;opacity:1;box-shadow:inset 0 4px 0 #3a3a44}
+.rscroll .rb.pin.cur{box-shadow:0 0 0 2px var(--pink)}
+.rooms .rb.gbtn.has{color:#fff;background:#6a6a74;border:2px solid #e8e8ee;opacity:1;font-size:12px;font-weight:800}
+.rooms .rb.gbtn.live{color:#222;background:#ffe14d;border:1.5px solid #ffe14d}
+.rooms .rb.gbtn.on{box-shadow:0 0 0 2px var(--pink)}
+#toOv .panel{display:flex;flex-direction:column;max-height:88vh;overflow:hidden}
+#toOv #toList{flex:1 1 auto;min-height:0;overflow-y:auto}
+#toOv .panel>.big,#toOv #toMe,#toOv h2{flex:none}
+.toico #toBtn svg{transform:scale(1.25)}
+.stkn{position:absolute;top:-6px;right:-6px;font-style:normal;background:#ff3b36;color:#fff;border-radius:10px;padding:0 5px;font-size:11px;line-height:16px}
+#morePanel .mav{position:relative}
+#morePanel .mav .cnt{position:absolute;top:-7px;right:-8px;font-style:normal;background:#ff3b36;color:#fff;border-radius:9px;padding:0 4px;font-size:10px;line-height:15px;border:1.5px solid #1b1b20}
+#morePanel .mav .tmpk{position:absolute;left:0;right:0;bottom:-1px;font-style:normal;font-size:8px;line-height:10px;font-weight:700;background:rgba(0,0,0,.55);color:#fff;border-radius:0 0 10px 10px;text-align:center}
+.rpage{margin-bottom:14px}
+.rpage .pno{text-align:right;font-size:13px;opacity:.6;padding:4px 6px 0;font-family:'Noto Sans KR',sans-serif}
 </style>
 </head>
 <body>
@@ -1353,7 +1376,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '40';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '42';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1451,7 +1474,7 @@ function pushTo(id, m){
     needKey(id);
     const { D, db } = FB, base = 'giftstory/rooms/' + id;
     D.push(D.ref(db, base + '/msgs'), m).catch(() => toast('보내기 실패 - 인터넷을 확인해 주세요'));
-    if (me === realMe) D.update(D.ref(db, base + '/members/' + me.uid), { name: me.name, at: Date.now(), joined: Date.now() }).catch(() => {});
+    if (me === realMe) D.update(D.ref(db, base + '/members/' + me.uid), { name: me.name, at: Date.now(), joined: Date.now(), lg: LS.get('rp_auth', null) ? 1 : 0 }).catch(() => {});
     return;
   }
   const k = 'rp_msgs_' + id, all = LS.get(k, {}), mid = rid();
@@ -1651,7 +1674,8 @@ function joinRoom(id){
   needKey(id);
   if (me !== realMe) return;   // 테스트 친구는 방 사람 목록에 안 남김
   const { D, db } = FB, r = D.ref(db, 'giftstory/rooms/' + id + '/members/' + me.uid), now = Date.now();
-  D.get(r).then(s => D.update(r, s.exists() ? { name: me.name, at: now } : { name: me.name, at: now, joined: now })).catch(() => {});
+  const lg = LS.get('rp_auth', null) ? 1 : 0;   // 42번: 간편 로그인 했는지
+  D.get(r).then(s => D.update(r, s.exists() ? { name: me.name, at: now, lg } : { name: me.name, at: now, joined: now, lg })).catch(() => {});
 }
 /* 25번: 이름을 바꾸면 내가 들어간 모든 방에 새 이름으로 (예전 이름 YM → 영민) */
 function renameAll(){
@@ -1906,7 +1930,8 @@ function drawMore(){
   $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (list.length ? list.map(x => {
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
     const nm = roomName(x.id);
-    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}</span><div class="mt"><b>${esc(nm)}</b></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
+    const tmp = FB && othersIn(x.id).length && !othersIn(x.id).some(v => v.lg);   // 42번: 간편 로그인 안 한 사람은 '임시'
+    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}${tmp ? '<em class="tmpk">임시</em>' : ''}</span><div class="mt"><b>${esc(nm)}</b></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
   }).join('') : '<div class="pin-empty">말풍선에 없는 친구가 여기에 보여요</div>');
 }
 /* 27번: 더보기 버튼 바로 밑에서 아래로 */
@@ -2888,7 +2913,7 @@ function buildPick(){
   $('fontGrid').innerHTML = FONTS.map(f => `<button class="fchip ${W.font === f.id ? 'sel' : ''}" data-f="${f.id}" style="${paperVars(p)};font-family:${f.css};font-size:${f.size - 2}px">못다한 그 말<small>${f.name}</small></button>`).join('');
 }
 function buildStk(){
-  $('stkChips').innerHTML = STICKERS.map(s => `<button class="chip ${W.stickers.includes(s) ? 'sel' : ''}" data-s="${s}" style="font-size:22px;padding:3px 9px">${s}</button>`).join('');
+  $('stkChips').innerHTML = STICKERS.map(s => { const n = W.stickers.filter(x => x === s).length; return `<button class="chip ${n ? 'sel' : ''}" data-s="${s}" style="font-size:22px;padding:3px 9px;position:relative">${s}${n > 1 ? `<i class="stkn">${n}</i>` : ''}</button>`; }).join('');   // 42번: 누른 만큼 개수
 }
 function applyW(){
   const f = fontOf(W.font);
@@ -2911,9 +2936,22 @@ $('step1').addEventListener('click', e => {
 $('stkChips').addEventListener('click', e => {
   const c = e.target.closest('[data-s]'); if (!c) return;
   const s = c.dataset.s;
-  W.stickers = W.stickers.includes(s) ? W.stickers.filter(x => x !== s) : [...W.stickers, s].slice(-5);
+  if (stkLp) { stkLp = false; return; }
+  if (W.stickers.length >= 30) { toast('스티커는 30개까지 붙일 수 있어요'); return; }
+  W.stickers = [...W.stickers, s];   // 42번: 누를 때마다 하나씩 더
   click(); buildStk(); applyW();
 });
+/* 42번: 스티커를 꾹 누르면 그 스티커 다 지우기 */
+let stkLp = false, stkT = 0;
+$('stkChips').addEventListener('pointerdown', e => {
+  const c = e.target.closest('[data-s]'); if (!c) return;
+  clearTimeout(stkT); stkT = setTimeout(() => {
+    const s = c.dataset.s; if (!W.stickers.includes(s)) return;
+    stkLp = true; W.stickers = W.stickers.filter(x => x !== s); click(); buildStk(); applyW(); toast(s + ' 스티커를 다 지웠어요');
+  }, 600);
+});
+['pointerup', 'pointerleave', 'pointercancel'].forEach(t => $('stkChips').addEventListener(t, () => clearTimeout(stkT)));
+$('stkChips').addEventListener('contextmenu', e => e.preventDefault());
 $('goWrite').onclick = () => { click(); applyW(); step(2); };
 $('wBack').onclick = () => { readW(); step(1); };
 function readW(){ W.to = $('wTo').value.trim(); W.body = $('wBody').value; }
@@ -2937,7 +2975,7 @@ $('wSave').onclick = () => {
   closeWriter(); updateFlag(); toast('💾 쓰던 편지에 저장했어요');
 };
 $('wSend').onclick = () => sendLetter(false);
-$('toBtn').innerHTML = ICON_POST;
+$('toBtn').innerHTML = ICON_POST.replace('<rect width="62" height="62" rx="16" fill="#2b1416"/>', '');   // 42번: 까만 배경 없이 우체통만
 $('wTo').addEventListener('input', () => { if (W) { W.toIds = null; W.self = false; } });   // 이름을 직접 고치면 고른 친구는 풀려요
 document.querySelectorAll('[data-lsend]').forEach(b => {
   b.innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
@@ -2946,18 +2984,18 @@ document.querySelectorAll('[data-lsend]').forEach(b => {
 /* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
 async function sendLetterLink(kind){
   click(); readW();
-  if (!W.body.trim()) { toast('편지 내용을 써 주세요'); return; }
-  if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
+  if (!W.body.trim()) { toast('편지 내용을 먼저 써 주세요'); $('wBody').focus(); return; }
   if (rec) await stopRec();
-  const id = rid(), u = who();
+  if (!W.to) W.to = '친구';   // 42번: 받는 사람은 카톡·문자에서 고르니까 이름 안 적어도 돼요
+  const id = W.linkRoom || rid(), u = who(), again = !!W.linkRoom;
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
     letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
   const shared = shareTo(kind, roomURL(id), text);   // 공유 창 먼저
-  pushTo(id, m); saveRoom(id, W.to);
+  if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   await shared;
-  closeWriter(); drop(); toast('💌 편지를 보냈어요 · 링크를 열면 우체통에 도착해요');
+  drop(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
 }
 $('wSlow').onclick = () => sendLetter(true);
 /* 22번: 빨간 우체통 친구 고르기 (모두 선택 가능) → 친구마다 그 방 우체통으로 */
@@ -3128,19 +3166,38 @@ function openLetter(m){
 }
 function showReader(){
   const m = curLetter, L = m.letter, p = lp(L), f = fontOf(L.font);
-  const rp = $('readPaper');
-  rp.innerHTML = `<div class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}">
-    <div class="ptop">To. ${esc(L.to)}</div>
-    <div class="lined rbody ${L.align === 'center' ? 'center' : ''}" style="font-size:${f.size}px">${esc(L.body)}</div>
-    ${L.stickers && L.stickers.length ? `<div class="pstk">${L.stickers.join('')}</div>` : ''}
-    <div class="pfrom">From. ${esc(L.fromName)}</div>
-  </div>`;
+  const rp = $('readPaper'), box = `class="paperbox ${pcls(p)}" style="${paperVars(p)};font-family:${f.css}"`, bc = `lined rbody ${L.align === 'center' ? 'center' : ''}`;
+  rp.innerHTML = `<div ${box}><div class="ptop">To. ${esc(L.to)}</div><div class="${bc}" style="font-size:${f.size}px">${esc(L.body)}</div></div>`;
   rp.style.animation = 'none'; void rp.offsetWidth; rp.style.animation = '';
   $('rVoice').style.display = L.voice ? '' : 'none';
   $('rReply').style.display = isMine(m) || m.sample ? 'none' : '';
   showOv('readOv'); $('readOv').scrollTop = 0;
+  const pg = letterPages(rp.querySelector('.rbody'), L.body || ''), N = pg.length;   // 42번: 길면 한 장, 두 장… 나눠서
+  rp.innerHTML = pg.map((t, i) => `<div class="paperbox ${pcls(p)} rpage" style="${paperVars(p)};font-family:${f.css}">
+    ${i === 0 ? `<div class="ptop">To. ${esc(L.to)}</div>` : ''}
+    <div class="${bc}" style="font-size:${f.size}px">${esc(t)}</div>
+    ${i === N - 1 && L.stickers && L.stickers.length ? `<div class="pstk">${L.stickers.join('')}</div>` : ''}
+    ${i === N - 1 ? `<div class="pfrom">From. ${esc(L.fromName)}</div>` : ''}
+    ${N > 1 ? `<div class="pno">${i + 1} / ${N}장</div>` : ''}
+  </div>`).join('');
   if (L.voice) setTimeout(playVoice, 1000);
   markRead(m);
+}
+/* 42번: 편지지 한 장 = 14줄 · 넘치면 다음 장으로 */
+function letterPages(el, body){
+  const max = 14 * 34 + 4, fits = t => { el.textContent = t; return el.scrollHeight <= max; };
+  if (!el || !el.offsetWidth || fits(body)) return [body];
+  const out = []; let rest = body;
+  while (rest && out.length < 30) {
+    if (fits(rest)) { out.push(rest); rest = ''; break; }
+    let lo = 1, hi = rest.length;
+    while (lo < hi) { const mid = (lo + hi + 1) >> 1; if (fits(rest.slice(0, mid))) lo = mid; else hi = mid - 1; }
+    let cut = lo; const sp = Math.max(rest.lastIndexOf('\n', lo), rest.lastIndexOf(' ', lo));
+    if (sp > lo * .6) cut = sp + 1;
+    out.push(rest.slice(0, cut)); rest = rest.slice(cut).replace(/^\n/, '');
+  }
+  if (rest) out.push(rest);
+  return out;
 }
 function playVoice(){
   if (!curLetter || !curLetter.letter.voice) return;
@@ -3505,7 +3562,7 @@ function mEnded(){
   if (!M || M.by !== me.name) return;
   if (M.idx < mList().length - 1) { mSet({ idx: M.idx + 1, pos: 0, playing: true }); return; }
   mSet({ pos: 0, playing: false });
-  clearTimeout(mEndT); mEndT = setTimeout(() => { if (M && !M.playing) tgWrite('music', null); }, 3000);
+  clearTimeout(mEndT);   // 42번: 노래가 끝나도 플레이어는 그대로 (✕로만 닫기)
 }
 tAudio.onended = mEnded;
 /* 앱을 나갔다 들어오면(또는 새로 열면) 휴대폰이 소리를 막아요 → 다시 틀기 / 화면을 한 번 누르면 다시 나와요 */
@@ -3965,6 +4022,7 @@ addEventListener('popstate', () => {
   if (skipPop) { skipPop--; return; }
   if (hDepth <= 0) return;
   hDepth--;
+  if ($('writer').classList.contains('show') && $('toOv').classList.contains('show')) { hideOv('toOv'); return; }   // 42번: 받는 사람 고르기에서 뒤로 → 쓰던 편지로
   const vOn = $('videoPanel').classList.contains('show');
   closeAll(); showPanel('musicPanel', false); if (vOn) document.querySelector('[data-tclose="videoPanel"]').click();
   if (!S.on) { grpSel = null; if (!homeOn) goHome(); else render(); }   // 39번: 어디서든 뒤로 가기 → 메인 화면 (앱 밖으로는 메인에서만)
@@ -4684,6 +4742,7 @@ function tdSave(x){
 }
 function tdAdd(inp){
   if (!needLogin()) return;   // 34번
+  dictOff();   // 42번: ＋ 누르면 마이크 꺼지고 다음 말은 새로
   const t = inp.value.trim(); if (!t) { inp.focus(); toast('할 일을 적어 주세요'); return; }
   click(); inp.value = '';
   tdSave({ id: 'td' + rid(), t, done: 0, star: 0, at: Date.now() });
@@ -4755,6 +4814,7 @@ document.addEventListener('click', e => {
 
 /* --- 🎤 말로 쓰기: 모든 쓰는 칸 옆 마이크 (말하면 글로 적혀요 · 키보드도 그대로) --- */
 let dictR = null;
+function dictOff(){ const r = dictR; if (!r) return; dictR = null; try { r.abort(); } catch (e) {} if (r._btn) r._btn.classList.remove('on'); musicDuck(false); }
 function dictate(el, btn){   // 33번: 말이 끊겨도 꺼지지 않고 기다렸다가 이어서 적어요 (다시 누르면 꺼짐)
   const R0 = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!el) return;
@@ -5191,8 +5251,9 @@ function grpSilver(gid){
 /* 위쪽 모임 탭 줄 */
 function grpDrawBar(){   // 40번: 모임 줄 대신 맨 위 ＋모임 버튼
   const b = $('grpBtn'), n = grpList().reduce((t, g) => t + unreadN(g.id), 0);
-  b.classList.toggle('on', !!grpSel);
-  b.innerHTML = (grpSel ? '👥' + esc([...grpName(grpSel).replace(/\s+/g, '')].slice(0, 3).join('')) : '＋모임') + (n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : '');
+  const gl = grpList(), live = gl.some(g => grpPeople(g.id).length);   // 42번: 모임 개수 · 사람이 들어오면 밝은 노랑
+  b.classList.toggle('on', !!grpSel); b.classList.toggle('has', !!gl.length); b.classList.toggle('live', live);
+  b.innerHTML = (gl.length ? '모임 ' + gl.length : '＋모임') + (n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : '');
   document.body.classList.toggle('grpon', !!grpSel);
 }
 function grpDrawPanel(){

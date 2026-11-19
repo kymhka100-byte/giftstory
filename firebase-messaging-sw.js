@@ -1,11 +1,12 @@
-/* 빨간 우체통 알림·설치 도우미 (41번: 첫 알림부터 소리 - 화면을 막 끈 뒤에도 '보고 있다'로 착각하지 않게 앱에 직접 물어봐요)
+/* 빨간 우체통 알림·설치 도우미 (42번: 알림 두 번 - 첫 번째는 조용히 폰 깨우기, 두 번째가 같은 자리를 덮어쓰며 소리 · 받는 사람에겐 알림 하나)
+   (41번: 첫 알림부터 소리 - 화면을 막 끈 뒤에도 '보고 있다'로 착각하지 않게 앱에 직접 물어봐요)
    (40번: 새 버전 40번으로 바꾸기)
    (36번: 앱을 보고 있어도 알림은 조용히 띄워서 폰이 우리 알림을 낮춰 보지 않게)
    (34번: 알림마다 이름표를 달리 해서 매번 소리가 나요)
    - 화면이 꺼져 있어도 서버가 보낸 알림을 띄워요
    - 알림이 온 방이 목록에 없으면 앱이 열릴 때 넣도록 적어 둬요
    - 앱 파일은 폰에 저장해 두고, 열 때마다 몰래 새 버전을 받아 다음에 바뀌어요 */
-const APP_CACHE = 'rp-app-41';
+const APP_CACHE = 'rp-app-42';
 const INBOX = 'rp-inbox';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -48,11 +49,14 @@ self.addEventListener('push', e => {
   try { p = e.data ? e.data.json() : {}; } catch (x) {}
   const d = p.data || {}, n = p.notification || {};
   const room = d.room || '', title = d.title || n.title || '빨간 우체통', body = d.body || n.body || '새 메시지가 왔어요';
+  const wake = d.stage === 'wake';   // 42번: 첫 번째(깨우기)는 항상 소리 없이
   e.waitUntil((async () => {
-    if (room) await noteInbox(room, d.name || title, +d.at || Date.now());
     const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
-    wins.forEach(w => w.postMessage({ inbox: 1 }));
-    const looking = await reallyLooking(wins);   // 41번: 앱에 직접 물어봐서 진짜 보고 있을 때만 조용히
+    if (!wake) {
+      if (room) await noteInbox(room, d.name || title, +d.at || Date.now());
+      wins.forEach(w => w.postMessage({ inbox: 1 }));
+    }
+    const looking = wake ? true : await reallyLooking(wins);   // 41번: 앱에 직접 물어봐서 진짜 보고 있을 때만 조용히
     await self.registration.showNotification(title, {
       body, tag: 'rp-' + room + '-' + (d.at || Date.now()), renotify: !looking, silent: looking, icon: 'icon-192.png', badge: 'icon-192.png',
       vibrate: [120, 60, 120], requireInteraction: false,
