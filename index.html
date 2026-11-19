@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
-<!-- 40번: 맨 위 한 줄 = 내 이름(하늘색·나와의 창) · ＋모임 · ＋친구 3칸 · 더보기 / 나와의 대화 카드·모임 줄 없앰 / 설정은 ＋ 메뉴 안으로 / 웹캠은 아래 마이크 옆 / 처음 화면 고르기 일반·다크·실버 한 줄 / 마이크 메뉴 "음성 문자" / 두더지는 큰 버튼 위 투명 버튼 3번 / 안 쓰는 코드 정리 -->
 <!-- 39번: 큰 글씨여도 화면이 폰에 꼭 맞고 '큰' 버튼 늘 보임 · 폰이 글씨 키우는 것 막기 · 뒤로 가기는 어디서든 메인 화면으로 (모임 방·게임 갔다 와도) · 할 일 ＋ 버튼 분홍 테두리 · 내 말풍선 연한 노랑+분홍 테두리+진한 글씨 · 입력칸 은은한 테두리 · 메뉴 버튼 테두리 · 파일 보내기 오디오·사진·일반 파일 · 처음에 다크·큰 글씨·실버 모드 고르기 · 가위바위보·뽑기 게임으로 잘 넘어가게 -->
 <!-- 37번: 우리 모임 (모임 만들기 · 초대 링크로 들어오면 모임 사람 이름이 저절로 · 전체 대화방 · 방장 공지·모두에게 따로 보내기·사람 빼기 · 여러 모임 · 실버 모드 가족 버튼 자동) -->
 <!-- 36번: 가위바위보는 따로 (gawibawibo.html) · 편지·메시지 "모든 친구에게" 버튼 · 키보드 올라오면 큰·친구 초대 버튼 숨김 · 할 일 ＋ 버튼 작게 -->
@@ -535,12 +534,16 @@ body.kb #installBar{display:none!important}
 /* ===== 26번 ===== */
 /* 맨 위 한 줄: 작은 우체통 · 웹캠 · 고정 말풍선 3 · 임시 1 · 더보기 */
 .rooms{gap:2px;padding:0 6px 0 4px;z-index:6}
+#topBox{flex:none;width:34px;height:34px;padding:0;border:none;background:none;display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+#topBox .tlet{display:none}#topBox.has .tlet{display:inline}
+.rooms #camBtn{width:32px;height:32px;border-radius:10px;margin-right:4px}
 .rscroll{justify-content:flex-start;gap:5px}
+#topMenu{left:4px;top:100%;bottom:auto;z-index:41}
 #topMenu .badge{position:static;display:none;margin-left:6px;vertical-align:middle}
-body:not(.dark) .pmenu{background:var(--t-btn);border-color:var(--t-btnline)}
+body:not(.dark) #topMenu,body:not(.dark) .pmenu{background:var(--t-btn);border-color:var(--t-btnline)}
 body:not(.dark) .pmenu button{color:var(--t-btnink)}
 /* 편지가 오면 우체통에 편지가 꽂히고 10초마다 흔들 */
-#mailbox.shake{transform-origin:50% 90%}
+#mailbox.shake,#topBox.shake{transform-origin:50% 90%}
 .rscroll{gap:4px;padding-left:2px;padding-right:2px}
 .rscroll .rb,.rscroll .rb:not(.cur):not(.add){width:42px;min-width:42px;font-size:12px}
 #nameOv{z-index:70}
@@ -610,6 +613,12 @@ body.menuon #menuDim{display:block}
 #pickList .mrow b{flex:none;max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #pickList .mrow small{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 메인: 나와의 대화 · 할 일 / 친구 */
+.selfrow{display:flex;align-items:center;gap:12px;margin:4px 12px 10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,#2a2233,#1e2230);border:1px solid #3d3a52;cursor:pointer}
+.selfrow:active{transform:scale(.98)}
+.selfrow .sav{width:44px;height:44px;border-radius:14px;background:#ffd76a;color:#222;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;flex:none}
+.selfrow .stx{flex:1;min-width:0}.selfrow .stx b{display:block;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.selfrow .stx small{display:block;font-size:13px;color:#c9c3e0;margin-top:2px}
+.selfrow .sgo{color:#ffd76a;font-size:24px}
 .htabs{display:flex;gap:6px;margin:0 12px 8px}
 .htab{flex:1;padding:10px 6px;border-radius:12px;border:1px solid #3a3b46;background:#1b1c23;color:#bbb;font-size:15px;font-weight:700;position:relative}
 .htab.on{background:#ffe14d;color:#222;border-color:#ffe14d}
@@ -727,6 +736,10 @@ body:not(.dark) .tdadd input{background:#fff;color:#222;border-color:var(--t-btn
 body:not(.dark) .hinvBar{background:none}
 body:not(.dark) #selfBar{background:var(--t-bar)}
 /* ===== 37번: 우리 모임 ===== */
+#grpBar{display:none;gap:6px;padding:6px 8px;overflow-x:auto;border-bottom:1px solid var(--line);background:#141417;scrollbar-width:none;z-index:5}
+#grpBar::-webkit-scrollbar{display:none}
+body.home #grpBar{display:flex}
+body.kb #grpBar{display:none!important}
 .gtab{flex:none;height:30px;padding:0 12px;border-radius:15px;border:1px solid #444;background:#22232c;color:#fff;font-size:13px;font-weight:700;position:relative;white-space:nowrap}
 .gtab.on{background:#4fc3ff;color:#062033;border-color:#4fc3ff}
 .gtab.add{border-style:dashed;color:#ffd76a;background:none;border-color:#c9a94a}
@@ -744,6 +757,7 @@ body.grpon #hGroup{display:block}
 .gtools .y{background:#ffe14d;color:#222;border:none}
 #gNote{display:none;padding:8px 12px;background:#3a3418;border-bottom:1px solid #c9a94a;color:#ffe9a6;font-size:14px;line-height:1.4;white-space:pre-wrap;z-index:4}
 body.gnote:not(.home) #gNote{display:block}
+body:not(.dark) #grpBar{background:var(--t-bar)}
 /* ===== 39번 ===== */
 :root{--pink:#ff8fb3}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -756,23 +770,7 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 .pmenu{gap:4px}
 .pmenu button{border:1px solid #474856;background:#2b2c36;border-radius:11px}
 body:not(.dark) .pmenu button{background:#fff;border-color:var(--t-btnline)}
-/* ===== 40번 ===== */
-.moderow{display:flex;gap:10px;justify-content:center;margin:16px 0 6px}
-.moderow button{flex:1;max-width:96px;padding:12px 4px;border-radius:18px 18px 18px 6px;border:1.5px solid #555;background:#26262c;color:#fff;font-size:24px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:transform .15s}
-.moderow button b{font-size:15px}
-.moderow button.on{border-color:var(--pink);box-shadow:0 0 0 2px rgba(255,143,179,.35)}
-.moderow button.pick{background:#ffe14d;color:#222;border-color:#ffe14d;transform:scale(1.08)}
-.rooms .rb.mebtn{flex:none;max-width:64px;overflow:hidden;padding:0 8px;background:#5bb8f5;color:#06263d;border:1.5px solid #bfe6ff;font-weight:800;margin-right:2px}
-.rooms .rb.mebtn.cur{background:#9ad6ff}
-.rooms .rb.gbtn{flex:none;padding:0 6px;font-size:11px;font-weight:600;color:#ffd76a;background:transparent;border:1.5px dashed #c9a94a;opacity:.9}
-.rooms .rb.gbtn.on{color:#222;background:#ffe14d;border:1.5px solid #ffe14d;opacity:1}
-body:not(.dark) .rooms .rb.gbtn{color:#a06a00}
-#grpMenu{left:4px;top:100%;bottom:auto;z-index:41}
-#topMenu{left:58px;top:auto;bottom:62px}
-footer #camBtn{width:36px;height:36px;border-radius:50%;margin-bottom:1px}
-footer.typing #camBtn{display:none}
-#moleBtn{position:absolute;left:8px;top:-110px;width:46px;height:50px;background:none;border:none;opacity:0;z-index:4}
-body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
+#modeOv .big{font-size:18px;padding:15px}
 </style>
 </head>
 <body>
@@ -780,11 +778,21 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <span id="subTitle" hidden></span>
   <!-- 26번: 맨 위 한 줄 (작은 우체통 · 웹캠 · 고정 말풍선 3 · 임시 1 · 더보기) -->
   <div class="rooms">
-    <button class="rb mebtn" id="meBtn" title="나와의 창 (할 일 · 일기장) · 길게 누르면 실버 모드">나</button>
-    <button class="rb gbtn" id="grpBtn" title="모임">＋모임</button>
-    <div class="pmenu" id="grpMenu"></div>
+    <button id="topBox" title="편지 쓰기 · 편지함 · 색상 (길게 누르면 실버 모드)"><svg viewBox="0 0 30 30" width="28" height="28"><rect x="5" y="12" width="20" height="15" rx="2" fill="#e3302e"/><path d="M4 13Q4 4 15 4Q26 4 26 13Z" fill="#ff5a52"/><rect x="4" y="12" width="22" height="2.4" rx="1" fill="#9c1218"/><rect x="10" y="16.5" width="10" height="2.2" rx="1.1" fill="#3a0507"/><g class="tlet"><rect x="9" y="7.5" width="12" height="9" rx="1" fill="#fff" transform="rotate(-8 15 12)"/><path d="M9.3 8.3 15 12.6 20.6 6.8" stroke="#e3302e" stroke-width="1.2" fill="none" transform="rotate(-8 15 12)"/></g></svg></button>
+    <button class="hbtn" id="camBtn" title="영상통화"><svg class="camico" viewBox="0 0 24 24"><circle cx="12" cy="10" r="8" fill="#e8e8ee"/><circle cx="12" cy="10" r="4.6" fill="#1b1b22"/><circle cx="12" cy="10" r="2.6" fill="#3a6cff"/><circle cx="10.9" cy="8.9" r=".9" fill="#fff"/><circle cx="17.2" cy="5.6" r=".9" fill="#ff4d4a"/><path d="M8 18.5h8l1.5 3.5h-11z" fill="#9a9aa6"/></svg></button>
     <div class="rscroll" id="roomBar"></div><button class="rb more" id="moreBtn">더보기</button><button id="addRoom" hidden></button><div id="morePanel"></div>
+    <div class="pmenu" id="topMenu">
+      <button id="tmHome">🏠 메인 화면으로</button>
+      <button id="tmWrite">✏ 편지 쓰기</button>
+      <button id="pileBtn">📚 편지함</button>
+      <button id="draftBtn">📝 쓰던 편지<span class="badge" id="draftBadge"></span></button>
+      <button id="themeBtn">🎨 색상 바꾸기</button>
+      <button data-dark id="darkBtn">☀ 밝은 화면</button>
+      <button id="roomBtn">⚙ 설정</button>
+      <button id="tmEng">🌐 English</button>
+    </div>
   </div>
+  <div id="grpBar"></div>
   <div id="gNote"></div>
   <div id="selfBar"><span>📝 나와의 대화</span><button id="sbTodo">✅ 할 일</button><button id="sbDiary">📒 일기장</button></div>
   <div id="menuDim"></div>
@@ -832,7 +840,6 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <footer>
     <span class="sign">YMwav</span>
     <button id="allBtn" type="button">☐ 모든 친구에게</button>
-    <button id="moleBtn" aria-hidden="true" tabindex="-1"></button>
     <button id="tgBtn" title="글씨 크기"><b style="font-size:22px;font-weight:900;margin:0">큰</b></button>
     <div class="pmenu" id="tgMenu"><button data-tg="music">🎵 노래 같이 듣기</button><button data-tg="video">🎬 영화 같이 보기</button></div>
     <button id="mailbox" title="빨간 우체통">
@@ -858,23 +865,12 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
       </svg>
     </button>
     <button id="plusBtn" title="파일 · 게임 · 친구 초대">＋</button>
-    <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="stt">📝 음성 문자</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
-    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="set">⚙ 설정</button><button data-tg="invite">👥 친구 초대</button></div>
-    <div class="pmenu" id="topMenu">
-      <button id="tmHome">🏠 메인 화면으로</button>
-      <button id="tmWrite">✏ 편지 쓰기</button>
-      <button id="pileBtn">📚 편지함</button>
-      <button id="draftBtn">📝 쓰던 편지<span class="badge" id="draftBadge"></span></button>
-      <button id="themeBtn">🎨 색상 바꾸기</button>
-      <button data-dark id="darkBtn">☀ 밝은 화면</button>
-      <button id="roomBtn">🔔 알림 · 로그인</button>
-      <button id="tmEng">🌐 English</button>
-    </div>
+    <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="cap">💬 음성 통화 + 자막</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="invite">👥 친구 초대</button></div>
     <div class="pmenu" id="gameMenu"><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button></div>
     <div class="pmenu" id="fileMenu"><button data-fk="audio">🎵 오디오</button><button data-fk="image">🖼 사진</button><button data-fk="doc">📄 일반 파일</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
-    <button class="hbtn" id="camBtn" title="영상통화"><svg class="camico" viewBox="0 0 24 24"><circle cx="12" cy="10" r="8" fill="#e8e8ee"/><circle cx="12" cy="10" r="4.6" fill="#1b1b22"/><circle cx="12" cy="10" r="2.6" fill="#3a6cff"/><circle cx="10.9" cy="8.9" r=".9" fill="#fff"/><circle cx="17.2" cy="5.6" r=".9" fill="#ff4d4a"/><path d="M8 18.5h8l1.5 3.5h-11z" fill="#9a9aa6"/></svg></button>
     <button id="micBtn" title="목소리 보내기"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
     <button id="sendBtn" title="보내기"><svg viewBox="0 0 24 24"><path class="pf" d="M2.5 11.2 21 3.2c.6-.3 1.2.3.9.9l-8 18.5c-.3.7-1.3.6-1.4-.1l-1.6-7.4-7.4-1.6c-.7-.1-.8-1.1-.1-1.4z"/><path class="pl" d="M10.9 13.1 21.3 3.6" stroke-width="1.6"/></svg></button>
     <div id="recStrip"><span id="recInfo">● 녹음 중 0초</span><button id="recCancel">✕ 취소</button></div>
@@ -1316,8 +1312,10 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 </div></div>
 <!-- 39번: 처음 한 번 화면 고르기 -->
 <div class="ov" id="modeOv"><div class="panel" style="max-width:380px;text-align:center">
-  <h2>화면을 골라 주세요</h2><div style="color:#ccc;font-size:14px">나중에 바꿀 수 있어요 · 글씨는 '큰' 버튼으로 키워요</div>
-  <div class="moderow"><button data-mode="light">☀<b>일반</b></button><button data-mode="dark" class="on">🌙<b>다크</b></button><button data-mode="silver">👵<b>실버</b></button></div>
+  <h2>화면을 골라 주세요</h2><div style="color:#ccc;font-size:14px">나중에 바꿀 수 있어요</div>
+  <button class="big y" data-mode="dark">🌙 다크 모드 (기본)</button>
+  <button class="big" data-mode="big">🔠 큰 글씨 모드</button>
+  <button class="big" data-mode="silver">👵 실버 모드 (어르신)</button>
 </div></div>
 <div id="fly"></div>
 <div id="toast"></div>
@@ -1340,7 +1338,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '40';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '39';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1602,7 +1600,8 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
   const rooms = visibleRooms();
   rooms.sort(roomOrder);
   const view = homeView(), letters = unreadIn().length, mN = rooms.reduce((a, x) => a + unreadN(x.id), 0), act = tdActive().length;
-  const top = (letters || (mN && view === 'todo') ? `<div class="hchips">${letters ? `<button class="hchip" data-hmail>💌 새 편지 ${letters}통</button>` : ''}${mN && view === 'todo' ? `<button class="hchip" data-hv="friends">💬 새 메시지 ${mN > 99 ? '99+' : mN}</button>` : ''}</div>` : '');
+  const top = `<div class="selfrow" data-self><div class="sav">${esc([...(me.name || '나').replace(/\s+/g, '')].slice(0, 2).join(''))}</div><div class="stx"><b>${esc(me.name)} <small style="display:inline;color:#ffd76a">(나)</small></b><small>📝 나에게 메모 · ✅ 할 일 · 📒 일기장</small></div><span class="sgo">›</span></div>`
+    + (letters || (mN && view === 'todo') ? `<div class="hchips">${letters ? `<button class="hchip" data-hmail>💌 새 편지 ${letters}통</button>` : ''}${mN && view === 'todo' ? `<button class="hchip" data-hv="friends">💬 새 메시지 ${mN > 99 ? '99+' : mN}</button>` : ''}</div>` : '');
   setHTML('hTop', top);
   { const lb = $('hListBtn'); lb.dataset.hv = view === 'todo' ? 'friends' : 'todo'; lb.innerHTML = view === 'todo' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view === 'todo' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
   grpDrawBar(); grpDrawPanel();
@@ -1624,6 +1623,7 @@ const homeView = () => LS.get('rp_homeview', 'todo');
 const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? fmtTime(t) : `${d.getMonth() + 1}/${d.getDate()}`; };
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
+  if (e.target.closest('[data-self]')) { click(); openRoom(selfId()); return; }   // 32번: 나와의 대화
   const hv = e.target.closest('[data-hv]'); if (hv) { click(); LS.set('rp_homeview', hv.dataset.hv); drawHome(); return; }
   if (e.target.closest('[data-hmail]')) { click(); openBox(unreadIn()); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
@@ -1827,7 +1827,7 @@ function drawRooms(){
   $('loginBtn').textContent = au ? `✓ 구글 로그인됨 ${au.name ? '(' + au.name + ')' : ''}` : 'G 구글로 로그인 (다른 기기에서도 방 목록 보기)';
 }
 /* 20번: 위쪽 말풍선 5자리 고정 - 자리는 안 바뀜, 빈 자리는 ＋친구, 고정 안 된 방은 더보기로 */
-const PIN_N = 3;   // 40번: ＋친구 3칸   // 29번: 고정 4칸(왼쪽부터 빈칸 없이) + 새 메시지·지금 대화방 1칸 + 더보기
+const PIN_N = 4;   // 29번: 고정 4칸(왼쪽부터 빈칸 없이) + 새 메시지·지금 대화방 1칸 + 더보기
 let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
 function getPins(){
   const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
@@ -1881,7 +1881,6 @@ function drawBar(){
   const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
   mb.innerHTML = '더보기' + (mn ? `<i class="cnt">${mn > 99 ? '99+' : mn}</i>` : '');
   if ($('morePanel').classList.contains('show')) drawMore();
-  { const mb = $('meBtn'), nm = esc([...(me.name || '나').replace(/\s+/g, '')].slice(0, 3).join('')); if (mb._n !== nm) { mb._n = nm; mb.innerHTML = nm; } mb.classList.toggle('cur', !homeOn && room === selfId()); }   // 40번: 맨 위 내 이름
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
 }
@@ -2414,7 +2413,7 @@ render.jump = true;
 function updateFlag(){
   const up = unreadIn().length > 0;
   document.querySelectorAll('.flag').forEach(f => f.classList.toggle('down', !up));
-  $('mailbox').classList.toggle('has', up);   // 26번: 편지가 꽂힌 우체통
+  $('mailbox').classList.toggle('has', up); $('topBox').classList.toggle('has', up);   // 26번: 편지가 꽂힌 우체통
   const n = getDrafts().length, b = $('draftBadge');
   b.textContent = n; b.style.display = n ? 'flex' : 'none';
   updateAppBadge();
@@ -2430,7 +2429,7 @@ function bumpBox(){ const mb = $('mailbox'); mb.classList.remove('bump'); void m
 /* 26번: 편지가 와 있으면 위·아래 우체통이 10초마다 흔들 */
 setInterval(() => {
   if (document.hidden || !unreadIn().length) return;
-  ['mailbox'].forEach(id => { const b = $(id); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); });
+  ['mailbox', 'topBox'].forEach(id => { const b = $(id); b.classList.remove('shake'); void b.offsetWidth; b.classList.add('shake'); });
 }, 10000);
 function waveFlag(){ const f = document.querySelector('#mailbox .flag'); f.classList.remove('wave'); void f.getBoundingClientRect(); f.classList.add('wave'); setTimeout(() => f.classList.remove('wave'), 1700); }
 function remindRooms(){   // 20초마다, 소리 없음
@@ -2561,7 +2560,6 @@ function vmUI(){
 }
 $('micBtn').onclick = e => {
   if (vm) { click(); vmStop(true); return; }
-  if (dictR && dictR._btn === $('micBtn')) { dictate($('txt'), $('micBtn')); return; }   // 40번: 음성 문자 끄기
   toggleMenu('micMenu', e);
 };
 $('micMenu').addEventListener('click', e => {
@@ -2569,9 +2567,8 @@ $('micMenu').addEventListener('click', e => {
   click(); closeMenus();
   const k = b.dataset.mic;
   if (k === 'rec') { micRec(); return; }
-  if (k === 'stt') { const go = () => { $('txt').focus(); dictate($('txt'), $('micBtn')); }; if (homeOn) pickFriend('📝 누구에게 말로 문자를 보낼까요?', id => { openRoom(id); setTimeout(go, 300); }); else go(); return; }   // 40번: 말하면 글씨로 적혀요
-  if (homeOn) { pickFriend('📞 누구와 통화할까요?', id => { openRoom(id); startCall('audio', false); }); return; }
-  startCall('audio', false);
+  if (homeOn) { pickFriend(k === 'cap' ? '💬 누구와 통화할까요? (자막도 같이)' : '📞 누구와 통화할까요?', id => { openRoom(id); startCall('audio', k === 'cap'); }); return; }
+  startCall('audio', k === 'cap');
 });
 function micRec(){
   if (homeOn) { pickFriend('🎤 누구에게 목소리를 보낼까요?', id => { openRoom(id); vmStart(); }); return; }
@@ -2801,16 +2798,16 @@ $('txt').addEventListener('focus', () => setTimeout(() => { const b = $('msgs');
 $('msgs').addEventListener('load', e => { if (e.target.tagName === 'IMG') { const b = $('msgs'); if (b.scrollHeight - b.scrollTop - b.clientHeight < 400) b.scrollTop = b.scrollHeight; } }, true);
 
 /* ----- 우체통 누르기 ----- */
-/* 40번: 우체통은 한 번 누르면 바로 (두더지는 '큰' 버튼 위 투명 버튼 3번) */
+/* 29번: 빠르게 5번 누르면 숨은 두더지 게임 */
+let mbTaps = 0, mbT = 0;
 $('mailbox').onclick = () => {
-  click();
-  const un = unreadIn();
-  if (un.length) openBox(un); else openWriter();
-};
-let moleN = 0, moleT = 0;
-$('moleBtn').onclick = () => {
-  clearTimeout(moleT); moleT = setTimeout(() => moleN = 0, 900);
-  if (++moleN >= 3) { moleN = 0; click(); window.open(MOLE_URL, '_blank'); }
+  click(); clearTimeout(mbT);
+  if (++mbTaps >= 5) { mbTaps = 0; window.open(MOLE_URL, '_blank'); return; }
+  mbT = setTimeout(() => {
+    mbTaps = 0;
+    const un = unreadIn();
+    if (un.length) openBox(un); else openWriter();
+  }, 330);
 };
 function openBox(list){
   const d = $('door'), pe = $('popEnv'), pl = $('popList'), many = list.length > 1;
@@ -3337,16 +3334,16 @@ function showPanel(id, on){
   $(id).classList.toggle('show', on);
   if (id === 'videoPanel') { document.body.classList.toggle('watch', on); if (on) { document.documentElement.style.setProperty('--fh', document.querySelector('footer').offsetHeight + 'px'); drawVChat(); } }
 }
-function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'fileMenu', 'topMenu', 'micMenu', 'grpMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
+function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'fileMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
 /* 32번: 메뉴가 열리면 뒤 화면을 어둡게 (뒤로 가기는 메뉴부터 닫아요) */
 function menuDim(){ const on = !!document.querySelector('.pmenu.show,#morePanel.show'); if (document.body.classList.contains('menuon') !== on) { document.body.classList.toggle('menuon', on); syncLayer(); } }
 function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $('morePanel').classList.remove('show'); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); menuDim(); }
 $('plusBtn').onclick = e => toggleMenu('plusMenu', e);
 $('tgBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); const big = LS.get('rp_zoom', 100) > 100; LS.set('rp_zoom', big ? 100 : BIG_Z); zoomApply(); toast(big ? '보통 글씨' : '큰 글씨'); };   // 38번: 한 번 누르면 큰 글씨 ⇄ 보통   // 34번: 같이 보기는 ＋ 안으로, 여기는 '큰' 글씨
-document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#grpBtn,#micBtn')) closeMenus(); });
+document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#topBox,#micBtn')) closeMenus(); });
 ['plusMenu', 'tgMenu', 'gameMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
-  if (['watch', 'game', 'file', 'set'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu', set: 'topMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
+  if (['watch', 'game', 'file'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
   click(); closeMenus();
   if (b.dataset.tg === 'invite') { openInvite(); return; }
   if (b.dataset.tg === 'lot') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'ppopgi.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 33번: 뽑기 게임은 따로 (ppopgi.html)
@@ -4566,25 +4563,13 @@ $('svVoiceBtn').onclick = () => { click(); S.test = false; svListen(); };
 $('svSheetVoice').onclick = () => { click(); svListen(); };
 $('svVoiceStop').onclick = () => { click(); S.test = false; svStopListen(); svOv('svVoice', false); };
 
-/* 40번: 맨 위 내 이름 - 한 번 누르면 나와의 창, 길게 누르면 실버 모드 */
+/* 숨은 입구: 위쪽 '빨간 우체통' 글씨를 길게 누르기 */
 let svOpenT = 0, svOpenDone = false;
-const svH1 = $('meBtn');
+const svH1 = $('topBox');
 svH1.addEventListener('pointerdown', () => { svOpenDone = false; clearTimeout(svOpenT); svOpenT = setTimeout(() => { svOpenDone = true; closeMenus(); if (navigator.vibrate) navigator.vibrate(40); svOpen(); }, 900); });
 ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => svH1.addEventListener(t, () => clearTimeout(svOpenT)));
 svH1.addEventListener('contextmenu', e => e.preventDefault());
-svH1.addEventListener('click', () => { if (svOpenDone) { svOpenDone = false; return; } click(); closeMenus(); openRoom(selfId()); });
-/* 40번: ＋모임 - 모임이 없으면 바로 만들기, 있으면 모임 목록 */
-function grpNewOpen(){ if (!FB) { toast('모임은 서버 연결이 필요해요'); return; } click(); closeMenus(); $('grpName').value = ''; showOv('grpNewOv'); setTimeout(() => $('grpName').focus(), 300); }
-$('grpBtn').onclick = e => {
-  const l = grpList(); if (!l.length) { grpNewOpen(); return; }
-  $('grpMenu').innerHTML = l.map(g => { const n = unreadN(g.id); return `<button data-gtab="${g.id}">👥 ${esc(grpName(g.id))}${n ? ` (${n > 99 ? '99+' : n})` : ''}</button>`; }).join('') + '<button data-gnew>＋ 새 모임 만들기</button>';
-  toggleMenu('grpMenu', e);
-};
-$('grpMenu').addEventListener('click', e => {
-  if (e.target.closest('[data-gnew]')) { grpNewOpen(); return; }
-  const t = e.target.closest('[data-gtab]'); if (!t) return;
-  click(); closeMenus(); grpSel = t.dataset.gtab; if (!homeOn) goHome(); else drawHome(); syncLayer();
-});
+svH1.addEventListener('click', e => { if (svOpenDone) { svOpenDone = false; return; } toggleMenu('topMenu', e); });
 $('tmWrite').onclick = () => { click(); openWriter(); };
 $('tmHome').onclick = () => { click(); closeAll(); if (!homeOn) goHome(); syncLayer(); };
 $('tmEng').onclick = () => { click(); toast('🌐 English version is coming soon · 준비 중이에요'); };
@@ -5042,21 +5027,16 @@ function zoomApply(){
 }
 zoomApply();
 addEventListener('resize', zoomApply);
-/* 40번: 처음 한 번 화면 고르기 (일반 · 다크 · 실버) */
+/* 39번: 처음 한 번 화면 고르기 (다크 · 큰 글씨 · 실버) */
 function askMode(){
   if (LS.get('rp_mode_asked', 0) || S.on || LS.get('rp_silver_on', 0) || svInv) return;
   showOv('modeOv');
 }
-function zzook(){ if (!ac()) return; const c = ac(), o = c.createOscillator(), g = c.createGain(), t = c.currentTime; o.type = 'triangle'; o.frequency.setValueAtTime(380, t); o.frequency.exponentialRampToValueAtTime(1400, t + .28); g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.16, t + .03); g.gain.exponentialRampToValueAtTime(.0001, t + .32); o.connect(g).connect(c.destination); o.start(t); o.stop(t + .34); }   // 40번: '쭉'
 document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
-  const k = b.dataset.mode; zzook();
-  document.querySelectorAll('[data-mode]').forEach(x => x.classList.toggle('pick', x === b));
-  setTimeout(() => {
-    LS.set('rp_mode_asked', 1); hideOv('modeOv');
-    LS.set('rp_light', k === 'light'); applyDark();
-    LS.set('rp_zoom', 100); zoomApply();
-    if (k === 'silver') svOpen(); else setTimeout(askInstall, 600);
-  }, 380);
+  const k = b.dataset.mode; click(); LS.set('rp_mode_asked', 1); hideOv('modeOv');
+  LS.set('rp_light', false); applyDark();
+  LS.set('rp_zoom', k === 'big' ? BIG_Z : 100); zoomApply();
+  if (k === 'silver') svOpen(); else setTimeout(askInstall, 600);
 });
 /* 편지 쓰기 위 버튼 */
 $('wPick').onclick = () => { click(); step(1); };
@@ -5154,10 +5134,10 @@ function grpSilver(gid){
   if (ch) { svSave(d); if (S.on) svHome(true); }
 }
 /* 위쪽 모임 탭 줄 */
-function grpDrawBar(){   // 40번: 모임 줄 대신 맨 위 ＋모임 버튼
-  const b = $('grpBtn'), n = grpList().reduce((t, g) => t + unreadN(g.id), 0);
-  b.classList.toggle('on', !!grpSel);
-  b.innerHTML = (grpSel ? '👥' + esc([...grpName(grpSel).replace(/\s+/g, '')].slice(0, 3).join('')) : '＋모임') + (n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : '');
+function grpDrawBar(){
+  const h = grpList().map(g => { const n = unreadN(g.id); return `<button class="gtab ${grpSel === g.id ? 'on' : ''}" data-gtab="${g.id}">👥 ${esc(grpName(g.id))}${n ? `<i>${n > 99 ? '99+' : n}</i>` : ''}</button>`; }).join('')
+    + `<button class="gtab add" data-gnew>＋ 모임 만들기</button>`;
+  setHTML('grpBar', h);
   document.body.classList.toggle('grpon', !!grpSel);
 }
 function grpDrawPanel(){
@@ -5180,6 +5160,11 @@ function grpRoomNote(){
   document.body.classList.toggle('gnote', !!on);
   if (on) { const t = '📢 ' + grpMeta[room].notice.text; if ($('gNote').textContent !== t) $('gNote').textContent = t; }
 }
+$('grpBar').addEventListener('click', e => {
+  if (e.target.closest('[data-gnew]')) { if (!FB) { toast('모임은 서버 연결이 필요해요'); return; } click(); $('grpName').value = ''; showOv('grpNewOv'); setTimeout(() => $('grpName').focus(), 300); return; }
+  const t = e.target.closest('[data-gtab]'); if (!t) return;
+  click(); grpSel = grpSel === t.dataset.gtab ? null : t.dataset.gtab; drawHome(); syncLayer();
+});
 $('grpMake').onclick = () => {
   const n = $('grpName').value.trim(); if (!n) { toast('모임 이름을 적어 주세요'); $('grpName').focus(); return; }
   if (!FB) { toast('서버 연결이 안 됐어요'); return; }

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>뽑기 - 빨간 우체통</title>
+<!-- 41번: 게임에서 나가면 음악 꺼짐 · 가위바위보 점수와 같은 점수로 이어짐 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{background:#111;color:#fff;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;min-height:100vh;overflow-x:hidden;user-select:none}
@@ -212,7 +213,10 @@ function rtdb(){ const d=firebase.database(); return {
 };}
 const key = id=>DB.set('giftstory/rooms/'+id+'/keys/'+me.uid,true);   // index 와 같은 '열쇠' 방식
 
-async function loadPts(){ let v=await DB.get(PTS()).catch(()=>null); if(typeof v!=='number'){ v=START_PTS; await DB.set(PTS(),v).catch(()=>{}); } myPts=v; $('myPts').textContent=myPts.toLocaleString(); }
+async function loadPts(){ let v=await DB.get(PTS()).catch(()=>null); if(typeof v!=='number'){ v=START_PTS; await DB.set(PTS(),v).catch(()=>{}); }
+  const d=+(localStorage.getItem('rp-point-delta')||0);   // 41번: 가위바위보에서 따고 잃은 점수 합치기
+  if(d){ localStorage.removeItem('rp-point-delta'); const ok=await DB.tx(PTS(),x=>(typeof x==='number'?x:START_PTS)+d).catch(()=>false); if(ok) v=await DB.get(PTS()).catch(()=>v+d); else localStorage.setItem('rp-point-delta',d); }
+  myPts=v; $('myPts').textContent=myPts.toLocaleString(); try{localStorage.setItem('rp-point',myPts)}catch(e){} }
 async function addPts(n){ await DB.tx(PTS(),v=>(typeof v==='number'?v:START_PTS)+n).catch(()=>{}); await loadPts(); }
 
 // ===== 메뉴 =====
@@ -410,6 +414,9 @@ function confetti(){
   for(let i=0;i<90;i++){ const d=document.createElement('div'); d.className='conf'; d.style.left=Math.random()*100+'vw'; d.style.background=cols[i%5]; d.style.animationDuration=2+Math.random()*2.5+'s'; d.style.animationDelay=Math.random()*1.2+'s'; document.body.appendChild(d); setTimeout(()=>d.remove(),5500); }
 }
 
+/* 41번: 게임에서 나가면 음악·멘트 모두 끄기 */
+addEventListener('pagehide',stopBgm);
+document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopBgm(); });
 initServer();
 </script>
 </body>

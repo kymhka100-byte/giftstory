@@ -2,19 +2,20 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
+<!-- 41번: 화면 아래 시작 버튼·점수가 안 잘리게 (실제 보이는 높이에 맞춤, 손 그림 칸 줄임) · 게임에서 나가면 음악 꺼짐 · 점수는 계속 이어짐 -->
 <!-- 40번: 한 판 승부가 나면 1.5초 뒤 저절로 다음 판 · 5초 안 누르면 3, 2, 1 세고 내 손이 저절로 나가요 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:system-ui,sans-serif}
-.w{height:100vh;height:100dvh;max-width:520px;margin:0 auto;padding:1.5vh 3vw 2.5vh;display:flex;flex-direction:column;gap:1.2vh}
+.w{height:100vh;height:100dvh;height:var(--vh,100dvh);max-width:520px;margin:0 auto;padding:1.5vh 3vw calc(1.5vh + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:1.2vh}
 h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .back{position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:min(2.6vh,18px);color:#ccc;text-decoration:none;font-weight:700}
-.arena{flex:1;min-height:0;background:#111;border-radius:22px;display:flex;flex-direction:column;justify-content:center;gap:2.5vh;padding:1vh 3vw 7vh;overflow:hidden}
+.arena{flex:1;min-height:0;background:#111;border-radius:22px;display:flex;flex-direction:column;justify-content:center;gap:1.5vh;padding:1vh 3vw;overflow:hidden}
 .row{display:flex;align-items:center}
 .row>.side{flex:1;text-align:center;font-size:min(2.8vh,21px);font-weight:900}
 .win{color:#ffd84a}
 .side small{display:block;font-size:min(2.8vh,21px);color:#aaa;font-weight:900}
-.hand{font-size:min(12vh,26vw);line-height:1}
+.hand{font-size:min(9vh,22vw);line-height:1}
 .cpu{transform:rotate(180deg)}
 .shake{animation:sh .25s infinite alternate}
 .cpu.shake{animation:shc .25s infinite alternate}
@@ -24,7 +25,7 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .pot{font-size:min(2.2vh,17px);font-weight:800;color:#ffd84a;background:#2a2410;border:2px solid #ffd84a;border-radius:20px;padding:2px 12px;transition:transform .8s ease-in,opacity .8s}
 .big{font-size:min(5vh,40px);font-weight:900;font-style:italic;min-height:1.2em;text-align:center}
 .vs{font-size:min(3vh,24px);font-weight:900;color:#444;font-style:italic}
-.btns{display:flex;gap:2vw;align-items:stretch}
+.btns{display:flex;gap:2vw;align-items:stretch;flex:none;min-height:min(13vh,110px);margin-bottom:14px}
 .me,.st{flex:0 0 26%;border-radius:16px}
 .me{background:linear-gradient(#ff3b3b,#a01818);display:flex;flex-direction:column;justify-content:center;text-align:center;font-weight:900}
 .me span{font-size:min(1.9vh,14px);opacity:.9}
@@ -75,15 +76,24 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 </div>
 <div class="mk">69KYM</div>
 <script>
+/* 41번: 폰 아래 버튼줄에 안 가리게 - 실제로 보이는 높이로 맞춰요 */
+function fitH(){const h=(window.visualViewport&&visualViewport.height)||innerHeight;document.documentElement.style.setProperty('--vh',h+'px')}
+fitH();addEventListener('resize',fitH);if(window.visualViewport)visualViewport.addEventListener('resize',fitH);
 const H=['✌️','✊','🖐️'],$=x=>document.getElementById(x),HB=[...document.querySelectorAll('.hs button')];
 /* 소리: sound 폴더에 아래 이름으로 mp3를 올리면 나와요 */
 const SND={bgm:'sound/bgm.mp3',hello:'sound/hello.mp3',gbb:'sound/gawibawibo.mp3',assa:'sound/assa.mp3',ayu:'sound/ayu.mp3',win3:'sound/win3.mp3'};
 for(const k in SND){SND[k]=new Audio(SND[k])}
 SND.bgm.loop=true;SND.bgm.volume=.35;
+/* 41번: 게임에서 나가면 음악·소리 모두 끄기 */
+function stopAll(){for(const k in SND){try{SND[k].pause();SND[k].currentTime=0}catch(e){}}}
+addEventListener('pagehide',stopAll);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();else if(mode&&$('ov').style.display==='none'){try{const p=SND.bgm.play();if(p)p.catch(()=>{})}catch(e){}}});
+$('back').addEventListener('click',stopAll);
 function snd(k){try{const a=SND[k];a.currentTime=0;const p=a.play();if(p)p.catch(()=>{})}catch(e){}}
 
 let mode='solo',pt=500,op=500,bet=20,on=false,ws={m:0,o:0};
 try{const v=localStorage.getItem('rp-point');if(v!==null)pt=+v}catch(e){}
+function addDelta(n){try{localStorage.setItem('rp-point-delta',+(localStorage.getItem('rp-point-delta')||0)+n)}catch(e){}}   // 41번: 뽑기 게임 점수와 합쳐져요
 function save(){$('pt').textContent=pt;$('op').textContent=mode==='friend'?op+'점':'';try{localStorage.setItem('rp-point',pt)}catch(e){}}
 function showWins(){$('mw').textContent=ws.m+'승';$('ow').textContent=ws.o+'승'}
 function drawBets(){
@@ -103,7 +113,7 @@ function start(){
     if(mode==='friend'){
       const b=Math.min(bet,pt,op);   // 연습용: 둘 중 적게 건 점수로 (지금은 상대도 같은 점수를 건다고 봐요)
       if(b<20){$('big').textContent='점수가 부족해요';return}
-      bet=b;pt-=bet;op-=bet;save();
+      bet=b;pt-=bet;op-=bet;addDelta(-bet);save();
       const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+bet*2;p.style.visibility='visible';
     }
     on=true;ws={m:0,o:0};showWins();drawBets();
@@ -149,7 +159,7 @@ function end(me){
   if(mode==='friend'){
     const p=$('pot');p.style.transition='';
     setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400);
-    setTimeout(()=>{if(me)pt+=bet*2;else op+=bet*2;save()},1200);
+    setTimeout(()=>{if(me){pt+=bet*2;addDelta(bet*2)}else op+=bet*2;save()},1200);
   }
   on=false;drawBets();$('go').textContent='다시 하기';$('go').disabled=false;
 }
