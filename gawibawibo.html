@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
+<!-- 40번: 한 판 승부가 나면 1.5초 뒤 저절로 다음 판 · 5초 안 누르면 3, 2, 1 세고 내 손이 저절로 나가요 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:#000;color:#fff;font-family:system-ui,sans-serif}
@@ -11,7 +12,7 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .arena{flex:1;min-height:0;background:#111;border-radius:22px;display:flex;flex-direction:column;justify-content:center;gap:2.5vh;padding:1vh 3vw 7vh;overflow:hidden}
 .row{display:flex;align-items:center}
 .row>.side{flex:1;text-align:center;font-size:min(2.8vh,21px);font-weight:900}
-.row>.side.win{font-size:min(4vh,30px);color:#ffd84a}
+.win{color:#ffd84a}
 .side small{display:block;font-size:min(2.8vh,21px);color:#aaa;font-weight:900}
 .hand{font-size:min(12vh,26vw);line-height:1}
 .cpu{transform:rotate(180deg)}
@@ -19,14 +20,9 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .cpu.shake{animation:shc .25s infinite alternate}
 @keyframes sh{to{transform:translateY(-12px)}}
 @keyframes shc{from{transform:rotate(180deg)}to{transform:rotate(180deg) translateY(-12px)}}
-.opps{display:flex;flex-wrap:wrap;justify-content:center;gap:2vw}
-.op{text-align:center;font-size:min(2.2vh,16px);font-weight:800;min-width:18vw}
-.op .hand{font-size:min(7vh,15vw)}
-.op.out{opacity:.3}
-.op i{display:block;font-style:normal;color:#ffd84a}
 .mid{display:flex;flex-direction:column;align-items:center;gap:.8vh}
 .pot{font-size:min(2.2vh,17px);font-weight:800;color:#ffd84a;background:#2a2410;border:2px solid #ffd84a;border-radius:20px;padding:2px 12px;transition:transform .8s ease-in,opacity .8s}
-.big{font-size:min(4vh,30px);font-weight:900;font-style:italic;min-height:1.2em;text-align:center}
+.big{font-size:min(5vh,40px);font-weight:900;font-style:italic;min-height:1.2em;text-align:center}
 .vs{font-size:min(3vh,24px);font-weight:900;color:#444;font-style:italic}
 .btns{display:flex;gap:2vw;align-items:stretch}
 .me,.st{flex:0 0 26%;border-radius:16px}
@@ -46,9 +42,8 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .bets .pr{flex:1;text-align:center;font-size:min(1.9vh,14px);color:#888;padding:3px 0}
 .go{flex:1;background:#ff3b3b;border:0;border-radius:14px;color:#fff;font-size:min(2.8vh,21px);font-weight:900}
 .go:disabled{opacity:.35}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh;text-align:center;padding:0 6vw}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3vh}
 .ov h2{font-size:min(4.5vh,34px)}
-.ov p{color:#aaa;font-size:min(2.4vh,17px)}
 .ov button{width:70%;max-width:320px;padding:2.2vh 0;border-radius:20px;border:0;font-size:min(3.4vh,26px);font-weight:900;color:#fff;background:#ff3b3b}
 .ov button+button{background:#333}
 .mk{position:fixed;right:6px;bottom:2px;font-size:10px;color:#555}
@@ -56,9 +51,9 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 <div class="w">
  <h1><a class="back" id="back" href="index.html">‹ 돌아가기</a>가위바위보 게임</h1>
  <div class="arena">
-  <div class="row"><div class="side win" id="ow"></div><div class="opps" id="opps"></div><div class="side" id="on"></div></div>
+  <div class="row"><div class="side win" id="ow">0승</div><div class="hand cpu" id="c">✊</div><div class="side" id="on">상대<small id="op"></small></div></div>
   <div class="mid"><div class="pot" id="pot" style="visibility:hidden"></div><div class="vs">VS</div><div class="big" id="big"></div></div>
-  <div class="row"><div class="side win" id="mw"></div><div class="hand" id="m">✊</div><div class="side">나</div></div>
+  <div class="row"><div class="side win" id="mw">0승</div><div class="hand" id="m">✊</div><div class="side">나</div></div>
  </div>
  <div class="btns">
   <div class="me"><span>내 점수</span><b id="pt">500</b></div>
@@ -77,176 +72,88 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
  <h2>누구랑 할까요?</h2>
  <button onclick="enter('friend')">친구랑 하기</button>
  <button onclick="enter('solo')">혼자 하기 (연습)</button>
- <p id="ovMsg"></p>
 </div>
 <div class="mk">69KYM</div>
 <script>
 const H=['✌️','✊','🖐️'],$=x=>document.getElementById(x),HB=[...document.querySelectorAll('.hs button')];
-const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const beats=(a,b)=>(a-b+3)%3===1;   // a가 b를 이기면 true
 /* 소리: sound 폴더에 아래 이름으로 mp3를 올리면 나와요 */
 const SND={bgm:'sound/bgm.mp3',hello:'sound/hello.mp3',gbb:'sound/gawibawibo.mp3',assa:'sound/assa.mp3',ayu:'sound/ayu.mp3',win3:'sound/win3.mp3'};
-for(const k in SND)SND[k]=new Audio(SND[k]);
+for(const k in SND){SND[k]=new Audio(SND[k])}
 SND.bgm.loop=true;SND.bgm.volume=.35;
 function snd(k){try{const a=SND[k];a.currentTime=0;const p=a.play();if(p)p.catch(()=>{})}catch(e){}}
-function say(t,c){const b=$('big');b.textContent=t;b.style.color=c||'#fff'}
 
-/* 빨간 우체통 정보 (같은 주소라 폰에 저장된 걸 같이 써요) */
-const G=new URLSearchParams(location.search).get('g');
-let RP={};try{RP=JSON.parse(localStorage.getItem('rp_me'))||{}}catch(e){}
-const myU=RP.uid||'u'+Math.random().toString(36).slice(2,10),myName=RP.name||'나';
-if(G)$('back').href='index.html?room='+encodeURIComponent(G);
-
-let mode='solo',pt=500,bet=20;
+let mode='solo',pt=500,op=500,bet=20,on=false,ws={m:0,o:0};
 try{const v=localStorage.getItem('rp-point');if(v!==null)pt=+v}catch(e){}
-function showPt(){$('pt').textContent=pt}
-function savePt(){showPt();try{localStorage.setItem('rp-point',pt)}catch(e){}if(F&&F.au)F.D.set(F.r('giftstory/users/'+F.au+'/my/point'),pt).catch(()=>{})}
-function lockHands(on){HB.forEach(x=>x.disabled=!on)}
-function drawBets(lock){
+function save(){$('pt').textContent=pt;$('op').textContent=mode==='friend'?op+'점':'';try{localStorage.setItem('rp-point',pt)}catch(e){}}
+function showWins(){$('mw').textContent=ws.m+'승';$('ow').textContent=ws.o+'승'}
+function drawBets(){
   $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':
-    [20,50,100].map(n=>`<button class="${n===bet?'on':''}" ${lock?'disabled':''} onclick="setBet(${n})">${n}</button>`).join('');
+    [20,50,100].map(n=>`<button class="${n===bet?'on':''}" ${on?'disabled':''} onclick="setBet(${n})">${n}</button>`).join('');
 }
-function setBet(n){bet=n;drawBets();if(F)F.D.update(F.r(RPS+'/players/'+myU),{bet}).catch(()=>{})}
-/* 위쪽 상대 그리기: 한 명이면 큰 손, 여럿이면 작은 손들 */
-function drawOpps(list){
-  const one=list.length<=1,o=list[0]||{name:'상대',h:1};
-  $('opps').innerHTML=one?`<div class="hand cpu${o.shake?' shake':''}">${H[o.h??1]}</div>`
-    :list.map(p=>`<div class="op${p.out?' out':''}"><div class="hand cpu${p.shake&&!p.out?' shake':''}">${H[p.h??1]}</div>${esc(p.name)}<i>${p.out?'탈락':p.mark||''}</i></div>`).join('');
-  $('on').innerHTML=one?esc(o.name)+(o.pt!=null?`<small>${o.pt}점</small>`:''):'';
-}
-function myHand(h,shake){$('m').textContent=H[h];$('m').classList.toggle('shake',!!shake)}
-function potShow(n){const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+n;p.style.visibility='visible'}
-function potFly(me){const p=$('pot');p.style.transition='';setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400)}
-function gbbAnim(done){
-  snd('gbb');const w=['가위','가위 바위','가위 바위 보!'];let i=0;
-  const step=()=>{say(w[i]);if(++i<3)setTimeout(step,500);else done()};step();
-}
-
+function setBet(n){bet=n;drawBets()}
 function enter(md){
-  if(md==='friend'&&!G){$('ovMsg').textContent='친구랑 하기는 대화방의 ＋ 메뉴 → 가위바위보로 들어와야 돼요';return}
   mode=md;$('ov').style.display='none';
+  $('on').firstChild.textContent=md==='solo'?'컴퓨터':'친구';
   snd('bgm');setTimeout(()=>snd('hello'),400);
-  say('누가 이기나 해 보자!');drawBets();showPt();
-  if(md==='solo'){drawOpps([{name:'컴퓨터',h:1}]);soloWins()}
-  else friendStart();
+  $('big').textContent='누가 이기나 해 보자!';$('big').style.color='#fff';
+  drawBets();save();showWins();
 }
-function start(){mode==='solo'?soloStart():friendGo()}
-function pick(i){lockHands(false);mode==='solo'?soloPick(i):friendPick(i)}
-
-/* ===== 혼자 하기 (연습 · 점수 안 걸어요) ===== */
-let S={on:false,m:0,o:0};
-function soloWins(){$('mw').textContent=S.m+'승';$('ow').textContent=S.o+'승'}
-function soloStart(){if(!S.on){S={on:true,m:0,o:0};soloWins()}soloRound()}
-function soloRound(){
-  $('go').disabled=true;myHand(1,true);drawOpps([{name:'컴퓨터',h:1,shake:true}]);
-  gbbAnim(()=>lockHands(true));
-}
-function soloPick(i){
-  const c=Math.floor(Math.random()*3);
-  myHand(i);drawOpps([{name:'컴퓨터',h:c}]);
-  if(i===c){say('비겼다! 다시','#f1c40f');setTimeout(soloRound,1200);return}
-  const me=beats(i,c);S[me?'m':'o']++;soloWins();
-  if(S.m===3||S.o===3){say(me?'🏆 최종 승리!':'최종 패배',me?'#ffd84a':'#ff3b3b');snd(me?'win3':'ayu');S.on=false;$('go').textContent='다시 하기';$('go').disabled=false;return}
-  say(me?'아싸! 이겼다':'아유, 졌다',me?'#2ecc71':'#ff3b3b');snd(me?'assa':'ayu');$('go').disabled=false;
-}
-
-/* ===== 친구랑 하기 (대화방 친구들과 · 파이어베이스) =====
-   rooms/방/rps : st(lobby·play·done) host gid bet r n win
-   rooms/방/rps/players/나 : name bet pt in(gid) out w p{r,h} */
-const CFG={apiKey:"AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",authDomain:"giftwav-9ab6b.firebaseapp.com",databaseURL:"https://giftwav-9ab6b-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"giftwav-9ab6b",appId:"1:790729206880:web:173a3a34e29e49a0b0a705"};
-const RPS='giftstory/rooms/'+G+'/rps';
-let F=null,gm={},charged=null,paid=null,shownR=0,shownG=null,revealed='',hostDone='';
-async function fbLoad(){
-  for(const v of['13.1.0','11.0.2']){try{const b=`https://www.gstatic.com/firebasejs/${v}/`;
-    const[A,D,AU]=await Promise.all([import(b+'firebase-app.js'),import(b+'firebase-database.js'),import(b+'firebase-auth.js')]);return{A,D,AU}}catch(e){}}
-  throw new Error('fb');
-}
-async function friendStart(){
-  say('연결하는 중...');$('go').disabled=true;
-  try{
-    const{A,D,AU}=await fbLoad(),app=A.initializeApp(CFG),auth=AU.getAuth(app);
-    if(auth.authStateReady)await auth.authStateReady();
-    if(!auth.currentUser)await AU.signInAnonymously(auth);
-    const db=D.getDatabase(app);F={D,au:auth.currentUser.uid,r:p=>D.ref(db,p)};
-    await D.set(F.r('giftstory/rooms/'+G+'/keys/'+F.au),true).catch(()=>{});
-    const v=(await D.get(F.r('giftstory/users/'+F.au+'/my/point')).catch(()=>null));
-    if(v&&typeof v.val()==='number')pt=v.val();savePt();
-    const meR=F.r(RPS+'/players/'+myU);
-    await D.update(meR,{name:myName,bet,pt,j:Date.now()});
-    D.onDisconnect(meR).remove();
-    D.push(F.r('giftstory/rooms/'+G+'/msgs'),{from:myU,name:myName,type:'text',text:'✊ 가위바위보 하자! ＋ 메뉴 → 가위바위보 → 친구랑 하기로 들어와요',at:Date.now()}).catch(()=>{});
-    D.onValue(F.r(RPS),s=>{gm=s.val()||{};friendDraw()});
-  }catch(e){say('연결이 안 됐어요','#ff3b3b');F=null}
-}
-const players=()=>Object.entries(gm.players||{}).map(([u,p])=>({u,...p}));
-function friendDraw(){
-  const ps=players(),play=gm.st==='play',inG=ps.filter(p=>p.in===gm.gid),alive=inG.filter(p=>!p.out),meP=inG.find(p=>p.u===myU);
-  const two=(gm.n||ps.length)===2,others=(play||gm.st==='done'?inG:ps).filter(p=>p.u!==myU);
-  // 판이 시작되면 내 점수에서 판돈을 빼요 (한 번만)
-  if(play&&meP&&charged!==gm.gid){charged=gm.gid;pt-=gm.bet;savePt();potShow(gm.bet*gm.n)}
-  // 승수 · 남은 사람
-  $('mw').textContent=meP&&two?(meP.w||0)+'승':'';
-  $('ow').textContent=play||gm.st==='done'?(two&&others[0]?(others[0].w||0)+'승':'남은 '+alive.length+'명'):'';
-  const picksIn=alive.length>1&&alive.every(p=>p.p&&p.p.r===gm.r),key=gm.gid+':'+gm.r;
-  drawOpps(others.map(p=>({name:p.name,pt:two?p.pt:null,out:p.out,h:picksIn&&p.p?p.p.h:1,shake:play&&!picksIn,mark:play&&!picksIn&&p.p&&p.p.r===gm.r?'✔':''})));
-  if(gm.st!=='play'&&gm.st!=='done'||!gm.gid){   // 기다리는 중
-    drawBets(false);$('go').textContent='시작';$('go').disabled=ps.length<2;
-    if(!play)say(ps.length<2?'친구를 기다려요...':ps.length+'명 모였어요 · 시작!');
-    return;
-  }
-  drawBets(true);
-  if(play&&(shownR!==gm.r||shownG!==gm.gid)){   // 새 판
-    shownR=gm.r;shownG=gm.gid;$('go').disabled=true;
-    if(meP&&!meP.out){myHand(1,true);gbbAnim(()=>{if(gm.gid===shownG&&gm.r===shownR)lockHands(true)})}
-    else{myHand(1);say('구경하는 중')}
-  }
-  if(play&&picksIn&&revealed!==key){   // 다 골랐으면 공개
-    revealed=key;lockHands(false);
-    const hs=new Set(alive.map(p=>p.p.h)),draw=hs.size!==2,wh=draw?-1:[...hs].find(h=>[...hs].every(x=>x===h||beats(h,x)));
-    if(meP&&meP.p)myHand(meP.p.h);
-    if(meP&&!meP.out){
-      if(draw)say('비겼다! 다시','#f1c40f');
-      else if(meP.p.h===wh){say(two?'아싸! 이겼다':'살았다!','#2ecc71');snd('assa')}
-      else{say(two?'아유, 졌다':'탈락!','#ff3b3b');snd('ayu')}
+function start(){
+  if(!on){
+    if(mode==='friend'){
+      const b=Math.min(bet,pt,op);   // 연습용: 둘 중 적게 건 점수로 (지금은 상대도 같은 점수를 건다고 봐요)
+      if(b<20){$('big').textContent='점수가 부족해요';return}
+      bet=b;pt-=bet;op-=bet;save();
+      const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+bet*2;p.style.visibility='visible';
     }
-    if(gm.host===myU&&hostDone!==key){hostDone=key;setTimeout(()=>hostNext(alive,draw,wh,two),2200)}
+    on=true;ws={m:0,o:0};showWins();drawBets();
   }
-  if(play&&gm.host===myU&&alive.length===1&&inG.length>1&&hostDone!=='end'+gm.gid){hostDone='end'+gm.gid;F.D.update(F.r(RPS),{st:'done',win:alive[0].u})}   // 다른 사람이 나가면
-  if(gm.st==='done'&&paid!==gm.gid){
-    paid=gm.gid;const me=gm.win===myU,wn=ps.find(p=>p.u===gm.win);
-    if(me){pt+=gm.bet*gm.n;savePt()}
-    say(me?'🏆 최종 승리!':'🏆 '+(wn?wn.name:'친구')+' 승리',me?'#ffd84a':'#ff3b3b');snd(me?'win3':'ayu');potFly(me);
-    $('go').textContent='다시 하기';$('go').disabled=false;
+  round();
+}
+function round(){
+  $('go').disabled=true;
+  $('m').textContent=$('c').textContent='✊';
+  $('m').classList.add('shake');$('c').classList.add('shake');
+  const b=$('big');b.style.color='#fff';snd('gbb');
+  const w=['가위','가위 바위','가위 바위 보!'];let i=0;
+  const step=()=>{b.textContent=w[i];if(++i<3)setTimeout(step,500);else{HB.forEach(x=>x.disabled=false);waitPick()}};step();
+}
+let autoT=0;
+function waitPick(){   // 5초 안 누르면 3, 2, 1 → 저절로
+  clearTimeout(autoT);let n=8;
+  const tick=()=>{if(HB[0].disabled)return;n--;
+    if(n>3){autoT=setTimeout(tick,1000);return}
+    if(n>0){const b=$('big');b.textContent=n+'';b.style.color='#ffd84a';autoT=setTimeout(tick,1000);return}
+    pick(Math.floor(Math.random()*3))};
+  autoT=setTimeout(tick,1000);
+}
+function pick(i){
+  clearTimeout(autoT);if(HB[0].disabled)return;
+  HB.forEach(x=>x.disabled=true);
+  $('m').classList.remove('shake');$('c').classList.remove('shake');
+  const c=Math.floor(Math.random()*3);
+  $('m').textContent=H[i];$('c').textContent=H[c];
+  const b=$('big');
+  if(i===c){b.textContent='비겼다! 다시';b.style.color='#f1c40f';setTimeout(round,1200);return}
+  const me=(i-c+3)%3===1;
+  ws[me?'m':'o']++;showWins();
+  if(ws.m===3||ws.o===3)return end(me);
+  b.textContent=me?'아싸! 이겼다':'아유, 졌다';b.style.color=me?'#2ecc71':'#ff3b3b';
+  snd(me?'assa':'ayu');
+  setTimeout(()=>{if(on)round()},1500);   // 1.5초 뒤 저절로 다음 판
+}
+function end(me){
+  const b=$('big');
+  b.textContent=me?'🏆 최종 승리!':'최종 패배';b.style.color=me?'#ffd84a':'#ff3b3b';
+  snd(me?'win3':'ayu');
+  if(mode==='friend'){
+    const p=$('pot');p.style.transition='';
+    setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400);
+    setTimeout(()=>{if(me)pt+=bet*2;else op+=bet*2;save()},1200);
   }
+  on=false;drawBets();$('go').textContent='다시 하기';$('go').disabled=false;
 }
-/* 방장(시작 누른 사람)이 결과를 적고 다음 판으로 넘겨요 */
-function hostNext(alive,draw,wh,two){
-  const u={},next=()=>{u.r=gm.r+1};
-  if(draw)next();
-  else if(two){
-    const w=alive.find(p=>p.p.h===wh),nw=(w.w||0)+1;
-    u['players/'+w.u+'/w']=nw;if(nw>=3){u.st='done';u.win=w.u}else next();
-  }else{
-    const left=alive.filter(p=>p.p.h===wh);
-    alive.filter(p=>p.p.h!==wh).forEach(p=>u['players/'+p.u+'/out']=true);
-    if(left.length===1){u.st='done';u.win=left[0].u}else next();
-  }
-  F.D.update(F.r(RPS),u).catch(()=>{});
-}
-function friendGo(){
-  if(!F)return;
-  const ps=players();
-  if(ps.length<2){say('친구를 기다려요...');return}
-  const b=Math.min(...ps.map(p=>Math.min(p.bet||20,p.pt??500)));   // 둘 중(여럿 중) 적게 건 점수로
-  if(b<20){say('점수가 모자란 사람이 있어요','#ff3b3b');return}
-  const gid=Math.random().toString(36).slice(2,10),u={st:'play',host:myU,gid,bet:b,r:1,n:ps.length,win:null};
-  ps.forEach(p=>{u['players/'+p.u+'/in']=gid;u['players/'+p.u+'/out']=false;u['players/'+p.u+'/w']=0;u['players/'+p.u+'/p']=null});
-  $('go').disabled=true;F.D.update(F.r(RPS),u).catch(()=>{say('시작이 안 됐어요','#ff3b3b');$('go').disabled=false});
-}
-function friendPick(i){
-  myHand(i);say('친구를 기다려요...');
-  F.D.update(F.r(RPS+'/players/'+myU),{p:{r:gm.r,h:i},pt}).catch(()=>{});
-}
-showPt();drawBets();drawOpps([{name:'상대',h:1}]);
+{const g=new URLSearchParams(location.search).get('g');if(g)$('back').href='index.html?room='+encodeURIComponent(g)}   // 그 대화방으로 돌아가기
+save();drawBets();
 </script>
 </body></html>
