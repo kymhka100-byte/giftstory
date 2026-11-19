@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 39번: 큰 글씨여도 화면이 폰에 꼭 맞고 '큰' 버튼 늘 보임 · 폰이 글씨 키우는 것 막기 · 뒤로 가기는 어디서든 메인 화면으로 (모임 방·게임 갔다 와도) · 할 일 ＋ 버튼 분홍 테두리 · 내 말풍선 연한 노랑+분홍 테두리+진한 글씨 · 입력칸 은은한 테두리 · 메뉴 버튼 테두리 · 파일 보내기 오디오·사진·일반 파일 · 처음에 다크·큰 글씨·실버 모드 고르기 · 가위바위보·뽑기 게임으로 잘 넘어가게 -->
 <!-- 37번: 우리 모임 (모임 만들기 · 초대 링크로 들어오면 모임 사람 이름이 저절로 · 전체 대화방 · 방장 공지·모두에게 따로 보내기·사람 빼기 · 여러 모임 · 실버 모드 가족 버튼 자동) -->
 <!-- 36번: 가위바위보는 따로 (gawibawibo.html) · 편지·메시지 "모든 친구에게" 버튼 · 키보드 올라오면 큰·친구 초대 버튼 숨김 · 할 일 ＋ 버튼 작게 -->
 <!-- 빨간 우체통 32번: 기본 다크 모드 · 메인 화면(나와의 대화 고정 · 할 일 기본 / 친구 목록 전환 · 홍보 글 · 친구 초대 아래 가운데) · 할 일(체크 · 별표 · 알림 시간 · 장소 · 대화방 연결) · 일기장(암호 4자리 · 달력 · 사진 1장) · 말로 쓰기 · 받은 파일 저장 · 메뉴 열면 뒤 화면 어둡게 · 뒤로 가기로 메뉴 닫기 · 알림 등록 보강 -->
@@ -757,6 +758,19 @@ body.grpon #hGroup{display:block}
 #gNote{display:none;padding:8px 12px;background:#3a3418;border-bottom:1px solid #c9a94a;color:#ffe9a6;font-size:14px;line-height:1.4;white-space:pre-wrap;z-index:4}
 body.gnote:not(.home) #gNote{display:block}
 body:not(.dark) #grpBar{background:var(--t-bar)}
+/* ===== 39번 ===== */
+:root{--pink:#ff8fb3}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+#tgBtn{z-index:8}
+.me .bubble{background:#fff4c2;color:#111;font-weight:600;border:1.5px solid var(--pink)}
+.hadd .ok,.hadd .mic,.hadd .hlist{width:40px;height:40px;min-height:0;padding:0;border-radius:50%;background:none;border:1.5px solid #4a4b58;color:#e8e8ee;display:flex;align-items:center;justify-content:center}
+.hadd .ok{border-color:var(--pink);color:var(--pink);font-size:17px;font-weight:700}
+.hadd .mic.on{background:#e0322f;border-color:#ff8a86}
+#txt,.tdadd input,input.in,textarea.in{border-color:rgba(255,143,179,.38)}
+.pmenu{gap:4px}
+.pmenu button{border:1px solid #474856;background:#2b2c36;border-radius:11px}
+body:not(.dark) .pmenu button{background:#fff;border-color:var(--t-btnline)}
+#modeOv .big{font-size:18px;padding:15px}
 </style>
 </head>
 <body>
@@ -854,6 +868,7 @@ body:not(.dark) #grpBar{background:var(--t-bar)}
     <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="cap">💬 음성 통화 + 자막</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
     <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="invite">👥 친구 초대</button></div>
     <div class="pmenu" id="gameMenu"><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button></div>
+    <div class="pmenu" id="fileMenu"><button data-fk="audio">🎵 오디오</button><button data-fk="image">🖼 사진</button><button data-fk="doc">📄 일반 파일</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
     <button id="micBtn" title="목소리 보내기"><svg viewBox="0 0 24 24" width="20" height="20"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
@@ -1295,6 +1310,13 @@ body:not(.dark) #grpBar{background:var(--t-bar)}
   <div class="shhint">링크를 단체방에 한 번만 올려도 돼요</div>
   <button class="big" data-ginvk="copy">🔗 모임 주소 복사</button><button class="big" data-close>닫기</button>
 </div></div>
+<!-- 39번: 처음 한 번 화면 고르기 -->
+<div class="ov" id="modeOv"><div class="panel" style="max-width:380px;text-align:center">
+  <h2>화면을 골라 주세요</h2><div style="color:#ccc;font-size:14px">나중에 바꿀 수 있어요</div>
+  <button class="big y" data-mode="dark">🌙 다크 모드 (기본)</button>
+  <button class="big" data-mode="big">🔠 큰 글씨 모드</button>
+  <button class="big" data-mode="silver">👵 실버 모드 (어르신)</button>
+</div></div>
 <div id="fly"></div>
 <div id="toast"></div>
 
@@ -1316,7 +1338,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '38';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '39';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1872,10 +1894,10 @@ function drawMore(){
 }
 /* 27번: 더보기 버튼 바로 밑에서 아래로 */
 function placeMore(){
-  const r = $('moreBtn').getBoundingClientRect(), m = $('morePanel'), w = m.offsetWidth || 180;
-  m.style.top = Math.round(r.bottom + 4) + 'px';
-  m.style.left = Math.round(Math.max(4, Math.min(r.right - w, innerWidth - w - 4))) + 'px';
-  m.style.maxHeight = Math.max(160, innerHeight - r.bottom - 20) + 'px';
+  const z = zNow(), r = $('moreBtn').getBoundingClientRect(), m = $('morePanel'), w = (m.offsetWidth || 180) * z;   // 39번: 큰 글씨일 때도 제자리에
+  m.style.top = Math.round((r.bottom + 4) / z) + 'px';
+  m.style.left = Math.round(Math.max(4, Math.min(r.right - w, innerWidth - w - 4)) / z) + 'px';
+  m.style.maxHeight = Math.round(Math.max(160, innerHeight - r.bottom - 20) / z) + 'px';
 }
 $('moreBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); const m = $('morePanel'); m.classList.toggle('show'); if (m.classList.contains('show')) { drawMore(); placeMore(); } menuDim(); };
 addEventListener('resize', () => { if ($('morePanel').classList.contains('show')) placeMore(); });
@@ -2765,7 +2787,7 @@ if (window.visualViewport) {
     const prevH = lastH; lastH = h; maxH = Math.max(maxH, h);
     const ae = document.activeElement, typing = ae && /^(TEXTAREA|INPUT)$/.test(ae.tagName);
     document.body.classList.toggle('kb', typing && h < maxH * .8);   // 25번: 키보드가 올라오면 위쪽 메뉴 숨기고 고정 말풍선 줄만
-    $('app').style.height = h + 'px';
+    $('app').style.height = Math.round(h / zNow()) + 'px';   // 39번: 큰 글씨여도 화면 높이에 꼭 맞게
     if (prevH && prevH < maxH * .8 && h >= maxH * .9 && document.activeElement === $('txt')) { $('txt').blur(); typingOn(false); }   // 32번: 키보드를 닫으면 우체통 · 같이 보기 다시
     if (near) requestAnimationFrame(() => box.scrollTop = box.scrollHeight);
   };
@@ -3312,7 +3334,7 @@ function showPanel(id, on){
   $(id).classList.toggle('show', on);
   if (id === 'videoPanel') { document.body.classList.toggle('watch', on); if (on) { document.documentElement.style.setProperty('--fh', document.querySelector('footer').offsetHeight + 'px'); drawVChat(); } }
 }
-function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
+function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'fileMenu', 'topMenu', 'micMenu'].forEach(id => $(id).classList.remove('show')); $('plusBtn').classList.remove('on'); menuDim(); }
 /* 32번: 메뉴가 열리면 뒤 화면을 어둡게 (뒤로 가기는 메뉴부터 닫아요) */
 function menuDim(){ const on = !!document.querySelector('.pmenu.show,#morePanel.show'); if (document.body.classList.contains('menuon') !== on) { document.body.classList.toggle('menuon', on); syncLayer(); } }
 function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $('morePanel').classList.remove('show'); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); menuDim(); }
@@ -3321,9 +3343,8 @@ $('tgBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); const bi
 document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#topBox,#micBtn')) closeMenus(); });
 ['plusMenu', 'tgMenu', 'gameMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
-  if (b.dataset.tg === 'watch' || b.dataset.tg === 'game') { e.stopPropagation(); click(); closeMenus(); const m = $(b.dataset.tg === 'watch' ? 'tgMenu' : 'gameMenu'); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로
+  if (['watch', 'game', 'file'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
   click(); closeMenus();
-  if (b.dataset.tg === 'file') { if (homeOn) { pickFriend('📁 누구에게 파일을 보낼까요?', id => { openRoom(id); $('sendFile').click(); }); return; } $('sendFile').click(); return; }
   if (b.dataset.tg === 'invite') { openInvite(); return; }
   if (b.dataset.tg === 'lot') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'ppopgi.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 33번: 뽑기 게임은 따로 (ppopgi.html)
   if (b.dataset.tg === 'rps') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'gawibawibo.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 36번: 가위바위보는 따로 (gawibawibo.html)
@@ -3331,6 +3352,15 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
   else if (homeOn) soloVideo();   // 메인 화면에서는 혼자 보기
   else { showPanel('musicPanel', false); showPanel('videoPanel', true); syncVideo(); }
 }));
+/* 39번: 파일 보내기 - 오디오·사진·일반 파일 (폰이 맞는 고르기 창을 열어요) */
+const FILE_ACCEPT = { audio: 'audio/*', image: 'image/*', doc: '' };
+$('fileMenu').addEventListener('click', e => {
+  const b = e.target.closest('[data-fk]'); if (!b) return;
+  click(); closeMenus();
+  const go = () => { const f = $('sendFile'); f.accept = FILE_ACCEPT[b.dataset.fk]; f.click(); };
+  if (homeOn) { pickFriend('📁 누구에게 보낼까요?', id => { if (Array.isArray(id)) return; openRoom(id); go(); }); return; }
+  go();
+});
 document.querySelectorAll('[data-tclose]').forEach(b => b.onclick = () => {
   click(); showPanel(b.dataset.tclose, false);
   if (b.dataset.tclose === 'videoPanel' && vPlayer) { vApplying(); vPlayer.pauseVideo(); tgVideoOn = false; }   // 나만 닫기 (친구는 계속)
@@ -3875,11 +3905,14 @@ let hDepth = 0, skipPop = 0, started = false;
 const anyOv = () => $('writer').classList.contains('show') || [...document.querySelectorAll('.ov.show')].some(o => o.id !== 'nameOv') || svLayer() || $('musicPanel').classList.contains('show') || $('videoPanel').classList.contains('show')
   || !!document.querySelector('.pmenu.show,#morePanel.show') || $('diary').classList.contains('show');   // 32번
 /* 21번: 대화창 한 칸 + 열린 창 한 칸 (누를 때 미리 쌓아 둬서 뒤로 가기가 앱 밖으로 안 나가요) */
-const wantDepth = () => started ? (!homeOn && !S.on ? 1 : 0) + (anyOv() ? 1 : 0) : 0;
+/* 39번: 메인 화면이 아니면(대화방·모임 방·펼친 창·모임 목록) 한 칸만 → 뒤로 가기 한 번에 메인 화면 */
+const wantDepth = () => started && (anyOv() || (!homeOn && !S.on) || (homeOn && !S.on && !!grpSel)) ? 1 : 0;
 let leaving = false;   // 34번: 다른 화면(뽑기 게임)으로 넘어갈 땐 뒤로 가기 정리를 멈춰요
+addEventListener('pageshow', e => { if (e.persisted && leaving) { leaving = false; syncLayer(); } });   // 39번: 게임 갔다가 돌아오면 다시 정리 (안 그러면 뒤로 가기에 앱이 나가요)
 function syncLayer(){
   if (leaving) return;
   setTimeout(() => {
+    if (leaving) return;   // 39번: 게임으로 넘어가는 중엔 뒤로 가기를 실행하지 않아요 (그래서 메인 화면으로 튕기던 문제)
     const w = wantDepth();
     while (hDepth < w) { hDepth++; history.pushState({ rp: hDepth }, ''); }
     if (hDepth > w) { const n = hDepth - w; hDepth = w; skipPop++; history.go(-n); }
@@ -3905,11 +3938,13 @@ function closeAll(){
   updateFlag();
 }
 addEventListener('popstate', () => {
+  if (leaving) return;   // 39번
   if (skipPop) { skipPop--; return; }
   if (hDepth <= 0) return;
   hDepth--;
-  if (anyOv()) { closeAll(); showPanel('musicPanel', false); if ($('videoPanel').classList.contains('show')) document.querySelector('[data-tclose="videoPanel"]').click(); }
-  else if (!homeOn && !S.on) goHome();   // 대화창에서 뒤로 가기 → 친구 목록 메인 화면
+  const vOn = $('videoPanel').classList.contains('show');
+  closeAll(); showPanel('musicPanel', false); if (vOn) document.querySelector('[data-tclose="videoPanel"]').click();
+  if (!S.on) { grpSel = null; if (!homeOn) goHome(); else render(); }   // 39번: 어디서든 뒤로 가기 → 메인 화면 (앱 밖으로는 메인에서만)
   syncLayer();
 });
 let toastT = 0;
@@ -4875,6 +4910,7 @@ function start(){
   setTimeout(checkUpdate, 3000);
   started = true;
   tdInit();   // 32번: 처음엔 할 일 예시 3줄
+  setTimeout(askMode, 700);   // 39번
   initStore();
   setInterval(tdRemind, 15000); setTimeout(tdRemind, 3000);   // 32번: 할 일 알림 시간
   if (LS.get('rp_sv_pend', null)) svApplyInvite();
@@ -4933,7 +4969,7 @@ function nameScreen(){
 }
 /* 24번: 시작을 누르면 홈 화면에 추가 권하기 (✕로 닫기) */
 function askInstall(){
-  if (isStandalone() || LS.get('rp_installed', 0)) return;
+  if (isStandalone() || LS.get('rp_installed', 0) || $('modeOv').classList.contains('show')) return;   // 39번: 화면 고르기가 먼저
   showOv('instOv');
 }
 $('instGo').onclick = () => { hideOv('instOv'); doInstall(); };
@@ -4979,8 +5015,29 @@ async function kakaoBack(){
 }
 /* 38번 '큰' 버튼: 한 번 누르면 큰 글씨, 다시 누르면 보통 */
 const BIG_Z = 120;   // 38번: 화면이 깨지지 않는 가장 큰 글씨
-function zoomApply(){ const z = Math.min(LS.get('rp_zoom', 100), BIG_Z); document.body.style.zoom = z === 100 ? '' : (z / 100); }
+/* 39번: 대화 화면만 크게 하고, 넓이·높이는 폰 화면에 꼭 맞춰요 → '큰' 버튼이 밖으로 밀려나지 않아요 */
+function zNow(){ return Math.min(LS.get('rp_zoom', 100), 120) / 100; }
+function zoomApply(){
+  const z = zNow(), a = $('app'), h = window.visualViewport ? visualViewport.height : innerHeight;
+  document.body.style.zoom = '';
+  a.style.zoom = z === 1 ? '' : z;
+  a.style.width = z === 1 ? '' : Math.floor(Math.min(innerWidth, 640 * z) / z) + 'px';
+  a.style.height = Math.round(h / z) + 'px';
+  if ($('morePanel').classList.contains('show')) placeMore();
+}
 zoomApply();
+addEventListener('resize', zoomApply);
+/* 39번: 처음 한 번 화면 고르기 (다크 · 큰 글씨 · 실버) */
+function askMode(){
+  if (LS.get('rp_mode_asked', 0) || S.on || LS.get('rp_silver_on', 0) || svInv) return;
+  showOv('modeOv');
+}
+document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => {
+  const k = b.dataset.mode; click(); LS.set('rp_mode_asked', 1); hideOv('modeOv');
+  LS.set('rp_light', false); applyDark();
+  LS.set('rp_zoom', k === 'big' ? BIG_Z : 100); zoomApply();
+  if (k === 'silver') svOpen(); else setTimeout(askInstall, 600);
+});
 /* 편지 쓰기 위 버튼 */
 $('wPick').onclick = () => { click(); step(1); };
 $('wDrafts').onclick = () => $('draftBtn').click();
@@ -5106,7 +5163,7 @@ function grpRoomNote(){
 $('grpBar').addEventListener('click', e => {
   if (e.target.closest('[data-gnew]')) { if (!FB) { toast('모임은 서버 연결이 필요해요'); return; } click(); $('grpName').value = ''; showOv('grpNewOv'); setTimeout(() => $('grpName').focus(), 300); return; }
   const t = e.target.closest('[data-gtab]'); if (!t) return;
-  click(); grpSel = grpSel === t.dataset.gtab ? null : t.dataset.gtab; drawHome();
+  click(); grpSel = grpSel === t.dataset.gtab ? null : t.dataset.gtab; drawHome(); syncLayer();
 });
 $('grpMake').onclick = () => {
   const n = $('grpName').value.trim(); if (!n) { toast('모임 이름을 적어 주세요'); $('grpName').focus(); return; }
