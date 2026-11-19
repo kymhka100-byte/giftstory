@@ -1,10 +1,11 @@
-/* 빨간 우체통 알림·설치 도우미 (39번: 새 버전 39번으로 바꾸기)
+/* 빨간 우체통 알림·설치 도우미 (41번: 첫 알림부터 소리 - 화면을 막 끈 뒤에도 '보고 있다'로 착각하지 않게 앱에 직접 물어봐요)
+   (40번: 새 버전 40번으로 바꾸기)
    (36번: 앱을 보고 있어도 알림은 조용히 띄워서 폰이 우리 알림을 낮춰 보지 않게)
    (34번: 알림마다 이름표를 달리 해서 매번 소리가 나요)
    - 화면이 꺼져 있어도 서버가 보낸 알림을 띄워요
    - 알림이 온 방이 목록에 없으면 앱이 열릴 때 넣도록 적어 둬요
    - 앱 파일은 폰에 저장해 두고, 열 때마다 몰래 새 버전을 받아 다음에 바뀌어요 */
-const APP_CACHE = 'rp-app-39';
+const APP_CACHE = 'rp-app-41';
 const INBOX = 'rp-inbox';
 
 self.addEventListener('install', () => self.skipWaiting());
@@ -51,7 +52,7 @@ self.addEventListener('push', e => {
     if (room) await noteInbox(room, d.name || title, +d.at || Date.now());
     const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     wins.forEach(w => w.postMessage({ inbox: 1 }));
-    const looking = wins.some(w => w.visibilityState === 'visible' && w.focused);   // 36번: 앱을 보고 있으면 소리 없이 띄움
+    const looking = await reallyLooking(wins);   // 41번: 앱에 직접 물어봐서 진짜 보고 있을 때만 조용히
     await self.registration.showNotification(title, {
       body, tag: 'rp-' + room + '-' + (d.at || Date.now()), renotify: !looking, silent: looking, icon: 'icon-192.png', badge: 'icon-192.png',
       vibrate: [120, 60, 120], requireInteraction: false,
@@ -59,6 +60,16 @@ self.addEventListener('push', e => {
     });
   })());
 });
+
+/* 41번: 앱에 "지금 진짜 보고 있어요?" 물어보기 · 0.4초 안에 대답 없으면(화면 꺼짐) 소리 나게 */
+function reallyLooking(wins){
+  const vis = wins.filter(w => w.visibilityState === 'visible' && w.focused);
+  if (!vis.length) return Promise.resolve(false);
+  return Promise.race([
+    Promise.all(vis.map(w => new Promise(res => { const ch = new MessageChannel(); ch.port1.onmessage = e => res(!!(e.data && e.data.looking)); w.postMessage({ ask: 1 }, [ch.port2]); }))).then(a => a.some(Boolean)),
+    new Promise(res => setTimeout(() => res(false), 400))
+  ]);
+}
 
 /* 알림을 누르면 그 대화방으로 */
 self.addEventListener('notificationclick', e => {
