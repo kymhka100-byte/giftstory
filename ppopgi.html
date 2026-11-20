@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>뽑기 - 빨간 우체통</title>
+<!-- 46번: 대화방에서 '같이 하기'를 만들면 그 방에 초대 말풍선이 가요 (누르면 바로 들어옴) · 오래전에 멈춘 판이 있어도 새로 시작돼요 -->
 <!-- 41번: 게임에서 나가면 음악 꺼짐 · 가위바위보 점수와 같은 점수로 이어짐 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -252,11 +253,16 @@ async function makeGame(){
   if(gType==='pig' && myPts<BET){ say('점수가 모자라요 (500점 필요)'); return; }
   const id=roomParam||'pg_'+Math.random().toString(36).slice(2,9);
   try{ await key(id); await DB.set(ROOM(id),{type:gType,host:me.uid,status:'wait',players:{[me.uid]:{name:me.name}},picks:{},created:Date.now()}); }catch(e){ say('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요'); return; }
+  if(roomParam && !roomParam.startsWith('pg_')){   // 46번: 대화방에 초대 말풍선
+    let u=me.uid; try{ const m=JSON.parse(localStorage.getItem('rp_me')); if(m&&m.uid) u=m.uid; }catch(e){}
+    firebase.database().ref('giftstory/rooms/'+roomParam+'/msgs').push({from:u,name:me.name,type:'gm',game:'ppopgi.html',text:NAMES[gType]+' 같이 해요!',at:Date.now()}).catch(()=>{});
+  }
   H.url('?g='+id); joinGame(id);
 }
 async function joinGame(id){
   await key(id).catch(()=>{}); const g=await DB.get(ROOM(id)).catch(()=>null);
-  if(!g || g.status==='reveal'){ roomParam=id; toast('이 대화방에서 새 뽑기를 시작해 보세요'); return; }   // 대화방에서 열었을 때
+  const old = g && Date.now()-(g.created||0) > 30*60e3 && !(g.players&&g.players[me.uid]);   // 46번: 30분 넘게 멈춘 판은 새로
+  if(!g || g.status==='reveal' || old){ roomParam=id; toast('이 대화방에서 새 뽑기를 시작해 보세요'); return; }   // 대화방에서 열었을 때
   if(g.status!=='wait' && !(g.players&&g.players[me.uid])){ say('이미 시작한 뽑기예요'); return; }
   if(g.type==='pig' && myPts<BET){ say('점수가 모자라서 돼지뽑기에 못 들어가요 (500점 필요)'); return; }
   local=false; gameId=id; myId=me.uid; gType=g.type;

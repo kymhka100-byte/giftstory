@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 46번: 공동체 방 공지 때문에 화면이 밀려 아래 입력 줄이 잘리던 것 고침 · '공동체 2' 버튼 글씨 넘침 고침 · 가위바위보·뽑기 게임 초대 말풍선(🎮 같이 하기) -->
 <!-- 45번: 모임 → 공동체로 이름 바꿈 · 공동체 '다 같이 대화하기' 잘 보이게 · 대화방에서 이름을 누르면 '이 사람이 한 말 보기' · 큰 글씨여도 아래 입력 줄이 화면에 꼭 맞게 -->
 <!-- 42번: 할 일 ＋ 누르면 마이크 꺼짐·다음 말은 새로 · 할 일 줄 버튼 원 없이 같은 크기 · ＋공동체 → 공동체 N · 고정 말풍선: 상대 정하면 테두리 진하게, 들어오면 밝은 노랑 · 편지 기본 손글씨(글씨체 적용 버그) · 스티커 누를수록 늘고 꾹 누르면 다 지움 · 받는 사람 고르기 뒤로 가기는 편지로 · 확인·닫기 버튼 고정 · 카톡·문자 바로 열림·돌아오면 편지로 · 긴 편지는 여러 장 · 편지 우체통 아이콘 까만 배경 없앰 · 더보기 이름 말풍선에 새 메시지·임시 표시 · 노래 끝나도 플레이어 그대로 · 알림 두 번(조용히 깨우고 → 소리) -->
 <!-- 41번: 첫 알림부터 소리 (알림 도우미가 물어보면 진짜 보고 있는지 대답) · 할 일 넣으면 입력창 바로 밑에 쌓임 · 오늘 할 일 있으면 내 이름 버튼 10분마다 흔들+띵동(한 번 들어가면 그날은 멈춤) · 공동체 공지 쓰기 창(저장 버튼) · 공동체 "저장하고 나가기" · 빨간 우체통 친구 골라 공동체 초대 -->
@@ -757,7 +758,7 @@ body.grpon #hGroup{display:block}
 .gtools button{flex:1 1 45%;padding:10px 6px;border-radius:12px;border:1px solid #3a3b46;background:#22232c;color:#fff;font-size:14px;font-weight:700}
 .gtools .y{background:#ffe14d;color:#222;border:none}
 #gNote{display:none;padding:8px 12px;background:#3a3418;border-bottom:1px solid #c9a94a;color:#ffe9a6;font-size:14px;line-height:1.4;white-space:pre-wrap;z-index:4}
-body.gnote:not(.home) #gNote{display:block}
+body.gnoteon:not(.home) #gNote{display:block}
 /* ===== 39번 ===== */
 :root{--pink:#ff8fb3}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -798,6 +799,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 .rooms .rb.gbtn.has{color:#fff;background:#6a6a74;border:2px solid #e8e8ee;opacity:1;font-size:12px;font-weight:800}
 .rooms .rb.gbtn.live{color:#222;background:#ffe14d;border:1.5px solid #ffe14d}
 .rooms .rb.gbtn.on{box-shadow:0 0 0 2px var(--pink)}
+#grpBtn{flex:none!important;max-width:none!important;min-width:max-content!important;overflow:visible!important;padding:0 8px!important}   /* 46번: '공동체 2' 글씨가 버튼 밖으로 안 나가게 */
 #toOv .panel{display:flex;flex-direction:column;max-height:88vh;overflow:hidden}
 #toOv #toList{flex:1 1 auto;min-height:0;overflow-y:auto}
 #toOv .panel>.big,#toOv #toMe,#toOv h2{flex:none}
@@ -2442,6 +2444,8 @@ function render(){
       html += `<div class="bubble voice" data-id="${m.id}"><b>▶</b>🎤 목소리 ${m.sec ? m.sec + '초' : ''}</div>`;
     } else if (m.type === 'file') {
       html += fileHTML(m, mine);
+    } else if (m.type === 'gm') {   // 46번: 같이 하는 게임 초대
+      html += `<div class="bubble">${esc(m.text || '🎮 게임 같이 해요')}${mine ? '' : `<button class="ginvb" data-gamego="${esc(m.game || '')}">🎮 같이 하기</button>`}</div>`;
     } else if (m.type === 'ginv') {   // 41번: 공동체 초대장
       html += `<div class="bubble">${esc(m.text || '👥 공동체 초대')}${mine ? '' : `<button class="ginvb" data-ginvgo="${esc(m.gid || '')}" data-gn="${esc(m.gn || '')}">👥 공동체 들어가기</button>`}</div>`;
     } else {
@@ -2794,6 +2798,8 @@ $('msgs').addEventListener('click', e => {
     if (!(nx && nx.classList.contains('whob'))) wh.insertAdjacentHTML('afterend', `<button class="whob" data-whogo="${esc(wh.dataset.who)}">💬 이 사람이 한 말 보기</button>`);
     return;
   }
+  const gg = e.target.closest('[data-gamego]');   // 46번: 게임 초대 누르면 그 게임으로
+  if (gg) { const f = gg.dataset.gamego; if (!/^(gawibawibo|ppopgi)\.html$/.test(f)) return; click(); leaving = true; location.href = f + '?g=' + encodeURIComponent(room) + '&j=1'; return; }
   const gi = e.target.closest('[data-ginvgo]');   // 41번: 초대장 누르면 공동체에 들어가기
   if (gi) { const gid = gi.dataset.ginvgo; if (!isGroup(gid)) return; click(); grpJoin(gid, gi.dataset.gn || ''); grpSel = gid; goHome(); toast(`👥 '${gi.dataset.gn || '공동체'}' 공동체에 들어왔어요`); return; }
   const sv = e.target.closest('[data-fsave]');
@@ -5299,7 +5305,7 @@ function grpDrawPanel(){
 /* 대화방 위 공지 (공동체 전체방) */
 function grpRoomNote(){
   const on = !homeOn && isGroup(room) && grpMeta[room] && grpMeta[room].notice && grpMeta[room].notice.text;
-  document.body.classList.toggle('gnote', !!on);
+  document.body.classList.toggle('gnoteon', !!on);   // 46번: .gnote(공지 칸) 모양이 화면 전체에 씌워져 아래 입력 줄이 잘리던 것 고침
   if (on) { const t = '📢 ' + grpMeta[room].notice.text; if ($('gNote').textContent !== t) $('gNote').textContent = t; }
 }
 $('grpMake').onclick = () => {

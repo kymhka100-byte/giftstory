@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
+<!-- 46번: '친구랑 하기'가 진짜로 친구와 같이 돼요 (각자 휴대폰 · 대화방에 초대 말풍선 · 둘이 다 고르면 결과 · 먼저 3승 · 나가면 상대 승리) -->
 <!-- 41번: 화면 아래 시작 버튼·점수가 안 잘리게 (실제 보이는 높이에 맞춤, 손 그림 칸 줄임) · 게임에서 나가면 음악 꺼짐 · 점수는 계속 이어짐 -->
 <!-- 40번: 한 판 승부가 나면 1.5초 뒤 저절로 다음 판 · 5초 안 누르면 3, 2, 1 세고 내 손이 저절로 나가요 -->
 <style>
@@ -48,12 +49,13 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .ov button{width:70%;max-width:320px;padding:2.2vh 0;border-radius:20px;border:0;font-size:min(3.4vh,26px);font-weight:900;color:#fff;background:#ff3b3b}
 .ov button+button{background:#333}
 .mk{position:fixed;right:6px;bottom:2px;font-size:10px;color:#555}
+#share{display:none;margin:0 auto;padding:1vh 4vw;border-radius:14px;border:0;background:#3a6fd8;color:#fff;font-size:min(2.4vh,18px);font-weight:900}
 </style></head><body>
 <div class="w">
  <h1><a class="back" id="back" href="index.html">‹ 돌아가기</a>가위바위보 게임</h1>
  <div class="arena">
   <div class="row"><div class="side win" id="ow">0승</div><div class="hand cpu" id="c">✊</div><div class="side" id="on">상대<small id="op"></small></div></div>
-  <div class="mid"><div class="pot" id="pot" style="visibility:hidden"></div><div class="vs">VS</div><div class="big" id="big"></div></div>
+  <div class="mid"><div class="pot" id="pot" style="visibility:hidden"></div><div class="vs">VS</div><div class="big" id="big"></div><button id="share" onclick="shareLink()">📨 친구 부르기 (링크 보내기)</button></div>
   <div class="row"><div class="side win" id="mw">0승</div><div class="hand" id="m">✊</div><div class="side">나</div></div>
  </div>
  <div class="btns">
@@ -75,6 +77,9 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
  <button onclick="enter('solo')">혼자 하기 (연습)</button>
 </div>
 <div class="mk">69KYM</div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <script>
 /* 41번: 폰 아래 버튼줄에 안 가리게 - 실제로 보이는 높이로 맞춰요 */
 function fitH(){const h=(window.visualViewport&&visualViewport.height)||innerHeight;document.documentElement.style.setProperty('--vh',h+'px')}
@@ -91,33 +96,28 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();e
 $('back').addEventListener('click',stopAll);
 function snd(k){try{const a=SND[k];a.currentTime=0;const p=a.play();if(p)p.catch(()=>{})}catch(e){}}
 
-let mode='solo',pt=500,op=500,bet=20,on=false,ws={m:0,o:0};
+let mode='solo',pt=500,bet=20,on=false,ws={m:0,o:0};
 try{const v=localStorage.getItem('rp-point');if(v!==null)pt=+v}catch(e){}
 function addDelta(n){try{localStorage.setItem('rp-point-delta',+(localStorage.getItem('rp-point-delta')||0)+n)}catch(e){}}   // 41번: 뽑기 게임 점수와 합쳐져요
-function save(){$('pt').textContent=pt;$('op').textContent=mode==='friend'?op+'점':'';try{localStorage.setItem('rp-point',pt)}catch(e){}}
+function save(){$('pt').textContent=pt;try{localStorage.setItem('rp-point',pt)}catch(e){}}
 function showWins(){$('mw').textContent=ws.m+'승';$('ow').textContent=ws.o+'승'}
 function drawBets(){
   $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':
-    [20,50,100].map(n=>`<button class="${n===bet?'on':''}" ${on?'disabled':''} onclick="setBet(${n})">${n}</button>`).join('');
+    [20,50,100].map(n=>`<button class="${n===bet?'on':''}" ${on||(mode==='friend'&&R&&R.host!==(FU&&FU.uid))?'disabled':''} onclick="setBet(${n})">${n}</button>`).join('');
 }
 function setBet(n){bet=n;drawBets()}
 function enter(md){
   mode=md;$('ov').style.display='none';
   $('on').firstChild.textContent=md==='solo'?'컴퓨터':'친구';
   snd('bgm');setTimeout(()=>snd('hello'),400);
-  $('big').textContent='누가 이기나 해 보자!';$('big').style.color='#fff';
+  big('누가 이기나 해 보자!');
   drawBets();save();showWins();
+  if(md==='friend'){$('go').disabled=true;friendGo()}
 }
+function big(t,c){const b=$('big');b.textContent=t;b.style.color=c||'#fff'}
 function start(){
-  if(!on){
-    if(mode==='friend'){
-      const b=Math.min(bet,pt,op);   // 연습용: 둘 중 적게 건 점수로 (지금은 상대도 같은 점수를 건다고 봐요)
-      if(b<20){$('big').textContent='점수가 부족해요';return}
-      bet=b;pt-=bet;op-=bet;addDelta(-bet);save();
-      const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+bet*2;p.style.visibility='visible';
-    }
-    on=true;ws={m:0,o:0};showWins();drawBets();
-  }
+  if(mode==='friend')return fStart();
+  if(!on){on=true;ws={m:0,o:0};showWins();drawBets()}
   round();
 }
 function round(){
@@ -140,6 +140,7 @@ function waitPick(){   // 5초 안 누르면 3, 2, 1 → 저절로
 function pick(i){
   clearTimeout(autoT);if(HB[0].disabled)return;
   HB.forEach(x=>x.disabled=true);
+  if(mode==='friend')return fPick(i);
   $('m').classList.remove('shake');$('c').classList.remove('shake');
   const c=Math.floor(Math.random()*3);
   $('m').textContent=H[i];$('c').textContent=H[c];
@@ -156,14 +157,118 @@ function end(me){
   const b=$('big');
   b.textContent=me?'🏆 최종 승리!':'최종 패배';b.style.color=me?'#ffd84a':'#ff3b3b';
   snd(me?'win3':'ayu');
-  if(mode==='friend'){
-    const p=$('pot');p.style.transition='';
-    setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400);
-    setTimeout(()=>{if(me){pt+=bet*2;addDelta(bet*2)}else op+=bet*2;save()},1200);
-  }
   on=false;drawBets();$('go').textContent='다시 하기';$('go').disabled=false;
 }
-{const g=new URLSearchParams(location.search).get('g');if(g)$('back').href='index.html?room='+encodeURIComponent(g)}   // 그 대화방으로 돌아가기
+const RID=new URLSearchParams(location.search).get('g');   // 대화방 번호 (대화방에서 열었을 때)
+if(RID&&!RID.startsWith('rps_'))$('back').href='index.html?room='+encodeURIComponent(RID);   // 그 대화방으로 돌아가기
+
+/* ===== 46번: 친구랑 하기 (각자 휴대폰 · index.html과 같은 서버) ===== */
+const CFG={apiKey:"AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",authDomain:"giftwav-9ab6b.firebaseapp.com",databaseURL:"https://giftwav-9ab6b-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"giftwav-9ab6b",storageBucket:"giftwav-9ab6b.firebasestorage.app",messagingSenderId:"790729206880",appId:"1:790729206880:web:173a3a34e29e49a0b0a705"};
+const ME=(()=>{try{return JSON.parse(localStorage.getItem('rp_me'))||{}}catch(e){return{}}})();
+const myName=ME.name||'나';
+let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curRound=0,shown=0,paidKey=null,doneKey=null;
+try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
+async function friendGo(){
+  if(!db){big('서버 연결이 안 돼요 · 혼자 하기로 해 보세요','#ff3b3b');return}
+  if(!authDone){waitAuth=true;big('로그인 확인 중…');return}
+  if(!FU){big('빨간 우체통에서 로그인한 다음 해 주세요','#ff3b3b');return}
+  gid=RID||('rps_'+Math.random().toString(36).slice(2,9));
+  if(!RID)try{history.replaceState(null,'',location.pathname+'?g='+gid)}catch(e){}
+  await db.ref('giftstory/rooms/'+gid+'/keys/'+FU.uid).set(true).catch(()=>{});
+  ref=db.ref('giftstory/rooms/'+gid+'/rps');
+  let made=false;
+  const r=await ref.transaction(v=>{
+    const now=Date.now(),p={name:myName};
+    if(!v||v.status==='end'&&!(v.players||{})[FU.uid]||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
+    made=false;v.players=v.players||{};
+    if(v.players[FU.uid])return v;
+    if(Object.keys(v.players).length>=2)return;   // 이미 두 사람
+    v.players[FU.uid]=p;v.status='ready';v.at=now;return v;
+  }).catch(()=>null);
+  if(!r){big('서버에서 막혔어요 · 데이터베이스 규칙을 확인해 주세요','#ff3b3b');return}
+  if(!r.committed){big('이미 두 사람이 하고 있어요','#ff3b3b');return}
+  if(made&&RID&&!RID.startsWith('rps_'))   // 대화방에 초대 말풍선
+    db.ref('giftstory/rooms/'+RID+'/msgs').push({from:ME.uid||FU.uid,name:myName,type:'gm',game:'gawibawibo.html',text:'✊ 가위바위보 같이 해요!',at:Date.now()}).catch(()=>{});
+  ref.on('value',s=>onRps(s.val()));
+}
+function shareLink(){
+  const url=location.origin+location.pathname+'?g='+gid,t='✊ 가위바위보 같이 해요! 눌러서 들어오세요';
+  if(navigator.share)navigator.share({title:'가위바위보',text:t,url}).catch(()=>{});
+  else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+url).then(()=>big('링크를 복사했어요'));
+}
+function onRps(v){
+  R=v;if(!v||!FU)return;
+  const ids=Object.keys(v.players||{});oid=ids.find(u=>u!==FU.uid)||null;
+  $('on').firstChild.textContent=oid?v.players[oid].name:'친구';
+  const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=((oid&&w[oid])||0)+'승';
+  $('share').style.display=v.status==='wait'&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
+  if(v.status==='wait'){on=false;big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
+  if(v.status==='ready'){on=false;big(oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;drawBets();return}
+  if(v.status==='play'){
+    const k=gid+v.start;
+    if(paidKey!==k){paidKey=k;on=true;bet=v.bet;pt-=bet;addDelta(-bet);save();drawBets();
+      const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+bet*2;p.style.visibility='visible'}
+    if(v.round!==curRound){curRound=v.round;round()}
+    const pk=v.picks||{};
+    if(oid&&pk[FU.uid]!=null&&pk[oid]!=null&&shown!==v.round){shown=v.round;fShow(pk[FU.uid],pk[oid],v.round)}
+    return;
+  }
+  if(v.status==='end'){
+    if(doneKey!==gid+v.start&&paidKey===gid+v.start){doneKey=gid+v.start;fEnd(v)}
+    else if(doneKey!==gid+v.start){on=false;big(oid?'다시 하기를 누르면 또 해요':'친구를 기다리는 중…');$('go').textContent='다시 하기';$('go').disabled=!oid;drawBets()}
+  }
+}
+function fStart(){
+  if(!R||!oid)return;
+  if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status='ready';v.at=Date.now();return v});return}
+  const b=Math.min(bet,pt);if(b<20){big('점수가 부족해요','#ff3b3b');return}
+  $('go').disabled=true;
+  ref.transaction(v=>{if(!v||v.status!=='ready')return;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=b;v.start=Date.now();v.at=Date.now();return v});
+}
+function fPick(i){
+  $('m').classList.remove('shake');$('m').textContent=H[i];
+  big('친구가 고르는 중…','#ffd84a');
+  ref.child('picks/'+FU.uid).set(i).catch(()=>big('보내지 못했어요 · 인터넷을 확인해 주세요','#ff3b3b'));
+}
+function fShow(i,c,r){
+  clearTimeout(autoT);HB.forEach(x=>x.disabled=true);
+  $('m').classList.remove('shake');$('c').classList.remove('shake');
+  $('m').textContent=H[i];$('c').textContent=H[c];
+  const me=i!==c&&(i-c+3)%3===1;
+  if(i===c)big('비겼다! 다시','#f1c40f');
+  else{big(me?'아싸! 이겼다':'아유, 졌다',me?'#2ecc71':'#ff3b3b');snd(me?'assa':'ayu')}
+  if(R.host!==FU.uid)return;   // 다음 판은 방장 폰이 넘겨요
+  setTimeout(()=>ref.transaction(v=>{
+    if(!v||v.status!=='play'||v.round!==r)return;
+    const p=v.picks||{},ids=Object.keys(v.players||{});if(ids.length<2||ids.some(u=>p[u]==null))return;
+    const a=ids[0],b=ids[1],x=p[a],y=p[b];v.wins=v.wins||{};v.at=Date.now();
+    if(x!==y){const wn=(x-y+3)%3===1?a:b;v.wins[wn]=(v.wins[wn]||0)+1;if(v.wins[wn]>=3){v.status='end';v.winner=wn;return v}}
+    v.round=r+1;v.picks={};return v;
+  }),i===c?1200:1500);
+}
+function fEnd(v){
+  on=false;clearTimeout(autoT);HB.forEach(x=>x.disabled=true);
+  $('m').classList.remove('shake');$('c').classList.remove('shake');
+  const me=v.winner===FU.uid;
+  if(v.quit&&v.quit!==FU.uid)big('친구가 나갔어요 · 내가 이겼어요','#ffd84a');
+  else big(me?'🏆 최종 승리!':'최종 패배',me?'#ffd84a':'#ff3b3b');
+  snd(me?'win3':'ayu');
+  const p=$('pot');p.style.transition='';
+  setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400);
+  setTimeout(()=>{if(me){pt+=v.bet*2;addDelta(v.bet*2)}save()},1200);
+  drawBets();$('go').textContent='다시 하기';$('go').disabled=false;
+}
+/* 나가면: 기다리는 중이면 방 지우기 · 하는 중이면 상대가 이긴 걸로 */
+function fLeave(){
+  if(!ref||!FU||!R)return;
+  try{ref.off()}catch(e){}
+  if(R.status==='play'&&oid)ref.transaction(v=>{if(!v||v.status!=='play')return;v.status='end';v.winner=oid;v.quit=FU.uid;return v});
+  else if(R.status==='wait')ref.remove().catch(()=>{});
+  else if(R.status==='ready'||R.status==='end')ref.child('players/'+FU.uid).remove().then(()=>ref.child('status').set('wait')).catch(()=>{});
+}
+$('back').addEventListener('click',fLeave);
+addEventListener('pagehide',fLeave);
 save();drawBets();
+if(RID&&(RID.startsWith('rps_')||new URLSearchParams(location.search).get('j')))enter('friend');   // 친구가 보낸 링크로 들어오면 바로 같이 하기
 </script>
 </body></html>
