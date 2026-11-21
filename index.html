@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 51번: 편지 봉투가 천천히 찢어지고(찢어진 봉투 1.5초) 편지가 나와 펼쳐짐 · 메인 ✍️ 편지 쓰기가 다른 방으로 가던 버그 · 답장은 그 사람에게 바로 · 카톡 초대는 글씨 없이 빨간 리본 봉투 그림만 · 공동체 사람이 실버 화면에 바로 · 안 읽은 편지가 보일 때마다 "편지가 왔어요" · 대화 상대 차단하기 -->
 <!-- 50번: 대화 속 링크 누르면 그 사이트로 · 사진 누르면 화면 가득 크게(두 손가락 확대) + ⬇ 저장 · 편지 왔을 때도 ✍️ 편지 쓰기 버튼이 봉투에 가려지지 않게 · 카톡 초대는 우표·도장 찍힌 편지 봉투 카드(보낸 사람·받는 사람 이름) · 편지 오면 띵동 + "어머, 편지가 왔어요" -->
 <!-- 48번: 초대 링크로 처음 들어와도 바로 대화 (방 열쇠를 먼저 만들고 듣기) · 카카오 로그인해도 바로 연결 · 지운 방도 새 메시지 오면 다시 · 방 이름에서 예전 내 이름 빼기 · 카카오 로그인됨 표시 · 닉네임 겹쳐도 돼요(같은 이름은 왼쪽 아래 작은 숫자) · 목록마다 🔍 찾기 · 실버톡 윗줄 작게 + 편지함·편지 쓰기 오른쪽 · 일반 화면 버튼은 왼쪽 아래 · ＋는 빈칸에 -->
 <!-- 47번: 공동체 방 아래 공지 말풍선 없앰 · 위 공지 줄은 2줄 고정, 누르면 전체 보기(방장은 고치기 · 약도 사진 · 전화번호 누르면 전화) · 뒤로 가기는 바로 전 단계로 · 실버톡(이름 3자) · 실버 편지 쓰기·편지함 · 실버 가족 버튼 입체·같은 크기·📞 전화 · ＋ → 설정에 실버 모드로 가기 -->
@@ -23,11 +24,11 @@
 <!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
 <title>빨간 우체통 (못다한 그 말)</title>
 <meta property="og:type" content="website">
-<meta property="og:title" content="💌 빨간 우체통에서 편지가 도착했어요">
-<meta property="og:description" content="못다한 그 말, 예쁜 종이 편지로 전해요. 눌러서 열어 보세요.">
-<meta property="og:image" content="https://giftwav.com/letter_env.jpg">
-<meta property="og:image:width" content="650">
-<meta property="og:image:height" content="410">
+<meta property="og:title" content="💌">
+<meta property="og:description" content=" ">
+<meta property="og:image" content="https://giftwav.com/letter_invite.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="760">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
 <link rel="icon" href="icon-192.png">
@@ -320,10 +321,6 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 .pick .env{position:absolute;left:0;top:0;transform:scale(.6);transform-origin:0 0}
 .pick:active{transform:scale(.95)}
 @keyframes popin{from{transform:translateY(40px) scale(.4);opacity:0}to{transform:none;opacity:1}}
-/* 봉투 찢기 */
-.envwrap.rip{animation:rip .45s ease forwards}
-@keyframes rip{0%{transform:translate(-50%,-30px) scale(.9) rotate(-6deg)}25%{transform:translate(-52%,-30px) scale(.95) rotate(-10deg)}50%{transform:translate(-48%,-30px) scale(1) rotate(-2deg);opacity:1}100%{transform:translate(-50%,-80px) scale(1.25);opacity:0}}
-.pick.rip{animation:none;transition:transform .3s,opacity .3s;transform:scale(1.15);opacity:0}
 .hint{margin-top:26px;color:#ddd;font-size:16px;animation:blink 1.4s infinite}
 @keyframes blink{50%{opacity:.35}}
 /* 편지 읽기 */
@@ -533,7 +530,8 @@ a.mlink{color:#5ab0ff;text-decoration:underline;word-break:break-all}
 .imgbar button{width:60px;height:60px;border-radius:50%;border:2px solid #666;background:#1c1c1c;color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding:0}
 .imgbar #imgSave{border-color:#ffd54a;color:#ffd54a}
 .imgbar .ih{color:#888;font-size:13px;text-align:center;flex:1}
-.lhic{z-index:4}
+#letterHome .lhic{z-index:5}
+#morePanel .mrow.blk{color:#ff8a86;font-weight:700}
 .sv-bar .sv-call{display:none;flex:0 0 96px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
 .sv-bar .sv-call small{font-size:18px;margin-top:4px}
 .sv-bar .sv-call.show{display:flex}
@@ -634,6 +632,33 @@ footer #micBtn{margin-right:-4px}
 #morePanel .mrow{gap:10px;padding:9px 12px;text-align:left}
 #morePanel .mav{flex:none;width:30px;height:30px;border-radius:10px;background:#ff5a55;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
 #morePanel .mt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ===== 51번: 봉투가 천천히 찢어지고 → 찢어진 봉투 1.5초 → 편지가 나와 펼쳐져요 ===== */
+#ripOv{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;flex-direction:column}
+#ripOv.show{display:flex}
+.rpst{position:relative;width:min(86vw,420px);aspect-ratio:650/410;margin-top:18vh;animation:rpin .35s ease-out both}
+@keyframes rpin{from{transform:scale(.6);opacity:0}}
+.rpback{position:absolute;inset:0;border-radius:6px;background:#d9cdb3;box-shadow:0 12px 30px rgba(0,0,0,.8)}
+.rpfront{position:absolute;inset:0;filter:drop-shadow(0 -3px 0 #fffaf0) drop-shadow(0 -1px 1px rgba(0,0,0,.35));z-index:3}
+.rpfront > div,.rpstrip{position:absolute;inset:0;border-radius:6px;background:#efe6d4 center/100% 100% no-repeat}
+.rpfront .f,.rpfront .t{position:absolute;inset:auto;font-family:'Nanum Pen Script',cursive;color:#5a3a22;line-height:1.25;background:none}
+.rpfront .f{left:9%;top:30%;font-size:min(5vw,22px)}
+.rpfront .t{left:38%;top:52%;font-size:min(7vw,32px)}
+.rpstrip{z-index:4;transform-origin:96% 20%}
+#ripOv.s1 .rpstrip{animation:rptear 1.5s ease-in forwards}
+@keyframes rptear{0%{transform:none}15%{transform:rotate(-2deg)}45%{transform:translate(-2%,-6%) rotate(-7deg)}75%{transform:translate(-4%,-14%) rotate(-12deg);opacity:1}100%{transform:translate(8%,-70%) rotate(-28deg);opacity:0}}
+#ripOv.s1 .rpst{animation:rpshake 1.5s linear}
+@keyframes rpshake{10%,30%,50%,70%{transform:translateX(-1.5px)}20%,40%,60%,80%{transform:translateX(1.5px)}}
+.rppap{position:absolute;left:7%;width:86%;top:14%;height:78%;z-index:2;perspective:900px;transition:transform 1s ease-in-out}
+.rpp1,.rpp2{position:absolute;left:0;right:0;height:100%;background:#fffaf0 repeating-linear-gradient(transparent 0 22px,#e3d3b8 22px 23px);border-radius:3px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.rpp1{top:0;padding:8px 12px;font-family:'Nanum Pen Script',cursive;color:#5a3a22;font-size:22px}
+.rpp2{top:100%;transform-origin:top;transform:rotateX(-178deg);backface-visibility:hidden;transition:transform .9s ease-out;opacity:0}
+#ripOv.s2 .rppap{transform:translateY(-82%)}
+#ripOv.s3 .rpst{transition:transform 1s ease-in-out}
+#ripOv.s3 .rppap{transform:translateY(-82%) scale(1.15);z-index:5}
+#ripOv.s3 .rpfront,#ripOv.s3 .rpback{transition:opacity .6s,transform .8s;opacity:0;transform:translateY(40%)}
+#ripOv.s3 .rpp2{transform:none;opacity:1}
+#ripOv.s4{transition:opacity .35s;opacity:0}
+.rpskip{position:absolute;bottom:calc(24px + env(safe-area-inset-bottom));color:rgba(255,255,255,.6);font-size:15px}
 /* ===== 48번: 편지 쓰기 메인 화면 · 편지 도착 봉투 ===== */
 #letterHome{display:none;order:9;position:relative;flex:1;min-height:0;margin:6px 0 0;overflow:hidden;background:#1a120c center/cover no-repeat;background-position:62% center}
 body.lview #homeList > :not(#letterHome):not(.hadd){display:none!important}
@@ -658,8 +683,6 @@ body.lview #homeLogo{display:none}
 @keyframes lhblink{50%{opacity:.6}}
 .lhenv{position:relative;width:92%;max-width:440px;aspect-ratio:650/410;background:#efe6d4 center/100% 100%;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.8);animation:lhdrop .9s cubic-bezier(.2,1.4,.4,1) both;cursor:pointer}
 @keyframes lhdrop{0%{transform:translateY(-120%) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
-.lhenv.rip{animation:lhrip .45s ease forwards}
-@keyframes lhrip{30%{transform:rotate(-5deg) scale(1.03)}60%{transform:rotate(3deg) scale(1.06);opacity:1}100%{transform:scale(1.15);opacity:0}}
 .lhenv .f,.lhenv .t{position:absolute;font-family:'Nanum Pen Script',cursive;color:#5a3a22;text-align:left;line-height:1.25}
 .lhenv .f{left:9%;top:11%;font-size:min(5vw,22px)}
 .lhenv .t{left:38%;top:44%;font-size:min(7vw,32px)}
@@ -1098,6 +1121,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 </div>
 
 <!-- 편지 읽기 -->
+<div id="ripOv"><div class="rpst"><div class="rpback"></div><div class="rppap"><div class="rpp1"></div><div class="rpp2"></div></div><div class="rpfront"><div><span class="f"></span><span class="t"></span></div></div><div class="rpstrip"></div></div><div class="rpskip">누르면 바로 열려요</div></div>
 <div class="ov" id="readOv">
   <div class="panel">
     <div id="readPaper"></div>
@@ -1475,7 +1499,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '50';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '51';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1683,7 +1707,7 @@ async function initStore(){
 function openRoom(id){
   unsub.forEach(f => { try { f(); } catch (e) {} }); unsub = [];
   if (room !== id && !homeOn) setSeen(room);
-  homeOn = false; document.body.classList.remove('home');
+  homeOn = false; document.body.classList.remove('home'); $('lhArrive')._on = false;
   document.body.classList.toggle('selfroom', isSelf(id));
   if (isSelf(id)) { LS.set('rp_td_seen', todayKey()); const mb = $('meBtn'); if (mb) mb.classList.remove('today', 'flash'); }   // 41번: 들어가면 오늘은 그만 흔들
   room = id; LS.set('rp_room', room); SS.set('rp_room', room);
@@ -1772,28 +1796,52 @@ function lhDraw(){
   const un = unreadIn(), a = $('lhArrive'), env = $('lhEnv');
   const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : ''); nb.parentNode.classList.toggle('has', !!un.length);
   a.classList.toggle('show', !!un.length);
-  if (!un.length) return;
+  if (!un.length) { a._on = false; return; }
   lhImg(env, 'letter_env.jpg');
-  const said = LS.get('rp_lhsaid', []), fresh = un.filter(x => !said.includes(x.id));   // 50번: 새 편지는 한 번만 알려요
-  if (fresh.length) { LS.set('rp_lhsaid', [...said, ...fresh.map(x => x.id)].slice(-200)); letterArriveSnd(); }
   const m = un[0], key = un.map(x => x.id).join(',');
+  if (!a._on || a._k !== key) { a._on = true; a._k = key; letterArriveSnd(); }   // 51번: 봉투가 화면에 나올 때마다 (안 읽은 동안) "편지가 왔어요"
   if (env._k === key) return; env._k = key;
-  env.classList.remove('rip'); env.style.animation = 'none'; void env.offsetWidth; env.style.animation = '';
+  env.style.animation = 'none'; void env.offsetWidth; env.style.animation = '';
   env.querySelector('.f').innerHTML = `보내는 사람<br>${esc((m.letter && m.letter.fromName) || m.name || '')}`;
   env.querySelector('.t').innerHTML = `받는 사람<br>${esc(me.name || (m.letter && m.letter.to) || '')} 님께`;
   $('lhHint').textContent = un.length > 1 ? `편지가 ${un.length}통 와 있어요 · 봉투를 누르면 골라 읽어요` : '봉투를 누르면 편지가 열려요';
 }
-function letterArriveSnd(){ dingdong(); setTimeout(() => { const a = loadMedia('sound/letter_arrived.mp3'); a.play().catch(() => {}); }, 1300); }   // 50번: 띵동 → "어머, 편지가 왔어요"
+let lasT = 0;
+function letterArriveSnd(){ if (Date.now() - lasT < 2500) return; lasT = Date.now(); dingdong(); setTimeout(() => { const a = loadMedia('sound/letter_arrived.mp3'); a.play().catch(() => {}); }, 1300); }   // 50번: 띵동 → "어머, 편지가 왔어요"
 function lhRip(el, m){
   if (ripping || !m) return;
-  ripping = true; tear(); el.classList.add('rip');
-  setTimeout(() => { ripping = false; el.classList.remove('rip'); openLetter(m); }, 420);
+  ripping = true; ripShow(m, () => { ripping = false; openLetter(m); });
+}
+/* 51번: 봉투가 천천히 찢어지고(1.5초) → 찢어진 봉투를 1.5초 보여 주고 → 편지가 나와서 펼쳐져요 · 누르면 바로 */
+const ripZig = (() => { const a = []; for (let x = 0, i = 0; x <= 100; x += 4, i++) a.push([x, i % 2 ? 17 : 21 + (i % 3)]); return a; })();
+let ripT = [];
+function ripShow(m, done){
+  const o = $('ripOv'), L = (m && m.letter) || {}, z = ripZig;
+  const bg = $('lhEnv').style.backgroundImage;
+  const fr = o.querySelector('.rpfront > div'), st = o.querySelector('.rpstrip');
+  [fr, st].forEach(e => e.style.backgroundImage = bg || '');
+  fr.style.clipPath = `polygon(${z.map(([x, y]) => x + '% ' + y + '%').join(',')},100% 100%,0 100%)`;
+  st.style.clipPath = `polygon(0 0,100% 0,${z.slice().reverse().map(([x, y]) => x + '% ' + y + '%').join(',')})`;
+  o.querySelector('.f').innerHTML = `보내는 사람<br>${esc(L.fromName || m.name || '')}`;
+  o.querySelector('.t').innerHTML = `${esc(L.to || me.name || '')} 님께`;
+  o.querySelector('.rpp1').textContent = 'To. ' + (L.to || '');
+  o.className = ''; void o.offsetWidth; o.classList.add('show');
+  let fin = false;
+  const end = () => { if (fin) return; fin = true; ripT.forEach(clearTimeout); ripT = []; o.className = ''; o.onclick = null; done(); };
+  o.onclick = end;
+  const at = (ms, f) => ripT.push(setTimeout(f, ms));
+  at(350, () => { o.classList.add('s1'); tear(); });          // 천천히 찢기 (1.5초)
+  at(1100, () => tear());
+  at(3350, () => { o.classList.add('s2'); rustle(.5); });     // 찢어진 봉투 1.5초 보여 준 뒤 편지가 쏙
+  at(4400, () => o.classList.add('s3'));                       // 편지가 펼쳐져요
+  at(5500, () => o.classList.add('s4'));
+  at(5850, end);
 }
 const lhShown = () => homeOn && document.body.classList.contains('lview');
 function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기본) / 친구 목록 → 홍보 글 → 친구 초대(아래 가운데)
   const rooms = visibleRooms();
   rooms.sort(roomOrder);
-  const view = homeView(); document.body.classList.toggle('lview', view === 'letter' && !grpSel); if (view === 'letter') { lhDraw(); }
+  const view = homeView(); document.body.classList.toggle('lview', view === 'letter' && !grpSel); if (view === 'letter' && !grpSel) { lhDraw(); } else $('lhArrive')._on = false;
   const mN = rooms.reduce((a, x) => a + unreadN(x.id), 0);   // 49번: 새 편지·새 메시지 깜빡이 줄 없앰 (버튼 자리 고정)
   { const lb = $('hListBtn'); lb.dataset.hv = view === 'friends' ? 'todo' : 'friends'; lb.innerHTML = view !== 'friends' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view !== 'friends' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
   grpDrawBar(); grpDrawPanel();
@@ -1955,7 +2003,7 @@ function syncWatchers(){
 const rwatch = {};
 const afterRemove = (id, key, m, t) => { const k = LS.get('rp_removed_k', {})[id]; return k !== undefined ? key > k : (m.at || 0) > t; };   // 29번
 function backFromRemoved(id, m){
-  const r = LS.get('rp_removed', {}); if (!r[id]) return;
+  const r = LS.get('rp_removed', {}); if (!r[id] || isBlocked(m.from)) return;   // 51번: 차단한 사람은 다시 안 나타나요
   const s = getSeen(); s[id] = Math.min(r[id], (m.at || Date.now()) - 1); LS.set('rp_seen', s);   // 지운 뒤에 온 메시지만 안 읽음으로
   delete r[id]; LS.set('rp_removed', r);
   const rk = LS.get('rp_removed_k', {}); delete rk[id]; LS.set('rp_removed_k', rk);
@@ -1997,7 +2045,9 @@ function watchRoom(id){
   needKey(id).then(() => { if (watch[id] !== un) return;   // 48번: 열쇠를 만든 뒤에 듣기
   un.push(D.onChildAdded(D.query(D.ref(db, path + '/msgs'), D.limitToLast(50)), snap => {
     const m = snap.val();
+    if (m && isBlocked(m.from)) return;   // 51번: 차단한 사람 글은 안 받아요
     if (m) noteLast(id, m);
+    if (m && m.type === 'letter' && !isMine(m) && !homeOn && (m.at || 0) >= t0 - 3000 && !(m.letter && m.letter.deliverAt > Date.now())) letterArriveSnd();   // 51번: 편지가 올 때마다
     if (m && m.type === 'letter' && m.letter && forMe(m) && (!isMine(m) || toMeL(m))) homeL[snap.key] = { ...m, id: snap.key, _room: id };   // 49번: 어느 방 편지든 메인 화면으로
     if (homeOn) queueRender();
     if (!m || isMine(m) || (m.at || 0) <= (getSeen()[id] || 0)) return;
@@ -2094,9 +2144,24 @@ function drawBar(){
   if (html === barHTML) return;
   barHTML = html; $('roomBar').innerHTML = html;
 }
+/* 51번: 차단하기 - 차단한 사람 글·편지는 안 보여요 (보낸 사람은 모르고 그냥 보내진 걸로 보여요) */
+let blkSet = null;
+function blocked(){ if (!blkSet) blkSet = new Set(LS.get('rp_block', [])); return blkSet; }
+function isBlocked(uid){ return !!uid && blocked().has(uid); }
+function blockRoom(id){
+  const others = Object.keys(roomMembers[id] || {}).filter(u => !me.ids.includes(u) && (roomMembers[id][u] || {}).name !== me.name);
+  Object.values(msgs).forEach(m => { if (m.from && !me.ids.includes(m.from) && !isMine(m)) others.push(m.from); });
+  const pi = pairInfo[id]; if (pi && pi.uid) others.push(pi.uid);
+  const add = [...new Set(others)];
+  if (!add.length) { toast('아직 이 방에 상대가 없어서 차단할 수 없어요'); return; }
+  const b = blocked(); add.forEach(u => b.add(u)); LS.set('rp_block', [...b]);
+  Object.keys(homeL).forEach(k => { if (b.has(homeL[k].from)) delete homeL[k]; }); delete unread[id];
+  const nm = roomName(id); removeFriend(id); barHTML = ''; goHome(); toast(`🚫 '${nm}'님을 차단했어요`);
+}
 function drawMore(){
   const list = moreRooms();
-  $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (list.length ? list.map(x => {
+  const canBlk = !homeOn && room && !isGroup(room) && !isSelf(room);
+  $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (canBlk ? `<div class="mrow blk" data-blk="1">🚫 '${esc(roomName(room))}' 차단하기</div>` : '') + (list.length ? list.map(x => {
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
     const nm = roomName(x.id);
     const tmp = FB && othersIn(x.id).length && !othersIn(x.id).some(v => v.lg);   // 42번: 간편 로그인 안 한 사람은 '임시'
@@ -2118,6 +2183,7 @@ $('morePanel').addEventListener('click', e => {
   const r = e.target.closest('.mrow'); if (!r) return;
   $('morePanel').classList.remove('show'); menuDim(); click();
   if (r.dataset.inv) { pinWant = null; $('addRoom').click(); return; }
+  if (r.dataset.blk) { if (confirm(`'${roomName(room)}'님을 차단할까요?\n차단하면 이 사람의 글과 편지가 오지 않아요.`)) blockRoom(room); return; }
   if (r.dataset.go && (homeOn || r.dataset.go !== room)) openRoom(r.dataset.go);
 });
 document.addEventListener('click', e => { if (!e.target.closest('#morePanel,#moreBtn') && $('morePanel').classList.contains('show')) { $('morePanel').classList.remove('show'); menuDim(); } });
@@ -2337,7 +2403,7 @@ async function shareTo(kind, url, text, env){
   if (kind === 'copy') { copy(text + '\n' + url); return; }
   if (kind === 'sms') { location.href = 'sms:?body=' + encodeURIComponent(text + '\n' + url); return; }
   if (KAKAO_JS_KEY && await kakaoShare(url, text, env)) return;
-  if (navigator.share) { try { await navigator.share({ title: '빨간 우체통', text, url }); } catch (e) {} }
+  if (navigator.share) { try { await navigator.share(kind === 'kakao' ? { url } : { title: '빨간 우체통', text, url }); } catch (e) {} }   // 51번: 카톡은 글씨 없이 봉투 그림 카드만
   else copy(text + '\n' + url);
 }
 /* 26번: 빨간 우체통 친구 고르기 창 */
@@ -2391,7 +2457,7 @@ function kakaoLoad(){
 }
 if (KAKAO_JS_KEY) kakaoLoad();   // 미리 불러 둠
 /* 50번: 카톡 초대 = 우표·도장 찍힌 편지 봉투 카드 (봉투 그림 위에 보낸 사람·받는 사람 이름을 손글씨로 써서 올려요) */
-const ENV_IMG = 'https://giftwav.com/letter_env.jpg';
+const ENV_IMG = 'https://giftwav.com/letter_invite.jpg';   // 51번: 빨간 리본 봉투
 function envPic(f, t){
   return new Promise(ok => {
     const i = new Image(); i.crossOrigin = 'anonymous';
@@ -2579,11 +2645,11 @@ const fmtTime = t => { const d = new Date(t); return `${d.getHours() < 12 ? '오
 const fmtDate = t => { const d = new Date(t); return `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`; };
 const arrived = m => !m.letter.deliverAt || m.letter.deliverAt <= Date.now();
 const whenOf = m => (m.letter && m.letter.deliverAt) || m.at;
-const sorted = () => Object.values(msgs).sort((a, b) => a.at - b.at);
+const sorted = () => Object.values(msgs).filter(m => !isBlocked(m.from)).sort((a, b) => a.at - b.at);
 const forMe = m => m.letter.toUid ? me.ids.includes(m.letter.toUid) : true;
 const toMeL = m => !!m.letter.toUid && me.ids.includes(m.letter.toUid);   // 49번: 나에게 보낸 편지
 const homeL = {};   // 49번: 모든 방에서 온 편지
-const received = () => { const o = {}; Object.values(homeL).forEach(m => o[m.id] = m);
+const received = () => { const o = {}; Object.values(homeL).forEach(m => { if (!isBlocked(m.from)) o[m.id] = m; });
   sorted().filter(m => m.type === 'letter' && (!isMine(m) || toMeL(m)) && forMe(m)).forEach(m => o[m.id] = { ...m, _room: room });
   return Object.values(o).filter(arrived); };
 const unreadIn = () => [...received().filter(m => !m.read), ...selfL().filter(m => !m.read && arrived(m))];   // 26번: 나에게 쓴 편지도
@@ -3120,9 +3186,8 @@ $('popList').addEventListener('click', e => { const k = e.target.closest('.pick'
 let ripping = false;
 function ripOpen(el, m){
   if (ripping || !m) return;
-  ripping = true; tear();
-  if (el) el.classList.add('rip');
-  setTimeout(() => { ripping = false; if (el) el.classList.remove('rip'); hideOv('boxOv'); openLetter(m); }, 420);
+  ripping = true; hideOv('boxOv');
+  ripShow(m, () => { ripping = false; openLetter(m); });   // 51번
 }
 
 /* ----- 편지 쓰기 ----- */
@@ -3488,7 +3553,8 @@ $('rClose').onclick = closeReader;
 $('rReply').onclick = () => {
   const to = curLetter.letter.fromName;
   closeReader();
-  openWriter({ to, body: '', paper: curLetter.letter.paperData ? 'pink' : curLetter.letter.paper, font: curLetter.letter.font, stickers: [], voice: null, draftId: null });
+  const rm = curLetter._room || (!homeOn ? room : null);   // 51번: 답장은 묻지 않고 그 사람 방으로
+  openWriter({ to: rm ? roomName(rm) || to : to, toIds: rm ? [rm] : null, body: '', paper: curLetter.letter.paperData ? 'pink' : curLetter.letter.paper, font: curLetter.letter.font, stickers: [], voice: null, draftId: null });
 };
 
 /* ----- 보관함 (자연스럽게 쌓인 편지) ----- */
@@ -4478,6 +4544,7 @@ function svOpen(){
   S.on = true; S.view = 'home'; LS.set('rp_silver_on', 1);
   $('silver').classList.add('show');
   if ('speechSynthesis' in window) speechSynthesis.getVoices();
+  grpList().forEach(g => grpSilver(g.id));
   svHome(true); requestAnimationFrame(svFit);
   if (!svData().elder) svSetupShow();
 }
@@ -4706,6 +4773,7 @@ function svSend(text){
 /* 메시지가 오면: 큰 글씨로 보여 주고 소리로 읽은 다음 → 답장 목록 */
 const svDone = new Set();
 function svIncoming(id, m){
+  if (m && isBlocked(m.from)) return;
   if (S.on && m && m.type === 'voice' && !isMine(m) && !svDone.has(m.id)) {   // 손주 목소리 → 바로 스피커로
     svDone.add(m.id); if (svShown('svVoice')) return;
     const f = svFamOf(id); if (f && (S.view !== 'chat' || S.room !== id)) svEnter(f, true);
@@ -5448,7 +5516,11 @@ function grpWatch(id){
     if (!pid || getRooms().some(x => x.id === pid)) return;
     unRemove(pid); saveRoom(pid, v.n || ''); syncWatchers(); queueRender();
   }));
-  un.push(FB.D.onChildAdded(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members'), () => grpSilver(id)));
+  un.push(FB.D.onValue(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members'), s => {   // 51번: 사람이 들어오면 실버 화면에 바로
+    const rm = roomMembers[id] || (roomMembers[id] = {});
+    Object.entries(s.val() || {}).forEach(([u, v]) => { if (v) rm[u] = v; });
+    grpSilver(id);
+  }));
 }
 function grpDrop(id){
   (gwatch[id] || []).forEach(f => { try { f(); } catch (e) {} }); delete gwatch[id];
@@ -5482,7 +5554,7 @@ function grpSilver(gid){
     pairInfo[pid] = { gid, uid: p.uid, name: p.name, sent: false };
     saveRoom(pid, p.name); ch = true;
   });
-  if (ch) { svSave(d); if (S.on) svHome(true); }
+  if (ch) { svSave(d); if (S.on && S.view === 'home') svHome(true); }
 }
 /* 위쪽 공동체 탭 줄 */
 function grpDrawBar(){   // 40번: 공동체 줄 대신 맨 위 ＋공동체 버튼
@@ -5565,7 +5637,7 @@ function grpInvite(id){
 }
 document.querySelectorAll('[data-ginvk]').forEach(b => b.onclick = () => {
   if (!grpInvId) return; click();
-  const url = location.origin + location.pathname + '?room=' + grpInvId + '&gn=' + encodeURIComponent(grpName(grpInvId)) + '&f=' + encodeURIComponent(me.name || '');
+  const url = location.origin + location.pathname + '?room=' + grpInvId;   // 51번: 짧은 주소 (공동체 이름은 서버에서)
   shareTo(b.dataset.ginvk, url, `👥 ${me.name}님이 '${grpName(grpInvId)}' 공동체에 초대했어요. 누르면 공동체 사람들 이름이 저절로 생겨요.`, { f: me.name, t: grpName(grpInvId) });
 });
 $('hGroup').addEventListener('click', e => {
