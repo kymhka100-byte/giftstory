@@ -617,8 +617,9 @@ footer #micBtn{margin-right:-4px}
 #morePanel .mav{flex:none;width:30px;height:30px;border-radius:10px;background:#ff5a55;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
 #morePanel .mt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* ===== 48번: 편지 쓰기 메인 화면 · 편지 도착 봉투 ===== */
-#letterHome{display:none;position:relative;flex:1;min-height:0;margin:-8px 0 0;overflow:hidden;background:#1a120c center/cover no-repeat;background-position:62% center}
-body.lview #homeList > :not(#letterHome){display:none!important}
+#letterHome{display:none;order:9;position:relative;flex:1;min-height:0;margin:6px 0 0;overflow:hidden;background:#1a120c center/cover no-repeat;background-position:62% center}
+body.lview #homeList > :not(#letterHome):not(.hadd){display:none!important}
+body.lview .hadd > :not(.hlist){visibility:hidden}
 body.lview #letterHome{display:block}
 body.lview #homeLogo{display:none}
 #letterHome:before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,0) 25%,rgba(0,0,0,0) 65%,rgba(0,0,0,.7));pointer-events:none}
@@ -626,11 +627,12 @@ body.lview #homeLogo{display:none}
 #lhQuote{position:absolute;top:30px;left:0;right:0;padding:0 24px;text-align:center;color:#fff8e7;font-family:'Nanum Pen Script',cursive;font-size:32px;line-height:1.4;text-shadow:0 2px 10px #000;pointer-events:none}
 #lhQuote q:before,#lhQuote q:after{color:#e8c27a;font-size:30px;vertical-align:-6px}
 .lhic{position:absolute;bottom:16px;display:flex;gap:12px;z-index:2}
-.lhic.r{right:14px}.lhic.l{left:14px}
+.lhic.r{right:14px}
+.lhic.r.has #lhBox{animation:lhbump 1.2s ease-in-out infinite}
+@keyframes lhbump{0%,100%{transform:none}10%{transform:translateY(-6px) rotate(-8deg)}20%{transform:translateY(0) rotate(6deg)}30%{transform:translateY(-3px) rotate(-4deg)}40%{transform:none}}
 .lhic button{width:54px;height:54px;border-radius:14px;border:none;background:rgba(40,22,12,.72);font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.6);padding:0;transition:transform .08s;position:relative}
 .lhic button:active{transform:scale(.9)}
 .lhic #lhWrite{background:rgba(160,25,25,.8)}
-.lhic.l button{width:40px;height:40px;font-size:18px;opacity:.55}
 .lhic i{position:absolute;top:-6px;right:-6px;background:#e3302e;color:#fff;font-style:normal;font-size:12px;font-weight:800;border-radius:10px;padding:1px 6px}
 #lhArrive{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:3;flex-direction:column;align-items:center;justify-content:center}
 #lhArrive.show{display:flex}
@@ -658,8 +660,6 @@ body.menuon #menuDim{display:block}
 .htab{flex:1;padding:10px 6px;border-radius:12px;border:1px solid #3a3b46;background:#1b1c23;color:#bbb;font-size:15px;font-weight:700;position:relative}
 .htab.on{background:#ffe14d;color:#222;border-color:#ffe14d}
 .htab i{font-style:normal;background:#ff3b36;color:#fff;border-radius:10px;padding:0 6px;font-size:12px;margin-left:3px}
-.hchips{display:flex;gap:6px;margin:0 12px 8px;flex-wrap:wrap}
-.hchip{border:none;border-radius:20px;padding:7px 12px;font-size:14px;font-weight:700;background:#ff4d4a;color:#fff;animation:blink 1.6s infinite}
 .hsec{margin:0 12px;padding:4px 6px 8px;border-radius:16px;background:var(--card);border:1px solid #2c2d38}
 .hpromo{text-align:left;display:table;margin-left:auto!important;margin-right:auto!important;margin:14px 12px 8px;padding:12px 14px;border-radius:14px;background:#17181e;border:1px dashed #3a3b46;font-size:14px;line-height:1.9;color:#d8d8e2}
 .hinvBar{margin-top:auto;position:sticky;bottom:0;padding:12px 0 12px;text-align:center;background:linear-gradient(rgba(17,18,23,0),var(--bg) 45%);z-index:2}
@@ -914,7 +914,6 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <div id="letterHome">
       <a id="lhSite" href="https://www.giftwave.com">www.giftwave.com</a>
       <div id="lhQuote"><q>소중한 분에게 정성 들여 마음을 전하세요</q></div>
-      <div class="lhic l"><button data-hv="todo" title="할 일">✅</button><button data-hv="friends" title="친구 목록">👥</button></div>
       <div class="lhic r"><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
@@ -1569,7 +1568,10 @@ function markRead(m){
   if (m.self && !m.read) { m.read = true; LS.set('rp_selfletters', selfL().map(x => x.id === m.id ? { ...x, read: true } : x)); updateFlag(); return; }
   if (m.read || m.sample || isMine(m)) return;
   m.read = true;
-  if (fb) fb.read(m.id); else saveDemo();
+  if (homeL[m.id]) homeL[m.id].read = true;
+  if (msgs[m.id]) msgs[m.id].read = true;
+  if (m._room && FB && (homeOn || m._room !== room)) FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + m._room + '/msgs/' + m.id), { read: true }).catch(() => {});   // 49번
+  else if (fb) fb.read(m.id); else saveDemo();
   render();
 }
 async function loadFirebase(){
@@ -1748,7 +1750,7 @@ function lhImg(el, file){ if (el._f === file) return; el._f = file; const i = ne
 function lhDraw(){
   lhImg($('letterHome'), 'letter_bg.jpg');
   const un = unreadIn(), a = $('lhArrive'), env = $('lhEnv');
-  const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : '');
+  const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : ''); nb.parentNode.classList.toggle('has', !!un.length);
   a.classList.toggle('show', !!un.length);
   if (!un.length) return;
   lhImg(env, 'letter_env.jpg');
@@ -1769,10 +1771,8 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
   const rooms = visibleRooms();
   rooms.sort(roomOrder);
   const view = homeView(); document.body.classList.toggle('lview', view === 'letter' && !grpSel); if (view === 'letter') { lhDraw(); }
-  const letters = unreadIn().length, mN = rooms.reduce((a, x) => a + unreadN(x.id), 0), act = tdActive().length;
-  const top = (letters || (mN && view === 'todo') ? `<div class="hchips">${letters ? `<button class="hchip" data-hmail>💌 새 편지 ${letters}통</button>` : ''}${mN && view === 'todo' ? `<button class="hchip" data-hv="friends">💬 새 메시지 ${mN > 99 ? '99+' : mN}</button>` : ''}</div>` : '');
-  setHTML('hTop', top);
-  { const lb = $('hListBtn'); lb.dataset.hv = view === 'todo' ? 'friends' : 'todo'; lb.innerHTML = view === 'todo' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view === 'todo' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
+  const mN = rooms.reduce((a, x) => a + unreadN(x.id), 0);   // 49번: 새 편지·새 메시지 깜빡이 줄 없앰 (버튼 자리 고정)
+  { const lb = $('hListBtn'); lb.dataset.hv = view === 'friends' ? 'todo' : 'friends'; lb.innerHTML = view !== 'friends' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view !== 'friends' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
   grpDrawBar(); grpDrawPanel();
   if (grpSel) return;
   $('hTodo').style.display = view === 'todo' ? '' : 'none';
@@ -1789,6 +1789,7 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
 }
 const setHTML = (id, h) => { const b = $(id); if (b && b._h !== h) { b._h = h; b.innerHTML = h; } };
 const homeView = () => LS.get('rp_homeview', 'letter');   // 48번: 기본은 편지 쓰기 화면
+try { localStorage.setItem('rp_homeview', JSON.stringify('letter')); } catch (e) {}   // 49번: 앱을 켜면 무조건 편지 쓰기 화면
 const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? fmtTime(t) : `${d.getMonth() + 1}/${d.getDate()}`; };
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
@@ -1796,7 +1797,6 @@ $('homeList').addEventListener('click', e => {
   if (e.target.closest('#lhBox')) { click(); const un = unreadIn(); if (un.length) openBox(un); else $('pileBtn').click(); return; }
   const le = e.target.closest('#lhEnv'); if (le) { const un = unreadIn(); if (un.length > 1) { click(); openBox(un); } else if (un.length) lhRip(le, un[0]); return; }
   const hv = e.target.closest('[data-hv]'); if (hv) { click(); LS.set('rp_homeview', hv.dataset.hv); drawHome(); return; }
-  if (e.target.closest('[data-hmail]')) { click(); openBox(unreadIn()); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
   if (hlpDone) { hlpDone = false; return; }
   click(); openRoom(r.dataset.home);
@@ -1975,6 +1975,7 @@ function watchRoom(id){
   un.push(D.onChildAdded(D.query(D.ref(db, path + '/msgs'), D.limitToLast(50)), snap => {
     const m = snap.val();
     if (m) noteLast(id, m);
+    if (m && m.type === 'letter' && m.letter && forMe(m) && (!isMine(m) || toMeL(m))) homeL[snap.key] = { ...m, id: snap.key, _room: id };   // 49번: 어느 방 편지든 메인 화면으로
     if (homeOn) queueRender();
     if (!m || isMine(m) || (m.at || 0) <= (getSeen()[id] || 0)) return;
     if (m.type === 'letter' && m.letter && m.letter.deliverAt > Date.now()) return;   // 아직 도착 안 한 편지
@@ -2531,7 +2532,11 @@ const arrived = m => !m.letter.deliverAt || m.letter.deliverAt <= Date.now();
 const whenOf = m => (m.letter && m.letter.deliverAt) || m.at;
 const sorted = () => Object.values(msgs).sort((a, b) => a.at - b.at);
 const forMe = m => m.letter.toUid ? me.ids.includes(m.letter.toUid) : true;
-const received = () => sorted().filter(m => m.type === 'letter' && !isMine(m) && arrived(m) && forMe(m));
+const toMeL = m => !!m.letter.toUid && me.ids.includes(m.letter.toUid);   // 49번: 나에게 보낸 편지
+const homeL = {};   // 49번: 모든 방에서 온 편지
+const received = () => { const o = {}; Object.values(homeL).forEach(m => o[m.id] = m);
+  sorted().filter(m => m.type === 'letter' && (!isMine(m) || toMeL(m)) && forMe(m)).forEach(m => o[m.id] = { ...m, _room: room });
+  return Object.values(o).filter(arrived); };
 const unreadIn = () => [...received().filter(m => !m.read), ...selfL().filter(m => !m.read && arrived(m))];   // 26번: 나에게 쓴 편지도
 
 function envHTML(m){
@@ -3061,7 +3066,7 @@ function uidOf(name){
   const m = sorted().slice().reverse().find(x => x.name === name && !isMine(x));
   return m ? m.from : null;
 }
-function otherName(){ const o = sorted().slice().reverse().find(m => !isMine(m)); return o ? o.name : titleFor(room); }
+function otherName(){ const n = roomName(room); if (n && n !== '새 방' && n !== me.name) return n; const o = sorted().slice().reverse().find(m => !isMine(m) && m.name !== me.name); return o ? o.name : '';   }   // 49번: 대화 상대 이름 (내 이름 X)
 function openWriter(data){   // 26번: 상대를 안 정해도 열려요 (받는 사람은 편지 쓰기 안에서 고르기)
   W = data || { to: homeOn ? '' : otherName(), body: '', paper: 'tulip', font: 'pen', stickers: [], voice: null, draftId: null, align: '' };
   $('wTo').value = W.to; $('wBody').value = W.body; $('wFrom').textContent = who().name;
@@ -3165,7 +3170,7 @@ async function sendLetterLink(kind){
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   await shared;
-  drop(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
+  dingdong(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
 }
 $('wSlow').onclick = () => sendLetter(true);
 /* 22번: 빨간 우체통 친구 고르기 (모두 선택 가능) → 친구마다 그 방 우체통으로 */
@@ -3217,7 +3222,7 @@ async function sendPicked(slow){
   ids.forEach(id => { const m = mk(roomName(id)); if (id === room && !homeOn) addMsg(m); else pushTo(id, m); });
   if (W.self) LS.set('rp_selfletters', [...selfL(), { ...mk(u.name), id: 'self_' + rid(), self: true }].slice(-60));
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
-  closeWriter(); drop(); bumpBox(); render.jump = true; queueRender(); updateFlag();
+  closeWriter(); dingdong(); bumpBox(); render.jump = true; queueRender(); updateFlag();
   const n = ids.length + (W.self ? 1 : 0);
   toast(slow ? '🌙 내일 아침 8시에 도착해요' : W.self && !ids.length ? '📝 나에게 편지를 보냈어요 · 우체통에 도착해요' : `📮 ${n}통 보냈어요`);
 }
@@ -3257,7 +3262,7 @@ function flyToMailbox(m, done){
   ], { duration: 1700, easing: 'ease-in-out' });
   a.onfinish = () => {
     fly.style.display = 'none'; fly.innerHTML = '';
-    drop(); bumpBox();
+    dingdong(); bumpBox();   // 49번: 보낼 때 띵동
     done();
   };
 }
@@ -3420,28 +3425,8 @@ $('rReply').onclick = () => {
 /* ----- 보관함 (자연스럽게 쌓인 편지) ----- */
 function hashN(s, n){ let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) | 0; return ((h % n) + n) % n; }
 /* 예시 편지: 빨간 우체부(사용 방법)는 항상, 나머지는 진짜 편지가 오면 사라짐 */
-const GUIDE_BODY = `빨간 우체통에 오신 걸 환영해요!
-
-📮 아래 빨간 우체통을 누르면 편지를 쓸 수 있어요.
-편지지와 글씨체를 고르고 ✏ 글쓰기를 누르세요.
-다 쓰면 📮 바로 보내기, 또는 🌙 내일 아침(다음 날 아침 8시 도착)으로 보내요.
-
-🚩 편지가 오면 우체통 깃발이 올라가요.
-우체통을 누르면 봉투가 나오고, 봉투를 누르면 열려요.
-
-＋ 위쪽 빨간 ＋를 누르면 새 친구 방이 생겨요.
-카카오톡이나 문자로 친구를 초대하세요.
-👥 부르기로 지금 방에 친구를 더 부를 수 있어요.
-
-방 말풍선을 누르면 그 방으로 가고, 길게 누르면 방을 지울 수 있어요.
-새 메시지가 온 방은 숫자로 알려 줘요.
-
-📝 쓰던 편지 - 임시 저장한 편지
-📚 보관함 - 읽은 편지가 쌓여요
-🎨 바탕 바꾸기 · ☀ 밝은 화면 · 📹 영상통화`;
 const sampleOf = (id, from, paper, font, body, stickers, day) => ({ id, sample: true, read: true, at: Date.now() - day * 86400000,
   letter: { to: me.name || '친구', fromName: from, body, paper, font, stickers, align: '' } });
-const GUIDE = () => sampleOf('s_guide', '빨간 우체부', 'plain', 'gothic', GUIDE_BODY, ['📮'], 0);
 const SAMPLES = () => [
   sampleOf('s_hong', '홍길동', 'tulip', 'pen', '잘 지내지?\n요즘 바쁘다는 핑계로 연락을 못 했네.\n지난번에 고마웠다는 말, 꼭 하고 싶었어.\n다음에 밥 한번 먹자!', ['🌸', '💗'], 3),
   sampleOf('s_post', '빨간 우체통', 'plain', 'pen', '편지는 이렇게\n보관함에 차곡차곡 쌓여요.\n\n못다한 그 말,\n오늘은 편지로 전해 보세요.', ['💌'], 2),
@@ -3450,9 +3435,9 @@ const SAMPLES = () => [
 let pileItems = {};
 $('pileBtn').onclick = () => {
   click();
-  const list = [...received().filter(m => m.read), ...selfL().filter(m => m.read && arrived(m))].sort((a, b) => whenOf(a) - whenOf(b));
+  const list = [...received(), ...selfL().filter(m => arrived(m))].sort((a, b) => whenOf(a) - whenOf(b));   // 49번: 받은 편지 모두 · 최근 편지가 맨 위
   $('pileCnt').textContent = list.length ? `(${list.length}통)` : '· 예시 편지';
-  const items = [...(list.length ? list : SAMPLES()), GUIDE()];   // 빨간 우체부 편지는 맨 위
+  const items = list.length ? list : SAMPLES();
   pileItems = {}; items.forEach(m => pileItems[m.id] = m);
   const pile = $('pile'), stepH = 26;
   pile.style.height = (180 + (items.length - 1) * stepH) + 'px';
@@ -3462,7 +3447,7 @@ $('pileBtn').onclick = () => {
   }).join('');
   showOv('pileOv');
 };
-$('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); curLetter = pileItems[w.dataset.id]; showReader(); } });
+$('pile').addEventListener('click', e => { const w = e.target.closest('.envwrap'); if (w) { hideOv('pileOv'); const m = pileItems[w.dataset.id]; if (!m.read) { openLetter(m); return; } curLetter = m; showReader(); } });
 
 /* ----- 편지지 가게 ----- */
 const thumbHTML = p => `<div class="pthumb ${pcls(p)}" style="${paperVars(p)}"></div>`;
