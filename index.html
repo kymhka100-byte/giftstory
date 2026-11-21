@@ -616,6 +616,34 @@ footer #micBtn{margin-right:-4px}
 #morePanel .mrow{gap:10px;padding:9px 12px;text-align:left}
 #morePanel .mav{flex:none;width:30px;height:30px;border-radius:10px;background:#ff5a55;color:#fff;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
 #morePanel .mt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* ===== 48번: 편지 쓰기 메인 화면 · 편지 도착 봉투 ===== */
+#letterHome{display:none;position:relative;flex:1;min-height:0;margin:-8px 0 0;overflow:hidden;background:#1a120c center/cover no-repeat;background-position:62% center}
+body.lview #homeList > :not(#letterHome){display:none!important}
+body.lview #letterHome{display:block}
+body.lview #homeLogo{display:none}
+#letterHome:before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55),rgba(0,0,0,0) 25%,rgba(0,0,0,0) 65%,rgba(0,0,0,.7));pointer-events:none}
+#lhSite{position:absolute;top:6px;left:0;right:0;text-align:center;color:rgba(255,255,255,.35);font-size:11px;letter-spacing:1px;text-decoration:none;z-index:2}
+#lhQuote{position:absolute;top:30px;left:0;right:0;padding:0 24px;text-align:center;color:#fff8e7;font-family:'Nanum Pen Script',cursive;font-size:32px;line-height:1.4;text-shadow:0 2px 10px #000;pointer-events:none}
+#lhQuote q:before,#lhQuote q:after{color:#e8c27a;font-size:30px;vertical-align:-6px}
+.lhic{position:absolute;bottom:16px;display:flex;gap:12px;z-index:2}
+.lhic.r{right:14px}.lhic.l{left:14px}
+.lhic button{width:54px;height:54px;border-radius:14px;border:none;background:rgba(40,22,12,.72);font-size:26px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(0,0,0,.6);padding:0;transition:transform .08s;position:relative}
+.lhic button:active{transform:scale(.9)}
+.lhic #lhWrite{background:rgba(160,25,25,.8)}
+.lhic.l button{width:40px;height:40px;font-size:18px;opacity:.55}
+.lhic i{position:absolute;top:-6px;right:-6px;background:#e3302e;color:#fff;font-style:normal;font-size:12px;font-weight:800;border-radius:10px;padding:1px 6px}
+#lhArrive{display:none;position:absolute;inset:0;background:rgba(0,0,0,.55);z-index:3;flex-direction:column;align-items:center;justify-content:center}
+#lhArrive.show{display:flex}
+#lhMsg{font-family:'Nanum Pen Script',cursive;color:#ffe9a8;font-size:38px;text-shadow:0 2px 10px #000;margin-bottom:12px;animation:lhblink 1.6s ease-in-out infinite}
+@keyframes lhblink{50%{opacity:.6}}
+.lhenv{position:relative;width:92%;max-width:440px;aspect-ratio:650/410;background:#efe6d4 center/100% 100%;border-radius:6px;box-shadow:0 10px 30px rgba(0,0,0,.8);animation:lhdrop .9s cubic-bezier(.2,1.4,.4,1) both;cursor:pointer}
+@keyframes lhdrop{0%{transform:translateY(-120%) rotate(-8deg);opacity:0}100%{transform:none;opacity:1}}
+.lhenv.rip{animation:lhrip .45s ease forwards}
+@keyframes lhrip{30%{transform:rotate(-5deg) scale(1.03)}60%{transform:rotate(3deg) scale(1.06);opacity:1}100%{transform:scale(1.15);opacity:0}}
+.lhenv .f,.lhenv .t{position:absolute;font-family:'Nanum Pen Script',cursive;color:#5a3a22;text-align:left;line-height:1.25}
+.lhenv .f{left:9%;top:11%;font-size:min(5vw,22px)}
+.lhenv .t{left:38%;top:44%;font-size:min(7vw,32px)}
+#lhHint{margin-top:14px;color:rgba(255,255,255,.7);font-size:15px}
 /* ===== 32번 ===== */
 #homeList{flex-direction:column;padding:8px 0 0}
 #menuDim{position:absolute;inset:0;z-index:5;background:rgba(0,0,0,.6);display:none}
@@ -883,9 +911,16 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 
   <!-- 32번: 메인 화면 (나와의 대화 고정 · 할 일 / 친구 · 홍보 · 친구 초대) -->
   <div id="homeList">
+    <div id="letterHome">
+      <a id="lhSite" href="https://www.giftwave.com">www.giftwave.com</a>
+      <div id="lhQuote"><q>소중한 분에게 정성 들여 마음을 전하세요</q></div>
+      <div class="lhic l"><button data-hv="todo" title="할 일">✅</button><button data-hv="friends" title="친구 목록">👥</button></div>
+      <div class="lhic r"><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
+      <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
+    </div>
     <div id="hTop"></div>
     <div id="hGroup" class="hsec"></div>
-    <div class="tdadd hadd"><input id="hTdIn" maxlength="80" placeholder="할 일 적기" enterkeyhint="done"><button class="mic" data-dict="hTdIn" title="말로 쓰기">🎤</button><button class="ok" data-tdadd="hTdIn" title="넣기">＋</button><button class="hlist" id="hListBtn" data-hv="friends" title="친구 목록 · 할 일 바꾸기">👥</button></div>
+    <div class="tdadd hadd"><input id="hTdIn" maxlength="80" placeholder="할 일 적기" enterkeyhint="done"><button class="mic" data-dict="hTdIn" title="말로 쓰기">🎤</button><button class="ok" data-tdadd="hTdIn" title="넣기">＋</button><button class="hlist" id="hListBtn" data-hv="friends" title="친구 목록 · 할 일 바꾸기">👥</button><button class="hlist" data-hv="letter" title="편지 쓰기 화면">✉</button></div>
     <div id="hTodo" class="hsec"><div id="hTodoList"></div>
       <button class="tdcal" data-gcal>📅 구글 캘린더 (일정) 열기</button></div>
     <div id="hFriends"></div>
@@ -1708,10 +1743,33 @@ function goHome(initial){
   if (vPlayer && vPlayer.stopVideo) { vApplying(); vPlayer.stopVideo(); } vSolo = false; V = null;
   render(); syncLayer();
 }
+/* 48번: 편지 쓰기 메인 화면 그리기 (편지가 와 있으면 봉투를 크게) */
+function lhImg(el, file){ if (el._f === file) return; el._f = file; const i = new Image(); i.onload = () => el.style.backgroundImage = `url(${i.src})`; i.onerror = () => { el.style.backgroundImage = `url(${MEDIA_HOME + file})`; }; i.src = file; }
+function lhDraw(){
+  lhImg($('letterHome'), 'letter_bg.jpg');
+  const un = unreadIn(), a = $('lhArrive'), env = $('lhEnv');
+  const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : '');
+  a.classList.toggle('show', !!un.length);
+  if (!un.length) return;
+  lhImg(env, 'letter_env.jpg');
+  const m = un[0], key = un.map(x => x.id).join(',');
+  if (env._k === key) return; env._k = key;
+  env.classList.remove('rip'); env.style.animation = 'none'; void env.offsetWidth; env.style.animation = '';
+  env.querySelector('.f').innerHTML = `보내는 사람<br>${esc((m.letter && m.letter.fromName) || m.name || '')}`;
+  env.querySelector('.t').innerHTML = `받는 사람<br>${esc(me.name || (m.letter && m.letter.to) || '')} 님께`;
+  $('lhHint').textContent = un.length > 1 ? `편지가 ${un.length}통 와 있어요 · 봉투를 누르면 골라 읽어요` : '봉투를 누르면 편지가 열려요';
+}
+function lhRip(el, m){
+  if (ripping || !m) return;
+  ripping = true; tear(); el.classList.add('rip');
+  setTimeout(() => { ripping = false; el.classList.remove('rip'); openLetter(m); }, 420);
+}
+const lhShown = () => homeOn && document.body.classList.contains('lview');
 function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기본) / 친구 목록 → 홍보 글 → 친구 초대(아래 가운데)
   const rooms = visibleRooms();
   rooms.sort(roomOrder);
-  const view = homeView(), letters = unreadIn().length, mN = rooms.reduce((a, x) => a + unreadN(x.id), 0), act = tdActive().length;
+  const view = homeView(); document.body.classList.toggle('lview', view === 'letter' && !grpSel); if (view === 'letter') { lhDraw(); }
+  const letters = unreadIn().length, mN = rooms.reduce((a, x) => a + unreadN(x.id), 0), act = tdActive().length;
   const top = (letters || (mN && view === 'todo') ? `<div class="hchips">${letters ? `<button class="hchip" data-hmail>💌 새 편지 ${letters}통</button>` : ''}${mN && view === 'todo' ? `<button class="hchip" data-hv="friends">💬 새 메시지 ${mN > 99 ? '99+' : mN}</button>` : ''}</div>` : '');
   setHTML('hTop', top);
   { const lb = $('hListBtn'); lb.dataset.hv = view === 'todo' ? 'friends' : 'todo'; lb.innerHTML = view === 'todo' ? `👥${mN ? `<i>${mN > 99 ? '99+' : mN}</i>` : ''}` : '✅'; lb.title = view === 'todo' ? '친구 목록 보기' : '할 일 보기'; }   // 34번: 목록 바꾸기 버튼
@@ -1730,10 +1788,13 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
   setHTML('hFriends', `<div class="hsec">${rooms.length ? rooms.map(row).join('') : '<div class="tdempty">아직 친구가 없어요 · 아래 ＋ 친구 초대하기</div>'}</div>`);
 }
 const setHTML = (id, h) => { const b = $(id); if (b && b._h !== h) { b._h = h; b.innerHTML = h; } };
-const homeView = () => LS.get('rp_homeview', 'todo');
+const homeView = () => LS.get('rp_homeview', 'letter');   // 48번: 기본은 편지 쓰기 화면
 const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateString() === n.toDateString() ? fmtTime(t) : `${d.getMonth() + 1}/${d.getDate()}`; };
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
+  if (e.target.closest('#lhWrite')) { click(); openWriter(); return; }
+  if (e.target.closest('#lhBox')) { click(); const un = unreadIn(); if (un.length) openBox(un); else $('pileBtn').click(); return; }
+  const le = e.target.closest('#lhEnv'); if (le) { const un = unreadIn(); if (un.length > 1) { click(); openBox(un); } else if (un.length) lhRip(le, un[0]); return; }
   const hv = e.target.closest('[data-hv]'); if (hv) { click(); LS.set('rp_homeview', hv.dataset.hv); drawHome(); return; }
   if (e.target.closest('[data-hmail]')) { click(); openBox(unreadIn()); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
@@ -2589,7 +2650,7 @@ function checkArrivals(){
   if (!fresh.length) return;
   fresh.forEach(m => seen.add(m.id));
   const lf = fresh[fresh.length - 1];
-  showBanner(lf.self ? '💌 나에게 쓴 편지가 도착했어요' : `💌 ${lf.name}님의 편지가 도착했어요`); ding();
+  if (lhShown()) dingdong(); else { showBanner(lf.self ? '💌 나에게 쓴 편지가 도착했어요' : `💌 ${lf.name}님의 편지가 도착했어요`); ding(); }
   bumpBox(); waveFlag();
 }
 function showBanner(t){
@@ -3270,7 +3331,7 @@ $('recDel').onclick = () => { W.voice = null; W.voiceSec = 0; if (recAudio) recA
 let curLetter = null, voiceAudio = null;
 function openLetter(m){
   if (!m) return;
-  curLetter = m; rustle(.8);
+  curLetter = m; rustle(.5);   // 48번: 편지 펼치는 소리 조금 작게
   showReader();
 }
 function showReader(){
@@ -4183,7 +4244,7 @@ function playSfx(k, vol, fallback){
   c.play().catch(e => { if (!e || e.name !== 'NotAllowedError') fallback(); });
 }
 function rustle(v = 1){ playSfx('rustle', v, () => { noiseBurst(.7, 2800, .35 * v); setTimeout(() => noiseBurst(.4, 1800, .25 * v), 180); }); }
-function tear(){ playSfx('tear', 1, () => rustle()); }
+function tear(){ playSfx('tear', .6, () => rustle(.6)); }   // 48번: 찢는 소리 조금 작게
 function drop(v = 1){ playSfx('drop', v, thunk); }
 function click(){ if (!ac()) return; tone(1320, 0, .09, .12); tone(1760, .015, .06, .05); }   // 부드러운 '톡'
 function tone(fq, t0, len, vol){
