@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 50번: 대화 속 링크 누르면 그 사이트로 · 사진 누르면 화면 가득 크게(두 손가락 확대) + ⬇ 저장 · 편지 왔을 때도 ✍️ 편지 쓰기 버튼이 봉투에 가려지지 않게 · 카톡 초대는 우표·도장 찍힌 편지 봉투 카드(보낸 사람·받는 사람 이름) · 편지 오면 띵동 + "어머, 편지가 왔어요" -->
 <!-- 48번: 초대 링크로 처음 들어와도 바로 대화 (방 열쇠를 먼저 만들고 듣기) · 카카오 로그인해도 바로 연결 · 지운 방도 새 메시지 오면 다시 · 방 이름에서 예전 내 이름 빼기 · 카카오 로그인됨 표시 · 닉네임 겹쳐도 돼요(같은 이름은 왼쪽 아래 작은 숫자) · 목록마다 🔍 찾기 · 실버톡 윗줄 작게 + 편지함·편지 쓰기 오른쪽 · 일반 화면 버튼은 왼쪽 아래 · ＋는 빈칸에 -->
 <!-- 47번: 공동체 방 아래 공지 말풍선 없앰 · 위 공지 줄은 2줄 고정, 누르면 전체 보기(방장은 고치기 · 약도 사진 · 전화번호 누르면 전화) · 뒤로 가기는 바로 전 단계로 · 실버톡(이름 3자) · 실버 편지 쓰기·편지함 · 실버 가족 버튼 입체·같은 크기·📞 전화 · ＋ → 설정에 실버 모드로 가기 -->
 <!-- 46번: 공동체 방 공지 때문에 화면이 밀려 아래 입력 줄이 잘리던 것 고침 · '공동체 2' 버튼 글씨 넘침 고침 · 가위바위보·뽑기 게임 초대 말풍선(🎮 같이 하기) -->
@@ -21,6 +22,12 @@
 <!-- 27번: 실버 모드 버튼 자리(편지↑ · 전화·음성·답장↓) · 답장 추가/수정 · 실버 말풍선 · 더보기 목록 버튼 밑으로 · 홍보 글 4줄 · 홈 화면 두 개 막기 · 지운 친구도 메시지 오면 다시 · 실버 모드 접속 화면 -->
 <!-- 26번: 맨 위 한 줄(작은 우체통·웹캠·말풍선 3) · 메인에도 아래 줄 · 글 쓰는 칸 작게/누르면 길게 · 새 마이크 · ＋ 메뉴(파일·게임·친구 초대) · 우체통 아이콘 맨 앞 · 받는 사람 없이 편지 쓰기·나에게 · 실버 초대 사진 · 실버톡톡 · 음성 3.5초 · 파일 스토리지 100MB · 진동 약하게 -->
 <title>빨간 우체통 (못다한 그 말)</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="💌 빨간 우체통에서 편지가 도착했어요">
+<meta property="og:description" content="못다한 그 말, 예쁜 종이 편지로 전해요. 눌러서 열어 보세요.">
+<meta property="og:image" content="https://giftwav.com/letter_env.jpg">
+<meta property="og:image:width" content="650">
+<meta property="og:image:height" content="410">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#e0322f">
 <link rel="icon" href="icon-192.png">
@@ -515,7 +522,18 @@ body.home #msgs{display:none}
 .bubble.file.song .fi{font-size:34px;color:#22c55e}
 .fimg{max-width:62%;max-height:260px;border-radius:14px;display:block;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);background:#333;min-width:80px;min-height:60px;object-fit:cover}
 .fst{font-size:11px;opacity:.6;margin:2px 6px 0}
-#imgOv img{max-width:100%;max-height:72vh;border-radius:10px;display:block;margin:0 auto}
+a.mlink{color:#5ab0ff;text-decoration:underline;word-break:break-all}
+.me .bubble a.mlink,.sv-m.me a.mlink{color:#0b57d0}
+/* 50번: 사진 크게 보기 - 화면 가득 · 두 손가락 확대 · 아래 화살표 저장 */
+#imgOv{background:#000!important;padding:0!important}
+#imgOv .panel{background:#000;border:none;box-shadow:none;width:100%;max-width:none;height:100%;max-height:none;border-radius:0;padding:0;display:flex;flex-direction:column}
+#imgBox{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;touch-action:none}
+#imgOv img{max-width:100%;max-height:100%;display:block;margin:auto;object-fit:contain;transform-origin:center;will-change:transform;user-select:none;-webkit-user-drag:none}
+.imgbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px calc(14px + env(safe-area-inset-bottom))}
+.imgbar button{width:60px;height:60px;border-radius:50%;border:2px solid #666;background:#1c1c1c;color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding:0}
+.imgbar #imgSave{border-color:#ffd54a;color:#ffd54a}
+.imgbar .ih{color:#888;font-size:13px;text-align:center;flex:1}
+.lhic{z-index:4}
 .sv-bar .sv-call{display:none;flex:0 0 96px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
 .sv-bar .sv-call small{font-size:18px;margin-top:4px}
 .sv-bar .sv-call.show{display:flex}
@@ -1075,7 +1093,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 <div class="ov" id="imgOv">
   <div class="panel">
     <div id="imgBox"></div>
-    <div class="twin"><button class="big y" id="imgSave">⬇ 내 폰에 저장</button><button class="big" data-close>닫기</button></div>
+    <div class="imgbar"><button data-close title="닫기">✕</button><span class="ih">두 손가락으로 벌리면 커져요</span><button id="imgSave" title="내 폰에 저장">⬇</button></div>
   </div>
 </div>
 
@@ -1457,7 +1475,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '42';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '50';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1466,6 +1484,8 @@ const LS = {
   set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ toast('저장 공간이 부족해요'); } }
 };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* 50번: 글 속 인터넷 주소는 눌러서 바로 가는 링크로 */
+const linky = t => esc(t).replace(/(https?:\/\/[^\s<]+[^\s<.,!?)\]'"])|(www\.[^\s<]+[^\s<.,!?)\]'"])/g, u => `<a class="mlink" href="${/^www\./.test(u) ? 'https://' + u : u}" target="_blank" rel="noopener">${u}</a>`);
 const rid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
 
 /* ----- 편지지 · 글씨체 · 스티커 ----- */
@@ -1754,6 +1774,8 @@ function lhDraw(){
   a.classList.toggle('show', !!un.length);
   if (!un.length) return;
   lhImg(env, 'letter_env.jpg');
+  const said = LS.get('rp_lhsaid', []), fresh = un.filter(x => !said.includes(x.id));   // 50번: 새 편지는 한 번만 알려요
+  if (fresh.length) { LS.set('rp_lhsaid', [...said, ...fresh.map(x => x.id)].slice(-200)); letterArriveSnd(); }
   const m = un[0], key = un.map(x => x.id).join(',');
   if (env._k === key) return; env._k = key;
   env.classList.remove('rip'); env.style.animation = 'none'; void env.offsetWidth; env.style.animation = '';
@@ -1761,6 +1783,7 @@ function lhDraw(){
   env.querySelector('.t').innerHTML = `받는 사람<br>${esc(me.name || (m.letter && m.letter.to) || '')} 님께`;
   $('lhHint').textContent = un.length > 1 ? `편지가 ${un.length}통 와 있어요 · 봉투를 누르면 골라 읽어요` : '봉투를 누르면 편지가 열려요';
 }
+function letterArriveSnd(){ dingdong(); setTimeout(() => { const a = loadMedia('sound/letter_arrived.mp3'); a.play().catch(() => {}); }, 1300); }   // 50번: 띵동 → "어머, 편지가 왔어요"
 function lhRip(el, m){
   if (ripping || !m) return;
   ripping = true; tear(); el.classList.add('rip');
@@ -2294,9 +2317,10 @@ function svInvURL(){
   const q = new URLSearchParams({ room, sv: 1, g: svInvG, r: svInvR, n: $('svInvName').value.trim(), p: $('svInvPhone').value.trim(), k: me.name });
   return location.origin + location.pathname + '?' + q.toString();
 }
+const invTo = () => { const nw = getComputedStyle($('newOv')).display !== 'none', v = $('newName').value.trim(); return nw && v && !/^초대 \d+$/.test(v) ? v : (nw ? '' : roomName(room)); };   // 50번: 봉투에 쓸 받는 사람
 const shareInvite = kind => svInvNow()
-  ? shareTo(kind, svInvURL(), `📮 ${svInvR} ${$('svInvName').value.trim() || me.name}이(가) 빨간 우체통에 초대했어요. 누르면 큰 글씨 화면으로 열려요.`)
-  : shareTo(kind, roomURL(room), inviteText());
+  ? shareTo(kind, svInvURL(), `📮 ${svInvR} ${$('svInvName').value.trim() || me.name}이(가) 빨간 우체통에 초대했어요. 누르면 큰 글씨 화면으로 열려요.`, { f: $('svInvName').value.trim() || me.name, t: svInvTitle() })
+  : shareTo(kind, roomURL(room), inviteText(), { f: me.name, t: invTo() });
 $('svInvBtn').onclick = () => {
   click(); svInvOn = !svInvOn;
   $('svInvBox').style.display = svInvOn ? '' : 'none';
@@ -2309,10 +2333,10 @@ $('svInvBtn').onclick = () => {
 $('svInvGen').addEventListener('click', e => { const b = e.target.closest('[data-ig]'); if (!b) return; click(); svInvG = b.dataset.ig; $('svInvGen').querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); });
 $('svInvRel').addEventListener('click', e => { const b = e.target.closest('.chip'); if (!b) return; click(); svInvR = b.textContent; $('svInvRel').querySelectorAll('.chip').forEach(x => x.classList.toggle('on', x === b)); });
 /* 공유 창은 누른 순간 바로 띄워야 해요 (먼저 기다리면 휴대폰이 막아요) */
-async function shareTo(kind, url, text){
+async function shareTo(kind, url, text, env){
   if (kind === 'copy') { copy(text + '\n' + url); return; }
   if (kind === 'sms') { location.href = 'sms:?body=' + encodeURIComponent(text + '\n' + url); return; }
-  if (KAKAO_JS_KEY && await kakaoShare(url, text)) return;
+  if (KAKAO_JS_KEY && await kakaoShare(url, text, env)) return;
   if (navigator.share) { try { await navigator.share({ title: '빨간 우체통', text, url }); } catch (e) {} }
   else copy(text + '\n' + url);
 }
@@ -2366,14 +2390,39 @@ function kakaoLoad(){
   return kakaoReady;
 }
 if (KAKAO_JS_KEY) kakaoLoad();   // 미리 불러 둠
-function kakaoShare(url, text){
-  return kakaoLoad().then(ok => {
+/* 50번: 카톡 초대 = 우표·도장 찍힌 편지 봉투 카드 (봉투 그림 위에 보낸 사람·받는 사람 이름을 손글씨로 써서 올려요) */
+const ENV_IMG = 'https://giftwav.com/letter_env.jpg';
+function envPic(f, t){
+  return new Promise(ok => {
+    const i = new Image(); i.crossOrigin = 'anonymous';
+    i.onload = async () => {
+      try {
+        try { await document.fonts.load("40px 'Nanum Pen Script'"); } catch (e) {}
+        const W = 800, H = Math.round(W * i.height / i.width), c = document.createElement('canvas'); c.width = W; c.height = H;
+        const g = c.getContext('2d'); g.drawImage(i, 0, 0, W, H);
+        g.fillStyle = '#5a3a22'; g.textBaseline = 'top'; g.font = `${Math.round(W * .045)}px 'Nanum Pen Script', cursive`;
+        g.fillText('보내는 사람', W * .09, H * .11); g.font = `${Math.round(W * .06)}px 'Nanum Pen Script', cursive`; g.fillText(f, W * .09, H * .11 + W * .05);
+        if (t) { g.font = `${Math.round(W * .05)}px 'Nanum Pen Script', cursive`; g.fillText('받는 사람', W * .38, H * .44); g.font = `${Math.round(W * .075)}px 'Nanum Pen Script', cursive`; g.fillText(t + ' 님께', W * .38, H * .44 + W * .055); }
+        c.toBlob(b => ok(b ? new File([b], 'letter.jpg', { type: 'image/jpeg' }) : null), 'image/jpeg', .88);
+      } catch (e) { ok(null); }
+    };
+    i.onerror = () => ok(null); i.src = ENV_IMG;
+  });
+}
+async function envUpload(f, t){   // 카카오 서버에 그림을 올려 주소를 받아요 (5초 넘으면 이름 없는 봉투 그림)
+  const go = (async () => { const file = await envPic(f, t); if (!file) return null; const r = await Kakao.Share.uploadImage({ file: [file] }); return r && r.infos && r.infos.original ? r.infos.original : null; })().catch(() => null);
+  return Promise.race([go, new Promise(ok => setTimeout(() => ok(null), 5000))]);
+}
+function kakaoShare(url, text, env){
+  return kakaoLoad().then(async ok => {
     if (!ok) return false;
     try {
-      const img = new URL('icon-512.png', location.href).href;
+      const f = (env && env.f) || me.name || '', t = (env && env.t) || '';
+      const up = await envUpload(f, t);
       Kakao.Share.sendDefault({ objectType: 'feed',
-        content: { title: '📮 빨간 우체통', description: text, imageUrl: img, link: { mobileWebUrl: url, webUrl: url } },
-        buttons: [{ title: '대화방 들어가기', link: { mobileWebUrl: url, webUrl: url } }] });
+        content: { title: `💌 ${f}님이 보낸 편지`, description: t ? `To. ${t}님께 · 눌러서 편지를 열어 보세요` : '눌러서 편지를 열어 보세요',
+          imageUrl: up ? up.url : ENV_IMG, imageWidth: up ? up.width : 650, imageHeight: up ? up.height : 410, link: { mobileWebUrl: url, webUrl: url } },
+        buttons: [{ title: '💌 편지 열어 보기', link: { mobileWebUrl: url, webUrl: url } }] });
       return true;
     } catch (e) { return false; }
   });
@@ -2590,11 +2639,11 @@ function render(){
     } else if (m.type === 'file') {
       html += fileHTML(m, mine);
     } else if (m.type === 'gm') {   // 46번: 같이 하는 게임 초대
-      html += `<div class="bubble">${esc(m.text || '🎮 게임 같이 해요')}${mine ? '' : `<button class="ginvb" data-gamego="${esc(m.game || '')}">🎮 같이 하기</button>`}</div>`;
+      html += `<div class="bubble">${linky(m.text || '🎮 게임 같이 해요')}${mine ? '' : `<button class="ginvb" data-gamego="${esc(m.game || '')}">🎮 같이 하기</button>`}</div>`;
     } else if (m.type === 'ginv') {   // 41번: 공동체 초대장
-      html += `<div class="bubble">${esc(m.text || '👥 공동체 초대')}${mine ? '' : `<button class="ginvb" data-ginvgo="${esc(m.gid || '')}" data-gn="${esc(m.gn || '')}">👥 공동체 들어가기</button>`}</div>`;
+      html += `<div class="bubble">${linky(m.text || '👥 공동체 초대')}${mine ? '' : `<button class="ginvb" data-ginvgo="${esc(m.gid || '')}" data-gn="${esc(m.gn || '')}">👥 공동체 들어가기</button>`}</div>`;
     } else {
-      html += `<div class="bubble">${m.cap ? '🎙 ' : ''}${esc(m.text)}</div>`;
+      html += `<div class="bubble">${m.cap ? '🎙 ' : ''}${linky(m.text)}</div>`;
     }
     let r1 = '';
     if (mine && FB && m.type !== 'letter' && !isSelf(room)) {   // 카톡처럼: 아직 안 읽은 사람 수
@@ -2932,6 +2981,7 @@ async function sendFiles(files){
 }
 ['sendFile'].forEach(id => $(id).onchange = e => { const fs = [...e.target.files]; e.target.value = ''; if (fs.length) sendFiles(fs); });
 $('msgs').addEventListener('click', e => {
+  if (e.target.closest('a.mlink')) return;   // 50번: 링크는 그대로 열기 (새 창)
   const wo = e.target.closest('[data-whooff]');   // 45번: 모두 보기
   if (wo) { click(); whoF = null; render.jump = true; render(); return; }
   const wg = e.target.closest('[data-whogo]');   // 45번: 이 사람이 한 말 보기
@@ -2958,7 +3008,8 @@ function fileOpen(m, u){
   if (m.kind === 'audio') { songFromFile(m); return; }
   if (m.kind === 'image' || m.kind === 'video') {
     $('imgBox').innerHTML = m.kind === 'image' ? `<img src="${u}" alt="">` : `<video src="${u}" controls playsinline style="width:100%;max-height:70vh;border-radius:10px"></video>`;
-    $('imgSave').onclick = () => fileSave(u, m.fname, m); showOv('imgOv'); return;
+    imgZoomReset();
+    $('imgSave').style.visibility = ''; $('imgSave').onclick = () => { click(); fileSave(u, m.fname, m); }; showOv('imgOv'); return;
   }
   /* 32번: 일반 파일은 저장 · 다른 앱으로 열기 */
   $('foIco').textContent = '📄'; $('foName').textContent = m.fname || '파일'; $('foInfo').textContent = fmtSize(m.size || 0);
@@ -2966,6 +3017,24 @@ function fileOpen(m, u){
   $('foShare').onclick = () => { click(); fileShare(u, m); };
   showOv('fileOv');
 }
+/* 50번: 사진 두 손가락으로 벌려 확대 · 확대한 채로 끌어서 보기 · 두 번 톡 누르면 2.5배/원래대로 */
+const IZ = { s: 1, x: 0, y: 0, pts: new Map(), d0: 0, s0: 1, lx: 0, ly: 0, tap: 0 };
+function imgZoomReset(){ IZ.s = 1; IZ.x = 0; IZ.y = 0; IZ.pts.clear(); imgZoomApply(); }
+function imgZoomApply(){ const im = $('imgBox').querySelector('img'); if (!im) return; if (IZ.s <= 1) { IZ.s = 1; IZ.x = 0; IZ.y = 0; } im.style.transform = `translate(${IZ.x}px,${IZ.y}px) scale(${IZ.s})`; }
+const izDist = () => { const [a, b] = [...IZ.pts.values()]; return Math.hypot(a.x - b.x, a.y - b.y) || 1; };
+$('imgBox').addEventListener('pointerdown', e => {
+  if (!$('imgBox').querySelector('img')) return;
+  IZ.pts.set(e.pointerId, { x: e.clientX, y: e.clientY }); IZ.lx = e.clientX; IZ.ly = e.clientY;
+  if (IZ.pts.size === 2) { IZ.d0 = izDist(); IZ.s0 = IZ.s; }
+  if (IZ.pts.size === 1) { const t = Date.now(); if (t - IZ.tap < 300) { IZ.s = IZ.s > 1 ? 1 : 2.5; IZ.x = 0; IZ.y = 0; imgZoomApply(); IZ.tap = 0; } else IZ.tap = t; }
+});
+$('imgBox').addEventListener('pointermove', e => {
+  if (!IZ.pts.has(e.pointerId)) return;
+  IZ.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (IZ.pts.size === 2) { IZ.s = Math.min(5, Math.max(1, IZ.s0 * izDist() / IZ.d0)); imgZoomApply(); }
+  else if (IZ.pts.size === 1 && IZ.s > 1) { IZ.x += e.clientX - IZ.lx; IZ.y += e.clientY - IZ.ly; IZ.lx = e.clientX; IZ.ly = e.clientY; imgZoomApply(); }
+});
+['pointerup', 'pointercancel', 'pointerleave'].forEach(k => $('imgBox').addEventListener(k, e => { IZ.pts.delete(e.pointerId); if (IZ.pts.size === 1) { const [p] = [...IZ.pts.values()]; IZ.lx = p.x; IZ.ly = p.y; } }));
 document.querySelector('#imgOv [data-close]').addEventListener('click', () => { const v = $('imgBox').querySelector('video'); if (v) v.pause(); });
 async function fileBlob(u, m){
   let b = m && m.fid ? await idbGet('f_' + m.fid).catch(() => null) : null;
@@ -3166,7 +3235,7 @@ async function sendLetterLink(kind){
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
     letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
-  const shared = shareTo(kind, roomURL(id), text);   // 공유 창 먼저
+  const shared = shareTo(kind, roomURL(id), text, { f: u.name, t: W.to === '친구' ? '' : W.to });   // 공유 창 먼저
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   await shared;
@@ -4622,7 +4691,7 @@ function svChat(){
     const mine = isMine(m);
     if (!mine && m.name !== last) html += `<div class="sv-who">${esc(m.name)}</div>`;
     last = mine ? '' : m.name;
-    html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>` : `<div class="sv-m ${mine ? 'me' : 'them'}">${esc(m.text)}</div>`;
+    html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>` : `<div class="sv-m ${mine ? 'me' : 'them'}">${linky(m.text)}</div>`;
   });
   html = `<div class="sv-wrap">${html || '<div class="sv-empty">아직 대화가 없어요</div>'}</div>`;
   if (html === svChatHTML) return;
@@ -5497,7 +5566,7 @@ function grpInvite(id){
 document.querySelectorAll('[data-ginvk]').forEach(b => b.onclick = () => {
   if (!grpInvId) return; click();
   const url = location.origin + location.pathname + '?room=' + grpInvId + '&gn=' + encodeURIComponent(grpName(grpInvId)) + '&f=' + encodeURIComponent(me.name || '');
-  shareTo(b.dataset.ginvk, url, `👥 ${me.name}님이 '${grpName(grpInvId)}' 공동체에 초대했어요. 누르면 공동체 사람들 이름이 저절로 생겨요.`);
+  shareTo(b.dataset.ginvk, url, `👥 ${me.name}님이 '${grpName(grpInvId)}' 공동체에 초대했어요. 누르면 공동체 사람들 이름이 저절로 생겨요.`, { f: me.name, t: grpName(grpInvId) });
 });
 $('hGroup').addEventListener('click', e => {
   const id = grpSel; if (!id) return;
