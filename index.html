@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 52번-3: 편지 쓰기 👤 이름 넣기(받는 사람마다 연락처 이름) · 처음 화면·설정에 전화번호 칸(안 써도 돼요) · 친구 목록·더보기·공동체 목록에 📞 버튼 -->
+<!-- 52번-2: 배터리 '제한 없음'·알림 허용 안내 창(처음 1번 · 업데이트한 사람도) · 대화 신청 알림 창(확인 → 그 대화방 / 나중에) · 새 대화방 말풍선 꿈틀 -->
+<!-- 52번-1: 받은 사진·문서도 눌러서 크게 보기(못 받아도 보이는 사진으로 열기) · 크게 보기에 📤 공유 버튼 · 실버 모드 전화 버튼 밝게 · 실버 모드에도 사진·파일 · 내용 없이 보내면 "편지 내용을 다 써 주세요" -->
 <!-- 51번: 편지 봉투가 천천히 찢어지고(찢어진 봉투 1.5초) 편지가 나와 펼쳐짐 · 메인 ✍️ 편지 쓰기가 다른 방으로 가던 버그 · 답장은 그 사람에게 바로 · 카톡 초대는 글씨 없이 빨간 리본 봉투 그림만 · 공동체 사람이 실버 화면에 바로 · 안 읽은 편지가 보일 때마다 "편지가 왔어요" · 대화 상대 차단하기 -->
 <!-- 50번: 대화 속 링크 누르면 그 사이트로 · 사진 누르면 화면 가득 크게(두 손가락 확대) + ⬇ 저장 · 편지 왔을 때도 ✍️ 편지 쓰기 버튼이 봉투에 가려지지 않게 · 카톡 초대는 우표·도장 찍힌 편지 봉투 카드(보낸 사람·받는 사람 이름) · 편지 오면 띵동 + "어머, 편지가 왔어요" -->
 <!-- 48번: 초대 링크로 처음 들어와도 바로 대화 (방 열쇠를 먼저 만들고 듣기) · 카카오 로그인해도 바로 연결 · 지운 방도 새 메시지 오면 다시 · 방 이름에서 예전 내 이름 빼기 · 카카오 로그인됨 표시 · 닉네임 겹쳐도 돼요(같은 이름은 왼쪽 아래 작은 숫자) · 목록마다 🔍 찾기 · 실버톡 윗줄 작게 + 편지함·편지 쓰기 오른쪽 · 일반 화면 버튼은 왼쪽 아래 · ＋는 빈칸에 -->
@@ -62,6 +65,13 @@ button{font-family:inherit;cursor:pointer}
 .rb .cnt{position:absolute;top:-9px;right:-2px;font-style:normal;font-size:12px;font-weight:800;color:#ff3b36;text-shadow:0 0 2px #fff,0 0 2px #fff}
 .rb.unread{background:#ff4d4a!important;color:#fff!important;border-color:#ff4d4a!important}
 .rb.flash{animation:rbflash 1.8s ease}
+.rb.wig,#moreBtn.wig{animation:rbflash 1.8s ease infinite}   /* 52번: 새 대화 신청 - 들어갈 때까지 꿈틀 */
+.ov .panel.mid{max-width:340px;width:88%;text-align:center;border-radius:22px;padding:22px 18px}
+.mid h2{font-size:22px;margin:4px 0 10px}
+.mid .mtx{color:#ddd;font-size:17px;line-height:1.7;margin-bottom:14px}
+.mid .mbtns{display:flex;gap:10px}
+.mid .mbtns button{flex:1;min-height:52px;border-radius:14px;font-size:18px;font-weight:800;border:2px solid #555;background:#26262c;color:#fff}
+.mid .mbtns button.y{background:#e0322f;border-color:#e0322f}
 .rb.mebtn.today{box-shadow:0 0 0 2px #ffe14d}
 .ginvb{display:block;margin-top:8px;padding:8px 12px;border-radius:10px;border:0;background:#ffe14d;color:#222;font-weight:800;font-size:15px}
 #gnTxt{width:100%;min-height:110px;font-size:18px;padding:10px;border-radius:12px;background:#1c1c22;color:#fff;border:1.5px solid #c9a94a;resize:vertical}
@@ -295,6 +305,7 @@ textarea.lined::placeholder{color:var(--ink);opacity:.38}
 .pstk{font-size:30px;text-align:center;letter-spacing:6px;position:relative;z-index:1}
 .chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .chip{border:2px solid #3a3a42;background:#222;color:#fff;border-radius:12px;padding:5px 9px;font-size:14px}
+.telb{flex:none;width:40px;height:40px;border-radius:50%;border:2px solid #b9ffc8;background:#22c55e;color:#fff;font-size:20px;display:inline-flex;align-items:center;justify-content:center;padding:0;margin-left:6px;vertical-align:middle}   /* 52번 */
 .chip.sel{border-color:var(--blue);box-shadow:0 0 10px rgba(79,195,255,.6)}
 .wbar{display:flex;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));border-top:1px solid var(--line);max-width:640px;width:100%;margin:0 auto;justify-content:flex-end}
 .wbar button{padding:8px 9px;border-radius:10px;border:1px solid #444;background:#26262c;color:#fff;font-size:13px;white-space:nowrap}
@@ -529,10 +540,11 @@ a.mlink{color:#5ab0ff;text-decoration:underline;word-break:break-all}
 .imgbar{display:flex;justify-content:space-between;align-items:center;padding:10px 16px calc(14px + env(safe-area-inset-bottom))}
 .imgbar button{width:60px;height:60px;border-radius:50%;border:2px solid #666;background:#1c1c1c;color:#fff;font-size:30px;display:flex;align-items:center;justify-content:center;padding:0}
 .imgbar #imgSave{border-color:#ffd54a;color:#ffd54a}
+.imgbar #imgShare{border-color:#5ab0ff;color:#5ab0ff;margin-right:12px;font-size:26px}
 .imgbar .ih{color:#888;font-size:13px;text-align:center;flex:1}
 #letterHome .lhic{z-index:5}
 #morePanel .mrow.blk{color:#ff8a86;font-weight:700}
-.sv-bar .sv-call{display:none;flex:0 0 96px;border:2px solid #4cd964;background:#123a1c;color:#7dff9a;flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
+.sv-bar .sv-call{display:none;flex:0 0 96px;border:2px solid #b9ffc8;background:#22c55e;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.35);flex-direction:column;align-items:center;justify-content:center;font-size:34px;line-height:1}
 .sv-bar .sv-call small{font-size:18px;margin-top:4px}
 .sv-bar .sv-call.show{display:flex}
 /* 22번 */
@@ -1046,7 +1058,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
     </div>
-    <div class="chips" style="margin-top:10px"><button class="chip mic" data-dict="wBody" style="min-height:0">🎤 말로 쓰기</button><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button></div>
+    <div class="chips" style="margin-top:10px"><button class="chip mic" data-dict="wBody" style="min-height:0">🎤 말로 쓰기</button><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button><button class="chip" id="nameInsBtn">👤 이름 넣기</button></div>
     <div class="lab">스티커 (편지 끝에 붙어요)</div>
     <div class="chips" id="stkChips"></div>
     <div class="lab">목소리 녹음 (선택 · 편지를 펼치면 나와요)</div>
@@ -1112,11 +1124,30 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <button class="big" style="max-width:260px" data-close>닫기</button>
 </div>
 
+<!-- 52번: 대화 신청 알림 창 -->
+<div class="ov" id="reqOv">
+  <div class="panel mid">
+    <div style="font-size:46px">💌</div>
+    <h2 id="reqTitle">대화를 신청하셨어요</h2>
+    <div class="mtx">확인을 누르면 바로 대화방으로 가요</div>
+    <div class="mbtns"><button id="reqLater">나중에</button><button class="y" id="reqGo">확인</button></div>
+  </div>
+</div>
+<!-- 52번: 배터리 제한 없음 · 알림 허용 안내 창 -->
+<div class="ov" id="battOv">
+  <div class="panel mid">
+    <div style="font-size:46px">🔋🔔</div>
+    <h2>알림이 잘 오게 해 주세요</h2>
+    <div class="mtx">휴대폰이 배터리를 아끼느라<br>빨간 우체통 알림을 막을 수 있어요.<br><b style="color:#ffe14d">배터리 '제한 없음'</b>을 허용해 주세요.</div>
+    <div id="battSteps" class="mtx" style="display:none;font-size:15px;text-align:left;background:#1c1c22;border-radius:12px;padding:10px 12px">휴대폰 <b>설정</b> → <b>애플리케이션</b> → <b>빨간 우체통</b> → <b>배터리</b> → <b style="color:#ffe14d">제한 없음</b></div>
+    <div class="mbtns"><button id="battLater">나중에</button><button class="y" id="battGo">허용하기</button></div>
+  </div>
+</div>
 <!-- 사진 크게 보기 -->
 <div class="ov" id="imgOv">
   <div class="panel">
     <div id="imgBox"></div>
-    <div class="imgbar"><button data-close title="닫기">✕</button><span class="ih">두 손가락으로 벌리면 커져요</span><button id="imgSave" title="내 폰에 저장">⬇</button></div>
+    <div class="imgbar"><button data-close title="닫기">✕</button><span class="ih">두 손가락으로 벌리면 커져요</span><button id="imgShare" title="공유">📤</button><button id="imgSave" title="내 폰에 저장">⬇</button></div>
   </div>
 </div>
 
@@ -1154,6 +1185,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <h2>⚙ 설정</h2>
     <div class="lab" style="margin-top:0">내 이름 (친구에게 보이는 이름)</div>
     <div style="display:flex;gap:8px"><input class="in" id="myName" maxlength="12"><button class="big y" id="myNameOk" style="width:auto;margin:0;padding:0 16px">바꾸기</button></div>
+    <div style="display:flex;gap:8px;margin-top:8px"><input class="in" id="myPhone" type="tel" inputmode="tel" maxlength="20" placeholder="📞 내 전화번호 (안 써도 돼요)"><button class="big y" id="myPhoneOk" style="width:auto;margin:0;padding:0 16px">저장</button></div>
     <button class="big" id="rmOpen" style="margin-top:14px">🗑 방 정리하기 (여러 개 골라 지우기)</button>
     <div id="roomList" style="display:none;margin-top:8px"></div>
     <button class="big r" id="rmSelBtn" style="display:none"></button>
@@ -1262,6 +1294,8 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <button class="nbtn" id="nameInstall">📲 홈 화면에 추가</button>
     <div class="nlab">이름(별명)</div>
     <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
+    <div class="nlab">전화번호 <small style="opacity:.7">(안 써도 돼요 · 친구가 📞 눌러 전화할 수 있어요)</small></div>
+    <input class="in" id="phoneIn" type="tel" inputmode="tel" maxlength="20" placeholder="예: 010-1234-5678" style="width:100%;box-sizing:border-box">
     <button class="nbtn sv" id="nameSilver">👵 실버 모드로 시작</button>
   </div>
 </div>
@@ -1499,7 +1533,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '51';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '52';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1705,6 +1739,7 @@ async function initStore(){
 }
 /* 방 열기 (방마다 따로 대화) - 방은 이름이 아니라 고유 번호(room)로 찾아요 */
 function openRoom(id){
+  reqDone(id);   // 52번
   unsub.forEach(f => { try { f(); } catch (e) {} }); unsub = [];
   if (room !== id && !homeOn) setSeen(room);
   homeOn = false; document.body.classList.remove('home'); $('lhArrive')._on = false;
@@ -1853,7 +1888,7 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
     const name = roomName(x.id), n = unreadN(x.id), L = lastMsg[x.id];
     const sub = L ? L.t : (FB && !othersIn(x.id).length ? '⏳ 친구가 아직 안 들어왔어요' : '대화를 시작해 보세요');
     return `<div class="hrow" data-home="${x.id}"><div class="hav">${esc([...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${dupTag(x.id)}</div>
-      <div class="htx"><b>${esc(name)}</b><small>${esc(sub)}</small></div>
+      <div class="htx"><b>${esc(name)}</b><small>${esc(sub)}</small></div>${telBtn(phoneOf(x.id))}
       <div class="hside">${L ? fmtShort(L.at) : ''}${n ? `<br><i>${n > 99 ? '99+' : n}</i>` : ''}${L && L.me && FB && !n && (othersIn(x.id).length ? othersIn(x.id).some(v => (v.seen || 0) < L.at) : true) ? '<b class="r1">1</b>' : ''}</div></div>`;   // 26번: 내가 보낸 글을 아직 안 읽었으면 1
   };
   setHTML('hFriends', `<div class="hsec">${rooms.length ? rooms.map(row).join('') : '<div class="tdempty">아직 친구가 없어요 · 아래 ＋ 친구 초대하기</div>'}</div>`);
@@ -1877,7 +1912,8 @@ function joinRoom(id){
   if (me !== realMe) return;   // 테스트 친구는 방 사람 목록에 안 남김
   const { D, db } = FB, r = D.ref(db, 'giftstory/rooms/' + id + '/members/' + me.uid), now = Date.now();
   const lg = LS.get('rp_auth', null) ? 1 : 0;   // 42번: 간편 로그인 했는지
-  needKey(id).then(() => D.get(r)).then(s => D.update(r, s.exists() ? { name: me.name, at: now, lg } : { name: me.name, at: now, joined: now, lg })).catch(() => {});
+  const ph = me.phone || null;   // 52번: 전화번호도 (없으면 지움)
+  needKey(id).then(() => D.get(r)).then(s => D.update(r, s.exists() ? { name: me.name, at: now, lg, ph } : { name: me.name, at: now, joined: now, lg, ph })).catch(() => {});
 }
 /* 25번: 이름을 바꾸면 내가 들어간 모든 방에 새 이름으로 (예전 이름 YM → 영민) */
 function renameAll(){
@@ -2072,7 +2108,7 @@ function drawRooms(){
   $('rmSelBtn').style.display = rmSel.size ? '' : 'none';
   $('rmSelBtn').textContent = `🗑 고른 방 ${rmSel.size}개 지우기`;
   $('logoutBtn').style.display = LS.get('rp_auth', null) ? '' : 'none';
-  $('myName').value = me.name;
+  $('myName').value = me.name; $('myPhone').value = me.phone || '';
   notiState();
   const au = LS.get('rp_auth', null);
   const kk = !!au && (au.k === 'kakao' || /kakao/i.test(au.uid));   // 48번: 카카오로 로그인했으면 카카오로 표시
@@ -2124,17 +2160,17 @@ function drawBar(){
   const html = p.map((id, i) => {
     if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;   // 31번: 빈칸은 모두 ＋친구
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
-    return `<button class="rb pin ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb pin ${reqHas(id) && !cur ? 'wig' : ''} ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('') + (() => {   // 24번: 고정 안 된 방에 들어가 있으면 더보기 바로 옆에 잠깐 보여요
     const tw = twinMap(), cr = tw[room] || room;
     if (!homeOn && room && !p.includes(cr) && getRooms().some(x => x.id === room)) {
       const name = roomName(room);
       return `<button class="rb cur tmp" data-go="${room}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}</button>`;
     }
-    const nw = moreRooms().find(x => unreadN(x.id));   // 29번: 말풍선에 없는 사람이 보낸 새 메시지
+    const nw = moreRooms().find(x => unreadN(x.id)) || moreRooms().find(x => reqHas(x.id));   // 29번: 말풍선에 없는 사람이 보낸 새 메시지   // 52번: 새 대화 신청도
     if (!nw) return '';
     const name = roomName(nw.id), n = unreadN(nw.id);
-    return `<button class="rb tmp unread ${flashing[nw.id] ? 'flash' : ''}" data-go="${nw.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}<i class="cnt">${n > 99 ? '99+' : n}</i></button>`;
+    return `<button class="rb tmp ${n ? 'unread' : ''} ${reqHas(nw.id) ? 'wig' : ''} ${flashing[nw.id] ? 'flash' : ''}" data-go="${nw.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   })();
   const mn = moreRooms().reduce((t, x) => t + (x.id === room && !homeOn ? 0 : unreadN(x.id)), 0);
   const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
@@ -2165,7 +2201,7 @@ function drawMore(){
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
     const nm = roomName(x.id);
     const tmp = FB && othersIn(x.id).length && !othersIn(x.id).some(v => v.lg);   // 42번: 간편 로그인 안 한 사람은 '임시'
-    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}${dupTag(x.id)}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}${tmp ? '<em class="tmpk">임시</em>' : ''}</span><div class="mt"><b>${esc(nm)}</b></div>${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
+    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}${dupTag(x.id)}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}${tmp ? '<em class="tmpk">임시</em>' : ''}</span><div class="mt"><b>${esc(nm)}</b></div>${telBtn(phoneOf(x.id))}${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
   }).join('') : '<div class="pin-empty">말풍선에 없는 친구가 여기에 보여요</div>');
 }
 /* 27번: 더보기 버튼 바로 밑에서 아래로 */
@@ -2949,7 +2985,7 @@ function fileFetch(r0, m){
     if (!b && m.sp) {   // 26번: 스토리지에 있는 파일
       if (!FB || isMine(m)) throw 0;
       const { SM, st } = await stg(), ref = SM.ref(st, m.sp);
-      try { b = await SM.getBlob(ref); }
+      try { b = await Promise.race([SM.getBlob(ref), new Promise((_, no) => setTimeout(no, 8000))]); }   // 52번: 8초 안에 못 받으면 주소로 열기
       catch (e) { return fileUrls[m.fid] = await SM.getDownloadURL(ref); }   // 바로 못 받으면 주소로 열기 (3일 뒤 자동 삭제)
       idbPut('f_' + m.fid, b).catch(() => {});
       FB.D.get(fileRef(r0, m.fid)).then(s => fileGot(r0, m, s.val() || {})).catch(() => {});
@@ -3068,14 +3104,28 @@ $('msgs').addEventListener('click', e => {
   const el = e.target.closest('[data-file]'); if (!el) return;
   const m = msgs[el.dataset.file]; if (!m) return;
   click();
-  fileFetch(room, m).then(u => fileOpen(m, u)).catch(() => toast('이 파일은 받을 수 없어요 (서버에서 지워졌어요)'));
+  fileOpenAny(room, m, el);
 });
+/* 52번: 받은 사진·문서도 눌러서 크게 보기 - 서버에서 못 받아도 화면에 보이는 사진으로 열기 */
+function fileOpenAny(r0, m, el){
+  const shown = el && el.tagName === 'IMG' && el.getAttribute('src') ? el.getAttribute('src') : (fileUrls[m.fid] || m.thumb || '');
+  if (m.kind === 'image' && shown) fileOpen(m, shown);   // 먼저 바로 보여 주고
+  else if (m.kind === 'image' || m.kind === 'doc' || m.kind === 'video') toast('⏳ 여는 중…');
+  fileFetch(r0, m).then(u => {
+    if (m.kind === 'image' && shown) { if (u !== shown && $('imgOv').classList.contains('show')) { const im = $('imgBox').querySelector('img'); if (im) im.src = u; fileBtns(m, u); } return; }
+    fileOpen(m, u);
+  }).catch(() => { if (!(m.kind === 'image' && shown)) toast('이 파일은 받을 수 없어요 (서버에서 지워졌어요)'); });
+}
+function fileBtns(m, u){   // 52번: 크게 보기 화면 - 저장(⬇) · 공유 버튼 (보낸 사람·받은 사람 모두)
+  $('imgSave').style.visibility = ''; $('imgSave').onclick = () => { click(); fileSave(u, m.fname, m); };
+  $('imgShare').onclick = () => { click(); fileShare(u, m); };
+}
 function fileOpen(m, u){
   if (m.kind === 'audio') { songFromFile(m); return; }
   if (m.kind === 'image' || m.kind === 'video') {
     $('imgBox').innerHTML = m.kind === 'image' ? `<img src="${u}" alt="">` : `<video src="${u}" controls playsinline style="width:100%;max-height:70vh;border-radius:10px"></video>`;
     imgZoomReset();
-    $('imgSave').style.visibility = ''; $('imgSave').onclick = () => { click(); fileSave(u, m.fname, m); }; showOv('imgOv'); return;
+    fileBtns(m, u); showOv('imgOv'); return;
   }
   /* 32번: 일반 파일은 저장 · 다른 앱으로 열기 */
   $('foIco').textContent = '📄'; $('foName').textContent = m.fname || '파일'; $('foInfo').textContent = fmtSize(m.size || 0);
@@ -3293,12 +3343,12 @@ document.querySelectorAll('[data-lsend]').forEach(b => {
 /* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
 async function sendLetterLink(kind){
   click(); readW();
-  if (!W.body.trim()) { toast('편지 내용을 먼저 써 주세요'); $('wBody').focus(); return; }
+  if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
   if (rec) await stopRec();
   if (!W.to) W.to = '친구';   // 42번: 받는 사람은 카톡·문자에서 고르니까 이름 안 적어도 돼요
   const id = W.linkRoom || rid(), u = who(), again = !!W.linkRoom;
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
+    letter: { to: W.to, toUid: null, fromName: u.name, body: nameFill(W.body, W.to === '친구' ? '' : W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
   const shared = shareTo(kind, roomURL(id), text, { f: u.name, t: W.to === '친구' ? '' : W.to });   // 공유 창 먼저
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
@@ -3344,7 +3394,7 @@ $('toSend').onclick = async () => {
   W.self = toSel.has('__me'); W.toIds = [...toSel].filter(x => x !== '__me');
   W.to = [...(W.self ? ['나'] : []), ...W.toIds.map(roomName)].join(', ').slice(0, 40);
   $('wTo').value = W.to; hideOv('toOv');
-  if (!W.body.trim()) { click(); toast('받는 사람을 정했어요 · 편지를 써 주세요'); return; }   // 아직 안 썼으면 고르기만
+  if (!W.body.trim()) { click(); toast('받는 사람을 정했어요 · ✏ 편지 내용을 다 써 주세요'); return; }   // 아직 안 썼으면 고르기만
   sendLetter(false);
 };
 /* 26번: 고른 친구들 · 나에게 보내기 */
@@ -3352,7 +3402,7 @@ async function sendPicked(slow){
   if (rec) await stopRec();
   const u = who(), ids = W.toIds || [], when = slow ? nextMorning() : 0;
   const mk = to => ({ from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to, toUid: null, fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when } });
+    letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when } });
   ids.forEach(id => { const m = mk(roomName(id)); if (id === room && !homeOn) addMsg(m); else pushTo(id, m); });
   if (W.self) LS.set('rp_selfletters', [...selfL(), { ...mk(u.name), id: 'self_' + rid(), self: true }].slice(-60));
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
@@ -3364,7 +3414,7 @@ function nextMorning(){ const d = new Date(); d.setDate(d.getDate() + 1); d.setH
 async function sendLetter(slow){
   if (rec) await stopRec();
   readW();
-  if (!W.body.trim()) { toast('편지 내용을 써 주세요'); return; }
+  if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
   if ((W.toIds && W.toIds.length) || W.self) { sendPicked(slow); return; }
   if (homeOn) {   // 26번: 메인 화면에서 쓴 편지 → 이름이 같은 친구 방, 없으면 고르기
     const hit = W.to && visibleRooms().find(x => roomName(x.id) === W.to);
@@ -3374,7 +3424,7 @@ async function sendLetter(slow){
   if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
   const u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: W.body, paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: slow ? nextMorning() : 0 } };
+    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: slow ? nextMorning() : 0 } };
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   closeWriter();
   flyToMailbox(m, () => { render.jump = true; addMsg(m); toast(slow ? '🌙 내일 아침 8시에 도착해요' : '📮 편지를 우체통에 넣었어요'); });
@@ -4739,7 +4789,7 @@ $('svOutTop').onclick = () => { click(); svExit(); };
 $('svWrite').onclick = () => { click(); svHush(); openWriter(S.view === 'chat' && S.fam ? { to: S.fam.name, body: '', paper: 'tulip', font: 'pen', stickers: [], voice: null, draftId: null, align: '' } : undefined); };
 $('svMail').onclick = () => { svHush(); const un = unreadIn(); if (un.length) { click(); openBox(un); } else $('pileBtn').click(); };   // 새 편지가 있으면 우체통, 없으면 편지함
 $('tmSilver').onclick = () => { click(); closeMenus(); svOpen(); };
-$('svChat').addEventListener('click', e => { const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); } });
+$('svChat').addEventListener('click', e => { const f = e.target.closest('[data-svfile]'); if (f) { const m = msgs[f.dataset.svfile]; if (m) { click(); fileOpenAny(room, m, f.querySelector('img')); } return; } const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); } });
 /* 같이 듣는 노래: 위쪽 큰 ▶/⏸ 버튼 */
 function svMusicDraw(){
   const b = $('svMusic'), on = S.on && S.view === 'chat' && !!M;
@@ -4752,12 +4802,13 @@ $('svPhone').onclick = () => { if (!S.fam || !S.fam.phone) return; click(); svHu
 let svChatHTML = '';
 function svChat(){
   if (S.room !== room) return;
-  const list = sorted().filter(m => m.type === 'text' || m.type === 'voice').slice(-40);
+  const list = sorted().filter(m => m.type === 'text' || m.type === 'voice' || m.type === 'file').slice(-40);   // 52번: 실버 모드에서도 사진·파일 보이기
   let html = '', last = '';
   list.forEach(m => {
     const mine = isMine(m);
     if (!mine && m.name !== last) html += `<div class="sv-who">${esc(m.name)}</div>`;
     last = mine ? '' : m.name;
+    if (m.type === 'file') { const u = fileUrls[m.fid] || m.thumb || ''; html += `<div class="sv-m ${mine ? 'me' : 'them'}" data-svfile="${m.id}" style="cursor:pointer">${m.kind === 'image' && u ? `<img src="${u}" alt="" style="max-width:100%;max-height:240px;border-radius:12px;display:block">` : fileLabel(m) + ' · 눌러서 보기'}</div>`; return; }
     html += m.type === 'voice' ? `<div class="sv-m voice ${mine ? 'me' : 'them'}" data-vid="${m.id}">🔊 목소리 듣기</div>` : `<div class="sv-m ${mine ? 'me' : 'them'}">${linky(m.text)}</div>`;
   });
   html = `<div class="sv-wrap">${html || '<div class="sv-empty">아직 대화가 없어요</div>'}</div>`;
@@ -5329,6 +5380,8 @@ function start(){
   started = true;
   tdInit();   // 32번: 처음엔 할 일 예시 3줄
   setTimeout(askMode, 700);   // 39번
+  setTimeout(battAsk, 6000);   // 52번: 배터리 제한 없음 안내 (처음 1번 · 업데이트한 사람도)
+  setTimeout(reqShowNext, 2500);   // 52번: 앱을 닫아 둔 사이에 온 대화 신청
   initStore();
   setInterval(tdRemind, 15000); setTimeout(tdRemind, 3000);   // 32번: 할 일 알림 시간
   if (LS.get('rp_sv_pend', null)) svApplyInvite();
@@ -5340,6 +5393,70 @@ function start(){
   setInterval(remindBox, 30000);
   setInterval(() => { if (!document.hidden) checkRemoved(); }, 30000);   // 29번
 }
+/* 52번: 대화 신청 - 새 대화방이 생기면 알림 창 + 말풍선 꿈틀 (들어가면 멈춤) */
+function reqAll(){ return LS.get('rp_req', {}); }
+function reqHas(id){ return !!reqAll()[id]; }
+function reqAdd(id, n, at){
+  if (at && Date.now() - at > 7 * 864e5) return;   // 오래된 신청은 넘어가요
+  const r = reqAll(); if (r[id]) return;
+  r[id] = { n: n || '', at: at || Date.now() }; LS.set('rp_req', r);
+  barHTML = ''; queueRender(); reqShowNext();
+}
+function reqDone(id){ const r = reqAll(); if (!r[id]) return; delete r[id]; LS.set('rp_req', r); barHTML = ''; }
+var reqCur = null, reqShown = new Set();
+function reqShowNext(){
+  if (!started || reqCur) return;
+  if (document.querySelector('.ov.show') || (S && S.on)) { setTimeout(reqShowNext, 4000); return; }   // 다른 창이 떠 있으면 기다렸다가
+  const e = Object.entries(reqAll()).find(([id]) => !reqShown.has(id) && !(id === room && !homeOn));
+  if (!e) return;
+  const [id, v] = e; reqCur = id; reqShown.add(id);
+  $('reqTitle').textContent = `${v.n || roomName(id) || '친구'}님이 대화를 신청하셨어요`;
+  showOv('reqOv'); try { dingdong(); } catch (er) {}
+}
+$('reqGo').onclick = () => { const id = reqCur; reqCur = null; hideOv('reqOv'); click(); if (id) openRoom(id); setTimeout(reqShowNext, 1500); };
+$('reqLater').onclick = () => { reqCur = null; hideOv('reqOv'); click(); toast('💬 위쪽 꿈틀거리는 말풍선을 누르면 대화방으로 가요'); setTimeout(reqShowNext, 1500); };
+/* 52번: 배터리 '제한 없음' · 알림 허용 안내 - 처음 1번 (업데이트한 사람도 앱을 열면 1번) */
+function battAsk(){
+  if (LS.get('rp_batt52', 0) || !/Android/i.test(navigator.userAgent)) return;
+  if (document.querySelector('.ov.show') || (S && S.on && svShown && (svShown('svVoice') || svShown('svEdit') || svShown('svSetup')))) { setTimeout(battAsk, 5000); return; }
+  $('battSteps').style.display = 'none'; $('battGo').textContent = '허용하기';
+  showOv('battOv');
+}
+$('battLater').onclick = () => { click(); hideOv('battOv'); LS.set('rp_batt52', 1); toast('나중에 ⚙ 설정에서 알림을 켤 수 있어요'); };
+$('battGo').onclick = async () => {
+  click();
+  if ($('battSteps').style.display !== 'none') { LS.set('rp_batt52', 1); hideOv('battOv'); return; }   // 두 번째 누르면 닫기
+  if ('Notification' in window && Notification.permission !== 'granted') { try { await setupPush(true); } catch (e) {} }   // 알림 허용 먼저
+  $('battSteps').style.display = ''; $('battGo').textContent = '다 했어요';
+  const t0 = Date.now();
+  try { location.href = 'intent:#Intent;action=android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS;end'; } catch (e) {}   // 되는 폰은 배터리 설정 화면이 바로 열려요
+  setTimeout(() => { if (Date.now() - t0 < 1800 && document.visibilityState === 'visible') toast('설정 화면이 안 열리면 위 순서대로 들어가 주세요'); }, 1500);
+};
+/* 52번-3: 전화번호 · 📞 버튼 · 이름 넣기 */
+function phoneClean(t){ const d = String(t || '').replace(/[^\d+]/g, ''); return d.length >= 8 ? d.slice(0, 16) : ''; }
+function phoneOf(id){ const v = othersIn(id).find(x => x.ph); return v ? v.ph : ''; }
+function telBtn(ph){ return ph ? `<button class="telb" data-tel="${esc(ph)}" title="전화 걸기">📞</button>` : ''; }
+document.addEventListener('click', e => {   // 📞 누르면 바로 전화 (대화방으로 안 가요)
+  const b = e.target.closest('[data-tel]'); if (!b) return;
+  e.preventDefault(); e.stopPropagation(); click();
+  location.href = 'tel:' + b.dataset.tel.replace(/[^\d+]/g, '');
+}, true);
+$('myPhoneOk').onclick = () => {
+  const raw = $('myPhone').value.trim(), ph = phoneClean(raw);
+  if (raw && !ph) { toast('전화번호를 다시 확인해 주세요'); return; }
+  click(); me.phone = ph; saveMe();
+  if (FB) getRooms().forEach(x => joinRoom(x.id));
+  if (FB) grpList().forEach(g => joinRoom(g.id));
+  toast(ph ? '📞 전화번호를 저장했어요' : '전화번호를 지웠어요');
+};
+const NAME_TAG = '{이름}';
+function nameFill(t, n){ return String(t || '').split(NAME_TAG).join(n || ''); }
+$('nameInsBtn').onclick = () => {
+  click(); const ta = $('wBody'), a = ta.selectionStart ?? ta.value.length, b = ta.selectionEnd ?? a;
+  ta.value = ta.value.slice(0, a) + NAME_TAG + ta.value.slice(b);
+  ta.focus(); ta.selectionStart = ta.selectionEnd = a + NAME_TAG.length; readW();
+  toast('👤 보낼 때 {이름} 자리에 받는 사람마다 연락처 이름이 들어가요');
+};
 function begin(){
   const newRoom = urlRoom && !getRooms().some(x => x.id === urlRoom);   // 링크로 처음 들어온 방
   if (!me.name && urlRoom) LS.set('rp_rooms', getRooms().filter(x => x.id === urlRoom));   // 처음 온 사람은 받은 방 하나만
@@ -5349,7 +5466,7 @@ function begin(){
 }
 /* 처음 화면 (이름 · 로그인 · 실버 모드) - 실버 모드에서 '처음 화면으로'를 눌러도 여기로 */
 function nameScreen(){
-    $('nameIn').value = me.name || '';
+    $('nameIn').value = me.name || ''; $('phoneIn').value = me.phone || '';
     if (svInv && !started) { $('nameIn').placeholder = '어르신 이름 (예: 순자)'; $('nameOk').textContent = '시작'; $('nameSilver').style.display = 'none'; }
     else { $('nameIn').placeholder = '예: 영민'; $('nameSilver').style.display = ''; }
     $('nameInstall').style.display = isStandalone() ? 'none' : '';
@@ -5359,7 +5476,7 @@ function nameScreen(){
       const n = $('nameIn').value.trim(); if (!n) { toast('이름을 적어 주세요'); $('nameIn').focus(); return; }
       if (going) return;
       $('nameIn').blur(); if (document.activeElement && document.activeElement.blur) document.activeElement.blur();   // 키보드 내리기
-      me.name = n; saveMe(); hideOv('nameOv');   // 48번: 같은 이름이 있어도 돼요
+      me.name = n; me.phone = phoneClean($('phoneIn').value); saveMe(); hideOv('nameOv');   // 52번: 전화번호는 안 써도 돼요   // 48번: 같은 이름이 있어도 돼요
       if (silver || (svInv && !started)) LS.set('rp_silver_on', 1);
       click();
       if (!started) start(); else if (silver) svOpen();
@@ -5485,7 +5602,7 @@ function grpPeople(id){
   const out = (grpMeta[id] || {}).out || {}, by = {};
   Object.entries(roomMembers[id] || {}).forEach(([u, v]) => {
     if (!v || !v.name || me.ids.includes(u) || v.name === me.name || out[u]) return;
-    if (!by[v.name] || (v.at || 0) > (by[v.name].at || 0)) by[v.name] = { uid: u, name: v.name, at: v.at || 0 };
+    if (!by[v.name] || (v.at || 0) > (by[v.name].at || 0)) by[v.name] = { uid: u, name: v.name, at: v.at || 0, ph: v.ph || '' };
   });
   return Object.values(by).sort((a, b) => a.name.localeCompare(b.name, 'ko'));
 }
@@ -5515,6 +5632,7 @@ function grpWatch(id){
     const v = s.val() || {}, pid = s.key;
     if (!pid || getRooms().some(x => x.id === pid)) return;
     unRemove(pid); saveRoom(pid, v.n || ''); syncWatchers(); queueRender();
+    reqAdd(pid, v.n || '', v.at || 0);   // 52번: 대화 신청 알림 창 · 말풍선 꿈틀
   }));
   un.push(FB.D.onValue(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members'), s => {   // 51번: 사람이 들어오면 실버 화면에 바로
     const rm = roomMembers[id] || (roomMembers[id] = {});
@@ -5572,7 +5690,7 @@ function grpDrawPanel(){
     + (gnHas(meta.notice) ? `<div class="gnote" data-gview>📢 ${esc(gnLine(meta.notice))}</div>` : '')
     + `<div class="hrow gall" data-gall><div class="hav">전체</div><div class="htx"><b>💬 ${esc(grpName(id))} 다 같이 대화하기</b><small>${esc(L ? L.t : '눌러서 공동체 사람 모두와 대화해요')}</small></div><div class="hside">${n ? `<i>${n > 99 ? '99+' : n}</i>` : ''}</div></div>`
     + (ppl.length ? ppl.map(p => { const pid = pairId(p.uid), m = unreadN(pid), pl = lastMsg[pid];
-        return `<div class="hrow" data-gmem="${p.uid}"><div class="hav">${ini(p.name)}</div><div class="htx"><b>${esc(p.name)}</b><small>${esc(pl ? pl.t : '눌러서 바로 대화')}</small></div><div class="hside">${m ? `<i>${m > 99 ? '99+' : m}</i>` : ''}</div></div>`; }).join('')
+        return `<div class="hrow" data-gmem="${p.uid}"><div class="hav">${ini(p.name)}</div><div class="htx"><b>${esc(p.name)}</b><small>${esc(pl ? pl.t : '눌러서 바로 대화')}</small></div>${telBtn(p.ph || phoneOf(pid))}<div class="hside">${m ? `<i>${m > 99 ? '99+' : m}</i>` : ''}</div></div>`; }).join('')
       : '<div class="tdempty">아직 아무도 안 들어왔어요 · 아래 초대하기로 링크를 보내 주세요</div>')
     + `<div class="gtools"><button class="y" data-ginv>＋ 사람 초대하기</button><button data-gpick>📮 우체통 친구 초대</button>`
     + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gsend>📨 모두에게 따로 보내기</button>` : `<button data-gleave>공동체 나가기</button>`)
@@ -5656,7 +5774,7 @@ $('hGroup').addEventListener('click', e => {
     const ppl = grpPeople(id); if (!ppl.length) { toast('아직 공동체에 들어온 사람이 없어요'); return; }
     click();
     const t = prompt(`공동체 사람 ${ppl.length}명에게 각자 따로 보낼 말`, ''); if (!t || !t.trim()) return;
-    ppl.forEach(p => { const pid = pairId(p.uid); pairInfo[pid] = { gid: id, uid: p.uid, name: p.name, sent: false }; grpPing(pid); saveRoom(pid, p.name); pushTo(pid, { from: realMe.uid, name: me.name, type: 'text', text: t.trim(), at: Date.now() }); });
+    ppl.forEach(p => { const pid = pairId(p.uid); pairInfo[pid] = { gid: id, uid: p.uid, name: p.name, sent: false }; grpPing(pid); saveRoom(pid, p.name); pushTo(pid, { from: realMe.uid, name: me.name, type: 'text', text: nameFill(t.trim(), aliasOf(pid) || p.name), at: Date.now() }); });   // 52번: {이름} → 사람마다
     sentFx(); toast(`📨 ${ppl.length}명에게 따로 보냈어요`); return;
   }
   if (e.target.closest('[data-gleave]')) {
