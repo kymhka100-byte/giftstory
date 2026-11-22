@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 53번: 🎄 크리스마스 카드 · 🎆 연말연시 카드(카드 그림 고르기 · 예시 문구 · 크리스마스 스티커 · 봉투 고르기 · 우표 고르면 날짜 도장 쾅 · 별·반짝이 봉인 · 리본 · 날짜·시간 정해서 보내기) · 메인에 카드 아이콘 2개 · 메인 문구 두 줄 · 도착한 편지 봉투 꿈틀 · 카톡·문자 초대는 보내기를 누를 때 -->
 <!-- 52번-3: 편지 쓰기 👤 이름 넣기(받는 사람마다 연락처 이름) · 처음 화면·설정에 전화번호 칸(안 써도 돼요) · 친구 목록·더보기·공동체 목록에 📞 버튼 -->
 <!-- 52번-2: 배터리 '제한 없음'·알림 허용 안내 창(처음 1번 · 업데이트한 사람도) · 대화 신청 알림 창(확인 → 그 대화방 / 나중에) · 새 대화방 말풍선 꿈틀 -->
 <!-- 52번-1: 받은 사진·문서도 눌러서 크게 보기(못 받아도 보이는 사진으로 열기) · 크게 보기에 📤 공유 버튼 · 실버 모드 전화 버튼 밝게 · 실버 모드에도 사진·파일 · 내용 없이 보내면 "편지 내용을 다 써 주세요" -->
@@ -698,6 +699,36 @@ body.lview #homeLogo{display:none}
 .lhenv .f,.lhenv .t{position:absolute;font-family:'Nanum Pen Script',cursive;color:#5a3a22;text-align:left;line-height:1.25}
 .lhenv .f{left:9%;top:11%;font-size:min(5vw,22px)}
 .lhenv .t{left:38%;top:44%;font-size:min(7vw,32px)}
+/* ===== 53번: 카드 · 봉투 ===== */
+@keyframes lhwig{0%,58%,100%{transform:none}64%{transform:rotate(-4deg) translateY(-4px)}70%{transform:rotate(4deg)}76%{transform:rotate(-3deg) translateY(-2px)}82%{transform:rotate(2deg)}88%{transform:none}}
+#lhEnv{animation:lhdrop .9s cubic-bezier(.2,1.4,.4,1) both,lhwig 2.4s 1s ease-in-out infinite}
+#lhEnv.card .f,#lhEnv.card .t{display:none}
+.lhic.l{left:14px}
+.lhic .cardic{background:rgba(20,60,35,.82)}
+.lhic .cardic svg{width:40px;height:40px}
+.paperbox.card{background:var(--pbg) var(--pimg) no-repeat top center/100% auto;padding:14px var(--cpr,16px) 18px 16px;min-height:60vh}
+.paperbox.card:before,.paperbox.card:after{display:none}
+.paperbox.card .lined{background-image:none;text-shadow:var(--tsh,none)}
+.paperbox.card .ptop,.paperbox.card .pfrom{text-shadow:var(--tsh,none)}
+.paperbox.card .ptop input{color:inherit;text-shadow:inherit}
+.toico button.sel{outline:3px solid #ffd54f;border-radius:10px}
+.cgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.cgrid button{border:2px solid #444;border-radius:12px;background:#000 center/cover;aspect-ratio:900/628;padding:0;position:relative;overflow:hidden}
+.cgrid button.sel{border-color:#ffd54f}
+.cgrid button span{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);color:#fff;font-size:15px;padding:4px}
+.env.cardenv{background:none;box-shadow:0 5px 14px rgba(0,0,0,.55)}
+.env.cardenv svg{position:absolute;inset:0;width:100%;height:100%}
+#envOv .panel{background:#000;color:#fff}
+#envPrev svg{width:100%;height:auto;display:block}
+#envPrev.thump svg{animation:bump .4s}
+.eopts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:6px 0 4px}
+.eopts button{background:#1b1b1f;border:2px solid #3a3a40;border-radius:10px;padding:6px 2px;color:#fff;font-size:13px}
+.eopts button.sel{border-color:#ffd54f}
+.eopts svg{width:100%;height:42px;display:block}
+.elab{font-size:17px;color:#ddd;margin-top:12px}
+.erow{display:flex;gap:8px;align-items:center;margin-top:6px;font-size:17px}
+.erow input{flex:1;min-width:0;background:#1b1b1f;border:1px solid #444;border-radius:10px;color:#fff;font-size:18px;padding:9px}
+#envWhen{color-scheme:dark}
 #lhHint{margin-top:14px;color:rgba(255,255,255,.7);font-size:15px}
 /* ===== 32번 ===== */
 #homeList{flex-direction:column;padding:8px 0 0}
@@ -966,7 +997,8 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <div id="homeList">
     <div id="letterHome">
       <a id="lhSite" href="https://www.giftwave.com">www.giftwave.com</a>
-      <div id="lhQuote"><q>소중한 분에게 정성 들여 마음을 전하세요</q></div>
+      <div id="lhQuote"><q>소중한 분에게<br>정성 들여 마음을 전하세요</q></div>
+      <div class="lhic l"><button class="cardic" id="lhXmas" title="크리스마스 카드"><svg viewBox="0 0 40 40"><path d="M20 3l-9 13h5l-8 11h24l-8-11h5z" fill="#4caf50"/><rect x="17" y="27" width="6" height="7" fill="#8d5a2b"/><circle cx="20" cy="4" r="2.6" fill="#ffd54f"/><circle cx="16" cy="20" r="1.8" fill="#e53935"/><circle cx="24" cy="15" r="1.6" fill="#ffd54f"/><circle cx="23" cy="23" r="1.8" fill="#e53935"/></svg></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
       <div class="lhic r"><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
@@ -1051,7 +1083,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   </div>
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
-    <div class="wtopchips"><button class="chip" id="wPick">🎨 편지지·글씨</button><button class="chip" id="wDrafts">📝 쓰던 편지</button><button class="chip" id="wPile" style="margin-left:auto">📚 내 편지함</button></div>
+    <div class="wtopchips"><button class="chip" id="wPick">🎨 편지지·글씨</button><button class="chip" id="wDrafts">📝 쓰던 편지</button><button class="chip" id="wCard">🎄 크리스마스 카드 쓰기</button><button class="chip" id="wPile" style="margin-left:auto">📚 내 편지함</button></div>
     <div class="paperbox" id="wPaper">
       <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button><button type="button" data-lsend="kakao" title="카톡"></button><button type="button" data-lsend="sms" title="문자"></button></span></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
@@ -1081,6 +1113,34 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <button id="wSave">💾 임시 저장</button>
     <button class="send" id="wSend">📮 바로 보내기</button>
     <button class="slow" id="wSlow">🌙 내일 아침</button>
+    <button class="send" id="wEnv" style="display:none">💌 봉투에 담기</button>
+  </div>
+</div>
+
+<!-- 53번: 카드 고르기 -->
+<div class="ov" id="cardOv">
+  <div class="panel" style="background:#000">
+    <h2 id="cardTtl">🎄 카드 고르기</h2>
+    <div class="chips"><button class="chip" data-ck="xmas">🎄 크리스마스</button><button class="chip" data-ck="ny">🎆 연말연시</button></div>
+    <div class="cgrid" id="cardGrid"></div>
+    <button class="big" data-close>닫기</button>
+  </div>
+</div>
+<!-- 53번: 봉투 쓰기 -->
+<div class="ov" id="envOv">
+  <div class="panel">
+    <h2>💌 봉투 쓰기</h2>
+    <div id="envPrev"></div>
+    <div class="elab">봉투 고르기</div><div class="eopts" id="eoEnv"></div>
+    <div class="elab">우표 고르기 <small>(붙이면 날짜 도장이 쾅)</small></div><div class="eopts" id="eoStamp"></div>
+    <div class="elab">봉인 스티커</div><div class="eopts" id="eoSeal"></div>
+    <div class="elab">리본</div><div class="eopts" id="eoRib"></div>
+    <div class="erow">받는 사람 <input id="envTo" maxlength="12"></div>
+    <div class="erow">보내는 사람 <input id="envFrom" maxlength="12"></div>
+    <div class="elab">보낼 날짜·시간</div>
+    <div class="erow"><input type="datetime-local" id="envWhen"><button class="chip" id="envNow">지금 바로</button></div>
+    <button class="big r" id="envSend">📮 보내기</button>
+    <button class="big" data-close>닫기</button>
   </div>
 </div>
 
@@ -1533,7 +1593,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '52';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '53';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1566,14 +1626,15 @@ const SHOP = [];   // 34번: 편지지 가게는 나중에
 const myPapers = () => LS.get('rp_mypapers', []);
 const gotIds = () => LS.get('rp_got', []);
 const EXTRA = {};   // 친구가 보낸 나만의 편지지
-const paperOf = id => PAPERS.find(p => p.id === id) || SHOP.find(p => p.id === id) || myPapers().find(p => p.id === id) || EXTRA[id] || PAPERS[0];
+const paperOf = id => PAPERS.find(p => p.id === id) || CARDS.find(p => p.id === id) || SHOP.find(p => p.id === id) || myPapers().find(p => p.id === id) || EXTRA[id] || PAPERS[0];
 /* 편지에 붙어 온 나만의 편지지도 쓸 수 있게 */
 const lp = L => { if (L.paperData && L.paper && !EXTRA[L.paper]) EXTRA[L.paper] = L.paperData; return paperOf(L.paper); };
 const paperDataFor = id => id && id.startsWith('my_') ? myPapers().find(p => p.id === id) || null : null;
 const fontOf = id => FONTS.find(f => f.id === id) || FONTS[0];
 const paperVars = p => `--pbg:${p.bg};--lc:${p.line};--ink:${p.ink};--ec:${p.env};--decor:${p.decor ? svgURI(p.decor) : 'none'}`
   + (p.img ? `;--pimg:url(${p.img});--pslice:${p.slice};--pbw:${p.bw}` : '')
-  + (p.photo ? `;--pimg:url(${p.photo});--pfade:${p.fade}` : '');
+  + (p.photo ? `;--pimg:url(${p.photo});--pfade:${p.fade}` : '')
+  + (p.svg ? `;--pimg:${svgURI(p.svg)}` : '') + (p.cpr ? `;--cpr:${p.cpr}` : '') + (p.tsh ? `;--tsh:${p.tsh}` : '');
 const pcls = p => p.cls || '';
 
 /* ----- 사람 (전송 버튼 위 투명 버튼: 나 ↔ 테스트 친구) ----- */
@@ -1836,6 +1897,8 @@ function lhDraw(){
   const m = un[0], key = un.map(x => x.id).join(',');
   if (!a._on || a._k !== key) { a._on = true; a._k = key; letterArriveSnd(); }   // 51번: 봉투가 화면에 나올 때마다 (안 읽은 동안) "편지가 왔어요"
   if (env._k === key) return; env._k = key;
+  const cd = m.letter && m.letter.card; env.classList.toggle('card', !!cd);   // 53번: 카드는 고른 봉투 그대로
+  if (cd) { env._f = ''; env.style.backgroundImage = svgURI(envSVG({ ...cd, to: cd.to || me.name, from: cd.from || m.letter.fromName, at: whenOf(m) })); }
   env.style.animation = 'none'; void env.offsetWidth; env.style.animation = '';
   env.querySelector('.f').innerHTML = `보내는 사람<br>${esc((m.letter && m.letter.fromName) || m.name || '')}`;
   env.querySelector('.t').innerHTML = `받는 사람<br>${esc(me.name || (m.letter && m.letter.to) || '')} 님께`;
@@ -1900,6 +1963,8 @@ const fmtShort = t => { const d = new Date(t), n = new Date(); return d.toDateSt
 $('homeList').addEventListener('click', e => {
   if (e.target.closest('#homeInv')) { $('addRoom').click(); return; }
   if (e.target.closest('#lhWrite')) { click(); openWriter(); return; }
+  if (e.target.closest('#lhXmas')) { click(); openWriter(); openCards('xmas'); return; }   // 53번
+  if (e.target.closest('#lhNY')) { click(); openWriter(); openCards('ny'); return; }
   if (e.target.closest('#lhBox')) { click(); const un = unreadIn(); if (un.length) openBox(un); else $('pileBtn').click(); return; }
   const le = e.target.closest('#lhEnv'); if (le) { const un = unreadIn(); if (un.length > 1) { click(); openBox(un); } else if (un.length) lhRip(le, un[0]); return; }
   const hv = e.target.closest('[data-hv]'); if (hv) { click(); LS.set('rp_homeview', hv.dataset.hv); drawHome(); return; }
@@ -2692,6 +2757,7 @@ const unreadIn = () => [...received().filter(m => !m.read), ...selfL().filter(m 
 
 function envHTML(m){
   const L = m.letter;
+  if (L.card) return `<div class="env cardenv">${envSVG({ ...L.card, to: L.card.to || L.to, from: L.card.from || L.fromName, at: whenOf(m) })}</div>`;   // 53번
   const p = lp(L);
   return `<div class="env ${p.cls === 'pic' ? 'pic' : p.cls === 'photo' ? 'pic photo' : ''}" style="${paperVars(p)}">
     <div class="stamp"><i>♥<b>우표</b></i></div>
@@ -3272,7 +3338,7 @@ function buildPick(){
   $('fontGrid').innerHTML = FONTS.map(f => `<button class="fchip ${W.font === f.id ? 'sel' : ''}" data-f="${f.id}" style="${paperVars(p)};font-family:${f.css};font-size:${f.size - 2}px">못다한 그 말<small>${f.name}</small></button>`).join('');
 }
 function buildStk(){
-  $('stkChips').innerHTML = STICKERS.map(s => { const n = W.stickers.filter(x => x === s).length; return `<button class="chip ${n ? 'sel' : ''}" data-s="${s}" style="font-size:22px;padding:3px 9px;position:relative">${s}${n > 1 ? `<i class="stkn">${n}</i>` : ''}</button>`; }).join('');   // 42번: 누른 만큼 개수
+  $('stkChips').innerHTML = (W.card ? XSTK : STICKERS).map(s => { const n = W.stickers.filter(x => x === s).length; return `<button class="chip ${n ? 'sel' : ''}" data-s="${s}" style="font-size:22px;padding:3px 9px;position:relative">${s}${n > 1 ? `<i class="stkn">${n}</i>` : ''}</button>`; }).join('');   // 42번: 누른 만큼 개수
 }
 function applyW(){
   const f = fontOf(W.font);
@@ -3283,6 +3349,10 @@ function applyW(){
   $('wBody').classList.toggle('center', W.align === 'center');
   $('alignBtn').classList.toggle('sel', W.align === 'center');
   $('wStk').textContent = W.stickers.join('');
+  const c = !!W.card;   // 53번: 카드는 봉투에 담아서 보내요
+  $('wSend').style.display = $('wSlow').style.display = c ? 'none' : ''; $('wEnv').style.display = c ? '' : 'none';
+  $('wCard').textContent = c ? '🎴 카드 바꾸기' : '🎄 크리스마스 카드 쓰기';
+  document.querySelectorAll('[data-lsend]').forEach(b => b.classList.toggle('sel', W.via === b.dataset.lsend));
 }
 $('step1').addEventListener('click', e => {
   const a = e.target.closest('[data-act]');
@@ -3338,23 +3408,27 @@ $('toBtn').innerHTML = ICON_POST.replace('<rect width="62" height="62" rx="16" f
 $('wTo').addEventListener('input', () => { if (W) { W.toIds = null; W.self = false; } });   // 이름을 직접 고치면 고른 친구는 풀려요
 document.querySelectorAll('[data-lsend]').forEach(b => {
   b.innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
-  b.onclick = () => sendLetterLink(b.dataset.lsend);
+  b.onclick = () => {   // 53번: 카톡·문자는 고르기만 · 편지를 다 쓰고 보내기를 누를 때 초대가 가요
+    click(); readW(); W.via = W.via === b.dataset.lsend ? null : b.dataset.lsend; W.toIds = null; W.self = false; applyW();
+    if (W.via) toast(`${W.via === 'kakao' ? '카톡' : '문자'}으로 보내요 · 편지를 다 쓰고 ${W.card ? '💌 봉투에 담기' : '📮 보내기'}를 누르면 그때 초대가 가요`);
+  };
 });
 /* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
-async function sendLetterLink(kind){
+async function sendLetterLink(kind, when){
   click(); readW();
   if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
   if (rec) await stopRec();
   if (!W.to) W.to = '친구';   // 42번: 받는 사람은 카톡·문자에서 고르니까 이름 안 적어도 돼요
   const id = W.linkRoom || rid(), u = who(), again = !!W.linkRoom;
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: null, fromName: u.name, body: nameFill(W.body, W.to === '친구' ? '' : W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0 } };
+    letter: { to: W.to, toUid: null, fromName: u.name, body: nameFill(W.body, W.to === '친구' ? '' : W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when || 0, card: W.env || null } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
   const shared = shareTo(kind, roomURL(id), text, { f: u.name, t: W.to === '친구' ? '' : W.to });   // 공유 창 먼저
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   await shared;
-  dingdong(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
+  dingdong(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');
+  hideOv('envOv');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
 }
 $('wSlow').onclick = () => sendLetter(true);
 /* 22번: 빨간 우체통 친구 고르기 (모두 선택 가능) → 친구마다 그 방 우체통으로 */
@@ -3398,36 +3472,37 @@ $('toSend').onclick = async () => {
   sendLetter(false);
 };
 /* 26번: 고른 친구들 · 나에게 보내기 */
-async function sendPicked(slow){
+async function sendPicked(slow, at){
   if (rec) await stopRec();
-  const u = who(), ids = W.toIds || [], when = slow ? nextMorning() : 0;
+  const u = who(), ids = W.toIds || [], when = at || (slow ? nextMorning() : 0);
   const mk = to => ({ from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when } });
+    letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when, card: W.env || null } });
   ids.forEach(id => { const m = mk(roomName(id)); if (id === room && !homeOn) addMsg(m); else pushTo(id, m); });
   if (W.self) LS.set('rp_selfletters', [...selfL(), { ...mk(u.name), id: 'self_' + rid(), self: true }].slice(-60));
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   closeWriter(); dingdong(); bumpBox(); render.jump = true; queueRender(); updateFlag();
   const n = ids.length + (W.self ? 1 : 0);
-  toast(slow ? '🌙 내일 아침 8시에 도착해요' : W.self && !ids.length ? '📝 나에게 편지를 보냈어요 · 우체통에 도착해요' : `📮 ${n}통 보냈어요`);
+  toast(at ? `⏰ ${cardWhen(at)}에 도착해요` : slow ? '🌙 내일 아침 8시에 도착해요' : W.self && !ids.length ? '📝 나에게 편지를 보냈어요 · 우체통에 도착해요' : `📮 ${n}통 보냈어요`);
 }
 function nextMorning(){ const d = new Date(); d.setDate(d.getDate() + 1); d.setHours(8, 0, 0, 0); return d.getTime(); }
-async function sendLetter(slow){
+async function sendLetter(slow, at){
   if (rec) await stopRec();
-  readW();
+  readW(); at = at || W.at || 0;   // 53번: 봉투에서 정한 시간
   if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
-  if ((W.toIds && W.toIds.length) || W.self) { sendPicked(slow); return; }
+  if (W.via) { sendLetterLink(W.via, at || (slow ? nextMorning() : 0)); return; }   // 53번
+  if ((W.toIds && W.toIds.length) || W.self) { sendPicked(slow, at); return; }
   if (homeOn) {   // 26번: 메인 화면에서 쓴 편지 → 이름이 같은 친구 방, 없으면 고르기
     const hit = W.to && visibleRooms().find(x => roomName(x.id) === W.to);
-    if (hit) { W.toIds = [hit.id]; sendPicked(slow); return; }
+    if (hit) { W.toIds = [hit.id]; sendPicked(slow, at); return; }
     toast('받는 사람을 골라 주세요'); $('toBtn').click(); return;
   }
   if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
   const u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: slow ? nextMorning() : 0 } };
+    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: at || (slow ? nextMorning() : 0), card: W.env || null } };
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   closeWriter();
-  flyToMailbox(m, () => { render.jump = true; addMsg(m); toast(slow ? '🌙 내일 아침 8시에 도착해요' : '📮 편지를 우체통에 넣었어요'); });
+  flyToMailbox(m, () => { render.jump = true; addMsg(m); toast(at ? `⏰ ${cardWhen(at)}에 도착해요` : slow ? '🌙 내일 아침 8시에 도착해요' : '📮 편지를 우체통에 넣었어요'); });
 }
 function flyToMailbox(m, done){
   const fly = $('fly');
@@ -5432,6 +5507,117 @@ $('battGo').onclick = async () => {
   try { location.href = 'intent:#Intent;action=android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS;end'; } catch (e) {}   // 되는 폰은 배터리 설정 화면이 바로 열려요
   setTimeout(() => { if (Date.now() - t0 < 1800 && document.visibilityState === 'visible') toast('설정 화면이 안 열리면 위 순서대로 들어가 주세요'); }, 1500);
 };
+/* ===== 53번: 크리스마스 · 연말연시 카드 · 봉투 ===== */
+const NY_SVG = (bg, c1, c2) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600"><rect width="900" height="600" fill="${bg}"/>`
+  + [[180, 150, 90, c1], [700, 120, 110, c2], [470, 250, 70, c1], [790, 360, 60, c1], [110, 400, 55, c2]].map(([x, y, r, c]) => Array.from({ length: 16 }, (_, i) => { const a = i * Math.PI / 8; return `<line x1="${x + Math.cos(a) * r * .25}" y1="${y + Math.sin(a) * r * .25}" x2="${x + Math.cos(a) * r}" y2="${y + Math.sin(a) * r}" stroke="${c}" stroke-width="4" stroke-linecap="round"/><circle cx="${x + Math.cos(a) * r * 1.12}" cy="${y + Math.sin(a) * r * 1.12}" r="4" fill="${c}"/>`; }).join('')).join('')
+  + Array.from({ length: 40 }, (_, i) => `<circle cx="${(i * 197) % 900}" cy="${(i * 113) % 600}" r="${1 + i % 3}" fill="#fff" opacity=".7"/>`).join('')
+  + `<text x="450" y="520" text-anchor="middle" font-family="Georgia,serif" font-size="64" fill="${c1}">Happy New Year</text></svg>`;
+const CARDS = [
+  { id:'xc1', kind:'xmas', name:'하얀 기도', photo:'xmas1.jpg', fade:0, cls:'card', bg:'#f6f4f1', line:'transparent', ink:'#4a3a30', env:'#f3e7cf', cpr:'30%' },
+  { id:'xc2', kind:'xmas', name:'촛불 트리', photo:'xmas2.jpg', fade:0, cls:'card', bg:'#2a1b12', line:'transparent', ink:'#fffaf0', env:'#7b1e2b', tsh:'0 1px 3px #000,0 0 8px #000' },
+  { id:'xc3', kind:'xmas', name:'나무 방', photo:'xmas3.jpg', fade:0, cls:'card', bg:'#5a3b22', line:'transparent', ink:'#fffaf0', env:'#1e4d2b', tsh:'0 1px 3px #000,0 0 8px #000' },
+  { id:'ny1', kind:'ny', name:'밤하늘 불꽃', svg:NY_SVG('#0f1a3a', '#ffd54f', '#ff8a80'), cls:'card', bg:'#0f1a3a', line:'transparent', ink:'#fffaf0', env:'#1b2a4a', tsh:'0 1px 3px #000' },
+  { id:'ny2', kind:'ny', name:'붉은 새해', svg:NY_SVG('#6d0f1a', '#ffd54f', '#fff3c4'), cls:'card', bg:'#6d0f1a', line:'transparent', ink:'#fffaf0', env:'#7b1e2b', tsh:'0 1px 3px #000' }
+];
+const XSTK = ['🎅','🦌','🎄','⭐','❄️','🎁','🔔','⛄','✨','🕯️'];
+const CARD_TXT = {
+  xmas: '{이름}님,\n메리 크리스마스!\n\n올 한 해 곁에 있어 주셔서 정말 고마웠어요.\n따뜻하고 행복한 성탄절 보내세요.\n늘 건강하시고 웃는 날만 가득하길 바랄게요.',
+  ny: '{이름}님,\n새해 복 많이 받으세요!\n\n지난 한 해 함께해 주셔서 고마웠어요.\n새해에도 건강하시고\n하시는 일마다 좋은 일만 가득하길 바랄게요.'
+};
+let cardKind = 'xmas';
+function openCards(kind){
+  cardKind = kind || cardKind; readW();
+  $('cardTtl').textContent = cardKind === 'ny' ? '🎆 연말연시 카드 고르기' : '🎄 크리스마스 카드 고르기';
+  document.querySelectorAll('[data-ck]').forEach(b => b.classList.toggle('sel', b.dataset.ck === cardKind));
+  $('cardGrid').innerHTML = CARDS.filter(c => c.kind === cardKind).map(c => `<button data-card="${c.id}" class="${W.paper === c.id ? 'sel' : ''}" style="background-image:${c.svg ? svgURI(c.svg) : `url(${c.photo})`}"><span>${c.name}</span></button>`).join('');
+  showOv('cardOv');
+}
+$('wCard').onclick = () => { click(); openCards(W.card || 'xmas'); };
+$('cardOv').addEventListener('click', e => {
+  const k = e.target.closest('[data-ck]'); if (k) { click(); openCards(k.dataset.ck); return; }
+  const b = e.target.closest('[data-card]'); if (!b) return;
+  const c = CARDS.find(x => x.id === b.dataset.card); click();
+  const was = W.card; W.paper = c.id; W.card = c.kind; W.font = 'pen';
+  if (was !== c.kind) W.stickers = [];
+  const ex = Object.values(CARD_TXT);
+  if (!W.body.trim() || ex.includes(W.body)) { W.body = CARD_TXT[c.kind]; $('wBody').value = W.body; }   // 예시 문구 (그대로 보내도, 지우고 써도 돼요)
+  hideOv('cardOv'); buildStk(); applyW(); step(2);
+  toast('✏ 예시 문구를 그대로 보내도 되고, 지우고 새로 써도 돼요');
+});
+/* 봉투 그림 (봉투·우표·도장·봉인·리본) */
+const ENVS = [{ id:'wine', n:'와인', b:'#7b1e2b', f:'#5e1520', g:'#e8c35a' }, { id:'forest', n:'초록', b:'#1e4d2b', f:'#163a20', g:'#e8c35a' }, { id:'navy', n:'남색', b:'#1b2a4a', f:'#131f38', g:'#cfd8e3' }, { id:'cream', n:'크림', b:'#f3e7cf', f:'#e6d5b3', g:'#b3263a' }];
+const STAMPS = [
+  { id:'tree', n:'트리', s: c => `<path d="M0 -16l-11 14h6l-9 12h28l-9-12h6z" fill="${c}"/><rect x="-2.5" y="10" width="5" height="6" fill="#8d5a2b"/><circle cx="0" cy="-17" r="2.5" fill="#ffd54f"/>` },
+  { id:'star', n:'별', s: c => `<path d="M0 -16l4.7 9.6 10.6 1.5-7.7 7.5 1.8 10.5L0 8.2l-9.4 4.9 1.8-10.5-7.7-7.5 10.6-1.5z" fill="${c}"/>` },
+  { id:'snow', n:'눈송이', s: c => `<g stroke="${c}" stroke-width="3" stroke-linecap="round"><path d="M0-15v30M-13-7.5l26 15M-13 7.5l26-15"/></g>` },
+  { id:'gift', n:'선물', s: c => `<rect x="-12" y="-6" width="24" height="20" fill="${c}"/><rect x="-14" y="-11" width="28" height="7" fill="${c}"/><path d="M0-11v25" stroke="#ffd54f" stroke-width="4"/><path d="M0-11c-6-8-12-4-6 0M0-11c6-8 12-4 6 0" stroke="#ffd54f" stroke-width="2.5" fill="none"/>` }
+];
+const SEALS = [
+  { id:'gold', n:'금별', s: g => `<path d="M0 -14l4 9 10 1-7.5 6.5 2.5 9.5L0 7l-9 5 2.5-9.5L-14 -4l10-1z" fill="${g}"/><circle cx="12" cy="-12" r="2" fill="#fff3c4"/><circle cx="-13" cy="10" r="1.6" fill="#fff3c4"/>` },
+  { id:'twinkle', n:'반짝이', s: g => `<path d="M0 -16C2 -4 4 -2 16 0 4 2 2 4 0 16-2 4-4 2-16 0-4-2-2-4 0-16z" fill="${g}"/><path d="M12 -12c.6 3 1 3.4 4 4-3 .6-3.4 1-4 4-.6-3-1-3.4-4-4 3-.6 3.4-1 4-4z" fill="#fff"/>` },
+  { id:'silver', n:'은별', s: () => `<circle r="15" fill="#cfd8e3"/><path d="M0 -10l3 6.5 7 .8-5.2 4.7 1.5 6.9L0 5.5l-6.3 3.4 1.5-6.9-5.2-4.7 7-.8z" fill="#7a8ca3"/>` },
+  { id:'wax', n:'왁스', s: () => `<circle r="15" fill="#b3263a"/><circle r="10.5" fill="none" stroke="#7a1020" stroke-width="2"/><path d="M0 -6l2 4.2 4.6.6-3.3 3.1.8 4.6L0 4.3l-4.1 2.2.8-4.6-3.3-3.1 4.6-.6z" fill="#ffd54f"/>` }
+];
+const RIBS = [{ id:'', n:'없음' }, { id:'#c62828', n:'빨강' }, { id:'#e8c35a', n:'금색' }, { id:'#e8eef5', n:'하양' }];
+function envSVG(o){
+  const E = ENVS.find(x => x.id === o.env) || ENVS[0], st = STAMPS.find(x => x.id === o.stamp), se = SEALS.find(x => x.id === o.seal) || SEALS[0];
+  const ink = E.id === 'cream' ? '#5a3a22' : '#fff8e7', d = new Date(o.at || Date.now());
+  const rib = o.rib ? `<rect x="0" y="176" width="400" height="16" fill="${o.rib}" opacity=".95"/><g transform="translate(330 184)" fill="${o.rib}"><path d="M0 0c-26-24-40-6-26 4zM0 0c26-24 40-6 26 4z"/><path d="M-4 2l-12 28 10-4 6 10zM4 2l12 28-10-4-6 10z"/><circle r="7"/></g>` : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250"><rect width="400" height="250" rx="10" fill="${E.b}"/>${rib}<path d="M0 0L200 128 400 0z" fill="${E.f}"/><path d="M0 250L150 120M400 250L250 120" stroke="${E.f}" stroke-width="2"/>`
+    + (st ? `<g transform="translate(348 46)">${st.s(E.g)}</g><g transform="translate(300 62) rotate(-14)" opacity=".85"><circle r="30" fill="none" stroke="${E.g}" stroke-width="2.5"/><text y="-3" text-anchor="middle" font-size="11" fill="${E.g}" font-family="sans-serif">${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()}</text><text y="12" text-anchor="middle" font-size="10" fill="${E.g}" font-family="sans-serif">빨간우체통</text></g>` : '')
+    + `<g transform="translate(200 128) scale(1.7)">${se.s(E.g)}</g>`
+    + `<text x="22" y="200" font-size="20" fill="${ink}" font-family="'Nanum Pen Script',cursive">From. ${esc(o.from || '')}</text><text x="378" y="236" text-anchor="end" font-size="30" fill="${ink}" font-family="'Nanum Pen Script',cursive">${esc(o.to || '')} 님께</text></svg>`;
+}
+const pad2 = n => String(n).padStart(2, '0');
+const toLocal = t => { const d = new Date(t); return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`; };
+const cardWhen = t => { const d = new Date(t); return `${d.getMonth() + 1}월 ${d.getDate()}일 ${d.getHours()}시${d.getMinutes() ? ' ' + d.getMinutes() + '분' : ''}`; };
+function cardDay(kind){   // 크리스마스 = 12월 25일 0시 · 연말연시 = 1월 1일 0시 (지났으면 0 = 바로)
+  const now = new Date(), y = now.getFullYear();
+  const t = kind === 'ny' ? new Date(now.getMonth() === 0 && now.getDate() === 1 ? y : y + 1, 0, 1).getTime() : new Date(y, 11, 25).getTime();
+  return t > Date.now() ? t : 0;
+}
+let EO = null;
+function drawEnv(thump){
+  $('envPrev').innerHTML = envSVG({ ...EO, to: $('envTo').value.trim(), from: $('envFrom').value.trim(), at: EO.when || Date.now() });
+  if (thump) { $('envPrev').classList.remove('thump'); void $('envPrev').offsetWidth; $('envPrev').classList.add('thump'); }
+  const E = ENVS.find(x => x.id === EO.env);
+  const mini = inner => `<svg viewBox="-20 -20 40 40">${inner}</svg>`;
+  $('eoEnv').innerHTML = ENVS.map(x => `<button data-eo="env" data-v="${x.id}" class="${EO.env === x.id ? 'sel' : ''}"><svg viewBox="0 0 40 26"><rect width="40" height="26" rx="2" fill="${x.b}"/><path d="M0 0l20 13L40 0z" fill="${x.f}"/></svg>${x.n}</button>`).join('');
+  $('eoStamp').innerHTML = STAMPS.map(x => `<button data-eo="stamp" data-v="${x.id}" class="${EO.stamp === x.id ? 'sel' : ''}">${mini(x.s(E.g))}${x.n}</button>`).join('');
+  $('eoSeal').innerHTML = SEALS.map(x => `<button data-eo="seal" data-v="${x.id}" class="${EO.seal === x.id ? 'sel' : ''}">${mini(x.s(E.g))}${x.n}</button>`).join('');
+  $('eoRib').innerHTML = RIBS.map(x => `<button data-eo="rib" data-v="${x.id}" class="${EO.rib === x.id ? 'sel' : ''}">${x.id ? `<svg viewBox="0 0 40 26"><rect y="10" width="40" height="6" fill="${x.id}"/><path d="M20 13c-10-10-16-2-10 2zM20 13c10-10 16-2 10 2z" fill="${x.id}"/></svg>` : '<svg viewBox="0 0 40 26"></svg>'}${x.n}</button>`).join('');
+  $('envNow').classList.toggle('sel', !EO.when);
+}
+$('wEnv').onclick = () => {
+  readW();
+  if (!W.body.trim()) { toast('✏ 카드 내용을 다 써 주세요'); $('wBody').focus(); return; }
+  click(); rustle(.4);
+  const when = cardDay(W.card);
+  EO = { env: 'wine', stamp: '', seal: 'gold', rib: '', ...(W.env || {}), when };
+  $('envTo').value = (W.env && W.env.to) || (W.via || /모든 친구|,/.test(W.to) ? '' : W.to);
+  $('envFrom').value = (W.env && W.env.from) || who().name;
+  $('envWhen').value = when ? toLocal(when) : '';
+  drawEnv(); showOv('envOv');
+};
+$('envOv').addEventListener('click', e => {
+  const b = e.target.closest('[data-eo]'); if (!b) return;
+  EO[b.dataset.eo] = b.dataset.v;
+  if (b.dataset.eo === 'stamp') { dingdong(); toast('📮 우표를 붙이고 날짜 도장을 쾅 찍었어요'); } else click();
+  drawEnv(b.dataset.eo === 'stamp' || b.dataset.eo === 'seal');
+});
+['envTo', 'envFrom'].forEach(id => $(id).addEventListener('input', () => drawEnv()));
+$('envWhen').addEventListener('change', () => { const t = new Date($('envWhen').value).getTime(); EO.when = t > Date.now() ? t : 0; if (!EO.when && $('envWhen').value) toast('지난 시간이라 바로 보내요'); drawEnv(); });
+$('envNow').onclick = () => { click(); EO.when = 0; $('envWhen').value = ''; drawEnv(); };
+$('envSend').onclick = () => {
+  if (!EO.stamp) { toast('📮 우표를 먼저 골라 붙여 주세요'); return; }
+  const at = EO.when && EO.when > Date.now() ? EO.when : 0;
+  W.env = { env: EO.env, stamp: EO.stamp, seal: EO.seal, rib: EO.rib, to: $('envTo').value.trim(), from: $('envFrom').value.trim() };
+  if (!W.via && !(W.toIds && W.toIds.length) && !W.self && !W.to && W.env.to) { W.to = W.env.to; $('wTo').value = W.to; }
+  W.at = at;
+  if (!W.via) hideOv('envOv');
+  sendLetter(false, at);
+};
+
 /* 52번-3: 전화번호 · 📞 버튼 · 이름 넣기 */
 function phoneClean(t){ const d = String(t || '').replace(/[^\d+]/g, ''); return d.length >= 8 ? d.slice(0, 16) : ''; }
 function phoneOf(id){ const v = othersIn(id).find(x => x.ph); return v ? v.ph : ''; }
