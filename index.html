@@ -958,6 +958,28 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 .sv-btn.addb .plus{font-size:56px;line-height:1;font-weight:700}
 .sv-btn.addb .nk{color:#9aa2d0}
 #svHome{padding-bottom:56px}
+/* ===== 55번 ===== */
+#lhQuote{top:34px;padding:0 12px;font-size:min(7vw,27px);white-space:nowrap}
+#lhQuote q:before,#lhQuote q:after{font-size:24px;vertical-align:-4px}
+.lhic{gap:10px}
+.lhic button{width:46px;height:46px;border-radius:12px;font-size:22px}
+.lhic .cardic svg{width:34px;height:34px}
+#lhXmas i{font-size:11px;padding:1px 5px}
+.toico #wCard{font-size:21px;line-height:28px;text-align:center}
+.bubble{border-width:1px!important}
+.me .bubble{border:1px solid var(--pink)}
+.them .bubble{border:1px solid #8a8da0}
+body.dark .me .bubble{background:var(--bd-bg,#3d3438);border:1px solid var(--bd-bd,#8a5a63);color:var(--bd-ink,#f5eef0)}
+body.dark .me .bubble a.mlink{color:#9cc7ff}
+body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--bl-bd);color:var(--bl-ink)}
+#bubGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
+#bubGrid button{border:2px solid transparent;border-radius:14px;padding:10px 6px;background:#1c1c22;color:#ccc;font-size:13px}
+#bubGrid button.sel{border-color:#ffd54f}
+#bubGrid span{display:block;margin:0 auto 6px;max-width:90%;padding:7px 10px;border-radius:16px 16px 4px 16px;font-size:15px;font-weight:600}
+#svArrive{align-items:center;justify-content:center;gap:16px}
+#svArrMsg{font-size:34px;font-weight:800;color:#ffd76a}
+#svArrHint{font-size:22px;color:#fff}
+#svEnv{animation:lhdrop .9s cubic-bezier(.2,1.4,.4,1) both,lhwig 2.4s 1s ease-in-out infinite}
 </style>
 </head>
 <body>
@@ -1005,8 +1027,8 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <!-- 32번: 메인 화면 (나와의 대화 고정 · 할 일 / 친구 · 홍보 · 친구 초대) -->
   <div id="homeList">
     <div id="letterHome">
-      <a id="lhSite" href="https://www.giftwave.com">www.giftwave.com</a>
-      <div id="lhQuote"><q>소중한 분에게<br>정성 들여 마음을 전하세요</q></div>
+      <a id="lhSite" href="https://giftwav.com" target="_blank" rel="noopener">giftwav.com</a>
+      <div id="lhQuote"><q>소중한 분께 마음을 전하세요</q></div>
       <div class="lhic l"><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
       <div class="lhic r"><button id="lhXmas" title="크리스마스 카드"></button><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
@@ -1058,6 +1080,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
       <button id="pileBtn">📚 편지함</button>
       <button id="draftBtn">📝 쓰던 편지<span class="badge" id="draftBadge"></span></button>
       <button id="themeBtn">🎨 색상 바꾸기</button>
+      <button id="bubBtn">💬 말풍선 색</button>
       <button data-dark id="darkBtn">☀ 밝은 화면</button>
       <button id="roomBtn">🔔 알림 · 로그인</button>
       <button id="tmEng">🌐 English</button>
@@ -1092,9 +1115,9 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   </div>
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
-    <div class="wtopchips"><button class="chip ic" id="wPick" title="편지지·글씨">🎨</button><button class="chip ic" id="wDrafts" title="쓰던 편지">📝</button><button class="chip ic" id="wCard" title="크리스마스 카드 쓰기">🎄</button><button class="chip ic" id="wPile" title="내 편지함" style="margin-left:auto">📚</button></div>
+    <div class="wtopchips"><button class="chip ic" id="wPick" title="편지지·글씨">🎨</button><button class="chip ic" id="wDrafts" title="쓰던 편지">📝</button><button class="chip ic" id="wPile" title="내 편지함" style="margin-left:auto">📚</button></div>
     <div class="paperbox" id="wPaper">
-      <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button></span></div>
+      <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button><button type="button" id="wCard" title="크리스마스 카드 쓰기">🎄</button></span></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
@@ -1452,6 +1475,8 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <button class="sv-big sv-red" id="svSheetVoice">🎤 음성 대화</button>
     <button class="sv-big sv-close" data-svclose>닫기</button>
   </div>
+  <!-- 55번: 실버 모드에서도 편지가 오면 봉투가 꿈틀 -->
+  <div class="sv-ov" id="svArrive"><div id="svArrMsg">편지가 왔어요!</div><div class="lhenv" id="svEnv"><div class="f"></div><div class="t"></div></div><div id="svArrHint">봉투를 누르면 편지가 열려요</div><button class="sv-big sv-close" id="svArrLater">나중에 볼게요</button></div>
   <!-- 음성 대화: 말이 끝나고 3.5초 조용하면 저절로 보내요 -->
   <div class="sv-ov" id="svVoice">
     <div class="sv-micbox"><div class="sv-mic">🎤</div><div id="svHeard"></div><div id="svMicHint"></div></div>
@@ -1512,7 +1537,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <h2 id="lockTitle">🔒 일기장 암호</h2><div id="lockSub" style="color:#ccc;font-size:14px"></div>
   <div class="pdots" id="lockDots"></div>
   <div class="pkeys" id="lockKeys"></div>
-  <button class="plink" id="lockForgot">암호를 잊었어요</button>
+  <button class="plink" id="lockChange">암호 바꾸기</button><button class="plink" id="lockForgot">암호를 잊었어요</button>
   <button class="big" data-close>닫기</button>
 </div></div>
 <!-- 32번: 받은 파일 저장 -->
@@ -1578,6 +1603,12 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   <div class="shhint">링크를 단체방에 한 번만 올려도 돼요</div>
   <button class="big" data-ginvk="copy">🔗 공동체 주소 복사</button><button class="big" data-close>닫기</button>
 </div></div>
+<!-- 55번: 보내는 말풍선 색 (다크·일반 화면 따로) -->
+<div class="ov" id="bubOv"><div class="panel" style="max-width:380px;text-align:center">
+  <h2>💬 보내는 말풍선 색</h2><div id="bubSub" style="color:#ccc;font-size:14px"></div>
+  <div id="bubGrid"></div>
+  <button class="big" data-close>닫기</button>
+</div></div>
 <!-- 39번: 처음 한 번 화면 고르기 -->
 <div class="ov" id="modeOv"><div class="panel" style="max-width:380px;text-align:center">
   <h2>화면을 골라 주세요</h2><div style="color:#ccc;font-size:14px">나중에 바꿀 수 있어요 · 글씨는 '큰' 버튼으로 키워요</div>
@@ -1604,7 +1635,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '53';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '55';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1898,8 +1929,14 @@ function goHome(initial){
 }
 /* 48번: 편지 쓰기 메인 화면 그리기 (편지가 와 있으면 봉투를 크게) */
 function lhImg(el, file){ if (el._f === file) return; el._f = file; const i = new Image(); i.onload = () => el.style.backgroundImage = `url(${i.src})`; i.onerror = () => { el.style.backgroundImage = `url(${MEDIA_HOME + file})`; }; i.src = file; }
+function xmasLeft(){   // 55번: 크리스마스까지 남은 날 (11월·12월 1~25일만 · 지나면 -1)
+  const n = new Date(), y = n.getFullYear(), mo = n.getMonth();
+  if (mo < 10 || (mo === 11 && n.getDate() > 25)) return -1;
+  return Math.round((new Date(y, 11, 25) - new Date(y, mo, n.getDate())) / 864e5);
+}
 function lhDraw(){
   lhImg($('letterHome'), 'letter_bg.jpg');
+  { const d = xmasLeft(), x = $('lhXmas'); x.style.display = d < 0 ? 'none' : ''; x.innerHTML = d < 0 ? '' : `<i>${d ? 'D-' + d : '오늘'}</i>`; }
   const un = unreadIn(), a = $('lhArrive'), env = $('lhEnv');
   const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : ''); nb.parentNode.classList.toggle('has', !!un.length);
   a.classList.toggle('show', !!un.length);
@@ -4596,6 +4633,23 @@ $('themeBtn').onclick = () => {
   toast('🎨 ' + applyTheme().name);
 };
 applyTheme();
+/* 55번: 보내는 말풍선 색 - 다크 화면·일반 화면 따로 골라요 */
+const BUB_D = [{ n:'기본 (장미 갈색)', bg:'#3d3438', bd:'#8a5a63', ink:'#f5eef0' }, { n:'군청', bg:'#2b3352', bd:'#5f6fa8', ink:'#f2f4ff' }, { n:'숲 초록', bg:'#2c3b31', bd:'#5f8a6a', ink:'#eef6f0' }, { n:'보라', bg:'#382f4d', bd:'#7a66a8', ink:'#f3efff' }, { n:'밝은 노랑', bg:'#fff4c2', bd:'#ff8fb3', ink:'#111' }, { n:'회색', bg:'#34353d', bd:'#7d7f8c', ink:'#f4f4f6' }];
+const BUB_L = [{ n:'테마 색 (기본)' }, { n:'노랑', bg:'#ffe58f', bd:'#e0b93a', ink:'#222' }, { n:'분홍', bg:'#ffd3e0', bd:'#e89ab2', ink:'#222' }, { n:'하늘', bg:'#d6ecff', bd:'#8fb9e3', ink:'#222' }, { n:'연두', bg:'#dff5c8', bd:'#9cc77a', ink:'#222' }, { n:'하양', bg:'#ffffff', bd:'#c9c9d2', ink:'#222' }];
+function applyBub(){
+  const s = document.body.style, d = BUB_D[LS.get('rp_bub_d', 0)] || BUB_D[0], l = BUB_L[LS.get('rp_bub_l', 0)] || BUB_L[0];
+  s.setProperty('--bd-bg', d.bg); s.setProperty('--bd-bd', d.bd); s.setProperty('--bd-ink', d.ink);
+  document.body.classList.toggle('bubl', !!l.bg);
+  if (l.bg) { s.setProperty('--bl-bg', l.bg); s.setProperty('--bl-bd', l.bd); s.setProperty('--bl-ink', l.ink); }
+}
+function bubDraw(){
+  const dark = document.body.classList.contains('dark'), L = dark ? BUB_D : BUB_L, cur = LS.get(dark ? 'rp_bub_d' : 'rp_bub_l', 0);
+  $('bubSub').textContent = dark ? '🌙 다크 화면에서 쓰는 색이에요' : '☀ 일반 화면에서 쓰는 색이에요';
+  $('bubGrid').innerHTML = L.map((x, i) => `<button data-bub="${i}" class="${i === cur ? 'sel' : ''}"><span style="background:${x.bg || 'var(--t-me)'};color:${x.ink || '#222'};border:1px solid ${x.bd || 'transparent'}">안녕하세요</span>${x.n}</button>`).join('');
+}
+$('bubBtn').onclick = () => { click(); bubDraw(); showOv('bubOv'); };
+$('bubGrid').addEventListener('click', e => { const b = e.target.closest('[data-bub]'); if (!b) return; click(); LS.set(document.body.classList.contains('dark') ? 'rp_bub_d' : 'rp_bub_l', +b.dataset.bub); applyBub(); bubDraw(); });
+applyBub();
 
 /* ----- 홈 화면에 추가: 추가 전에는 늘 버튼, 추가하면 저절로 사라짐 ----- */
 let installEv = null;
@@ -4868,7 +4922,7 @@ function svWatchLive(){
     if (!svLiveUn[u]) svLiveUn[u] = FB.D.onValue(FB.D.ref(FB.db, 'giftstory/live/' + u), s => { svLive[u] = s.val() || 0; if (S.on && S.view === 'home') svHome(); });
   }); });
 }
-function svRefresh(){ svWatchLive(); svMusicDraw(); $('svMail').classList.toggle('has', unreadIn().length > 0); if (S.view === 'home') svHome(); else svChat(); }
+function svRefresh(){ svWatchLive(); svMusicDraw(); $('svMail').classList.toggle('has', unreadIn().length > 0); svLetter(); if (S.view === 'home') svHome(); else svChat(); }
 
 /* 대화방: 들어가면 "아들, 엄마 들어왔다. 지금 뭐하니?" 저절로 보내요 (5분 안에 다시 들어가면 안 보냄) */
 function svEnter(f, quiet){
@@ -4893,6 +4947,23 @@ $('svBack').onclick = () => { click(); svHush(); svGoHome(); };
 $('svOutTop').onclick = () => { click(); svExit(); };
 /* 47번: 실버 편지 쓰기 · 편지함 = 일반 화면 편지 기능 그대로 (일반 화면을 바꾸면 같이 바뀌어요) */
 $('svWrite').onclick = () => { click(); svHush(); openWriter(S.view === 'chat' && S.fam ? { to: S.fam.name, body: '', paper: 'tulip', font: 'pen', stickers: [], voice: null, draftId: null, align: '' } : undefined); };
+/* 55번: 실버 모드에서도 편지가 오면 "편지가 왔어요" + 봉투 꿈틀 (일반 화면과 같게) */
+function svLetter(){
+  const o = $('svArrive'); if (!o) return;
+  const un = unreadIn().filter(m => !(m.letter && m.letter.deliverAt > Date.now())), key = un.map(x => x.id).join(',');
+  if (!un.length) { o._k = ''; if (o.classList.contains('show')) svOv('svArrive', false); return; }
+  if (o._k === key) return; o._k = key;
+  const m = un[0], L = m.letter || {}, e = $('svEnv'), cd = L.card;
+  e.classList.toggle('card', !!cd);
+  if (cd) { e._f = ''; e.style.backgroundImage = svgURI(envSVG({ ...cd, to: cd.to || me.name, from: cd.from || L.fromName, at: whenOf(m) })); } else lhImg(e, 'letter_env.jpg');
+  e.querySelector('.f').innerHTML = `보내는 사람<br>${esc(L.fromName || m.name || '')}`;
+  e.querySelector('.t').innerHTML = `받는 사람<br>${esc(me.name || L.to || '')} 님께`;
+  e.style.animation = 'none'; void e.offsetWidth; e.style.animation = '';
+  $('svArrHint').textContent = un.length > 1 ? `편지가 ${un.length}통 와 있어요 · 봉투를 누르세요` : '봉투를 누르면 편지가 열려요';
+  svOv('svArrive', true); letterArriveSnd();
+}
+$('svEnv').onclick = () => { click(); svOv('svArrive', false); const un = unreadIn(); if (un.length) openBox(un); };
+$('svArrLater').onclick = () => { click(); svOv('svArrive', false); };
 $('svMail').onclick = () => { svHush(); const un = unreadIn(); if (un.length) { click(); openBox(un); } else $('pileBtn').click(); };   // 새 편지가 있으면 우체통, 없으면 편지함
 $('tmSilver').onclick = () => { click(); closeMenus(); svOpen(); };
 $('svChat').addEventListener('click', e => { const f = e.target.closest('[data-svfile]'); if (f) { const m = msgs[f.dataset.svfile]; if (m) { click(); fileOpenAny(room, m, f.querySelector('img')); } return; } const b = e.target.closest('[data-vid]'); if (b) { click(); Promise.resolve(playVoiceMsg(msgs[b.dataset.vid])).catch(() => toast('재생이 안 돼요')); } });
@@ -5412,7 +5483,7 @@ $('calPrev').onclick = () => { click(); dyMon = new Date(dyMon.getFullYear(), dy
 $('calNext').onclick = () => { click(); dyMon = new Date(dyMon.getFullYear(), dyMon.getMonth() + 1, 1); dyCalDraw(); };
 
 /* --- 🔒 일기장 암호 (숫자 네 자리 · 잊으면 구글로 다시 로그인해서 새로 정하기) --- */
-let lockBuf = '', lockMode = 'check', lockFirst = '', lockOk = null, lockAt = 0;
+let lockBuf = '', lockMode = 'check', lockFirst = '', lockOk = null, lockAt = 0, lockChg = false;   // 54번: 암호 바꾸기
 async function pinHash(p){
   const s = 'rp-diary|' + p;
   try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
@@ -5422,16 +5493,17 @@ function lockCheck(){
   if (Date.now() - lockAt < 5 * 60000) return Promise.resolve(true);   // 5분 안에 다시 열면 그대로
   return new Promise(ok => {
     if (lockOk) lockOk(false);
-    lockOk = ok; lockBuf = ''; lockFirst = '';
+    lockOk = ok; lockBuf = ''; lockFirst = ''; lockChg = false;
     lockMode = LS.get('rp_dpin', '') ? 'check' : 'new';
     lockDraw(); showOv('lockOv');
   });
 }
 function lockDraw(){
   $('lockTitle').textContent = lockMode === 'check' ? '🔒 일기장 암호' : lockMode === 'new' ? '🔒 일기장 암호 정하기' : '🔒 한 번 더 눌러 주세요';
-  $('lockSub').textContent = lockMode === 'check' ? '숫자 네 자리를 눌러 주세요' : lockMode === 'new' ? '일기장을 열 때 쓸 숫자 네 자리' : '확인을 위해 같은 숫자 네 자리';
+  $('lockSub').textContent = lockMode === 'check' ? (lockChg ? '지금 쓰는 암호를 먼저 눌러 주세요' : '숫자 네 자리를 눌러 주세요') : lockMode === 'new' ? '일기장을 열 때 쓸 숫자 네 자리' : '확인을 위해 같은 숫자 네 자리';
   $('lockDots').innerHTML = [0, 1, 2, 3].map(i => `<i class="${i < lockBuf.length ? 'on' : ''}"></i>`).join('');
   $('lockForgot').style.display = lockMode === 'check' ? '' : 'none';
+  $('lockChange').style.display = lockMode === 'check' && !lockChg ? '' : 'none';
 }
 $('lockKeys').innerHTML = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '←', '0', ''].map(k => `<button data-k="${k}" class="${k ? '' : 'blank'}">${k}</button>`).join('');
 function lockDone(v){ lockAt = v ? Date.now() : 0; const f = lockOk; lockOk = null; hideOv('lockOv'); if (f) f(v); }
@@ -5444,7 +5516,7 @@ $('lockKeys').addEventListener('click', e => {
   const p = lockBuf;
   setTimeout(async () => {
     if (lockMode === 'check') {
-      if (await pinHash(p) === LS.get('rp_dpin', '')) lockDone(true);
+      if (await pinHash(p) === LS.get('rp_dpin', '')) { if (lockChg) { lockChg = false; lockMode = 'new'; lockBuf = ''; lockDraw(); } else lockDone(true); }
       else { lockBuf = ''; lockDraw(); toast('암호가 달라요'); if (navigator.vibrate) navigator.vibrate(200); }
     } else if (lockMode === 'new') { lockFirst = p; lockBuf = ''; lockMode = 'again'; lockDraw(); }
     else if (p === lockFirst) { const h = await pinHash(p); LS.set('rp_dpin', h); myPut('pin', h); toast('🔒 일기장 암호를 정했어요'); lockDone(true); }
@@ -5452,8 +5524,14 @@ $('lockKeys').addEventListener('click', e => {
   }, 150);
 });
 document.querySelector('#lockOv [data-close]').addEventListener('click', () => { const f = lockOk; lockOk = null; if (f) f(false); });
+$('lockChange').onclick = () => { click(); lockChg = true; lockBuf = ''; lockDraw(); };
 $('lockForgot').onclick = () => {
   click();
+  const au0 = LS.get('rp_auth', null);
+  if (au0 && au0.k === 'kakao') {   // 54번: 카카오로 가입한 사람은 카카오로 다시 로그인해서 새로 정해요
+    if (!confirm('카카오로 다시 로그인하면 암호를 새로 정할 수 있어요.\n로그인할까요?')) return;
+    LS.set('rp_pinreset', au0.uid); kakaoLogin(); return;
+  }
   if (!confirm('구글로 다시 로그인하면 암호를 새로 정할 수 있어요.\n로그인할까요?')) return;
   if (!LG) { loginPrep().catch(() => {}); toast('로그인 준비 중이에요 · 잠깐 뒤 한 번 더 눌러 주세요'); return; }
   const { A, auth, prov } = LG;
@@ -5572,8 +5650,8 @@ $('cardOv').addEventListener('click', e => {
   const c = CARDS.find(x => x.id === b.dataset.card); click();
   const was = W.card; W.paper = c.id; W.card = c.kind; W.font = 'pen';
   if (was !== c.kind) W.stickers = [];
-  const ex = Object.values(CARD_TXT);
-  if (!W.body.trim() || ex.includes(W.body)) { W.body = CARD_TXT[c.kind]; $('wBody').value = W.body; }   // 예시 문구 (그대로 보내도, 지우고 써도 돼요)
+  const ex = Object.values(CARD_TXT), nm = W.to && !W.via && !/모든 친구|,/.test(W.to) ? W.to : '';   // 55번: 받는 사람이 정해져 있으면 카드에 그 이름
+  if (!W.body.trim() || ex.includes(W.body) || W.body === W._ex) { W.body = W._ex = nm ? CARD_TXT[c.kind].split(NAME_TAG).join(nm) : CARD_TXT[c.kind]; $('wBody').value = W.body; }   // 예시 문구 (그대로 보내도, 지우고 써도 돼요)
   hideOv('cardOv'); buildStk(); applyW(); step(2);
   toast('✏ 예시 문구를 그대로 보내도 되고, 지우고 새로 써도 돼요');
 });
@@ -5757,6 +5835,13 @@ async function kakaoBack(){
     if (!j.token) throw new Error(j.error || ('서버 ' + r.status));
     const A = await authModule(), res = await A.signInWithCustomToken(A.getAuth(FB.app), j.token);
     await afterLogin({ uid: res.user.uid, displayName: j.name || '' }, 'kakao');
+    const pr = LS.get('rp_pinreset', '');
+    if (pr) {   // 54번: 일기장 암호 잊었어요 → 같은 카카오 계정이면 암호를 지우고 새로 정하기
+      LS.set('rp_pinreset', '');
+      if (pr === res.user.uid) { LS.set('rp_dpin', ''); FB.D.set(FB.D.ref(FB.db, 'giftstory/users/' + pr + '/my/pin'), null).catch(() => {}); toast('✓ 확인됐어요 · 일기장을 열면 새 암호를 정해요'); }
+      else toast('처음에 쓰던 카카오 계정으로 로그인해 주세요');
+      return;
+    }
     toast('✓ 카카오로 로그인했어요');
   } catch (e) { toast('카카오 로그인이 안 됐어요 (' + ((e && e.message) || e) + ')'); }
 }
