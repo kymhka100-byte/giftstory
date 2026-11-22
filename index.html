@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,interactive-widget=resizes-content">
+<!-- 54-1번: '누구에게 보낼까요?' 창에 카톡·문자 버튼 · 카톡·문자로 보내고 돌아오면 "보냈어요" → 보낸 편지함(맨 위 'OO에게' 이름) → 창 닫힘 · 편지 쓰기 위 카톡·문자 버튼 없앰 · 편지함에 📤 보낸 편지함 · 편지 쓰기 위 버튼은 아이콘만 -->
+<!-- 54번: 크리스마스 카드 2장 추가(광장 트리 · 반짝 트리) · 메인 크리스마스 버튼을 트리 그림 아이콘으로, 편지함·편지 쓰기 옆에 같은 크기 -->
 <!-- 53번: 🎄 크리스마스 카드 · 🎆 연말연시 카드(카드 그림 고르기 · 예시 문구 · 크리스마스 스티커 · 봉투 고르기 · 우표 고르면 날짜 도장 쾅 · 별·반짝이 봉인 · 리본 · 날짜·시간 정해서 보내기) · 메인에 카드 아이콘 2개 · 메인 문구 두 줄 · 도착한 편지 봉투 꿈틀 · 카톡·문자 초대는 보내기를 누를 때 -->
 <!-- 52번-3: 편지 쓰기 👤 이름 넣기(받는 사람마다 연락처 이름) · 처음 화면·설정에 전화번호 칸(안 써도 돼요) · 친구 목록·더보기·공동체 목록에 📞 버튼 -->
 <!-- 52번-2: 배터리 '제한 없음'·알림 허용 안내 창(처음 1번 · 업데이트한 사람도) · 대화 신청 알림 창(확인 → 그 대화방 / 나중에) · 새 대화방 말풍선 꿈틀 -->
@@ -706,6 +708,7 @@ body.lview #homeLogo{display:none}
 .lhic.l{left:14px}
 .lhic .cardic{background:rgba(20,60,35,.82)}
 .lhic .cardic svg{width:40px;height:40px}
+.lhic #lhXmas{background:#0b1430 url(data:image/jpeg;base64,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) center/cover;border:2px solid #ffd54f}
 .paperbox.card{background:var(--pbg) var(--pimg) no-repeat top center/100% auto;padding:14px var(--cpr,16px) 18px 16px;min-height:60vh}
 .paperbox.card:before,.paperbox.card:after{display:none}
 .paperbox.card .lined{background-image:none;text-shadow:var(--tsh,none)}
@@ -766,7 +769,13 @@ body.typing #allBtn{display:block}
 #easyOv .panel{max-width:380px;text-align:center;position:relative}
 #easyOv .ix{position:absolute;top:6px;right:8px;background:none;border:none;color:#bbb;font-size:24px;width:40px;height:40px}
 .nbtn.kk{background:#fee500;color:#191600;border-color:#fee500}
-.wtopchips{display:flex;gap:6px;margin:0 0 8px}
+.wtopchips{display:flex;gap:8px;margin:0 0 8px}
+.wtopchips .chip.ic{font-size:26px;min-width:52px;min-height:46px;padding:4px 8px;justify-content:center}
+.tvia{display:flex;gap:8px;margin:10px 0}
+.tvia button{flex:1;min-height:54px;border:none;border-radius:12px;font-size:19px;font-weight:700}
+.tvia [data-tvia=kakao]{background:#fee500;color:#3a1d1d}
+.tvia [data-tvia=sms]{background:#2e7d32;color:#fff}
+#pileTabs{margin:0 0 8px}
 /* 할 일 */
 .td{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid #2a2b34}
 .td:last-child{border-bottom:none}
@@ -998,8 +1007,8 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <div id="letterHome">
       <a id="lhSite" href="https://www.giftwave.com">www.giftwave.com</a>
       <div id="lhQuote"><q>소중한 분에게<br>정성 들여 마음을 전하세요</q></div>
-      <div class="lhic l"><button class="cardic" id="lhXmas" title="크리스마스 카드"><svg viewBox="0 0 40 40"><path d="M20 3l-9 13h5l-8 11h24l-8-11h5z" fill="#4caf50"/><rect x="17" y="27" width="6" height="7" fill="#8d5a2b"/><circle cx="20" cy="4" r="2.6" fill="#ffd54f"/><circle cx="16" cy="20" r="1.8" fill="#e53935"/><circle cx="24" cy="15" r="1.6" fill="#ffd54f"/><circle cx="23" cy="23" r="1.8" fill="#e53935"/></svg></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
-      <div class="lhic r"><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
+      <div class="lhic l"><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
+      <div class="lhic r"><button id="lhXmas" title="크리스마스 카드"></button><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
     <div id="hTop"></div>
@@ -1083,9 +1092,9 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
   </div>
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
-    <div class="wtopchips"><button class="chip" id="wPick">🎨 편지지·글씨</button><button class="chip" id="wDrafts">📝 쓰던 편지</button><button class="chip" id="wCard">🎄 크리스마스 카드 쓰기</button><button class="chip" id="wPile" style="margin-left:auto">📚 내 편지함</button></div>
+    <div class="wtopchips"><button class="chip ic" id="wPick" title="편지지·글씨">🎨</button><button class="chip ic" id="wDrafts" title="쓰던 편지">📝</button><button class="chip ic" id="wCard" title="크리스마스 카드 쓰기">🎄</button><button class="chip ic" id="wPile" title="내 편지함" style="margin-left:auto">📚</button></div>
     <div class="paperbox" id="wPaper">
-      <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button><button type="button" data-lsend="kakao" title="카톡"></button><button type="button" data-lsend="sms" title="문자"></button></span></div>
+      <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button></span></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
@@ -1151,6 +1160,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
     <button class="big" id="toAll" style="margin-top:0">☑ 모두 선택</button>
     <div class="mrow" data-to="__me" id="toMe"><span class="ck">☐</span><b>📝 나에게 쓰기 (내 편지함으로)</b></div>
     <div id="toList"></div>
+    <div class="tvia"><button data-tvia="kakao">💬 카톡으로 보내기</button><button data-tvia="sms">✉ 문자로 보내기</button></div>
     <button class="big r" id="toSend">📮 보내기</button>
     <button class="big" data-close>닫기</button>
   </div>
@@ -1225,6 +1235,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 <div class="ov" id="pileOv">
   <div class="panel">
     <h2>📚 편지 보관함 <span id="pileCnt" style="color:#888;font-size:16px"></span></h2>
+    <div class="chips" id="pileTabs"><button class="chip" data-pt="in">📥 받은 편지함</button><button class="chip" data-pt="out">📤 보낸 편지함</button></div>
     <div id="pile"></div>
     <button class="big" data-close>닫기</button>
   </div>
@@ -3351,8 +3362,7 @@ function applyW(){
   $('wStk').textContent = W.stickers.join('');
   const c = !!W.card;   // 53번: 카드는 봉투에 담아서 보내요
   $('wSend').style.display = $('wSlow').style.display = c ? 'none' : ''; $('wEnv').style.display = c ? '' : 'none';
-  $('wCard').textContent = c ? '🎴 카드 바꾸기' : '🎄 크리스마스 카드 쓰기';
-  document.querySelectorAll('[data-lsend]').forEach(b => b.classList.toggle('sel', W.via === b.dataset.lsend));
+  $('wCard').textContent = c ? '🎴' : '🎄'; $('wCard').title = c ? '카드 바꾸기' : '크리스마스 카드 쓰기';
 }
 $('step1').addEventListener('click', e => {
   const a = e.target.closest('[data-act]');
@@ -3406,18 +3416,12 @@ $('wSave').onclick = () => {
 $('wSend').onclick = () => sendLetter(false);
 $('toBtn').innerHTML = ICON_POST.replace('<rect width="62" height="62" rx="16" fill="#2b1416"/>', '');   // 42번: 까만 배경 없이 우체통만
 $('wTo').addEventListener('input', () => { if (W) { W.toIds = null; W.self = false; } });   // 이름을 직접 고치면 고른 친구는 풀려요
-document.querySelectorAll('[data-lsend]').forEach(b => {
-  b.innerHTML = b.dataset.lsend === 'kakao' ? ICON_KAKAO : ICON_SMS;
-  b.onclick = () => {   // 53번: 카톡·문자는 고르기만 · 편지를 다 쓰고 보내기를 누를 때 초대가 가요
-    click(); readW(); W.via = W.via === b.dataset.lsend ? null : b.dataset.lsend; W.toIds = null; W.self = false; applyW();
-    if (W.via) toast(`${W.via === 'kakao' ? '카톡' : '문자'}으로 보내요 · 편지를 다 쓰고 ${W.card ? '💌 봉투에 담기' : '📮 보내기'}를 누르면 그때 초대가 가요`);
-  };
-});
 /* 새 방에 편지를 넣고 그 방 주소를 카톡·문자로 보내요 → 받는 사람이 열면 우체통에 편지가 와 있어요 */
 async function sendLetterLink(kind, when){
   click(); readW();
   if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
   if (rec) await stopRec();
+  const tn = topName(); if (tn) W.to = tn;   // 54-1번: 맨 위 'OO에게' 이름으로
   if (!W.to) W.to = '친구';   // 42번: 받는 사람은 카톡·문자에서 고르니까 이름 안 적어도 돼요
   const id = W.linkRoom || rid(), u = who(), again = !!W.linkRoom;
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
@@ -3426,9 +3430,12 @@ async function sendLetterLink(kind, when){
   const shared = shareTo(kind, roomURL(id), text, { f: u.name, t: W.to === '친구' ? '' : W.to });   // 공유 창 먼저
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
+  const sentTo = W.to, sentLetterData = m.letter;
+  whenBack(() => {   // 54-1번: 돌아오면 보낸 것으로 → 보낸 편지함 → 창 닫기
+    saveSent(sentTo, sentLetterData); hideOv('envOv'); closeWriter(); W.via = null; W.linkRoom = null;
+    dingdong(); bumpBox(); toast(`📮 ${sentTo === '친구' ? '' : sentTo + '님께 '}보냈어요 · 보낸 편지함에 넣었어요`);
+  });
   await shared;
-  dingdong(); toast('💌 링크를 보냈어요 · 다 보냈으면 ✕로 닫아 주세요');
-  hideOv('envOv');   // 42번: 카톡·문자에서 돌아오면 편지 쓰기 그대로
 }
 $('wSlow').onclick = () => sendLetter(true);
 /* 22번: 빨간 우체통 친구 고르기 (모두 선택 가능) → 친구마다 그 방 우체통으로 */
@@ -3471,6 +3478,24 @@ $('toSend').onclick = async () => {
   if (!W.body.trim()) { click(); toast('받는 사람을 정했어요 · ✏ 편지 내용을 다 써 주세요'); return; }   // 아직 안 썼으면 고르기만
   sendLetter(false);
 };
+/* 54-1번: '누구에게 보낼까요?' 창에서 카톡·문자 고르기 → 편지를 다 썼으면 바로 보내기 */
+$('toOv').addEventListener('click', e => {
+  const b = e.target.closest('[data-tvia]'); if (!b) return;
+  click(); readW(); W.via = b.dataset.tvia; W.toIds = null; W.self = false; hideOv('toOv');
+  if (!W.body.trim()) { toast(`${W.via === 'kakao' ? '카톡' : '문자'}으로 보내요 · 편지를 다 쓰고 보내기를 누르면 그때 보내져요`); return; }
+  sendLetter(false);
+});
+/* 54-1번: 보낸 편지함 (이 폰에 저장) */
+const sentL = () => LS.get('rp_sentletters', []);
+function saveSent(to, L){ LS.set('rp_sentletters', [...sentL(), { id: 'sent_' + rid(), from: who().uid, name: who().name, type: 'letter', at: Date.now(), read: true, sent: true, letter: { ...L, to } }].slice(-80)); }
+const topName = () => { const m = ((W && W.body) || '').trim().split('\n')[0].match(/^\s*(?:사랑하는\s*|보고\s*싶은\s*|그리운\s*)?(.{1,12}?)\s*(?:에게|께)/); return m ? m[1].trim() : ''; };
+function whenBack(fn){   // 카톡·문자에 갔다가 앱으로 돌아오면
+  let gone = false, done = false;
+  const fin = () => { if (done) return; done = true; document.removeEventListener('visibilitychange', vh); fn(); };
+  const vh = () => { if (document.hidden) gone = true; else if (gone) setTimeout(fin, 300); };
+  document.addEventListener('visibilitychange', vh);
+  setTimeout(() => { if (!gone) fin(); }, 4000);
+}
 /* 26번: 고른 친구들 · 나에게 보내기 */
 async function sendPicked(slow, at){
   if (rec) await stopRec();
@@ -3478,6 +3503,7 @@ async function sendPicked(slow, at){
   const mk = to => ({ from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
     letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when, card: W.env || null } });
   ids.forEach(id => { const m = mk(roomName(id)); if (id === room && !homeOn) addMsg(m); else pushTo(id, m); });
+  if (ids.length) saveSent(ids.map(roomName).join(', ').slice(0, 40), mk(ids.length > 1 ? '' : roomName(ids[0])).letter);   // 54-1번
   if (W.self) LS.set('rp_selfletters', [...selfL(), { ...mk(u.name), id: 'self_' + rid(), self: true }].slice(-60));
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   closeWriter(); dingdong(); bumpBox(); render.jump = true; queueRender(); updateFlag();
@@ -3496,11 +3522,12 @@ async function sendLetter(slow, at){
     if (hit) { W.toIds = [hit.id]; sendPicked(slow, at); return; }
     toast('받는 사람을 골라 주세요'); $('toBtn').click(); return;
   }
-  if (!W.to) { toast('받는 사람을 적어 주세요'); $('wTo').focus(); return; }
+  if (!W.to) { toast('받는 사람을 골라 주세요'); $('toBtn').click(); return; }   // 54-1번: 고르기 창(카톡·문자 포함)
   const u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
     letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: at || (slow ? nextMorning() : 0), card: W.env || null } };
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
+  saveSent(W.to, m.letter);   // 54-1번
   closeWriter();
   flyToMailbox(m, () => { render.jump = true; addMsg(m); toast(at ? `⏰ ${cardWhen(at)}에 도착해요` : slow ? '🌙 내일 아침 8시에 도착해요' : '📮 편지를 우체통에 넣었어요'); });
 }
@@ -3693,11 +3720,15 @@ const SAMPLES = () => [
   sampleOf('s_mom', '엄마', 'tulip', 'pen', '밥은 잘 챙겨 먹고 다니니?\n날이 추워졌으니 따뜻하게 입고 다녀라.\n늘 고맙고 사랑한다.', ['🌷'], 1)
 ];
 let pileItems = {};
+let pileMode = 'in';
+$('pileTabs').addEventListener('click', e => { const b = e.target.closest('[data-pt]'); if (!b) return; pileMode = b.dataset.pt; $('pileBtn').click(); });
 $('pileBtn').onclick = () => {
   click();
-  const list = [...received(), ...selfL().filter(m => arrived(m))].sort((a, b) => whenOf(a) - whenOf(b));   // 49번: 받은 편지 모두 · 최근 편지가 맨 위
-  $('pileCnt').textContent = list.length ? `(${list.length}통)` : '· 예시 편지';
-  const items = list.length ? list : SAMPLES();
+  document.querySelectorAll('[data-pt]').forEach(b => b.classList.toggle('sel', b.dataset.pt === pileMode));
+  const out = pileMode === 'out';   // 54-1번: 보낸 편지함
+  const list = out ? sentL().slice().sort((a, b) => a.at - b.at) : [...received(), ...selfL().filter(m => arrived(m))].sort((a, b) => whenOf(a) - whenOf(b));   // 49번: 받은 편지 모두 · 최근 편지가 맨 위
+  $('pileCnt').textContent = list.length ? `(${list.length}통)` : out ? '· 아직 보낸 편지가 없어요' : '· 예시 편지';
+  const items = list.length || out ? list : SAMPLES();
   pileItems = {}; items.forEach(m => pileItems[m.id] = m);
   const pile = $('pile'), stepH = 26;
   pile.style.height = (180 + (items.length - 1) * stepH) + 'px';
@@ -5516,6 +5547,8 @@ const CARDS = [
   { id:'xc1', kind:'xmas', name:'하얀 기도', photo:'xmas1.jpg', fade:0, cls:'card', bg:'#f6f4f1', line:'transparent', ink:'#4a3a30', env:'#f3e7cf', cpr:'30%' },
   { id:'xc2', kind:'xmas', name:'촛불 트리', photo:'xmas2.jpg', fade:0, cls:'card', bg:'#2a1b12', line:'transparent', ink:'#fffaf0', env:'#7b1e2b', tsh:'0 1px 3px #000,0 0 8px #000' },
   { id:'xc3', kind:'xmas', name:'나무 방', photo:'xmas3.jpg', fade:0, cls:'card', bg:'#5a3b22', line:'transparent', ink:'#fffaf0', env:'#1e4d2b', tsh:'0 1px 3px #000,0 0 8px #000' },
+  { id:'xc4', kind:'xmas', name:'광장 트리', photo:'xmas4.jpg', fade:0, cls:'card', bg:'#0b1430', line:'transparent', ink:'#fffaf0', env:'#7b1e2b', tsh:'0 1px 3px #000,0 0 8px #000' },
+  { id:'xc5', kind:'xmas', name:'반짝 트리', photo:'xmas5.jpg', fade:0, cls:'card', bg:'#0b1430', line:'transparent', ink:'#fffaf0', env:'#1e4d2b', tsh:'0 1px 3px #000,0 0 8px #000' },
   { id:'ny1', kind:'ny', name:'밤하늘 불꽃', svg:NY_SVG('#0f1a3a', '#ffd54f', '#ff8a80'), cls:'card', bg:'#0f1a3a', line:'transparent', ink:'#fffaf0', env:'#1b2a4a', tsh:'0 1px 3px #000' },
   { id:'ny2', kind:'ny', name:'붉은 새해', svg:NY_SVG('#6d0f1a', '#ffd54f', '#fff3c4'), cls:'card', bg:'#6d0f1a', line:'transparent', ink:'#fffaf0', env:'#7b1e2b', tsh:'0 1px 3px #000' }
 ];
