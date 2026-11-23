@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 58번: 🚨 신고하기(더보기·차단 옆) · 욕설 거르기(보낼 때 ** 로) · 💡 건의하기 · 🚪 탈퇴하기 · 🛠 관리자 화면(신고·건의 보기 · 강제 탈퇴) · 🍀 모르는 사람에게 편지(답장하면 펜팔) · 모르는 편지 받지 않기 · 🍀 모르는 편지함 · 홍보 글 잠깐 보였다 사라짐(✕ · 5분) -->
 <html lang="ko">
 <head>
 <meta charset="utf-8">
@@ -1209,6 +1210,7 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
     <div class="mrow" data-to="__me" id="toMe"><span class="ck">☐</span><b>📝 나에게 쓰기 (내 편지함으로)</b></div>
     <div id="toList"></div>
     <div class="tvia"><button data-tvia="kakao">💬 카톡으로 보내기</button><button data-tvia="sms">✉ 문자로 보내기</button></div>
+    <button class="big" id="toStranger">🍀 모르는 사람에게 보내기</button>
     <button class="big r" id="toSend">📮 보내기</button>
     <button class="big" data-close>닫기</button>
   </div>
@@ -1315,6 +1317,11 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
     <button class="big" id="installBtn2" style="margin-top:0">📲 홈 화면에 추가</button>
     <button class="big" id="loginBtn">G 구글로 로그인 (다른 기기에서도 방 목록 보기)</button><button class="big" id="kakaoBtn" style="background:#fee500;color:#191600;border-color:#fee500">💬 카카오로 로그인</button>
     <button class="big" id="logoutBtn" style="display:none">로그아웃</button>
+    <button class="big" id="stBox">🍀 모르는 편지함</button>
+    <button class="big" id="stOff">🍀 모르는 편지 받기: 켜짐</button>
+    <button class="big" id="fbBtn">💡 건의하기 · 제안하기</button>
+    <button class="big" id="quitBtn">🚪 탈퇴하기</button>
+    <button class="big y" id="admBtn" style="display:none">🛠 관리자 (신고·건의·탈퇴)</button>
     <button class="big y" id="ntWrite" style="display:none">📢 전체 공지 쓰기 (개발자)</button>
     <div id="myUid" style="font-size:12px;color:#888;text-align:center;margin:6px 0;word-break:break-all"></div>
     <button class="big" data-close>닫기</button>
@@ -1644,6 +1651,36 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
   <div class="moderow"><button data-mode="light">☀<b>일반</b></button><button data-mode="dark" class="on">🌙<b>다크</b></button><button data-mode="silver">👵<b>실버</b></button></div>
 </div></div>
 <div id="fly"></div>
+<!-- 58번: 신고 · 건의 · 관리자 · 정지 · 모르는 편지 -->
+<div class="ov" id="repOv"><div class="panel mid">
+  <h2>🚨 신고하기</h2><div style="color:#ccc;font-size:14px;margin-bottom:8px" id="repWho"></div>
+  <div class="tvia" id="repWhy"><button data-why="욕설·비방">욕설·비방</button><button data-why="스팸·광고">스팸·광고</button><button data-why="음란·불쾌">음란·불쾌</button><button data-why="사기·위협">사기·위협</button></div>
+  <textarea id="repTxt" rows="3" placeholder="더 적을 내용 (안 써도 돼요)" style="width:100%;font-size:16px;margin-top:8px"></textarea>
+  <button class="big r" id="repSend">🚨 신고 보내기</button><button class="big" data-close>닫기</button>
+</div></div>
+<div class="ov" id="fbOv"><div class="panel mid">
+  <h2>💡 건의하기 · 제안하기</h2><div style="color:#ccc;font-size:14px">불편한 점이나 바라는 점을 적어 주세요</div>
+  <textarea id="fbTxt" rows="6" style="width:100%;font-size:16px;margin-top:8px"></textarea>
+  <button class="big r" id="fbSend">💡 보내기</button><button class="big" data-close>닫기</button>
+</div></div>
+<div class="ov" id="admOv"><div class="panel">
+  <h2>🛠 관리자</h2>
+  <div class="tvia"><button id="admRep">🚨 신고 목록</button><button id="admFb">💡 건의 목록</button></div>
+  <div id="admList" style="text-align:left;font-size:15px;line-height:1.6;max-height:60vh;overflow:auto"></div>
+  <button class="big" data-close>닫기</button>
+</div></div>
+<div class="ov" id="banOv" style="z-index:999"><div class="panel mid">
+  <h2>🚫 이용이 정지되었어요</h2><div class="mtx">운영 규칙을 어겨 이 계정은 더 이상 쓸 수 없어요.<br>문의: kymhka100@gmail.com</div>
+</div></div>
+<div class="ov" id="stOv"><div class="panel mid">
+  <div style="font-size:64px">🍀</div><h2 id="stTitle">모르는 분의 편지가 도착했어요</h2>
+  <div class="mtx" style="color:#ccc;font-size:14px">누군가 마음을 담아 보낸 편지예요</div>
+  <button class="big r" id="stOpen">💌 열어 보기</button><button class="big" id="stLater">나중에 (모르는 편지함에서 볼 수 있어요)</button>
+</div></div>
+<div class="ov" id="stListOv"><div class="panel">
+  <h2>🍀 모르는 편지함</h2><div id="stList"></div><button class="big" data-close>닫기</button>
+</div></div>
+<div id="promoBar" style="display:none;position:fixed;left:10px;right:10px;bottom:84px;z-index:45;background:#1d1d24;border:1px solid #ff8fb1;color:#f2f2f6;border-radius:14px;padding:10px 40px 10px 14px;font-size:15px;line-height:1.5;box-shadow:0 4px 18px rgba(0,0,0,.5)"><span id="promoTx"></span><button id="promoX" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:#aaa;font-size:20px;padding:6px">✕</button></div>
 <div id="toast"></div>
 
 <script>
@@ -1754,12 +1791,14 @@ const selfL = () => LS.get('rp_selfletters', []);   // 26번: 나에게 쓴 편�
 const demoKey = () => 'rp_msgs_' + room;
 const saveDemo = () => LS.set(demoKey(), msgs);
 function addMsg(m){
+  badFix(m);   // 58번: 욕설 거르기
   if (fb && pairInfo[room]) grpPing(room);   // 37번: 공동체 사람에게 처음 보내면 그 사람 목록에도
   if (fb) { fb.push(m).catch(() => toast('보내기 실패 - 인터넷을 확인해 주세요')); return; }
   m.id = rid(); msgs[m.id] = m; saveDemo(); render();
 }
 /* 다른 방(새 방)에 메시지 넣기 */
 function pushTo(id, m){
+  badFix(m);   // 58번
   if (FB) {
     needKey(id);
     const { D, db } = FB, base = 'giftstory/rooms/' + id;
@@ -1772,6 +1811,7 @@ function pushTo(id, m){
 }
 function markRead(m){
   if (m.self && !m.read) { m.read = true; LS.set('rp_selfletters', selfL().map(x => x.id === m.id ? { ...x, read: true } : x)); updateFlag(); return; }
+  if (m.stranger) { stMark(m); return; }   // 58번
   if (m.read || m.sample || isMine(m)) return;
   m.read = true;
   if (homeL[m.id]) homeL[m.id].read = true;
@@ -1850,7 +1890,7 @@ async function initStore(){
     try { await fbInit(); } catch (e) { FB = null; toast('서버 연결 실패 - 연습 모드로 열려요'); }
   }
   if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
-  if (FB && authUid) { devCheck(); noticeCheck(); }   // 57번
+  if (FB && authUid) { devCheck(); noticeCheck(); banCheck(); setTimeout(stCheck, 4000); }   // 57번 · 58번
   if (FB && authUid) myLoad();   // 32번: 할 일 · 일기 (서버 ↔ 내 폰)
   if (FB && me.name && LS.get('rp_name_synced', '') !== me.name) setTimeout(renameAll, 3000);   // 25번: 예전 이름으로 남은 방도 한 번에 고쳐요
   /* 28번: 초대 링크·알림을 누르고 들어오면 목록이 아니라 바로 그 대화방 */
@@ -2342,7 +2382,7 @@ function blockRoom(id){
 function drawMore(){
   const list = moreRooms();
   const canBlk = !homeOn && room && !isGroup(room) && !isSelf(room);
-  $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (canBlk ? `<div class="mrow blk" data-blk="1">🚫 '${esc(roomName(room))}' 차단하기</div>` : '') + (list.length ? list.map(x => {
+  $('morePanel').innerHTML = `<div class="mrow inv" data-inv="1">＋ 새 친구 초대하기</div>` + (canBlk ? `<div class="mrow blk" data-blk="1">🚫 '${esc(roomName(room))}' 차단하기</div><div class="mrow blk" data-rep="1">🚨 '${esc(roomName(room))}' 신고하기</div>` : '') + (list.length ? list.map(x => {
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
     const nm = roomName(x.id);
     const tmp = FB && othersIn(x.id).length && !othersIn(x.id).some(v => v.lg);   // 42번: 간편 로그인 안 한 사람은 '임시'
@@ -2364,6 +2404,7 @@ $('morePanel').addEventListener('click', e => {
   const r = e.target.closest('.mrow'); if (!r) return;
   $('morePanel').classList.remove('show'); menuDim(); click();
   if (r.dataset.inv) { pinWant = null; $('addRoom').click(); return; }
+  if (r.dataset.rep) { repOpen(room); return; }   // 58번
   if (r.dataset.blk) { if (confirm(`'${roomName(room)}'님을 차단할까요?\n차단하면 이 사람의 글과 편지가 오지 않아요.`)) blockRoom(room); return; }
   if (r.dataset.go && (homeOn || r.dataset.go !== room)) openRoom(r.dataset.go);
 });
@@ -3544,7 +3585,7 @@ $('toAll').onclick = () => { click(); const list = visibleRooms(), all = list.ev
 $('toSend').onclick = async () => {
   if (!toSel.size) { toast('보낼 친구를 골라 주세요'); return; }
   readW();
-  W.self = toSel.has('__me'); W.toIds = [...toSel].filter(x => x !== '__me');
+  W.stranger = null; W.self = toSel.has('__me'); W.toIds = [...toSel].filter(x => x !== '__me');
   W.to = [...(W.self ? ['나'] : []), ...W.toIds.map(roomName)].join(', ').slice(0, 40);
   $('wTo').value = W.to; hideOv('toOv');
   if (!W.body.trim()) { click(); toast('받는 사람을 정했어요 · ✏ 편지 내용을 다 써 주세요'); return; }   // 아직 안 썼으면 고르기만
@@ -3553,7 +3594,7 @@ $('toSend').onclick = async () => {
 /* 54-1번: '누구에게 보낼까요?' 창에서 카톡·문자 고르기 → 편지를 다 썼으면 바로 보내기 */
 $('toOv').addEventListener('click', e => {
   const b = e.target.closest('[data-tvia]'); if (!b) return;
-  click(); readW(); W.via = b.dataset.tvia; W.toIds = null; W.self = false; hideOv('toOv');
+  click(); readW(); W.stranger = null; W.via = b.dataset.tvia; W.toIds = null; W.self = false; hideOv('toOv');
   if (!W.body.trim()) { toast(`${W.via === 'kakao' ? '카톡' : '문자'}으로 보내요 · 편지를 다 쓰고 보내기를 누르면 그때 보내져요`); return; }
   sendLetter(false);
 });
@@ -3587,6 +3628,7 @@ async function sendLetter(slow, at){
   if (rec) await stopRec();
   readW(); at = at || W.at || 0;   // 53번: 봉투에서 정한 시간
   if (!W.body.trim()) { toast('✏ 편지 내용을 다 써 주세요'); $('wBody').focus(); return; }
+  if (W.stranger) { stSend(slow); return; }   // 58번: 모르는 사람에게
   if (W.via) { sendLetterLink(W.via, at || (slow ? nextMorning() : 0)); return; }   // 53번
   if ((W.toIds && W.toIds.length) || W.self) { sendPicked(slow, at); return; }
   if (homeOn) {   // 26번: 메인 화면에서 쓴 편지 → 이름이 같은 친구 방, 없으면 고르기
@@ -3775,6 +3817,7 @@ function koVoice(){
 $('rTTS').onclick = readAloud;
 $('rClose').onclick = closeReader;
 $('rReply').onclick = () => {
+  if (curLetter && curLetter.stranger) { stReply(curLetter); return; }   // 58번
   const to = curLetter.letter.fromName;
   closeReader();
   const rm = curLetter._room || (!homeOn ? room : null);   // 51번: 답장은 묻지 않고 그 사람 방으로
@@ -6262,7 +6305,161 @@ async function ntSave(on){
 }
 $('ntEdSend').onclick = () => { click(); ntSave(true); };
 $('ntEdOff').onclick = () => { click(); ntSave(false); };
-function devUi(){ $('ntWrite').style.display = isDev ? '' : 'none'; $('myUid').textContent = authUid ? '내 번호: ' + authUid : ''; }
+function devUi(){ $('admBtn').style.display = isDev ? '' : 'none'; stOffUi(); $('ntWrite').style.display = isDev ? '' : 'none'; $('myUid').textContent = authUid ? '내 번호: ' + authUid : ''; }
+/* ===== 58번 ===== */
+const isAdm = () => !!(FB && authUid && isDev);
+const fbOk = () => { if (!FB || !authUid) { toast('인터넷에 연결된 뒤에 다시 해 주세요'); return false; } return true; };
+/* 욕설 거르기 - 보낼 때 ** 로 바꿔요 */
+const BAD_RE = new RegExp(['씨\\s*발', '시\\s*발', '씨\\s*바', '씨\\s*빨', 'ㅅ\\s*ㅂ', 'ㅆ\\s*ㅂ', '병\\s*신', 'ㅂ\\s*ㅅ', '개\\s*새\\s*끼', '개\\s*색\\s*기', '개\\s*새', '좆', '존\\s*나', '졸\\s*라', '미\\s*친\\s*놈', '미\\s*친\\s*년', '지\\s*랄', '염\\s*병', '썅', '닥\\s*쳐', '꺼\\s*져', '엿\\s*먹', 'fuck', 'shit'].join('|'), 'gi');
+const badClean = t => typeof t === 'string' ? t.replace(BAD_RE, w => '*'.repeat(Math.max(2, w.replace(/\s/g, '').length))) : t;
+function badFix(m){
+  if (!m) return;
+  if (m.text) m.text = badClean(m.text);
+  if (m.letter && m.letter.body) m.letter.body = badClean(m.letter.body);
+}
+/* 이 방의 상대 번호들 */
+function othersOf(id){
+  const o = Object.keys(roomMembers[id] || {}).filter(u => !me.ids.includes(u) && (roomMembers[id][u] || {}).name !== me.name);
+  if (id === room) Object.values(msgs).forEach(m => { if (m.from && !me.ids.includes(m.from) && !isMine(m)) o.push(m.from); });
+  const pi = pairInfo[id]; if (pi && pi.uid) o.push(pi.uid);
+  return [...new Set(o)];
+}
+/* 🚨 신고하기 */
+let repRoom = null, repWhy = '';
+function repOpen(id){
+  repRoom = id; repWhy = ''; $('repTxt').value = ''; $('repWho').textContent = `'${roomName(id)}'님을 신고해요 · 운영자가 확인해요`;
+  $('repWhy').querySelectorAll('button').forEach(b => b.classList.remove('on')); showOv('repOv');
+}
+$('repWhy').addEventListener('click', e => { const b = e.target.closest('[data-why]'); if (!b) return; click(); repWhy = b.dataset.why; $('repWhy').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); });
+$('repSend').onclick = async () => {
+  click(); if (!repWhy) { toast('신고 이유를 골라 주세요'); return; }
+  if (!fbOk()) return;
+  const last = Object.values(msgs).filter(m => !isMine(m) && m.text).slice(-5).map(m => `${m.name}: ${m.text}`.slice(0, 120));
+  try {
+    await FB.D.push(FB.D.ref(FB.db, 'giftstory/reports'), { by: authUid, byName: me.name, room: repRoom, name: roomName(repRoom), uids: othersOf(repRoom), why: repWhy, text: $('repTxt').value.trim().slice(0, 500), last, at: Date.now() });
+    hideOv('repOv'); toast('🚨 신고했어요 · 확인해 볼게요');
+  } catch (e) { toast('신고를 못 보냈어요 (서버 규칙 확인)'); }
+};
+/* 💡 건의하기 */
+$('fbBtn').onclick = () => { click(); $('fbTxt').value = ''; showOv('fbOv'); };
+$('fbSend').onclick = async () => {
+  click(); const t = $('fbTxt').value.trim(); if (!t) { toast('내용을 적어 주세요'); return; }
+  if (!fbOk()) return;
+  try { await FB.D.push(FB.D.ref(FB.db, 'giftstory/feedback'), { by: authUid, name: me.name, text: t.slice(0, 2000), at: Date.now() }); hideOv('fbOv'); toast('💡 고마워요! 잘 읽어 볼게요'); }
+  catch (e) { toast('못 보냈어요 (서버 규칙 확인)'); }
+};
+/* 🚪 탈퇴하기 */
+$('quitBtn').onclick = async () => {
+  click();
+  if (!confirm('정말 탈퇴할까요?\n이 폰의 대화·편지·일기장이 모두 지워지고 되돌릴 수 없어요.')) return;
+  if (!confirm('한 번 더 확인해요. 탈퇴할까요?')) return;
+  try { if (FB && authUid) await FB.D.remove(FB.D.ref(FB.db, 'giftstory/users/' + authUid)); } catch (e) {}
+  try { const A = await authModule(); if (A) await A.signOut(A.getAuth(FB.app)); } catch (e) {}
+  try { Object.keys(localStorage).filter(k => k.startsWith('rp_')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+  alert('탈퇴했어요. 그동안 고마웠어요.'); location.replace(location.pathname);
+};
+/* 🚫 강제 탈퇴(정지) 확인 */
+async function banCheck(){
+  if (!FB || !authUid) return;
+  try { const b = (await FB.D.get(FB.D.ref(FB.db, 'giftstory/banned/' + authUid))).val(); if (b) { showOv('banOv'); document.body.style.pointerEvents = 'none'; $('banOv').style.pointerEvents = 'auto'; } } catch (e) {}
+}
+/* 🛠 관리자 화면 */
+const ago = t => new Date(t).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+$('admBtn').onclick = () => { click(); if (!isAdm()) return; showOv('admOv'); admLoad('reports'); };
+$('admRep').onclick = () => { click(); admLoad('reports'); };
+$('admFb').onclick = () => { click(); admLoad('feedback'); };
+async function admLoad(kind){
+  const box = $('admList'); box.innerHTML = '불러오는 중…';
+  try {
+    const v = (await FB.D.get(FB.D.query(FB.D.ref(FB.db, 'giftstory/' + kind), FB.D.limitToLast(100)))).val() || {};
+    const ban = (await FB.D.get(FB.D.ref(FB.db, 'giftstory/banned'))).val() || {};
+    const rows = Object.entries(v).sort((a, b) => b[1].at - a[1].at);
+    if (!rows.length) { box.innerHTML = '<div class="pin-empty">아직 없어요</div>'; return; }
+    box.innerHTML = rows.map(([k, r]) => kind === 'reports'
+      ? `<div style="border-bottom:1px solid #333;padding:8px 0"><b>🚨 ${esc(r.name || '')}</b> · ${esc(r.why || '')} <span style="color:#888">${ago(r.at)} · 신고: ${esc(r.byName || '')}</span>
+         ${r.text ? `<div>${esc(r.text)}</div>` : ''}${(r.last || []).map(t => `<div style="color:#aaa;font-size:13px">${esc(t)}</div>`).join('')}
+         <div>${(r.uids || []).map(u => ban[u] ? `<button data-unban="${u}">✅ 정지 풀기</button>` : `<button data-ban="${u}" data-nm="${esc(r.name || '')}">🚫 강제 탈퇴</button>`).join(' ')} <button data-del="${k}">🗑 지우기</button></div></div>`
+      : `<div style="border-bottom:1px solid #333;padding:8px 0"><b>💡 ${esc(r.name || '')}</b> <span style="color:#888">${ago(r.at)}</span><div style="white-space:pre-wrap">${esc(r.text || '')}</div><button data-del="${k}">🗑 지우기</button></div>`).join('');
+    box.dataset.kind = kind;
+  } catch (e) { box.innerHTML = '못 불러왔어요 (서버 규칙 확인)'; }
+}
+$('admList').addEventListener('click', async e => {
+  const b = e.target.closest('button'); if (!b || !isAdm()) return; click();
+  const kind = $('admList').dataset.kind;
+  try {
+    if (b.dataset.ban) { if (!confirm(`'${b.dataset.nm}'님을 강제 탈퇴시킬까요?\n이 사람은 앱을 더 쓸 수 없어요.`)) return; await FB.D.set(FB.D.ref(FB.db, 'giftstory/banned/' + b.dataset.ban), { at: Date.now(), by: authUid }); toast('🚫 강제 탈퇴시켰어요'); }
+    else if (b.dataset.unban) { await FB.D.remove(FB.D.ref(FB.db, 'giftstory/banned/' + b.dataset.unban)); toast('✅ 정지를 풀었어요'); }
+    else if (b.dataset.del) { await FB.D.remove(FB.D.ref(FB.db, 'giftstory/' + kind + '/' + b.dataset.del)); }
+    admLoad(kind);
+  } catch (err) { toast('안 됐어요 (서버 규칙 확인)'); }
+});
+/* 🍀 모르는 사람에게 편지 (giftstory/stranger/<번호> = { from, name, at, letter, to, got }) */
+const stIn = () => LS.get('rp_stIn', []);
+const stOffOn = () => !!LS.get('rp_noStranger', false);
+function stOffUi(){ $('stOff').textContent = stOffOn() ? '🍀 모르는 편지 받기: 꺼짐 (안 받아요)' : '🍀 모르는 편지 받기: 켜짐'; }
+$('stOff').onclick = () => { click(); LS.set('rp_noStranger', !stOffOn()); stOffUi(); toast(stOffOn() ? '이제 모르는 사람 편지는 안 받아요' : '모르는 사람 편지를 다시 받아요'); };
+$('toStranger').onclick = () => {
+  click(); readW(); W.stranger = { uid: null }; W.toIds = null; W.self = false; W.via = null; W.to = '모르는 분'; $('wTo').value = W.to; hideOv('toOv');
+  if (!W.body.trim()) { toast('🍀 모르는 누군가에게 보내요 · 편지를 다 쓰고 보내기를 누르세요'); return; }
+  sendLetter(false);
+};
+async function stSend(slow){
+  if (rec) await stopRec();
+  if (!fbOk()) return;
+  const u = who(), to = W.stranger.uid || null;
+  const L = { to: to ? (W.stranger.name || '모르는 분') : '모르는 분', toUid: null, fromName: u.name, body: badClean(W.body), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0, card: W.env || null };
+  try { await FB.D.push(FB.D.ref(FB.db, 'giftstory/stranger'), { from: authUid, name: u.name, at: Date.now(), to, letter: L }); }
+  catch (e) { toast('못 보냈어요 (서버 규칙 확인)'); return; }
+  saveSent(L.to, L);
+  if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
+  closeWriter(); dingdong(); bumpBox();
+  toast(to ? '🍀 답장을 보냈어요' : '🍀 모르는 누군가에게 편지가 날아가요');
+}
+/* 받기: 나에게 온 답장은 늘, 모르는 편지는 하루에 한 통 */
+async function stCheck(){
+  if (!FB || !authUid) return;
+  try {
+    const v = (await FB.D.get(FB.D.query(FB.D.ref(FB.db, 'giftstory/stranger'), FB.D.limitToLast(60)))).val() || {};
+    const have = new Set(stIn().map(x => x.sid)), today = new Date().toDateString(), mine = me.ids.concat(authUid);
+    const ok = ([k, x]) => x && x.letter && !x.got && !have.has(k) && !mine.includes(x.from) && !isBlocked(x.from);
+    const pick = Object.entries(v).filter(e => ok(e) && e[1].to === authUid).concat(stOffOn() || LS.get('rp_stDay', '') === today ? [] : Object.entries(v).filter(e => ok(e) && !e[1].to).sort(() => Math.random() - .5).slice(0, 1));
+    let n = 0;
+    for (const [k, x] of pick) {
+      const r = await FB.D.runTransaction(FB.D.ref(FB.db, 'giftstory/stranger/' + k + '/got'), g => g ? undefined : authUid);
+      if (!r.committed) continue;
+      if (!x.to) LS.set('rp_stDay', today);
+      LS.set('rp_stIn', [...stIn(), { sid: k, fromUid: x.from, at: x.at, read: false, reply: !!x.to, letter: { ...x.letter, to: x.to ? me.name : '모르는 분께', fromName: x.to ? x.letter.fromName : '모르는 누군가' } }].slice(-60));
+      n++;
+    }
+    if (n) { $('stTitle').textContent = n > 1 ? `🍀 모르는 분의 편지 ${n}통이 도착했어요` : '모르는 분의 편지가 도착했어요'; dingdong(); showOv('stOv'); }
+  } catch (e) {}
+}
+const stMsg = x => ({ id: 'st_' + x.sid, sid: x.sid, stranger: true, fromUid: x.fromUid, from: 'stranger', name: x.letter.fromName, type: 'letter', at: x.at, read: x.read, letter: x.letter });
+$('stOpen').onclick = () => { click(); hideOv('stOv'); const x = stIn().filter(y => !y.read).pop(); if (x) openLetter(stMsg(x)); };
+$('stLater').onclick = () => { click(); hideOv('stOv'); };
+function stMark(m){ m.read = true; LS.set('rp_stIn', stIn().map(x => x.sid === m.sid ? { ...x, read: true } : x)); }
+$('stBox').onclick = () => {
+  click(); const l = stIn().slice().reverse();
+  $('stList').innerHTML = l.length ? l.map(x => `<div class="mrow" data-sid="${x.sid}"><b>${x.read ? '✉' : '💌'} ${esc(x.letter.fromName)}</b><span style="color:#888;margin-left:auto;font-size:13px">${ago(x.at)}</span></div>`).join('') : '<div class="pin-empty">아직 모르는 편지가 없어요</div>';
+  showOv('stListOv');
+};
+$('stList').addEventListener('click', e => { const r = e.target.closest('[data-sid]'); if (!r) return; click(); const x = stIn().find(y => y.sid === r.dataset.sid); if (x) { hideOv('stListOv'); openLetter(stMsg(x)); } });
+function stReply(m){
+  closeReader();
+  openWriter({ to: '모르는 분', toIds: null, body: '', paper: m.letter.paperData ? 'pink' : m.letter.paper, font: m.letter.font, stickers: [], voice: null, draftId: null, stranger: { uid: m.fromUid, name: m.letter.fromName } });
+}
+/* 홍보 글 - 잠깐 보였다가 5분 뒤 사라지고, 30분 뒤 다시 잠깐 */
+const PROMOS = ['📒 매일 일기장을 쓸 수 있어요', '✅ 할 일을 기록하고 편하게 지울 수 있어요', '🎵 ＋ → 같이 듣기로 친구와 음악을 같이 들을 수 있어요', '🎲 ＋ → 게임에서 다른 사람과 가위바위보를 할 수 있어요', '🍀 모르는 누군가에게 편지를 보낼 수 있어요', '👥 가족·회사 공동체를 만들면 연락처가 자동으로 등록돼요', '🎄 크리스마스 카드를 여러 명에게 한 번에 보낼 수 있어요'];
+let promoT = 0;
+function promoShow(){
+  if (document.hidden || $('writer').classList.contains('show') || document.querySelector('.ov.show')) { promoT = setTimeout(promoShow, 60000); return; }
+  const i = (LS.get('rp_promoI', -1) + 1) % PROMOS.length; LS.set('rp_promoI', i);
+  $('promoTx').textContent = PROMOS[i]; $('promoBar').style.display = 'block';
+  clearTimeout(promoT); promoT = setTimeout(() => { $('promoBar').style.display = 'none'; promoT = setTimeout(promoShow, 1800000); }, 300000);
+}
+$('promoX').onclick = () => { click(); $('promoBar').style.display = 'none'; clearTimeout(promoT); promoT = setTimeout(promoShow, 1800000); };
+setTimeout(promoShow, 8000);
+
 new MutationObserver(() => { if ($('roomOv').classList.contains('show')) devUi(); }).observe($('roomOv'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
