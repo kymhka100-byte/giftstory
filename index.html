@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 59번: 상단 말풍선 새 모양(살짝 둥근 네모 · 같은 크기 · 가운데 · 안 들어옴 회색/들어옴 올리브 · ＋친구 점선) · 목록 이름 칸도 같은 규칙 · 공동체 버튼 "공동3" · 메인 아이콘 4개 한 줄(편지 쓰기·편지함·크리스마스·연말) 작게 · 테두리 없이 그림만 · 홍보 글 누르면 그 기능으로 -->
 <!-- 58번: 🚨 신고하기(더보기·차단 옆) · 욕설 거르기(보낼 때 ** 로) · 💡 건의하기 · 🚪 탈퇴하기 · 🛠 관리자 화면(신고·건의 보기 · 강제 탈퇴) · 🍀 모르는 사람에게 편지(답장하면 펜팔) · 모르는 편지 받지 않기 · 🍀 모르는 편지함 · 홍보 글 잠깐 보였다 사라짐(✕ · 5분) -->
 <html lang="ko">
 <head>
@@ -1008,6 +1009,39 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
 #svArrMsg{font-size:34px;font-weight:800;color:#ffd76a}
 #svArrHint{font-size:22px;color:#fff}
 #svEnv{animation:lhdrop .9s cubic-bezier(.2,1.4,.4,1) both,lhwig 2.4s 1s ease-in-out infinite}
+/* ===== 59번: 상단 말풍선 · 목록 이름 칸 새 모양 ===== */
+.rooms{justify-content:center}
+.rscroll,.rscroll.rscroll{flex:0 1 auto;justify-content:center;gap:6px;overflow:hidden}
+.rooms .rb:not(.more),.rscroll .rb,.rscroll .rb:not(.cur):not(.add){flex:none!important;width:54px!important;min-width:54px!important;max-width:54px!important;height:30px!important;padding:0 6px!important;box-sizing:border-box;border-radius:8px!important;border:1px solid #666!important;background:#2a2a30!important;color:#d4d4da!important;font-size:11px!important;font-weight:200!important;text-align:center;display:inline-flex;align-items:center;justify-content:center;opacity:1!important;box-shadow:none!important;margin:0!important}
+.rooms .rb.pin:not(.wait),.rooms .rb.gbtn.live{background:#5a5520!important;border-color:#8a8240!important;color:#eee!important;font-weight:500!important}
+.rooms .rb.empty,.rooms .rb.gbtn:not(.has){background:transparent!important;border:1px dotted #777!important;color:#888!important;font-weight:300!important}
+.rooms .rb.mebtn{background:#2b6f9e!important;border-color:#5ab4f0!important;color:#fff!important;font-weight:500!important}
+.rooms .rb.cur:not(.mebtn),.rooms .rb.gbtn.on{box-shadow:0 0 0 2px var(--pink)!important}
+.rooms .rb.unread{background:#ff4d4a!important;border-color:#ff4d4a!important;color:#fff!important;font-weight:500!important}
+body:not(.dark) .rooms .rb:not(.more),body:not(.dark) .rscroll .rb{background:#ececf0!important;border-color:#b8b8c0!important;color:#6a6a72!important}
+body:not(.dark) .rooms .rb.pin:not(.wait),body:not(.dark) .rooms .rb.gbtn.live{background:#f3edc0!important;border-color:#d8cf8a!important;color:#6a5f2a!important;font-weight:400!important}
+body:not(.dark) .rooms .rb.empty,body:not(.dark) .rooms .rb.gbtn:not(.has){background:transparent!important;border:1px dotted #aaa!important;color:#aaa!important}
+body:not(.dark) .rooms .rb.mebtn{background:#d6efff!important;border-color:#5ab4f0!important;color:#3a5f7a!important;font-weight:400!important}
+body:not(.dark) .rooms .rb.unread{background:#ff4d4a!important;border-color:#ff4d4a!important;color:#fff!important}
+/* 목록 이름 칸도 같은 규칙 */
+.hav,#morePanel .mav{width:44px!important;height:28px!important;border-radius:8px!important;border:1px solid #666;background:#2a2a30!important;color:#d4d4da!important;font-size:11px!important;font-weight:200!important}
+.hav.in,#morePanel .mav.in{background:#5a5520!important;border-color:#8a8240;color:#eee!important;font-weight:500!important}
+body:not(.dark) .hav,body:not(.dark) #morePanel .mav{background:#ececf0!important;border-color:#b8b8c0;color:#6a6a72!important}
+body:not(.dark) .hav.in,body:not(.dark) #morePanel .mav.in{background:#f3edc0!important;border-color:#d8cf8a;color:#6a5f2a!important;font-weight:400!important}
+.gall .hav{background:#2b6f9e!important;border-color:#5ab4f0;color:#fff!important}
+/* 메인 화면 아이콘 4개 한 줄 · 작게 · 테두리 없이 그림만 */
+#letterHome .lhic.r{left:0;right:0;justify-content:center;gap:18px}
+#letterHome .lhic button{width:38px!important;height:38px!important;border-radius:8px!important;font-size:24px!important;box-shadow:none!important}
+#lhWrite,#lhBox,#lhNY{background:transparent!important}
+#lhNY svg{width:32px!important;height:32px!important}
+#promoTx{cursor:pointer}
+#roomBar .rb.pin:not(.wait){background:#5a5520!important;border-color:#8a8240!important;color:#eee!important;font-weight:500!important}
+#roomBar .rb.empty{background:transparent!important;border:1px dotted #777!important;color:#888!important;font-weight:300!important}
+#roomBar .rb.unread{background:#ff4d4a!important;border-color:#ff4d4a!important;color:#fff!important;font-weight:500!important}
+body:not(.dark) #roomBar .rb.pin:not(.wait){background:#f3edc0!important;border-color:#d8cf8a!important;color:#6a5f2a!important;font-weight:400!important}
+body:not(.dark) #roomBar .rb.empty{background:transparent!important;border:1px dotted #aaa!important;color:#aaa!important}
+body:not(.dark) #roomBar .rb.unread{background:#ff4d4a!important;border-color:#ff4d4a!important;color:#fff!important}
+#lhXmas{border:none!important;outline:none!important}
 </style>
 </head>
 <body>
@@ -1056,8 +1090,7 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
   <div id="homeList">
     <div id="letterHome">
       <div id="lhQuote"><q>소중한 분께 마음을 전하세요</q></div>
-      <div class="lhic l"><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
-      <div class="lhic r"><button id="lhXmas" title="크리스마스 카드"></button><button id="lhBox" title="편지함">📬</button><button id="lhWrite" title="편지 쓰기">✍️</button></div>
+      <div class="lhic r"><button id="lhWrite" title="편지 쓰기">✍️</button><button id="lhBox" title="편지함">📬</button><button id="lhXmas" title="크리스마스 카드"></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
     <div id="hGroup" class="hsec"></div>
@@ -1670,7 +1703,7 @@ body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--
   <button class="big" data-close>닫기</button>
 </div></div>
 <div class="ov" id="banOv" style="z-index:999"><div class="panel mid">
-  <h2>🚫 이용이 정지되었어요</h2><div class="mtx">운영 규칙을 어겨 이 계정은 더 이상 쓸 수 없어요.<br>문의: kymhka100@gmail.com</div>
+  <h2>🚫 이용이 정지되었어요</h2><div class="mtx">운영 규칙을 어겨 이 계정은 더 이상 쓸 수 없어요.<br>문의는 개발자에게 해 주세요.</div>
 </div></div>
 <div class="ov" id="stOv"><div class="panel mid">
   <div style="font-size:64px">🍀</div><h2 id="stTitle">모르는 분의 편지가 도착했어요</h2>
@@ -2070,7 +2103,7 @@ function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기
   const row = x => {
     const name = roomName(x.id), n = unreadN(x.id), L = lastMsg[x.id];
     const sub = L ? L.t : (FB && !othersIn(x.id).length ? '⏳ 친구가 아직 안 들어왔어요' : '대화를 시작해 보세요');
-    return `<div class="hrow" data-home="${x.id}"><div class="hav">${esc([...name.replace(/\s+/g, '')].slice(0, 2).join(''))}${dupTag(x.id)}</div>
+    return `<div class="hrow" data-home="${x.id}"><div class="hav ${FB && !othersIn(x.id).length ? 'off' : 'in'}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${dupTag(x.id)}</div>
       <div class="htx"><b>${esc(name)}</b><small>${esc(sub)}</small></div>${telBtn(phoneOf(x.id))}
       <div class="hside">${L ? fmtShort(L.at) : ''}${n ? `<br><i>${n > 99 ? '99+' : n}</i>` : ''}${L && L.me && FB && !n && (othersIn(x.id).length ? othersIn(x.id).some(v => (v.seen || 0) < L.at) : true) ? '<b class="r1">1</b>' : ''}</div></div>`;   // 26번: 내가 보낸 글을 아직 안 읽었으면 1
   };
@@ -2386,7 +2419,7 @@ function drawMore(){
     const n = unreadN(x.id), cur = !homeOn && x.id === room;
     const nm = roomName(x.id);
     const tmp = FB && othersIn(x.id).length && !othersIn(x.id).some(v => v.lg);   // 42번: 간편 로그인 안 한 사람은 '임시'
-    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav">${esc([...nm.replace(/\s+/g, '')].slice(0, 2).join(''))}${dupTag(x.id)}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}${tmp ? '<em class="tmpk">임시</em>' : ''}</span><div class="mt"><b>${esc(nm)}</b></div>${telBtn(phoneOf(x.id))}${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
+    return `<div class="mrow ${cur ? 'on' : ''}" data-go="${x.id}"><span class="mav ${FB && !othersIn(x.id).length ? 'off' : 'in'}">${esc([...nm.replace(/\s+/g, '')].slice(0, 3).join(''))}${dupTag(x.id)}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}${tmp ? '<em class="tmpk">임시</em>' : ''}</span><div class="mt"><b>${esc(nm)}</b></div>${telBtn(phoneOf(x.id))}${n && !cur ? `<span class="mc">${n > 99 ? '99+' : n}</span>` : ''}</div>`;
   }).join('') : '<div class="pin-empty">말풍선에 없는 친구가 여기에 보여요</div>');
 }
 /* 27번: 더보기 버튼 바로 밑에서 아래로 */
@@ -6126,7 +6159,7 @@ function grpDrawBar(){   // 40번: 공동체 줄 대신 맨 위 ＋공동체 버
   const b = $('grpBtn'), n = grpList().reduce((t, g) => t + unreadN(g.id), 0);
   const gl = grpList(), live = gl.some(g => grpPeople(g.id).length);   // 42번: 공동체 개수 · 사람이 들어오면 밝은 노랑
   b.classList.toggle('on', !!grpSel); b.classList.toggle('has', !!gl.length); b.classList.toggle('live', live);
-  b.innerHTML = (gl.length ? '공동체 ' + gl.length : '＋공동체') + (n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : '');
+  b.innerHTML = (gl.length ? '공동' + gl.length : '＋공동') + (n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : '');
   document.body.classList.toggle('grpon', !!grpSel);
 }
 function grpDrawPanel(){
@@ -6460,6 +6493,17 @@ function promoShow(){
 $('promoX').onclick = () => { click(); $('promoBar').style.display = 'none'; clearTimeout(promoT); promoT = setTimeout(promoShow, 1800000); };
 setTimeout(promoShow, 8000);
 
+/* 59번: 홍보 글을 누르면 그 기능으로 바로 */
+const PROMO_GO = [
+  () => diaryOpen(),
+  () => $('meBtn').click(),
+  () => { const b = document.querySelector('[data-tg="music"]'); if (b) b.click(); },
+  () => { const b = document.querySelector('[data-tg="rps"]'); if (b) b.click(); },
+  () => { openWriter(); W.stranger = { uid: null }; W.to = '모르는 분'; $('wTo').value = W.to; toast('🍀 모르는 누군가에게 편지를 써 보세요'); },
+  () => $('grpBtn').click(),
+  () => { openWriter(); openCards('xmas'); }
+];
+$('promoTx').onclick = () => { click(); $('promoBar').style.display = 'none'; clearTimeout(promoT); promoT = setTimeout(promoShow, 1800000); const f = PROMO_GO[LS.get('rp_promoI', 0)]; try { f && f(); } catch (e) {} };
 new MutationObserver(() => { if ($('roomOv').classList.contains('show')) devUi(); }).observe($('roomOv'), { attributes: true, attributeFilter: ['class'] });
 </script>
 </body>
