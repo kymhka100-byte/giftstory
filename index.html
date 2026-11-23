@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 61번: 보내고 나면 편지 쓰기 창이 꼭 닫혀요(모르는 사람에게·카톡·문자) · 위 말풍선 모두 같은 크기 · 옆으로 밀어서 보기(더보기는 오른쪽 고정) · ＋친구 누를 때마다 칸이 늘어요(최대 12) · 대화창 상대 이름 잘 보이게 · 👤 아이콘 밝게 · 다크 보내는 말풍선 조금 밝게 · ⬇ 저장 ⬆ 공유 아이콘 가늘게 · 파일 한 번 누르면 버튼 5초 · 문자·카톡 미리보기 그림에 '당신의 벗 → 소중한 친구' (letter_card.jpg) -->
 <!-- 60번: 뒤로 가기는 늘 한 단계씩 · 메인에서 한 번 더 눌러야 앱이 닫혀요(안내) · '한 말만 보기'도 뒤로 가기로 원래대로 · 모든 파일에 ⬇ 저장 · ⬆ 공유 버튼 · 파일 꾹 눌러 지우기 · html도 열리지 않고 저장 · 받는 편지 봉투도 빨간 리본 '당신의 벗 → 소중한 친구' · 로그인 필수(실버 모드 빼고) · 처음 화면 프로필 사진(안 넣어도 돼요) · 공동체 💬 오늘의 주제 · 세 번 이상 대화한 친구는 빈 고정 칸에 자동 -->
 <!-- 59번: 상단 말풍선 새 모양(살짝 둥근 네모 · 같은 크기 · 가운데 · 안 들어옴 회색/들어옴 올리브 · ＋친구 점선) · 목록 이름 칸도 같은 규칙 · 공동체 버튼 "공동3" · 메인 아이콘 4개 한 줄(편지 쓰기·편지함·크리스마스·연말) 작게 · 테두리 없이 그림만 · 홍보 글 누르면 그 기능으로 -->
 <!-- 58번: 🚨 신고하기(더보기·차단 옆) · 욕설 거르기(보낼 때 ** 로) · 💡 건의하기 · 🚪 탈퇴하기 · 🛠 관리자 화면(신고·건의 보기 · 강제 탈퇴) · 🍀 모르는 사람에게 편지(답장하면 펜팔) · 모르는 편지 받지 않기 · 🍀 모르는 편지함 · 홍보 글 잠깐 보였다 사라짐(✕ · 5분) -->
@@ -37,7 +38,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="💌">
 <meta property="og:description" content=" ">
-<meta property="og:image" content="https://giftwav.com/letter_invite.jpg">
+<meta property="og:image" content="https://giftwav.com/letter_card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="760">
 <link rel="manifest" href="manifest.json">
@@ -1006,7 +1007,7 @@ body.typing #moleBtn,body.kb #moleBtn,body.watch #moleBtn{display:none}
 .bubble{border-width:1px!important}
 .me .bubble{border:1px solid var(--pink)}
 .them .bubble{border:1px solid #8a8da0}
-body.dark .me .bubble{background:var(--bd-bg,#3d3438);border:1px solid var(--bd-bd,#8a5a63);color:var(--bd-ink,#f5eef0)}
+body.dark .me .bubble{background:var(--bd-bg,#54474c);border:1px solid var(--bd-bd,#8a5a63);color:var(--bd-ink,#f5eef0)}
 body.dark .me .bubble a.mlink{color:#9cc7ff}
 body:not(.dark).bubl .me .bubble{background:var(--bl-bg);border:1px solid var(--bl-bd);color:var(--bl-ink)}
 #bubGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0 4px}
@@ -1050,6 +1051,19 @@ body:not(.dark) #roomBar .rb.pin:not(.wait){background:#f3edc0!important;border-
 body:not(.dark) #roomBar .rb.empty{background:transparent!important;border:1px dotted #aaa!important;color:#aaa!important}
 body:not(.dark) #roomBar .rb.unread{background:#ff4d4a!important;border-color:#ff4d4a!important;color:#fff!important}
 #lhXmas{border:none!important;outline:none!important}
+/* ===== 61번 ===== */
+.rooms{justify-content:flex-start}
+.rscroll,.rscroll.rscroll{flex:1 1 auto;min-width:0;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.rooms .rb.more{flex:none!important;min-width:54px!important;height:30px!important;border-radius:8px!important}
+.who{color:#c4c6d0}
+.who[data-who]::before{content:'';display:inline-block;width:1em;height:1em;margin-right:4px;vertical-align:-2px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23eef0f6' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 21c0-4 4-6 8-6s8 2 8 6'/%3E%3C/svg%3E") center/contain no-repeat}
+body:not(.dark) .who[data-who]::before{filter:brightness(.35)}
+.fbtns{opacity:0;pointer-events:none;transition:opacity .2s}
+.fshow .fbtns{opacity:1;pointer-events:auto}
+.fsv,#imgShare,#imgSave{display:inline-flex;align-items:center;justify-content:center}
+.fsv .ic{width:18px;height:18px}
+#imgShare .ic,#imgSave .ic{width:22px;height:22px}
+.fwrap .fsv{font-weight:400;padding:5px 8px}
 </style>
 </head>
 <body>
@@ -1309,7 +1323,7 @@ body:not(.dark) #roomBar .rb.unread{background:#ff4d4a!important;border-color:#f
 <div class="ov" id="imgOv">
   <div class="panel">
     <div id="imgBox"></div>
-    <div class="imgbar"><button data-close title="닫기">✕</button><span class="ih">두 손가락으로 벌리면 커져요</span><button id="imgShare" title="공유">📤</button><button id="imgSave" title="내 폰에 저장">⬇</button></div>
+    <div class="imgbar"><button data-close title="닫기">✕</button><span class="ih">두 손가락으로 벌리면 커져요</span><button id="imgShare" title="공유"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14M12 20V9M7 14l5-5 5 5"/></svg></button><button id="imgSave" title="내 폰에 저장"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button></div>
   </div>
 </div>
 
@@ -2349,7 +2363,7 @@ function drawRooms(){
   $('kakaoBtn').style.display = au ? 'none' : '';
 }
 /* 20번: 위쪽 말풍선 5자리 고정 - 자리는 안 바뀜, 빈 자리는 ＋친구, 고정 안 된 방은 더보기로 */
-const PIN_N = 3;   // 40번: ＋친구 3칸   // 29번: 고정 4칸(왼쪽부터 빈칸 없이) + 새 메시지·지금 대화방 1칸 + 더보기
+const PIN_N = 12;   // 61번: ＋친구 누를 때마다 칸이 늘어요 (보이는 빈칸은 최소 3칸까지만) ·   // 40번: ＋친구 3칸   // 29번: 고정 4칸(왼쪽부터 빈칸 없이) + 새 메시지·지금 대화방 1칸 + 더보기
 let pinWant = null;   // ＋친구 → 새 친구 초대로 만든 방을 넣을 자리
 function getPins(){
   const tw = twinMap(), ids = getRooms().map(x => x.id).filter(id => tw[id] === id);
@@ -2399,7 +2413,8 @@ function moreRooms(){
 let barHTML = '';
 function drawBar(){
   const p = getPins();
-  const html = p.map((id, i) => {
+  const fill = p.filter(Boolean).length, shown = Math.max(3, fill + 1);   // 61번
+  const html = p.slice(0, shown).map((id, i) => {
     if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;   // 31번: 빈칸은 모두 ＋친구
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
     return `<button class="rb pin ${reqHas(id) && !cur ? 'wig' : ''} ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
@@ -3221,7 +3236,7 @@ const fileRef = (r0, fid) => FB.D.ref(FB.db, 'giftstory/files/' + r0 + '/' + fid
 function fileHTML(m, mine){
   const u = fileUrls[m.fid], st = u || mine ? '' : fileFail[m.fid] ? '받을 수 없어요' : '받는 중…';
   /* 60번: 모든 파일(사진·노래·문서·html)에 ⬇ 다운로드 · ⬆ 공유 버튼 (누르지 않아도 바로 보여요) · 꾹 누르면 지우기 */
-  const fb2 = `<span class="fbtns"><button class="fsv" data-fsave="${m.id}" title="내 폰에 저장">⬇</button><button class="fsv" data-fshare="${m.id}" title="공유">⬆</button></span>`;
+  const fb2 = `<span class="fbtns"><button class="fsv" data-fsave="${m.id}" title="내 폰에 저장"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></button><button class="fsv" data-fshare="${m.id}" title="공유"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14M12 20V9M7 14l5-5 5 5"/></svg></button></span>`;
   if (m.kind === 'image') return `<div class="fwrap" data-fmsg="${m.id}"><img class="fimg" data-file="${m.id}" src="${u || m.thumb || ''}" alt="사진">${fb2}</div>${st ? `<div class="fst">${st}</div>` : ''}`;
   const ico = m.kind === 'audio' ? '♪' : m.kind === 'video' ? '🎬' : '📄';
   return `<div class="bubble file ${m.kind === 'audio' ? 'song' : ''}" data-file="${m.id}" data-fmsg="${m.id}"><span class="fi">${ico}</span><span class="fn">${esc(m.fname)}<small>${fmtSize(m.size || 0)} · ${m.kind === 'audio' ? '눌러서 듣기' : '눌러서 열기'}${st ? ' · ' + st : ''}</small></span>${fb2}</div>`;
@@ -3354,6 +3369,8 @@ $('msgs').addEventListener('click', e => {
   if (sh) { const m = msgs[sh.dataset.fshare]; if (m) { click(); fileFetch(room, m).then(u => fileShare(u, m)).catch(() => toast('이 파일은 받을 수 없어요 (서버에서 지워졌어요)')); } return; }
   const sv = e.target.closest('[data-fsave]');
   if (sv) { const m = msgs[sv.dataset.fsave]; if (m) { click(); fileFetch(room, m).then(u => fileSave(u, m.fname, m)).catch(() => toast('이 파일은 받을 수 없어요 (서버에서 지워졌어요)')); } return; }   // 32번
+  const fw = e.target.closest('[data-fmsg]');   // 61번: 한 번 누르면 ⬇ ⬆ 버튼이 5초 보여요 · 그때 또 누르면 열기
+  if (fw && !fw.classList.contains('fshow')) { click(); document.querySelectorAll('#msgs .fshow').forEach(x => x.classList.remove('fshow')); fw.classList.add('fshow'); clearTimeout(fw._t); fw._t = setTimeout(() => fw.classList.remove('fshow'), 5000); return; }
   const el = e.target.closest('[data-file]'); if (!el) return;
   const m = msgs[el.dataset.file]; if (!m) return;
   click();
@@ -3631,7 +3648,7 @@ async function sendLetterLink(kind, when){
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   const sentTo = W.to, sentLetterData = m.letter;
   whenBack(() => {   // 54-1번: 돌아오면 보낸 것으로 → 보낸 편지함 → 창 닫기
-    saveSent(sentTo, sentLetterData); hideOv('envOv'); closeWriter(); W.via = null; W.linkRoom = null;
+    hideOv('envOv'); closeWriter(); W.via = null; W.linkRoom = null; saveSent(sentTo, sentLetterData);   // 61번: 창부터 닫기
     dingdong(); bumpBox(); toast(`📮 ${sentTo === '친구' ? '' : sentTo + '님께 '}보냈어요 · 보낸 편지함에 넣었어요`);
   });
   await shared;
@@ -3690,9 +3707,12 @@ function saveSent(to, L){ LS.set('rp_sentletters', [...sentL(), { id: 'sent_' + 
 const topName = () => { const m = ((W && W.body) || '').trim().split('\n')[0].match(/^\s*(?:사랑하는\s*|보고\s*싶은\s*|그리운\s*)?(.{1,12}?)\s*(?:에게|께)/); return m ? m[1].trim() : ''; };
 function whenBack(fn){   // 카톡·문자에 갔다가 앱으로 돌아오면
   let gone = false, done = false;
-  const fin = () => { if (done) return; done = true; document.removeEventListener('visibilitychange', vh); fn(); };
+  const fin = () => { if (done) return; done = true; document.removeEventListener('visibilitychange', vh); window.removeEventListener('focus', fo); window.removeEventListener('pageshow', fo); try { fn(); } catch (e) { try { closeWriter(); } catch (x) {} } };
   const vh = () => { if (document.hidden) gone = true; else if (gone) setTimeout(fin, 300); };
   document.addEventListener('visibilitychange', vh);
+  const fo = () => { if (gone && !document.hidden) setTimeout(fin, 300); };   // 61번: 돌아온 걸 못 알아채도 창이 닫혀요
+  window.addEventListener('focus', fo); window.addEventListener('pageshow', fo);
+  const pv = setInterval(() => { if (done) return clearInterval(pv); if (gone && !document.hidden) fin(); }, 1500);
   setTimeout(() => { if (!gone) fin(); }, 4000);
 }
 /* 26번: 고른 친구들 · 나에게 보내기 */
@@ -4812,7 +4832,7 @@ $('themeBtn').onclick = () => {
 };
 applyTheme();
 /* 55번: 보내는 말풍선 색 - 다크 화면·일반 화면 따로 골라요 */
-const BUB_D = [{ n:'기본 (장미 갈색)', bg:'#3d3438', bd:'#8a5a63', ink:'#f5eef0' }, { n:'군청', bg:'#2b3352', bd:'#5f6fa8', ink:'#f2f4ff' }, { n:'숲 초록', bg:'#2c3b31', bd:'#5f8a6a', ink:'#eef6f0' }, { n:'보라', bg:'#382f4d', bd:'#7a66a8', ink:'#f3efff' }, { n:'밝은 노랑', bg:'#fff4c2', bd:'#ff8fb3', ink:'#111' }, { n:'회색', bg:'#34353d', bd:'#7d7f8c', ink:'#f4f4f6' }];
+const BUB_D = [{ n:'기본 (장미 갈색)', bg:'#54474c', bd:'#8a5a63', ink:'#f5eef0' }, { n:'군청', bg:'#3a4570', bd:'#5f6fa8', ink:'#f2f4ff' }, { n:'숲 초록', bg:'#3c5044', bd:'#5f8a6a', ink:'#eef6f0' }, { n:'보라', bg:'#4b3f66', bd:'#7a66a8', ink:'#f3efff' }, { n:'밝은 노랑', bg:'#fff4c2', bd:'#ff8fb3', ink:'#111' }, { n:'회색', bg:'#4a4b55', bd:'#7d7f8c', ink:'#f4f4f6' }];
 const BUB_L = [{ n:'테마 색 (기본)' }, { n:'노랑', bg:'#ffe58f', bd:'#e0b93a', ink:'#222' }, { n:'분홍', bg:'#ffd3e0', bd:'#e89ab2', ink:'#222' }, { n:'하늘', bg:'#d6ecff', bd:'#8fb9e3', ink:'#222' }, { n:'연두', bg:'#dff5c8', bd:'#9cc77a', ink:'#222' }, { n:'하양', bg:'#ffffff', bd:'#c9c9d2', ink:'#222' }];
 function applyBub(){
   const s = document.body.style, d = BUB_D[LS.get('rp_bub_d', 0)] || BUB_D[0], l = BUB_L[LS.get('rp_bub_l', 0)] || BUB_L[0];
@@ -6544,11 +6564,13 @@ async function stSend(slow){
   if (!fbOk()) return;
   const u = who(), to = W.stranger.uid || null;
   const L = { to: to ? (W.stranger.name || '모르는 분') : '모르는 분', toUid: null, fromName: u.name, body: badClean(W.body), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0, card: W.env || null };
-  try { await FB.D.push(FB.D.ref(FB.db, 'giftstory/stranger'), { from: authUid, name: u.name, at: Date.now(), to, letter: L }); }
+  const draft = W.draftId;
+  closeWriter(); W.stranger = null;   // 61번: 보내기를 누르면 창부터 닫아요 (서버 답을 기다리다 멈추지 않게)
+  try { await Promise.race([FB.D.push(FB.D.ref(FB.db, 'giftstory/stranger'), { from: authUid, name: u.name, at: Date.now(), to, letter: L }), new Promise(ok => setTimeout(ok, 8000))]); }
   catch (e) { toast('못 보냈어요 (서버 규칙 확인)'); return; }
   saveSent(L.to, L);
-  if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
-  closeWriter(); dingdong(); bumpBox();
+  if (draft) setDrafts(getDrafts().filter(x => x.draftId !== draft));
+  dingdong(); bumpBox();
   toast(to ? '🍀 답장을 보냈어요' : '🍀 모르는 누군가에게 편지가 날아가요');
 }
 /* 받기: 나에게 온 답장은 늘, 모르는 편지는 하루에 한 통 */
