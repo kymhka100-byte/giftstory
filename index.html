@@ -1787,7 +1787,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '60';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '64';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -3867,6 +3867,20 @@ $('recDel').onclick = () => { W.voice = null; W.voiceSec = 0; if (recAudio) recA
 
 /* ----- 편지 열기 · 읽기 ----- */
 let curLetter = null, voiceAudio = null;
+/* 64번: 편지·카드 읽을 때 잔잔한 배경음악 (3곡 중 무작위 · 작게 · 닫으면 꺼짐 · 다른 노래가 나오는 중이면 안 틀어요) */
+const LETTER_BGM = ['sound/letter_bgm1.mp3', 'sound/letter_bgm2.mp3', 'sound/letter_bgm3.mp3'], LBGM_VOL = .25;
+let lbgm = null, lbgmLast = -1;
+function songOn(){
+  try { if (mPlayer && mPlayer.getPlayerState && mPlayer.getPlayerState() === 1) return true; } catch (e) {}
+  return !tAudio.paused || !rAudio.paused;
+}
+function letterBgmOn(){
+  if (lbgm || songOn()) return;
+  let i; do { i = Math.floor(Math.random() * LETTER_BGM.length); } while (i === lbgmLast && LETTER_BGM.length > 1);
+  lbgmLast = i; lbgm = loadMedia(LETTER_BGM[i]); lbgm.loop = true; lbgm.volume = LBGM_VOL;
+  lbgm.play().catch(() => {});
+}
+function letterBgmOff(){ if (lbgm) { lbgm.pause(); lbgm = null; } }
 function openLetter(m){
   if (!m) return;
   curLetter = m; rustle(.5);   // 48번: 편지 펼치는 소리 조금 작게
@@ -3888,6 +3902,7 @@ function showReader(){
     ${i === N - 1 ? `<div class="pfrom">From. ${esc(L.fromName)}</div>` : ''}
     ${N > 1 ? `<div class="pno">${i + 1} / ${N}장</div>` : ''}
   </div>`).join('');
+  letterBgmOn();
   if (L.voice) setTimeout(playVoice, 1000);
   markRead(m);
 }
@@ -3915,7 +3930,7 @@ function playVoice(){
   voiceAudio.onended = () => musicDuck(false);
   voiceAudio.play().catch(() => musicDuck(false));
 }
-function closeReader(){ if (voiceAudio) voiceAudio.pause(); if ('speechSynthesis' in window) speechSynthesis.cancel(); musicDuck(false); hideOv('readOv'); }
+function closeReader(){ letterBgmOff(); if (voiceAudio) voiceAudio.pause(); if ('speechSynthesis' in window) speechSynthesis.cancel(); musicDuck(false); hideOv('readOv'); }
 $('rVoice').onclick = playVoice;
 function readAloud(){
   if (!('speechSynthesis' in window)) { toast('이 화면에서는 읽어 주기가 안 돼요 (크롬으로 열어 주세요)'); return; }
@@ -4712,6 +4727,7 @@ function closeAll(){
     }
     stopRec(); $('writer').classList.remove('show');
   }
+  letterBgmOff();
   if (voiceAudio) voiceAudio.pause();
   if ('speechSynthesis' in window) speechSynthesis.cancel();
   musicDuck(false);
@@ -4762,6 +4778,7 @@ function ac(){
 function musicDuck(on){
   const v = on ? .12 : 1;
   tAudio.volume = v; rAudio.volume = v;
+  if (lbgm) lbgm.volume = on ? .08 : LBGM_VOL;   // 64번: 목소리·읽어 주기 때는 배경음악 더 작게
   try { if (mPlayer && mPlayer.setVolume) mPlayer.setVolume(on ? 12 : 100); } catch (e) {}
 }
 

@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>승부차기 게임</title>
+<!-- 2번: 소리 순서 시작안내→레디→3,2,1→휘슬 (소리가 다 끝나야 다음으로) · 차기 전 배경음악 작게, 골/노골 소리 끝나면 원래대로 · 승부 끝나면 배경음악 꺼짐 · 골/노골 판정을 화면 속 골대·골키퍼 모양에 맞춤 -->
 <!-- 1번: 승부차기 첫 버전 · 공을 손가락으로 밀어서 슛(세기=속도, 방향=방향, 길게=뜬 공, 짧게=땅볼) · 3,2,1 삑 후 3초 안에 슛(못 차면 실축) · 골키퍼는 손가락으로 왼쪽/오른쪽 밀기, 가만히 있으면 가운데, 미리 날면 쓰러짐 · 3,2,1 동안 골키퍼 옆으로 살짝 움직이기 · 공 만지면 빙그르르 · 처음 3번 화살표 안내 · 친구랑 하기(대화방 초대) / 혼자 하기(연습, 컴퓨터) · 한 번 찰 때마다 20점, 3번 연속 골이면 다음 한 번 40점 · 5번씩 차고 같으면 한 번씩 더 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
@@ -50,11 +51,19 @@ const $=x=>document.getElementById(x);
 /* 소리: sound 폴더에 아래 이름으로 mp3를 올리면 나와요 (없으면 조용히 진행) */
 const SND={bgm:'penalty_bgm',start:'penalty_start',ready:'penalty_ready',whistle:'penalty_whistle',shoot:'penalty_shoot',goal:'penalty_goal',nogoal:'penalty_nogoal',win:'penalty_win'};
 for(const k in SND){SND[k]=new Audio('sound/'+SND[k]+'.mp3')}
-SND.bgm.loop=true;SND.bgm.volume=.3;
+SND.bgm.loop=true;
 function snd(k){try{const a=SND[k];a.currentTime=0;const p=a.play();if(p)p.catch(()=>{})}catch(e){}}
+/* 소리가 다 끝나야 다음으로 (파일이 없으면 바로 넘어가요) */
+function sndThen(k,cb){let done=false;const a=SND[k];const go=()=>{if(done)return;done=true;a.removeEventListener('ended',go);a.removeEventListener('error',go);clearTimeout(t);cb()};
+  const t=setTimeout(go,12000);
+  try{if(a.error)return go();a.addEventListener('ended',go);a.addEventListener('error',go);a.currentTime=0;const p=a.play();if(p)p.catch(go)}catch(e){go()}}
+let bgmOn=false;
+function bgmPlay(){bgmOn=true;SND.bgm.volume=.3;snd('bgm')}
+function bgmStop(){bgmOn=false;try{SND.bgm.pause();SND.bgm.currentTime=0}catch(e){}}
+function bgmVol(v){try{SND.bgm.volume=v}catch(e){}}
 function stopAll(){for(const k in SND){try{SND[k].pause();SND[k].currentTime=0}catch(e){}}}
 addEventListener('pagehide',stopAll);$('back').addEventListener('click',stopAll);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();else if(mode)snd('bgm')});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();else if(bgmOn){try{SND.bgm.play().catch(()=>{})}catch(e){}}});
 
 /* ===== 점수 (가위바위보·뽑기와 같은 점수) ===== */
 let mode=null,pt=500,on=false;
@@ -73,32 +82,37 @@ const SIGNS=[{x:14,t:'골!',c:'#e63946',f:'#fff'},{x:142,t:'화이팅',c:'#f4c43
 
 /* 한 번 차기(슛)의 상태 */
 let S=null,msg='',msgC='#fff',msgAt=0,sub='',spin=0,spinV=0,touch=null;
-function newShot(n,role,bet){
-  S={n,role,bet,t0:performance.now(),ph:'count',kx:0,kick:null,strike:0,dive:null,res:null,resAt:0,back:0};
+function newShot(n,role,bet,intro){
+  bgmVol(.08);
+  S={n,role,bet,t0:performance.now(),ph:intro?'intro':'count',kx:0,kick:null,strike:0,dive:null,res:null,resAt:0,back:0};
   sub=(role==='kick'?'⚽ 내가 찰 차례':'🧤 내가 막을 차례')+(mode==='friend'?' · 판돈 '+bet+(bet>20?' (두 배!)':''):'');
-  setMsg('3');
+  if(!intro)return setMsg('3');
+  setMsg('준비','#ffd84a');const me=S;
+  sndThen('start',()=>sndThen('ready',()=>{if(S===me&&S.ph==='intro'){S.ph='count';S.t0=performance.now();setMsg('3')}}));
 }
 function setMsg(t,c){msg=t;msgC=c||'#fff';msgAt=performance.now()}
 
 /* ===== 결과 정하기 (찰 때 화면 기준 좌표) ===== */
 function judge(k,dv,kx){
   if(k.miss)return{goal:false,why:'실축!',d:0};
-  if(k.gx<GL||k.gx>GR||k.gh>108)return{goal:false,why:'빗나갔어요',d:dv?dv.d:0};
-  const rel=k.gx-(BX+kx);let saved=false,why='';
-  if(!dv)saved=Math.abs(rel)<=30&&k.gh<=100;
-  else if(dv.t<-.3)why='미리 날아서 쓰러졌어요';
-  else if(dv.t>k.T-.12)why='늦었어요';
-  else{const r=rel*dv.d;saved=r>=-12&&r<=125&&!(r>95&&k.gh>86)}
-  return{goal:!saved,why:saved?'선방!':why,d:dv?dv.d:0};
+  const bx=k.gx,by=GB-6-k.gh,r=8;   // 공이 골대에 닿는 자리 (화면 그대로)
+  if(bx<GL-3||bx>GR+3||by<GT-3)return{goal:false,why:'빗나갔어요',d:dv?dv.d:0};
+  let f=0,d=0,why='';
+  if(dv){d=dv.d;if(dv.t<-.3)return{goal:true,why:'미리 날아서 쓰러졌어요',d};f=Math.max(0,Math.min(1,(k.T-dv.t)/.28))}
+  // 공이 도착할 때 골키퍼 모양(그림과 똑같이)에 닿으면 선방
+  const ang=d*f*1.3,px=BX+kx+d*f*88,py=GB-4-f*18,dx=bx-px,dy=by-py,c=Math.cos(ang),sn=Math.sin(ang);
+  const lx=dx*c+dy*sn,ly=-dx*sn+dy*c,ax=Math.abs(lx);
+  const saved=(ax<=14+r&&ly>=-60-r&&ly<=18+r)||(ax<=39+r&&ly>=-42-r&&ly<=-30+r);
+  if(!saved&&dv&&f<1)why='늦었어요';
+  return{goal:!saved,why:saved?'선방!':why,d};
 }
-
 /* ===== 3, 2, 1 → 삑 ===== */
 function tick(now){
   if(!S)return;const e=now-S.t0;
   if(S.ph==='count'){
     const c=3-Math.floor(e/1000);
     if(c>0){if(msg!==c+'')setMsg(c+'','#ffd84a')}
-    else{S.ph='go';S.go=now;setMsg('삑! 슛!','#7CFC00');snd('whistle');setTimeout(()=>snd('ready'),300);
+    else{S.ph='go';S.go=now;setMsg('삑! 슛!','#7CFC00');snd('whistle');
       if(S.role==='keep'&&mode==='solo')setTimeout(cpuKick,500+Math.random()*1800)}
   }
   if(S.ph==='go'&&S.role==='kick'&&now-S.go>3000)doKick({miss:true});
@@ -143,7 +157,8 @@ function showRes(r){
   if(!S||S.res)return;S.res=r;S.resAt=performance.now();
   if(r.d&&!S.dive)S.dive={d:S.role==='keep'?-r.d:r.d,at:S.strike+60};
   const meKick=S.role==='kick',good=meKick?r.goal:!r.goal;
-  if(r.goal){setMsg('골!!!','#ffd84a');snd('goal')}else{setMsg(r.why||'노골','#ff6b6b');snd('nogoal')}
+  if(r.goal)setMsg('골!!!','#ffd84a');else setMsg(r.why==='미리 날아서 쓰러졌어요'?'노골':r.why||'노골','#ff6b6b');
+  sndThen(r.goal?'goal':'nogoal',()=>{if(bgmOn)bgmVol(.3)});
   if(mode==='friend'&&S.paid!==S.n){S.paid=S.n;const dl=good?S.bet:-S.bet;pt+=dl;addDelta(dl);save()}
   if(mode==='solo')soloNext(r.goal);
   else if(R&&R.host===FU.uid)setTimeout(()=>hostNext(S.n),2300);
@@ -159,7 +174,7 @@ cv.addEventListener('pointerdown',e=>{
 cv.addEventListener('pointermove',e=>{
   if(!touch||!S)return;const p=lp(e),dx=p.x-touch.x;
   if(S.role==='kick'){spinV=Math.min(.6,spinV+.02);return}
-  if(S.dive)return;
+  if(S.dive||S.ph==='intro')return;
   if(S.ph==='count')S.kx=Math.max(-18,Math.min(18,touch.kx+dx));   // 3,2,1 동안은 살짝만
   else if(Math.abs(dx)>35){S.dive={d:Math.sign(dx),at:performance.now()};touch=null}
 });
@@ -265,13 +280,13 @@ let names=['나','상대'],goals=[0,0];
 function board(){$('sc').textContent=goals[0]+' : '+goals[1];$('nm').textContent=names[0]+' · '+names[1]}
 function enter(md){
   mode=md;$('ov').style.display='none';names=['나',md==='solo'?'컴퓨터':'친구'];board();save();
-  snd('bgm');setMsg('');sub=md==='solo'?'연습 · 점수는 안 걸려요':'';
+  bgmPlay();setMsg('');sub=md==='solo'?'연습 · 점수는 안 걸려요':'';
   if(md==='friend'){$('go').disabled=true;friendGo()}
 }
 function start(){
   if(mode==='friend')return fStart();
-  snd('start');$('go').disabled=true;$('go').textContent='시작';
-  P={n:0,g:[0,0]};goals=[0,0];board();on=true;setTimeout(()=>newShot(0,'kick',0),1500);
+  if(!bgmOn)bgmPlay();$('go').disabled=true;$('go').textContent='시작';
+  P={n:0,g:[0,0]};goals=[0,0];board();on=true;newShot(0,'kick',0,true);
 }
 function over(n,g){   // 5번씩, 같으면 한 번씩 더
   const c=n+1,k0=Math.ceil(c/2),k1=Math.floor(c/2);
@@ -283,7 +298,7 @@ let P=null;
 function soloNext(goal){
   const i=P.n%2;if(goal)P.g[i]++;goals=P.g.slice();board();
   setTimeout(()=>{
-    if(over(P.n,P.g)){on=false;S=null;const w=P.g[0]>P.g[1];sub='';setMsg(w?'🏆 나 승리!':'컴퓨터 승리',w?'#ffd84a':'#ff6b6b');if(w)snd('win');$('go').textContent='다시 하기';$('go').disabled=false;return}
+    if(over(P.n,P.g)){on=false;S=null;bgmStop();const w=P.g[0]>P.g[1];sub='';setMsg(w?'🏆 나 승리!':'컴퓨터 승리',w?'#ffd84a':'#ff6b6b');if(w)snd('win');$('go').textContent='다시 하기';$('go').disabled=false;return}
     P.n++;newShot(P.n,P.n%2?'keep':'kick',0);
   },2300);
 }
@@ -333,13 +348,13 @@ function onPk(v){
   if(v.status==='ready'){on=false;info(oid?names[1]+'님과 해요!':'친구 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;return}
   if(v.status==='play'){
     const key=v.start+'_'+v.n;
-    if(curKey!==key){curKey=key;on=true;$('go').disabled=true;if(v.n===0)snd('start');newShot(v.n,v.order[v.n%2]===FU.uid?'kick':'keep',v.bet||20)}
+    if(curKey!==key){curKey=key;on=true;$('go').disabled=true;if(v.n===0&&!bgmOn)bgmPlay();newShot(v.n,v.order[v.n%2]===FU.uid?'kick':'keep',v.bet||20,v.n===0)}
     if(S&&v.kick&&v.kick.n===S.n&&S.role==='keep')recvKick(v.kick);
     if(S&&v.res&&v.res.n===S.n&&S.role==='kick')showRes(v.res);
     return;
   }
   if(v.status==='end'&&doneKey!==v.start){
-    doneKey=v.start;on=false;
+    doneKey=v.start;on=false;bgmStop();
     const me=v.winner===FU.uid;
     setTimeout(()=>{S=null;sub='';
       if(v.quit&&v.quit!==FU.uid)setMsg('친구가 나갔어요 · 내 승리','#ffd84a');
