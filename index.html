@@ -25,6 +25,7 @@
 <!-- 42번: 할 일 ＋ 누르면 마이크 꺼짐·다음 말은 새로 · 할 일 줄 버튼 원 없이 같은 크기 · ＋공동체 → 공동체 N · 고정 말풍선: 상대 정하면 테두리 진하게, 들어오면 밝은 노랑 · 편지 기본 손글씨(글씨체 적용 버그) · 스티커 누를수록 늘고 꾹 누르면 다 지움 · 받는 사람 고르기 뒤로 가기는 편지로 · 확인·닫기 버튼 고정 · 카톡·문자 바로 열림·돌아오면 편지로 · 긴 편지는 여러 장 · 편지 우체통 아이콘 까만 배경 없앰 · 더보기 이름 말풍선에 새 메시지·임시 표시 · 노래 끝나도 플레이어 그대로 · 알림 두 번(조용히 깨우고 → 소리) -->
 <!-- 41번: 첫 알림부터 소리 (알림 도우미가 물어보면 진짜 보고 있는지 대답) · 할 일 넣으면 입력창 바로 밑에 쌓임 · 오늘 할 일 있으면 내 이름 버튼 10분마다 흔들+띵동(한 번 들어가면 그날은 멈춤) · 공동체 공지 쓰기 창(저장 버튼) · 공동체 "저장하고 나가기" · 빨간 우체통 친구 골라 공동체 초대 -->
 <!-- 40번: 맨 위 한 줄 = 내 이름(하늘색·나와의 창) · ＋공동체 · ＋친구 3칸 · 더보기 / 나와의 대화 카드·공동체 줄 없앰 / 설정은 ＋ 메뉴 안으로 / 웹캠은 아래 마이크 옆 / 처음 화면 고르기 일반·다크·실버 한 줄 / 마이크 메뉴 "음성 문자" / 두더지는 큰 버튼 위 투명 버튼 3번 / 안 쓰는 코드 정리 -->
+<!-- 63번: 게임 메뉴에 ⚽ 승부차기 추가 (penalty.html) · 대화방 승부차기 초대 말풍선 누르면 같이 하기 -->
 <!-- 39번: 큰 글씨여도 화면이 폰에 꼭 맞고 '큰' 버튼 늘 보임 · 폰이 글씨 키우는 것 막기 · 뒤로 가기는 어디서든 메인 화면으로 (공동체 방·게임 갔다 와도) · 할 일 ＋ 버튼 분홍 테두리 · 내 말풍선 연한 노랑+분홍 테두리+진한 글씨 · 입력칸 은은한 테두리 · 메뉴 버튼 테두리 · 파일 보내기 오디오·사진·일반 파일 · 처음에 다크·큰 글씨·실버 모드 고르기 · 가위바위보·뽑기 게임으로 잘 넘어가게 -->
 <!-- 37번: 우리 공동체 (공동체 만들기 · 초대 링크로 들어오면 공동체 사람 이름이 저절로 · 전체 대화방 · 방장 공지·모두에게 따로 보내기·사람 빼기 · 여러 공동체 · 실버 모드 가족 버튼 자동) -->
 <!-- 36번: 가위바위보는 따로 (gawibawibo.html) · 편지·메시지 "모든 친구에게" 버튼 · 키보드 올라오면 큰·친구 초대 버튼 숨김 · 할 일 ＋ 버튼 작게 -->
@@ -1186,7 +1187,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
       <button id="tmEng">🌐 English</button>
       <button id="tmSilver">👵 실버 모드로 가기</button>
     </div>
-    <div class="pmenu" id="gameMenu"><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button></div>
+    <div class="pmenu" id="gameMenu"><button data-tg="rps">✊ 가위바위보</button><button data-tg="lot">🎲 뽑기 게임</button><button data-tg="pk">⚽ 승부차기</button></div>
     <div class="pmenu" id="fileMenu"><button data-fk="audio">🎵 오디오</button><button data-fk="image">🖼 사진</button><button data-fk="doc">📄 일반 파일</button></div>
     <input type="file" id="sendFile" accept=".jpg,.jpeg,.png,.gif,.webp,.heic,.mp4,.mov,.3gp,.webm,.mkv,.mp3,.m4a,.wav,.ogg,.aac,.flac,.pdf,.hwp,.hwpx,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip" multiple style="display:none">
     <textarea id="txt" placeholder="메시지 입력"></textarea>
@@ -3387,7 +3388,7 @@ $('msgs').addEventListener('click', e => {
     return;
   }
   const gg = e.target.closest('[data-gamego]');   // 46번: 게임 초대 누르면 그 게임으로
-  if (gg) { const f = gg.dataset.gamego; if (!/^(gawibawibo|ppopgi)\.html$/.test(f)) return; click(); leaving = true; location.href = f + '?g=' + encodeURIComponent(room) + '&j=1'; return; }
+  if (gg) { const f = gg.dataset.gamego; if (!/^(gawibawibo|ppopgi|penalty)\.html$/.test(f)) return; click(); leaving = true; location.href = f + '?g=' + encodeURIComponent(room) + '&j=1'; return; }
   const gi = e.target.closest('[data-ginvgo]');   // 41번: 초대장 누르면 공동체에 들어가기
   if (gi) { const gid = gi.dataset.ginvgo; if (!isGroup(gid)) return; click(); grpJoin(gid, gi.dataset.gn || ''); grpSel = gid; goHome(); toast(`👥 '${gi.dataset.gn || '공동체'}' 공동체에 들어왔어요`); return; }
   if (lpFileDone) { lpFileDone = false; return; }   // 60번: 꾹 눌러 지우기 창이 뜬 뒤엔 누름 무시
@@ -4119,6 +4120,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
   if (['watch', 'game', 'file', 'set'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu', set: 'topMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
   click(); closeMenus();
   if (b.dataset.tg === 'invite') { openInvite(); return; }
+  if (b.dataset.tg === 'pk') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'penalty.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 63번: 승부차기는 따로 (penalty.html)
   if (b.dataset.tg === 'lot') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'ppopgi.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 33번: 뽑기 게임은 따로 (ppopgi.html)
   if (b.dataset.tg === 'rps') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'gawibawibo.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 36번: 가위바위보는 따로 (gawibawibo.html)
   if (b.dataset.tg === 'music') { showPanel('videoPanel', false); openMusicPanel(); }
