@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- 66번: 🎮 게임 점수 - 로그인(가입)하면 500점 · 초대 링크로 온 친구가 로그인하면 초대한 사람 +500점 · 모든 게임이 같은 점수(서버 giftstory/points) · 1위 랭킹 -->
+<!-- 65번: 내 이름 눌러 내 말만 보기 · 내 말풍선 꾹 눌러 지우기 · 나와의 창 보관함 버그(편지 화면 열리던 것) → 🖼 사진 · 📄 문서 보관함(안 지워짐 · 30MB · 사진 줄여 올리기 · 공개/비공개) · 이름 누르면 "OO이 말만 보기 · OO에게 귓속말하기 · 📞 전화하기 · 🖼 OO의 앨범" · 나와의 창 버튼 아이콘+작은 글씨 · 홍보 "바로 가기 ➜" + 기능 랜덤 · 안 읽음 1 버그 · 숨은 테스트 버튼(내 말이 왼쪽·이름 테스트로 바뀌던 원인) 개발자만 · 로그아웃하면 이 폰 번호 새로 · 일기 읽어 주기 끝까지 · 로그인 화면 문구·버튼 한 줄 · 편지·카드에 📎 파일 첨부(⬇ ⬆) -->
 <!-- 62번: 대화창 이름 둘 다 흰색으로 밝게 · 내 말에도 내 이름 · 다크 기본 내 말풍선 밝은 회청색 · ⬇ ⬆ 버튼 동그란 어두운 바탕 + 가는 흰 화살표(가깝게) · 나와의 창 📁 보관함(올리기·받기) · 까치 우체통 아이콘·처음 화면 그림 -->
 <!-- 61번: 보내고 나면 편지 쓰기 창이 꼭 닫혀요(모르는 사람에게·카톡·문자) · 위 말풍선 모두 같은 크기 · 옆으로 밀어서 보기(더보기는 오른쪽 고정) · ＋친구 누를 때마다 칸이 늘어요(최대 12) · 대화창 상대 이름 잘 보이게 · 👤 아이콘 밝게 · 다크 보내는 말풍선 조금 밝게 · ⬇ 저장 ⬆ 공유 아이콘 가늘게 · 파일 한 번 누르면 버튼 5초 · 문자·카톡 미리보기 그림에 '당신의 벗 → 소중한 친구' (letter_card.jpg) -->
 <!-- 60번: 뒤로 가기는 늘 한 단계씩 · 메인에서 한 번 더 눌러야 앱이 닫혀요(안내) · '한 말만 보기'도 뒤로 가기로 원래대로 · 모든 파일에 ⬇ 저장 · ⬆ 공유 버튼 · 파일 꾹 눌러 지우기 · html도 열리지 않고 저장 · 받는 편지 봉투도 빨간 리본 '당신의 벗 → 소중한 친구' · 로그인 필수(실버 모드 빼고) · 처음 화면 프로필 사진(안 넣어도 돼요) · 공동체 💬 오늘의 주제 · 세 번 이상 대화한 친구는 빈 고정 칸에 자동 -->
@@ -242,7 +244,8 @@ footer{display:flex;align-items:flex-end;gap:8px;padding:8px 10px calc(8px + env
 .flag.down{transform:rotate(90deg)}
 .flag.wave{animation:fwave 1.6s ease}
 @keyframes fwave{25%{transform:rotate(90deg)}50%{transform:none}75%{transform:rotate(90deg)}100%{transform:none}}
-#testBtn{position:absolute;right:8px;top:-50px;width:64px;height:44px;opacity:0;border:none;background:none;z-index:4}
+#testBtn{position:absolute;right:8px;top:-50px;width:64px;height:44px;opacity:0;border:none;background:none;z-index:4;pointer-events:none}
+body.dev #testBtn{pointer-events:auto}   /* 65번: 숨은 테스트 버튼은 개발자만 (내 말풍선 자리를 눌러 테스트 친구로 바뀌던 버그) */
 .drow.go{cursor:pointer}.drow.go:active{background:#1d4a63}
 #txt{flex:1;resize:none;height:42px;max-height:110px;border-radius:14px;border:1px solid #3a3a42;background:#232328;color:#fff;font-size:15px;padding:10px 12px;font-family:inherit}
 #sendBtn{height:42px;padding:0 14px;border-radius:14px;border:none;background:#ffe14d;color:#222;font-weight:700;font-size:15px;flex:none}
@@ -1083,6 +1086,45 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 .boxrow small{display:block;color:#aaa;font-size:13px}
 .boxrow .fsv{flex:none}
 #boxList .empty{color:#aaa;text-align:center;padding:20px 0;font-size:15px}
+
+/* ===== 65번 ===== */
+.who.mine[data-who]{align-self:flex-end}
+.whobox{display:flex;flex-wrap:wrap;gap:6px;margin:2px 6px 8px;align-self:flex-start;max-width:100%}
+.row.me .whobox{align-self:flex-end;justify-content:flex-end}
+.whobox .whob{margin:0}
+.whob.w2{background:#c9b6ff}.whob.w3{background:#9be7a8}.whob.w4{background:#ffd0a8}
+.bubble.wsp{border:1px dashed #c9b6ff}
+.bubble.wsp small{display:block;font-size:12px;opacity:.8;margin-bottom:2px}
+#wspBar{display:none;position:absolute;left:8px;right:80px;top:-46px;z-index:5;align-items:center;gap:8px;padding:8px 12px;border-radius:12px;background:#2d2350;border:1px solid #c9b6ff;color:#fff;font-size:15px;font-weight:700}
+#wspBar.on{display:flex}
+#wspBar button{margin-left:auto;padding:6px 12px;border-radius:10px;border:none;background:#c9b6ff;color:#221a40;font-weight:800}
+#selfBar{justify-content:space-around}
+#selfBar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px;border:none!important;background:none!important;font-size:12px;font-weight:600;color:inherit}
+#selfBar button i{font-style:normal;font-size:27px;line-height:1.1}
+.sttabs{display:flex;gap:8px;margin:0 0 8px}
+.sttabs button{flex:1;padding:11px 6px;border-radius:12px;border:1px solid #3a3b46;background:#22232c;color:#fff;font-size:16px;font-weight:700}
+.sttabs button.on{background:#ffe14d;color:#222;border-color:#ffe14d}
+#stUse{font-size:13px;color:#ccc;text-align:center;margin:2px 0 8px}
+#stUse i{display:block;height:6px;border-radius:3px;background:#333;margin-top:4px;overflow:hidden}
+#stUse i b{display:block;height:100%;background:#4fc3ff}
+.boxrow .bth{flex:none;width:46px;height:46px;border-radius:8px;object-fit:cover;background:#222}
+.boxrow .bic{flex:none;width:46px;text-align:center;font-size:26px}
+.stb{flex:none;min-width:36px;height:36px;padding:0 6px;border-radius:18px;border:1px solid #444;background:#26262c;color:#fff;font-size:15px}
+.stb.pub{background:#1f4a2c;border-color:#4caf6a}
+.albgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}
+.albgrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer}
+#promoGo{display:inline-block;margin-left:8px;padding:5px 12px;border-radius:14px;border:none;background:#ff8fb1;color:#2b0a16;font-weight:800;font-size:14px;vertical-align:middle}
+.nrow3{display:flex;gap:8px;margin:6px 0 12px}
+.nrow3 .nbtn{flex:1;margin:0!important;padding:10px 2px;font-size:14px!important;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:16px;line-height:1.15;min-height:64px}
+.nrow3 .nbtn i{font-style:normal;font-size:22px}
+.nrow3 .nbtn.g b{margin:0;font-size:22px}
+.latts{margin:10px 0 4px;padding:8px 10px;border-radius:12px;background:#1d1d24;border:1px solid #3a3a44}
+.latts .lab2{font-size:13px;color:#ffd76a;margin-bottom:4px}
+.latt{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #333;color:#fff;font-size:15px}
+.latt:last-child{border-bottom:none}
+.latt .bn{flex:1;min-width:0;word-break:break-all;cursor:pointer}
+.latt small{display:block;color:#aaa;font-size:12px}
+.latt img{flex:none;width:40px;height:40px;border-radius:6px;object-fit:cover}
 </style>
 </head>
 <body>
@@ -1097,7 +1139,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
   </div>
   <div id="gTopic"></div>
   <div id="gNote"></div>
-  <div id="selfBar"><span>📝 나와의 대화</span><button id="sbTodo">✅ 할 일</button><button id="sbDiary">📒 일기장</button><button id="sbBox">📁 보관함</button></div>
+  <div id="selfBar"><button id="sbTodo"><i>✅</i>할 일</button><button id="sbDiary"><i>📒</i>일기장</button><button id="sbBox"><i>🖼</i>사진</button><button id="sbDoc"><i>📄</i>문서</button></div>
   <div id="menuDim"></div>
   <div id="homeLogo"><img src="icon-512.png" alt="" style="width:120px;height:120px;border-radius:20px"><br>빨간 우체통<br><small>(못다한 그 말)</small></div>
   <!-- 노래 막대 (같이 듣는 중) -->
@@ -1196,6 +1238,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     <button id="sendBtn" title="보내기"><svg viewBox="0 0 24 24"><path class="pf" d="M2.5 11.2 21 3.2c.6-.3 1.2.3.9.9l-8 18.5c-.3.7-1.3.6-1.4-.1l-1.6-7.4-7.4-1.6c-.7-.1-.8-1.1-.1-1.4z"/><path class="pl" d="M10.9 13.1 21.3 3.6" stroke-width="1.6"/></svg></button>
     <div id="recStrip"><span id="recInfo">● 녹음 중 0초</span><button id="recCancel">✕ 취소</button></div>
     <button id="testBtn" aria-hidden="true" tabindex="-1"></button>
+    <div id="wspBar"><span id="wspTx"></span><button id="wspX">그만</button></div>
   </footer>
 </div>
 
@@ -1236,6 +1279,9 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     </div>
     <div class="lab">노래 선물</div>
     <div class="chips"><button class="chip" id="songBtn"><span class="cas"></span> 카세트테이프 노래 선물</button></div>
+    <div class="lab">파일 첨부 (사진 · 노래 · 문서 · 편지와 함께 가요)</div>
+    <div class="chips"><button class="chip" id="attBtn">📎 파일 넣기</button><input type="file" id="attFile" multiple style="display:none"></div>
+    <div id="attList"></div>
     <div style="height:16px"></div>
   </div>
   <div class="wbar" id="bar1">
@@ -1491,10 +1537,10 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 <!-- 이름 -->
 <div class="ov" id="nameOv">
   <div class="panel" style="max-width:420px">
-    <img src="icon-512.png" alt="" style="display:block;width:150px;height:150px;margin:0 auto 10px;border-radius:24px"><h2 style="text-align:center;margin-bottom:14px">빨간 우체통 <span style="font-size:.8em;color:#ffb3b1">(못다한 그 말)</span></h2>
-    <div class="npromo">💌 옛날 감성의 편지로 마음을 전하세요<br>👵 어르신도 편하게 말로 문자하세요<br>📨 한 번에 모두에게 보내기<br>📎 사진 · 노래 · 파일도 보내기</div>
+    <img src="icon-512.png" alt="" style="display:block;width:96px;height:96px;margin:0 auto 6px;border-radius:20px"><h2 style="text-align:center;margin-bottom:14px">빨간 우체통 <span style="font-size:.8em;color:#ffb3b1">(못다한 그 말)</span></h2>
+    <div class="npromo">💌 옛날 감성의 편지로 마음을 전하세요<br>📨 모든 사람에게 한 번에 보내기<br>👵 실버 모드로 어르신도 음성으로 편하게 문자하세요<br>🎄 예쁜 연말연시·크리스마스 카드 보내기 가능합니다</div>
     <div class="nlab" id="nameNeed" style="text-align:center;color:#ffd76a">🔐 구글이나 카카오로 로그인해야 시작할 수 있어요</div>
-    <button class="nbtn g" id="nameLogin"><b>G</b> 구글 간편 로그인 <small>(닉네임 자동 입력)</small></button><button class="nbtn kk" id="nameKakao">💬 카카오 간편 로그인</button>
+    <div class="nrow3"><button class="nbtn sv" id="nameSilver"><i>👵</i>실버 모드</button><button class="nbtn kk" id="nameKakao"><i>💬</i>카톡 인증</button><button class="nbtn g" id="nameLogin"><b>G</b>구글 인증</button></div>
     <button class="nbtn" id="nameInstall">📲 홈 화면에 추가</button>
     <div class="nlab">이름(별명)</div>
     <div class="namerow"><input class="in" id="nameIn" maxlength="12" placeholder="예: 영민" enterkeyhint="go"><button id="nameOk">시작</button></div>
@@ -1502,7 +1548,6 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     <input class="in" id="phoneIn" type="tel" inputmode="tel" maxlength="20" placeholder="예: 010-1234-5678" style="width:100%;box-sizing:border-box">
     <div class="nlab">프로필 사진 <small style="opacity:.7">(안 넣어도 돼요)</small></div>
     <div class="sv-photo"><span id="mePic"></span><button id="mePicBtn" type="button">🖼 사진 넣기</button><button id="mePicDel" type="button">지우기</button></div><input type="file" id="mePicFile" accept="image/*" style="display:none">
-    <button class="nbtn sv" id="nameSilver">👵 실버 모드로 시작</button>
   </div>
 </div>
 
@@ -1719,11 +1764,17 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 </div></div>
 <!-- 55번: 보내는 말풍선 색 (다크·일반 화면 따로) -->
 <!-- 62번: 나와의 창 📁 보관함 - 올린 파일을 차례대로 · 올리기 · 받기 -->
-<div class="ov" id="boxOv"><div class="panel" style="max-width:420px">
-  <h2 style="text-align:center">📁 보관함</h2>
-  <div style="color:#ccc;font-size:14px;text-align:center;margin-bottom:10px">나와의 창에 올린 파일이 차례대로 모여요</div>
-  <button class="big" id="boxUp">⬆ 파일 올리기</button><input type="file" id="boxFile" multiple style="display:none">
+<div class="ov" id="storeOv"><div class="panel" style="max-width:440px">
+  <h2 style="text-align:center">📁 내 보관함</h2>
+  <div class="sttabs"><button id="stTabImg" class="on">🖼 사진</button><button id="stTabDoc">📄 문서</button></div>
+  <div id="stUse"></div>
+  <button class="big y" id="boxUp">⬆ 올리기</button><input type="file" id="boxFile" multiple style="display:none">
   <div id="boxList"></div>
+  <button class="big" data-close>닫기</button>
+</div></div>
+<div class="ov" id="albOv"><div class="panel" style="max-width:440px">
+  <h2 id="albTitle" style="text-align:center">🖼 앨범</h2>
+  <div id="albGrid" class="albgrid"></div>
   <button class="big" data-close>닫기</button>
 </div></div>
 <div class="ov" id="bubOv"><div class="panel" style="max-width:380px;text-align:center">
@@ -1766,7 +1817,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 <div class="ov" id="stListOv"><div class="panel">
   <h2>🍀 모르는 편지함</h2><div id="stList"></div><button class="big" data-close>닫기</button>
 </div></div>
-<div id="promoBar" style="display:none;position:fixed;left:10px;right:10px;bottom:84px;z-index:45;background:#1d1d24;border:1px solid #ff8fb1;color:#f2f2f6;border-radius:14px;padding:10px 40px 10px 14px;font-size:15px;line-height:1.5;box-shadow:0 4px 18px rgba(0,0,0,.5)"><span id="promoTx"></span><button id="promoX" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:#aaa;font-size:20px;padding:6px">✕</button></div>
+<div id="promoBar" style="display:none;position:fixed;left:10px;right:10px;bottom:84px;z-index:45;background:#1d1d24;border:1px solid #ff8fb1;color:#f2f2f6;border-radius:14px;padding:10px 40px 10px 14px;font-size:15px;line-height:1.5;box-shadow:0 4px 18px rgba(0,0,0,.5)"><span id="promoTx"></span><button id="promoGo">바로 가기 ➜</button><button id="promoX" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:#aaa;font-size:20px;padding:6px">✕</button></div>
 <div id="toast"></div>
 
 <script>
@@ -1787,7 +1838,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '64';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '66';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -1842,7 +1893,8 @@ const isMine = m => me.ids.includes(m.from) || (!!m.name && m.name === me.name);
 
 const urlQ = new URLSearchParams(location.search);
 const urlRoom = urlQ.get('room');
-const urlFrom = (urlQ.get('f') || '').slice(0, 12);   // 32번: 초대한 친구 이름 (새 방 대신 바로 보이게)
+const urlFrom = (urlQ.get('f') || '').slice(0, 12);
+if (urlQ.get('iv') && !LS.get('rp_inviter', '')) LS.set('rp_inviter', urlQ.get('iv').slice(0, 64));   // 66번   // 32번: 초대한 친구 이름 (새 방 대신 바로 보이게)
 /* 22번: 가족이 보낸 실버 모드 초대 (호칭 · 이름 · 전화번호 · 닉네임) */
 const svInv = urlRoom && urlQ.get('sv') ? { g: urlQ.get('g') === 'm' ? 'm' : 'f', r: (urlQ.get('r') || '').slice(0, 8), n: (urlQ.get('n') || '').slice(0, 8), p: (urlQ.get('p') || '').slice(0, 15), k: (urlQ.get('k') || '').slice(0, 12) } : null;
 if (svInv) LS.set('rp_sv_pend', { ...svInv, room: urlRoom });   // 24번: 초대 정보를 폰에 먼저 적어 둬요 (도중에 사라지지 않게)
@@ -1977,6 +2029,7 @@ async function initStore(){
   }
   if (FB) { if (!authP) authP = ensureAuth(); await authP; }   // 22번: 로그인이 끝난 뒤에 대화 읽기
   if (FB && authUid) { devCheck(); noticeCheck(); banCheck(); setTimeout(stCheck, 4000); }   // 57번 · 58번
+  if (FB && authUid && LS.get('rp_auth', null)) ptInit(authUid);   // 66번: 게임 점수
   if (FB && authUid) myLoad();   // 32번: 할 일 · 일기 (서버 ↔ 내 폰)
   if (FB && me.name && LS.get('rp_name_synced', '') !== me.name) setTimeout(renameAll, 3000);   // 25번: 예전 이름으로 남은 방도 한 번에 고쳐요
   /* 28번: 초대 링크·알림을 누르고 들어오면 목록이 아니라 바로 그 대화방 */
@@ -2001,6 +2054,7 @@ async function initStore(){
 }
 /* 방 열기 (방마다 따로 대화) - 방은 이름이 아니라 고유 번호(room)로 찾아요 */
 function openRoom(id){
+  if (wsp && wsp.room !== id) wspSet(null);   // 65번
   reqDone(id);   // 52번
   unsub.forEach(f => { try { f(); } catch (e) {} }); unsub = [];
   if (room !== id && !homeOn) setSeen(room);
@@ -2186,7 +2240,7 @@ function joinRoom(id){
   const lg = LS.get('rp_auth', null) ? 1 : 0;   // 42번: 간편 로그인 했는지
   const ph = me.phone || null;   // 52번: 전화번호도 (없으면 지움)
   const pic = me.pic || null;    // 60번: 프로필 사진도 (없으면 지움)
-  needKey(id).then(() => D.get(r)).then(s => D.update(r, s.exists() ? { name: me.name, at: now, lg, ph, pic } : { name: me.name, at: now, joined: now, lg, ph, pic })).catch(() => {});
+  needKey(id).then(() => D.get(r)).then(s => D.update(r, s.exists() ? { name: me.name, at: now, lg, ph, pic, au: authUid || null } : { name: me.name, at: now, joined: now, lg, ph, pic, au: authUid || null })).catch(() => {});
 }
 /* 25번: 이름을 바꾸면 내가 들어간 모든 방에 새 이름으로 (예전 이름 YM → 영민) */
 function renameAll(){
@@ -2209,7 +2263,7 @@ let seenT = 0, seenLast = 0;
 function writeSeen(){
   if (!FB || me !== realMe || document.hidden || !room) return;
   clearTimeout(seenT);
-  const go = () => { seenLast = Date.now(); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + me.uid), { seen: Date.now() }).catch(() => {}); };
+  const go = () => { seenLast = Date.now(); const top = Object.values(msgs).reduce((a, m) => Math.max(a, m.at || 0), 0); FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/members/' + me.uid), { seen: Math.max(Date.now(), top + 1) }).catch(() => {}); };   // 65번: 폰 시계가 달라도 읽음이 되게
   if (Date.now() - seenLast > 3000) go(); else seenT = setTimeout(go, 3000);
 }
 document.addEventListener('visibilitychange', () => { livePing(); if (!document.hidden) { writeSeen(); readInbox(); checkRemoved(); queueRender(); } });
@@ -2618,7 +2672,9 @@ $('logoutBtn').onclick = async () => {
   if (!confirm('로그아웃할까요?')) return;
   click();
   try { const A = await authModule(); if (A) await A.signOut(A.getAuth(FB.app)); } catch (e) {}
-  LS.set('rp_auth', null); toast('로그아웃했어요'); setTimeout(() => location.reload(), 900);
+  LS.set('rp_auth', null);
+  realMe.uid = rid(); realMe.ids = [realMe.uid]; LS.set('rp_me', realMe); LS.set('rp_test_me', null);   // 65번: 같은 계정을 두 폰에서 쓰다 로그아웃하면 이 폰은 새 번호로 (내 계정이 헷갈리지 않게)
+  toast('로그아웃했어요'); setTimeout(() => location.reload(), 900);
 };
 $('roomList').addEventListener('click', e => {
   const ck = e.target.closest('[data-ck]');
@@ -2675,7 +2731,7 @@ document.querySelectorAll('[data-share]').forEach(b => b.onclick = async () => {
   await shareInvite(kind);
   if (kind !== 'copy') { hideOv('newOv'); hideOv('inviteOv'); }   // 돌아오면 바로 그 방 대화창
 });
-const roomURL = id => location.origin + location.pathname + '?room=' + id + (me.name ? '&f=' + encodeURIComponent(me.name) : '');   // 32번: 받은 사람 화면에 '새 방' 대신 내 이름
+const roomURL = id => location.origin + location.pathname + '?room=' + id + (me.name ? '&f=' + encodeURIComponent(me.name) : '') + (LS.get('rp_auth', null) && authUid ? '&iv=' + authUid : '');   // 66번: 초대한 사람 (친구가 가입하면 +500점)   // 32번: 받은 사람 화면에 '새 방' 대신 내 이름
 const inviteText = () => `📮 ${me.name}님이 빨간 우체통에 초대했어요. 못다한 그 말, 편지로 주고받아요.`;
 /* 22번: 어르신 초대 - 링크에 호칭 · 이름 · 전화번호 · 닉네임을 같이 넣어요 → 어르신 가족 버튼에 저절로 */
 let svInvOn = false, svInvG = 'f', svInvR = '아들', svInvPh = '';
@@ -2818,6 +2874,20 @@ function kakaoShare(url, text, env){
 
 /* ----- 구글 로그인: 어느 기기에서나 같은 방 목록 ----- */
 let AU = null;
+/* 66번: 🎮 게임 점수 - 처음 로그인(가입)하면 500점 · 초대 링크로 들어온 친구가 가입하면 초대한 사람에게 500점 · 점수를 다시 받는 방법은 친구 초대뿐 */
+const PT_START = 500, PT_INVITE = 500;
+async function ptInit(uid){
+  if (!FB || !uid || ptInit.done === uid) return; ptInit.done = uid;
+  const { D, db } = FB, r = D.ref(db, 'giftstory/points/' + uid), iv = LS.get('rp_inviter', '');
+  try {
+    let made = false;
+    await D.runTransaction(r, v => { if (v) { made = false; return; } made = true; return { p: PT_START, name: me.name || '', at: Date.now(), by: iv && iv !== uid ? iv : null }; });
+    if (made) {
+      toast('🎁 가입 선물 ' + PT_START + '점이 들어왔어요 (게임에 써요)');
+      if (iv && iv !== uid) D.runTransaction(D.ref(db, 'giftstory/points/' + iv + '/p'), v => (typeof v === 'number' ? v : 0) + PT_INVITE).catch(() => {});
+    } else if (me.name) D.update(r, { name: me.name }).catch(() => {});   // 랭킹에 보이는 이름
+  } catch (e) { ptInit.done = null; }
+}
 async function authModule(){ if (!AU && FB) AU = await import(FB.base + 'firebase-auth.js'); return AU; }
 /* 29번: 로그인 창은 버튼을 누른 그 순간에 바로 열어야 해요 (미리 준비해 두기)
    - 준비 없이 누르면 폰이 창을 막고, 다른 주소로 갔다 오는 방식은 처음 설치한 폰에서 로그인이 풀려 처음 화면으로 돌아왔어요 */
@@ -2845,11 +2915,11 @@ async function afterLogin(user, kind){
   if (!user) return;
   LS.set('rp_auth', { uid: user.uid, name: user.displayName || '', k: kind || 'google' });   // 48번: 카카오인지 구글인지
   if ($('nameOv').classList.contains('show')) {
-    $('nameLogin').innerHTML = '<b>✓</b> ' + (kind === 'kakao' ? '카카오' : '구글') + ' 로그인됨'; toast('예전 대화를 찾는 중…');
+    (kind === 'kakao' ? $('nameKakao') : $('nameLogin')).innerHTML = '<b>✓</b>' + (kind === 'kakao' ? '카톡' : '구글') + ' 됨'; toast('예전 대화를 찾는 중…');
     await syncAccount();   // 31번: 예전 번호·방·이름을 먼저 불러와요 → 원래 이름 그대로
-    nameFromLogin(); return;
+    nameFromLogin(); ptInit(user.uid); return;
   }
-  await syncAccount(); toast('✓ 로그인했어요'); drawRooms();
+  await syncAccount(); toast('✓ 로그인했어요'); drawRooms(); ptInit(user.uid);
   if (started) setTimeout(() => location.reload(), 1200);   // 22번: 새 로그인 번호로 방을 다시 열기
 }
 async function loginReturn(){   // 페이지 이동 방식으로 로그인하고 돌아왔을 때
@@ -2955,6 +3025,7 @@ function notifyNew(m){
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   let body;
   if (m.type === 'letter') { if (!forMe(m) || !arrived(m)) return; body = '💌 편지가 도착했어요'; }
+  else if (m.wt != null) { if (!forWsp(m)) return; body = '🤫 ' + m.wt; }   // 65번
   else body = m.text;
   const opt = { body, tag: 'rp-' + room + '-' + (m.at || Date.now()), renotify: true, silent: false, data: { url: location.href } };
   try { swReg ? swReg.showNotification(m.name, opt) : new Notification(m.name, opt); } catch (e) {}
@@ -2988,6 +3059,12 @@ function envHTML(m){
     <div class="eto"><b>${esc(L.to)}</b> 님께</div>
   </div>`;
 }
+const seenByName = a => Object.values(a.reduce((o, v) => { o[v.name] = Math.max(o[v.name] || 0, v.seen || 0); return o; }, {}));
+const iga = n => { n = String(n || ''); const c = n.charCodeAt(n.length - 1); return c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? n + '이' : n; };   // 지영 → 지영이
+const memOf = (id, name) => Object.values(roomMembers[id] || {}).filter(v => v && v.name === name).sort((a, b) => (b.at || 0) - (a.at || 0))[0] || null;
+const ME_KEY = '__me__';
+let wsp = null;   // 65번: 🤫 귓속말 { room, name }
+const forWsp = m => me.ids.includes(m.toU) || m.to === me.name;
 let whoF = null;   // 45번: 이 사람이 한 말 보기 { room, name }
 function render(){
   if (homeOn) {
@@ -3011,33 +3088,36 @@ function render(){
   const alias1 = aliasOf(room) && new Set(others.map(v => v.name)).size <= 1 ? aliasOf(room) : '';   // 31번: 1:1 방은 내가 정한 이름으로
   if (whoF && whoF.room !== room) whoF = null;   // 45번: 다른 방으로 가면 '한 말 보기' 풀기
   const wf = whoF && whoF.name;
-  if (wf) html += `<div class="wfbar">👤 ${esc(wf)}님이 한 말만 보는 중<button data-whooff>모두 보기</button></div>`;
+  if (wf) html += `<div class="wfbar">${wf === ME_KEY ? '🙋 내가 한 말만 보는 중' : '👤 ' + esc(wf) + '님이 한 말만 보는 중'}<button data-whooff>모두 보기</button></div>`;
   sorted().forEach(m => {
     const mine = isMine(m);
     if (m.type === 'letter' && !mine) return;          // 받은 편지는 대화창에 안 보임 (우체통으로만)
     if (isGroup(room) && m.type === 'text' && String(m.text || '').startsWith('📢 공지: ')) return;   // 47번: 예전 공지 말풍선도 안 보이게 (공지는 위에만)
-    if (wf && (mine || m.name !== wf)) return;          // 45번: 그 사람이 한 말만
+    if (wf && (wf === ME_KEY ? !mine : (mine || m.name !== wf))) return;          // 45번: 그 사람이 한 말만 · 65번: 내 이름은 내 말만
+    if (m.wt != null && !mine && !forWsp(m)) return;   // 65번: 다른 사람 귓속말은 안 보여요
     if (m.del || (m.type === 'file' && fileHid().includes(m.id))) return;      // 60번: 지운 파일은 안 보이게
     const day = fmtDate(m.at);
     if (day !== lastDay) { html += `<div class="day">${day}</div>`; lastDay = day; }
-    html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? `<div class="who mine">${esc(me.name || m.name || '나')}</div>` : `<div class="who" data-who="${esc(m.name || '')}">${esc(alias1 || m.name)}</div>`}`;
+    html += `<div class="row ${mine ? 'me' : 'them'}">${mine ? `<div class="who mine" data-who="${ME_KEY}">${esc(me.name || m.name || '나')}</div>` : `<div class="who" data-who="${esc(m.name || '')}">${esc(alias1 || m.name)}</div>`}`;
     if (m.type === 'letter') {
       const st = !arrived(m) ? '<span class="st wait">내일 아침 도착</span>' : m.read ? '<span class="st read">읽음</span>' : '<span class="st">안 읽음</span>';
       html += `<div class="mini" data-id="${m.id}">${st}<div class="ico ${pcls(lp(m.letter))}" style="${paperVars(lp(m.letter))}"></div></div>`;
     } else if (m.type === 'voice') {
-      html += `<div class="bubble voice" data-id="${m.id}"><b>▶</b>🎤 목소리 ${m.sec ? m.sec + '초' : ''}</div>`;
+      html += `<div class="bubble voice" data-id="${m.id}" data-mid="${m.id}"><b>▶</b>🎤 목소리 ${m.sec ? m.sec + '초' : ''}</div>`;
     } else if (m.type === 'file') {
       html += fileHTML(m, mine);
     } else if (m.type === 'gm') {   // 46번: 같이 하는 게임 초대
       html += `<div class="bubble">${linky(m.text || '🎮 게임 같이 해요')}${mine ? '' : `<button class="ginvb" data-gamego="${esc(m.game || '')}">🎮 같이 하기</button>`}</div>`;
     } else if (m.type === 'ginv') {   // 41번: 공동체 초대장
       html += `<div class="bubble">${linky(m.text || '👥 공동체 초대')}${mine ? '' : `<button class="ginvb" data-ginvgo="${esc(m.gid || '')}" data-gn="${esc(m.gn || '')}">👥 공동체 들어가기</button>`}</div>`;
+    } else if (m.wt != null) {   // 65번: 귓속말
+      html += `<div class="bubble wsp" data-mid="${m.id}"><small>🤫 ${mine ? esc(m.to || '') + '에게 ' : ''}귓속말</small>${linky(m.wt)}</div>`;
     } else {
-      html += `<div class="bubble">${m.cap ? '🎙 ' : ''}${linky(m.text)}</div>`;
+      html += `<div class="bubble" data-mid="${m.id}">${m.cap ? '🎙 ' : ''}${linky(m.text)}</div>`;
     }
     let r1 = '';
     if (mine && FB && m.type !== 'letter' && !isSelf(room)) {   // 카톡처럼: 아직 안 읽은 사람 수
-      const n = others.length ? others.filter(v => (v.seen || 0) < (m.at || 0)).length : 1;
+      const n = others.length ? seenByName(others).filter(x => x < (m.at || 0)).length : 1;   // 65번: 같은 사람(번호 여러 개)은 한 번만
       if (n) r1 = `<b class="r1">${n}</b>`;
     }
     html += `<div class="time">${r1}${fmtTime(m.at)}</div></div>`;
@@ -3107,6 +3187,7 @@ $('msgs').addEventListener('click', e => { const w = e.target.closest('.mini'); 
 
 /* ----- 테스트 버튼 (전송 버튼 위, 안 보임) ----- */
 $('testBtn').onclick = () => {
+  if (!isDev && me === realMe) return;   // 65번
   if (me === realMe) {
     testMe = LS.get('rp_test_me', null) || { uid: rid(), name: '테스트친구' };
     if (!testMe.ids) testMe.ids = [testMe.uid];
@@ -3142,7 +3223,10 @@ function sendText(){
     }, { all: isDev });   // 57번: 모두에게 보내기는 개발자만
     return;
   }
-  addMsg({ from: who().uid, name: who().name, type: 'text', text: t, at: Date.now() });
+  if (wsp && wsp.room === room) {   // 65번: 귓속말 (그 사람에게만 보여요 · 알림에는 내용 없이)
+    const mv = memOf(room, wsp.name), uid = mv ? Object.keys(roomMembers[room] || {}).find(k => roomMembers[room][k] === mv) : null;
+    addMsg({ from: who().uid, name: who().name, type: 'text', text: '🤫 귓속말이 왔어요', wt: t, to: wsp.name, toU: uid || null, at: Date.now() });
+  } else addMsg({ from: who().uid, name: who().name, type: 'text', text: t, at: Date.now() });
   $('txt').value = ''; txtFit(); sendLook();
   render.jump = true;
   askNoti();
@@ -3381,12 +3465,23 @@ $('msgs').addEventListener('click', e => {
   const wg = e.target.closest('[data-whogo]');   // 45번: 이 사람이 한 말 보기
   if (wg) { click(); whoF = { room, name: wg.dataset.whogo }; render.jump = true; render(); return; }
   const wh = e.target.closest('[data-who]');   // 45번: 이름(아이콘)을 누르면 '이 사람이 한 말 보기' 버튼
-  if (wh && wh.dataset.who) {
+  if (wh && wh.dataset.who) {   // 65번: 이름을 누르면 'OO이 말만 보기 · OO에게 귓속말하기 · 📞 전화하기 · 🖼 앨범'
     click(); const nx = wh.nextElementSibling;
-    document.querySelectorAll('#msgs .whob').forEach(b => b.remove());
-    if (!(nx && nx.classList.contains('whob'))) wh.insertAdjacentHTML('afterend', `<button class="whob" data-whogo="${esc(wh.dataset.who)}">💬 이 사람이 한 말 보기</button>`);
+    document.querySelectorAll('#msgs .whobox').forEach(b => b.remove());
+    if (nx && nx.classList.contains('whobox')) return;
+    const n = wh.dataset.who, mv = n === ME_KEY ? null : memOf(room, n);
+    let h = n === ME_KEY ? `<button class="whob" data-whogo="${ME_KEY}">🙋 내 말만 보기</button>`
+      : `<button class="whob" data-whogo="${esc(n)}">💬 ${esc(iga(n))} 말만 보기</button>`
+        + (isGroup(room) ? `<button class="whob w2" data-wsp="${esc(n)}">🤫 ${esc(n)}에게 귓속말하기</button>` : '')
+        + (mv && mv.ph ? `<button class="whob w3" data-tel="${esc(mv.ph)}">📞 전화하기</button>` : '')
+        + `<button class="whob w4" data-album="${esc(n)}">🖼 ${esc(iga(n))} 앨범</button>`;
+    wh.insertAdjacentHTML('afterend', `<div class="whobox">${h}</div>`);
     return;
   }
+  const ws = e.target.closest('[data-wsp]');   // 65번: 귓속말하기
+  if (ws) { click(); wspSet(ws.dataset.wsp); document.querySelectorAll('#msgs .whobox').forEach(b => b.remove()); return; }
+  const al = e.target.closest('[data-album]');   // 65번: 그 사람 앨범 (공개한 사진만)
+  if (al) { click(); albumOpen(al.dataset.album); document.querySelectorAll('#msgs .whobox').forEach(b => b.remove()); return; }
   const gg = e.target.closest('[data-gamego]');   // 46번: 게임 초대 누르면 그 게임으로
   if (gg) { const f = gg.dataset.gamego; if (!/^(gawibawibo|ppopgi|penalty)\.html$/.test(f)) return; click(); leaving = true; location.href = f + '?g=' + encodeURIComponent(room) + '&j=1'; return; }
   const gi = e.target.closest('[data-ginvgo]');   // 41번: 초대장 누르면 공동체에 들어가기
@@ -3405,16 +3500,28 @@ $('msgs').addEventListener('click', e => {
 });
 /* 60번: 파일 꾹 누르면 지우기 - 내가 보낸 건 모두에게서, 받은 건 내 화면에서 */
 function fileHid(){ return LS.get('rp_fhid', []); }
+/* 65번: 🤫 귓속말 */
+function wspSet(name){ wsp = name ? { room, name } : null; $('wspBar').classList.toggle('on', !!wsp); if (wsp) { $('wspTx').textContent = '🤫 ' + name + '에게 귓속말 중'; $('txt').focus(); } }
+$('wspX').onclick = () => { click(); wspSet(null); };
+/* 65번: 내 말풍선 꾹 누르면 지우기 */
+function msgDelAsk(id){
+  const m = msgs[id]; if (!m || !isMine(m)) return;
+  if (!confirm('🗑 이 말을 지울까요?\n(상대 화면에서도 지워져요)')) return;
+  if (FB) FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + room + '/msgs/' + id), { del: true }).catch(() => toast('못 지웠어요'));
+  else { m.del = true; saveDemo(); }
+  m.del = true; click(); toast('🗑 지웠어요'); render();
+}
 let lpFileT = 0, lpFileDone = false, lpFileXY = null;
 $('msgs').addEventListener('pointerdown', e => {
   lpFileDone = false;
-  const f = e.target.closest('[data-fmsg]'); if (!f || e.target.closest('.fsv')) return;
+  const f = e.target.closest('[data-fmsg]'), t = f ? null : e.target.closest('.row.me [data-mid]');   // 65번: 내 말풍선도 꾹
+  if ((!f && !t) || e.target.closest('.fsv') || e.target.closest('a.mlink')) return;
   lpFileXY = [e.clientX, e.clientY]; clearTimeout(lpFileT);
-  lpFileT = setTimeout(() => { lpFileDone = true; if (navigator.vibrate) navigator.vibrate(30); fileDelAsk(f.dataset.fmsg); }, 700);
+  lpFileT = setTimeout(() => { lpFileDone = true; if (navigator.vibrate) navigator.vibrate(30); f ? fileDelAsk(f.dataset.fmsg) : msgDelAsk(t.dataset.mid); }, 700);
 });
 $('msgs').addEventListener('pointermove', e => { if (lpFileXY && Math.hypot(e.clientX - lpFileXY[0], e.clientY - lpFileXY[1]) > 12) clearTimeout(lpFileT); });
 ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => $('msgs').addEventListener(t, () => clearTimeout(lpFileT)));
-$('msgs').addEventListener('contextmenu', e => { if (e.target.closest('[data-fmsg]')) e.preventDefault(); });
+$('msgs').addEventListener('contextmenu', e => { if (e.target.closest('[data-fmsg]') || e.target.closest('.row.me [data-mid]')) e.preventDefault(); });
 function fileDelAsk(id){
   const m = msgs[id]; if (!m) return;
   const mine = isMine(m);
@@ -3571,11 +3678,50 @@ function uidOf(name){
   return m ? m.from : null;
 }
 function otherName(){ const n = roomName(room); if (n && n !== '새 방' && n !== me.name) return n; const o = sorted().slice().reverse().find(m => !isMine(m) && m.name !== me.name); return o ? o.name : '';   }   // 49번: 대화 상대 이름 (내 이름 X)
+/* 65번: 📎 편지·카드에 파일 첨부 (사진은 줄여서 · 한 개 20MB까지 · 받은 쪽은 ⬇ 저장 · ⬆ 공유) */
+const attsOf = () => W && W.atts && W.atts.length ? W.atts.slice(0, 10) : null;
+function attDraw(){
+  const L = (W && W.atts) || [];
+  $('attList').innerHTML = L.length ? `<div class="latts">${L.map((x, i) => `<div class="latt">${x.kind === 'image' && x.thumb ? `<img src="${esc(x.thumb)}" alt="">` : `<span style="font-size:22px">${x.kind === 'audio' ? '♪' : '📄'}</span>`}<span class="bn">${esc(x.fname)}<small>${fmtSize(x.size || 0)}</small></span><button class="stb" data-attx="${i}">✕</button></div>`).join('')}</div>` : '';
+}
+$('attBtn').onclick = () => { click(); if (!FB) { toast('인터넷에 연결돼야 넣을 수 있어요'); return; } $('attFile').click(); };
+$('attFile').onchange = async () => {
+  const fs = [...$('attFile').files]; $('attFile').value = ''; if (!fs.length || !W) return;
+  if (!W.atts) W.atts = [];
+  const lim = await fqLimit();
+  for (const f of fs) {
+    if (W.atts.length >= 10) { toast('파일은 10개까지 넣을 수 있어요'); break; }
+    let blob = f, thumb = '', mime = f.type || 'application/octet-stream', name = f.name || '파일';
+    const kind = fileKind(mime, name);
+    if (kind === 'image' && !/gif|svg/.test(mime)) { const sh = await shrinkImg(f, 1600, .82, 240); if (sh) { thumb = sh.thumb; if (sh.blob.size < f.size) { blob = sh.blob; mime = 'image/jpeg'; name = name.replace(/\.[^.]+$/, '') + '.jpg'; } } }
+    if (blob.size > 20 * 1048576) { toast('📎 ' + name + ' - 20MB가 넘어서 못 넣어요'); continue; }
+    if (fqUsed() + blob.size > lim) { fqFull(); break; }
+    const sp = 'giftstory/latt/' + (authUid || realMe.uid) + '/' + rid();
+    try { await stgUpload(sp, blob, mime); } catch (e) { toast('못 넣었어요 (인터넷·서버 규칙 확인)'); continue; }
+    fqAdd(blob.size);
+    W.atts.push({ kind, fname: name.slice(0, 80), mime, size: blob.size, sp, thumb }); attDraw();
+  }
+  toast('📎 편지에 넣었어요');
+};
+$('attList').addEventListener('click', e => {
+  const b = e.target.closest('[data-attx]'); if (!b || !W || !W.atts) return;
+  click(); const x = W.atts.splice(+b.dataset.attx, 1)[0]; attDraw();
+  if (x && x.sp) stg().then(({ SM, st }) => SM.deleteObject(SM.ref(st, x.sp))).catch(() => {});
+});
+$('readPaper').addEventListener('click', async e => {
+  const k = ['lasave', 'lashare', 'laopen'].find(k => e.target.closest('[data-' + k + ']')); if (!k || !curLetter) return;
+  const x = ((curLetter.letter || {}).atts || [])[+e.target.closest('[data-' + k + ']').dataset[k]]; if (!x) return;
+  click(); toast('⏳ 여는 중…');
+  try {
+    const u = await stURL(x.sp), m = { kind: x.kind === 'audio' ? 'video' : x.kind, fname: x.fname, mime: x.mime, size: x.size };
+    if (k === 'lasave') fileSave(u, x.fname, m); else if (k === 'lashare') fileShare(u, m); else fileOpen(m, u);
+  } catch (e) { toast('파일을 못 받았어요'); }
+});
 function openWriter(data){   // 26번: 상대를 안 정해도 열려요 (받는 사람은 편지 쓰기 안에서 고르기)
   W = data || { to: homeOn ? '' : otherName(), body: '', paper: 'tulip', font: 'pen', stickers: [], voice: null, draftId: null, align: '' };
   $('wTo').value = W.to; $('wBody').value = W.body; $('wFrom').textContent = who().name;
   $('wAllBtn').classList.remove('on'); $('wAllBtn').textContent = '☐ 모두';   // 36번
-  buildPick(); buildStk(); applyW(); updRec();
+  buildPick(); buildStk(); applyW(); updRec(); attDraw();
   step(2);   // 34번: 바로 편지 쓰기 (편지지·글씨는 위 버튼으로)
   $('writer').classList.add('show'); syncLayer();
 }
@@ -3668,7 +3814,7 @@ async function sendLetterLink(kind, when){
   if (!W.to) W.to = '친구';   // 42번: 받는 사람은 카톡·문자에서 고르니까 이름 안 적어도 돼요
   const id = W.linkRoom || rid(), u = who(), again = !!W.linkRoom;
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: null, fromName: u.name, body: nameFill(W.body, W.to === '친구' ? '' : W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when || 0, card: W.env || null } };
+    letter: { to: W.to, toUid: null, fromName: u.name, body: nameFill(W.body, W.to === '친구' ? '' : W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when || 0, card: W.env || null, atts: attsOf() } };
   const text = `💌 ${u.name}님이 ${W.to}님께 손편지를 보냈어요. 빨간 우체통에서 열어 보세요.`;
   const shared = shareTo(kind, roomURL(id), text, { f: u.name, t: W.to === '친구' ? '' : W.to });   // 공유 창 먼저
   if (!again) { pushTo(id, m); saveRoom(id, W.to); W.linkRoom = id; }   // 같은 편지를 다시 보내면 같은 링크
@@ -3747,7 +3893,7 @@ async function sendPicked(slow, at){
   if (rec) await stopRec();
   const u = who(), ids = W.toIds || [], when = at || (slow ? nextMorning() : 0);
   const mk = to => ({ from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when, card: W.env || null } });
+    letter: { to, toUid: null, fromName: u.name, body: nameFill(W.body, to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: when, card: W.env || null, atts: attsOf() } });
   ids.forEach(id => { const m = mk(roomName(id)); if (id === room && !homeOn) addMsg(m); else pushTo(id, m); });
   if (ids.length) saveSent(ids.map(roomName).join(', ').slice(0, 40), mk(ids.length > 1 ? '' : roomName(ids[0])).letter);   // 54-1번
   if (W.self) LS.set('rp_selfletters', [...selfL(), { ...mk(u.name), id: 'self_' + rid(), self: true }].slice(-60));
@@ -3772,7 +3918,7 @@ async function sendLetter(slow, at){
   if (!W.to) { toast('받는 사람을 골라 주세요'); $('toBtn').click(); return; }   // 54-1번: 고르기 창(카톡·문자 포함)
   const u = who();
   const m = { from: u.uid, name: u.name, type: 'letter', at: Date.now(), read: false,
-    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: at || (slow ? nextMorning() : 0), card: W.env || null } };
+    letter: { to: W.to, toUid: uidOf(W.to), fromName: u.name, body: nameFill(W.body, W.to), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: at || (slow ? nextMorning() : 0), card: W.env || null, atts: attsOf() } };
   if (W.draftId) setDrafts(getDrafts().filter(x => x.draftId !== W.draftId));
   saveSent(W.to, m.letter);   // 54-1번
   closeWriter();
@@ -3902,6 +4048,7 @@ function showReader(){
     ${i === N - 1 ? `<div class="pfrom">From. ${esc(L.fromName)}</div>` : ''}
     ${N > 1 ? `<div class="pno">${i + 1} / ${N}장</div>` : ''}
   </div>`).join('');
+  if (L.atts && L.atts.length) rp.insertAdjacentHTML('beforeend', `<div class="latts"><div class="lab2">📎 함께 온 파일 ${L.atts.length}개</div>${L.atts.map((x, i) => `<div class="latt">${x.kind === 'image' && x.thumb ? `<img src="${esc(x.thumb)}" alt="" data-laopen="${i}">` : `<span class="bic" style="font-size:24px" data-laopen="${i}">${x.kind === 'audio' ? '♪' : x.kind === 'video' ? '🎬' : '📄'}</span>`}<span class="bn" data-laopen="${i}">${esc(x.fname || '파일')}<small>${fmtSize(x.size || 0)}</small></span><button class="fsv" data-lasave="${i}" title="내 폰에 저장">${IC_DN}</button><button class="fsv" data-lashare="${i}" title="공유">${IC_UP}</button></div>`).join('')}</div>`);   // 65번
   letterBgmOn();
   if (L.voice) setTimeout(playVoice, 1000);
   markRead(m);
@@ -5585,27 +5732,110 @@ document.addEventListener('visibilitychange', () => {
 /* 나와의 대화방 위 버튼: 1 할 일 · 2 일기장 */
 $('sbTodo').onclick = () => { click(); tdShowDone = false; showOv('todoOv'); tdDraw(); };
 $('sbDiary').onclick = () => { if (needLogin()) diaryOpen(); };
-/* 62번: 📁 보관함 - 나와의 창에 올린 파일 모아 보기 · 올리기 · 받기 */
-function boxDraw(){
-  const DN_SVG = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5v10.5M8.5 11.5l3.5 3.5 3.5-3.5M6.5 19.5h11"/></svg>`;
-  const L = Object.values(msgs).filter(m => m && m.type === 'file' && !m.del && !fileHid().includes(m.id)).sort((a, b) => (a.at || 0) - (b.at || 0));
-  $('boxList').innerHTML = L.length ? L.map((m, i) => {
-    const d = new Date(m.at || 0), ds = `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-    const ico = m.kind === 'image' ? '🖼' : m.kind === 'audio' ? '♪' : m.kind === 'video' ? '🎬' : '📄';
-    return `<div class="boxrow"><span>${i + 1}</span><span class="bn">${ico} ${esc(m.fname || '파일')}<small>${ds} · ${fmtSize(m.size || 0)}</small></span><button class="fsv" data-boxsave="${m.id}" title="내 폰에 저장">${DN_SVG}</button></div>`;
-  }).join('') : '<div class="empty">아직 올린 파일이 없어요</div>';
+/* 65번: 📁 내 보관함 - 🖼 사진 · 📄 문서 따로 · 서버에 계속 남아요(친구에게 보낸 파일처럼 지워지지 않아요) · 사람마다 30MB · 사진은 줄여서 올려요 · 사진은 공개/비공개 */
+const ST_MAX = 30 * 1048576;
+let stTab = 'image', stList = {};
+const stBase = () => 'giftstory/store/' + authUid;
+const IC_DN = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5v10.5M8.5 11.5l3.5 3.5 3.5-3.5M6.5 19.5h11"/></svg>`;
+const IC_UP = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4.5M8.5 8l3.5-3.5L15.5 8M6.5 12.5v7h11v-7"/></svg>`;
+async function stLoad(){
+  if (!FB || !authUid) return stList = {};
+  try { stList = (await FB.D.get(FB.D.ref(FB.db, stBase()))).val() || {}; } catch (e) { stList = {}; toast('보관함을 못 불러왔어요 (인터넷·서버 규칙 확인)'); }
+  return stList;
 }
-$('sbBox').onclick = () => { click(); boxDraw(); showOv('boxOv'); };
+const stUsed = () => Object.values(stList).reduce((a, x) => a + (x && x.size || 0), 0);
+const stMax = () => isDev ? 10240 * 1048576 : ST_MAX;
+function boxDraw(){
+  $('stTabImg').classList.toggle('on', stTab === 'image'); $('stTabDoc').classList.toggle('on', stTab !== 'image');
+  $('boxFile').accept = stTab === 'image' ? 'image/*' : '';
+  $('boxUp').textContent = stTab === 'image' ? '⬆ 사진 올리기' : '⬆ 문서 올리기 (한글·엑셀·PDF 등)';
+  const u = stUsed(), mx = stMax();
+  $('stUse').innerHTML = `사용 ${fmtSize(u)} / ${Math.round(mx / 1048576)}MB <small>(사진·문서 합쳐서)</small><i><b style="width:${Math.min(100, u / mx * 100).toFixed(1)}%"></b></i>`;
+  const L = Object.entries(stList).filter(([, x]) => x && (stTab === 'image' ? x.kind === 'image' : x.kind !== 'image')).sort((a, b) => (b[1].at || 0) - (a[1].at || 0));
+  $('boxList').innerHTML = L.length ? L.map(([id, x]) => {
+    const d = new Date(x.at || 0), ds = `${d.getMonth() + 1}/${d.getDate()}`;
+    const pic = x.kind === 'image' ? `<img class="bth" src="${esc(x.thumb || '')}" alt="" data-stopen="${id}">` : `<span class="bic" data-stopen="${id}">📄</span>`;
+    const pub = x.kind === 'image' ? `<button class="stb ${x.pub ? 'pub' : ''}" data-stpub="${id}" title="공개/비공개">${x.pub ? '🔓 공개' : '🔒'}</button>` : '';
+    return `<div class="boxrow">${pic}<span class="bn" data-stopen="${id}">${esc(x.fname || '파일')}<small>${ds} · ${fmtSize(x.size || 0)}</small></span>${pub}<button class="fsv" data-stsave="${id}" title="내 폰에 저장">${IC_DN}</button><button class="fsv" data-stshare="${id}" title="공유">${IC_UP}</button><button class="stb" data-stdel="${id}" title="지우기">🗑</button></div>`;
+  }).join('') : `<div class="empty">아직 올린 ${stTab === 'image' ? '사진' : '문서'}이 없어요</div>`;
+}
+async function stOpen(kind){
+  if (!needLogin()) return;
+  stTab = kind || 'image'; boxDraw(); showOv('storeOv');
+  $('boxList').innerHTML = '<div class="empty">불러오는 중…</div>';
+  await stLoad(); boxDraw();
+}
+async function stUpload(files){
+  if (!FB || !authUid) { toast('로그인한 뒤에 쓸 수 있어요'); return; }
+  await stLoad(); let used = stUsed(), n = 0;
+  for (const f of files) {
+    let blob = f, thumb = '', mime = f.type || 'application/octet-stream', name = f.name || '파일';
+    if (stTab === 'image') {
+      if (!/^image\//.test(mime)) { toast('사진만 올릴 수 있어요 · 문서는 📄 문서에'); continue; }
+      const sh = /gif|svg/.test(mime) ? null : await shrinkImg(f, 1600, .82, 240);   // 사진은 줄여서
+      if (sh) { thumb = sh.thumb; if (sh.blob.size < f.size) { blob = sh.blob; mime = 'image/jpeg'; name = name.replace(/\.[^.]+$/, '') + '.jpg'; } }
+    }
+    if (used + blob.size > stMax()) { toast(`📦 보관함이 꽉 찼어요 (${Math.round(stMax() / 1048576)}MB) · 안 쓰는 파일을 지워 주세요`); break; }
+    const id = rid(), sp = stBase() + '/' + id;
+    try { await stgUpload(sp, blob, mime); } catch (e) { toast('못 올렸어요 (인터넷·서버 규칙 확인)'); continue; }
+    const x = { kind: stTab === 'image' ? 'image' : 'doc', fname: name.slice(0, 80), mime, size: blob.size, at: Date.now(), sp, thumb, pub: 0 };
+    try { await FB.D.set(FB.D.ref(FB.db, stBase() + '/' + id), x); } catch (e) { toast('못 올렸어요 (서버 규칙 확인)'); continue; }
+    stList[id] = x; used += blob.size; n++; boxDraw();
+  }
+  if (n) toast(`✓ 보관함에 ${n}개 올렸어요`);
+}
+async function stURL(sp){
+  const { SM, st } = await stg(), ref = SM.ref(st, sp);
+  try { const b = await Promise.race([SM.getBlob(ref), new Promise((_, no) => setTimeout(no, 8000))]); return URL.createObjectURL(b); }
+  catch (e) { return SM.getDownloadURL(ref); }
+}
+const stoMsg = x => ({ kind: x.kind === 'image' ? 'image' : /^audio\//.test(x.mime || '') ? 'video' : /^video\//.test(x.mime || '') ? 'video' : 'doc', fname: x.fname, mime: x.mime, size: x.size });
+$('sbBox').onclick = () => { click(); stOpen('image'); };
+$('sbDoc').onclick = () => { click(); stOpen('doc'); };
+$('stTabImg').onclick = () => { click(); stTab = 'image'; boxDraw(); };
+$('stTabDoc').onclick = () => { click(); stTab = 'doc'; boxDraw(); };
 $('boxUp').onclick = () => { click(); $('boxFile').click(); };
-$('boxFile').onchange = async () => {
-  const f = [...$('boxFile').files]; $('boxFile').value = ''; if (!f.length) return;
-  try { await sendFiles(f); } catch (e) {}
-  setTimeout(boxDraw, 800);
-};
-$('boxList').addEventListener('click', e => {
-  const b = e.target.closest('[data-boxsave]'); if (!b) return;
-  const m = msgs[b.dataset.boxsave]; if (!m) return;
-  click(); fileFetch(room, m).then(u => fileSave(u, m.fname, m)).catch(() => toast('이 파일은 받을 수 없어요 (서버에서 지워졌어요)'));
+$('boxFile').onchange = () => { const f = [...$('boxFile').files]; $('boxFile').value = ''; if (f.length) stUpload(f); };
+$('boxList').addEventListener('click', async e => {
+  const g = k => { const b = e.target.closest('[data-' + k + ']'); return b ? b.dataset[k.replace(/-(\w)/g, (_, c) => c.toUpperCase())] : null; };
+  let id;
+  if ((id = g('stpub'))) {
+    const x = stList[id]; if (!x) return; click(); x.pub = x.pub ? 0 : 1;
+    FB.D.update(FB.D.ref(FB.db, stBase() + '/' + id), { pub: x.pub }).catch(() => {});
+    const ar = FB.D.ref(FB.db, 'giftstory/album/' + authUid + '/' + id);
+    (x.pub ? FB.D.set(ar, { sp: x.sp, thumb: x.thumb || '', fname: x.fname, at: x.at }) : FB.D.remove(ar)).catch(() => toast('앨범에 못 넣었어요 (서버 규칙 확인)'));
+    toast(x.pub ? '🔓 공개 · 친구가 내 앨범에서 볼 수 있어요' : '🔒 비공개 · 나만 봐요'); boxDraw(); return;
+  }
+  if ((id = g('stdel'))) {
+    const x = stList[id]; if (!x || !confirm('🗑 보관함에서 지울까요?\n(되돌릴 수 없어요)')) return; click();
+    stg().then(({ SM, st }) => SM.deleteObject(SM.ref(st, x.sp))).catch(() => {});
+    FB.D.remove(FB.D.ref(FB.db, stBase() + '/' + id)).catch(() => {});
+    if (x.pub) FB.D.remove(FB.D.ref(FB.db, 'giftstory/album/' + authUid + '/' + id)).catch(() => {});
+    delete stList[id]; boxDraw(); toast('🗑 지웠어요'); return;
+  }
+  const sv = g('stsave'), sh = g('stshare'), op = g('stopen'); id = sv || sh || op;
+  const x = id && stList[id]; if (!x) return;
+  click(); toast('⏳ 여는 중…');
+  try {
+    const u = await stURL(x.sp), m = stoMsg(x);
+    if (sv) fileSave(u, x.fname, m); else if (sh) fileShare(u, m); else fileOpen(m, u);
+  } catch (e) { toast('파일을 못 열었어요'); }
+});
+/* 65번: 🖼 OO의 앨범 - 그 사람이 보관함에서 '공개'로 한 사진만 */
+async function albumOpen(name){
+  const mv = memOf(room, name);
+  $('albTitle').textContent = '🖼 ' + iga(name) + ' 앨범'; $('albGrid').innerHTML = '<div class="empty" style="grid-column:1/-1">불러오는 중…</div>'; showOv('albOv');
+  if (!FB || !mv || !mv.au) { $('albGrid').innerHTML = '<div class="empty" style="grid-column:1/-1">아직 공개한 사진이 없어요</div>'; return; }
+  let L = {};
+  try { L = (await FB.D.get(FB.D.ref(FB.db, 'giftstory/album/' + mv.au))).val() || {}; } catch (e) {}
+  const arr = Object.values(L).filter(x => x && x.sp).sort((a, b) => (b.at || 0) - (a.at || 0));
+  albumOpen.list = arr;
+  $('albGrid').innerHTML = arr.length ? arr.map((x, i) => `<img src="${esc(x.thumb || '')}" alt="" data-albi="${i}">`).join('') : '<div class="empty" style="grid-column:1/-1">아직 공개한 사진이 없어요</div>';
+}
+$('albGrid').addEventListener('click', async e => {
+  const b = e.target.closest('[data-albi]'); if (!b) return;
+  const x = (albumOpen.list || [])[+b.dataset.albi]; if (!x) return;
+  click(); try { fileOpen({ kind: 'image', fname: x.fname || 'photo.jpg', mime: 'image/jpeg' }, await stURL(x.sp)); } catch (e) { toast('사진을 못 열었어요'); }
 });
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-tdadd]'); if (a) { tdAdd($(a.dataset.tdadd)); return; }
@@ -5684,6 +5914,19 @@ $('dySum').onclick = () => { click(); dyFoldSet(!$('diary').classList.contains('
 if (LS.get('rp_dybig', false)) { $('diary').classList.add('dbig'); $('dyBig').classList.add('on'); }
 $('dyBig').onclick = () => { click(); const on = $('diary').classList.toggle('dbig'); $('dyBig').classList.toggle('on', on); LS.set('rp_dybig', on); };
 /* 🔊 읽어 주기 */
+/* 65번: 폰은 긴 글을 한 번에 읽으면 중간에 멈춰요 → 문장마다 잘라서 차례로 */
+function speakAll(t, rate, done){
+  const parts = [];
+  String(t).split(/(?<=[.!?。…\n])\s*/).forEach(x => { x = x.trim(); while (x.length > 120) { let k = x.lastIndexOf(' ', 120); if (k < 40) k = 120; parts.push(x.slice(0, k)); x = x.slice(k).trim(); } if (x) parts.push(x); });
+  if (!parts.length) { done && done(); return; }
+  const v = typeof koVoice === 'function' ? koVoice() : null;
+  parts.forEach((x, i) => {
+    const u = new SpeechSynthesisUtterance(x); u.lang = 'ko-KR'; u.rate = rate || 1; if (v) u.voice = v;
+    if (i === parts.length - 1) u.onend = () => done && done();
+    u.onerror = e => { if (e && e.error !== 'interrupted' && e.error !== 'canceled') done && done(); };
+    speechSynthesis.speak(u);
+  });
+}
 function dySpeakOff(){ try { speechSynthesis.cancel(); } catch (e) {} $('dyRead').classList.remove('on'); }
 $('dyRead').onclick = () => {
   click();
@@ -5692,9 +5935,8 @@ $('dyRead').onclick = () => {
   const t = [$('dyTitle').value.trim(), $('dyText').value.trim()].filter(Boolean).join('. ');
   if (!t) { toast('읽을 일기가 없어요'); return; }
   dyMicOff(); speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = .9;
-  u.onend = u.onerror = () => $('dyRead').classList.remove('on');
-  $('dyRead').classList.add('on'); speechSynthesis.speak(u);
+  $('dyRead').classList.add('on');
+  speakAll(t, .9, () => $('dyRead').classList.remove('on'));   // 65번: 긴 일기도 끝까지 (조각조각 이어서)
 };
 /* 🎤 일기 마이크 하나: 누른 칸에 써져요 · 제목 말하면 본문으로 · 말 끝나면 다음 줄 · 3초 조용하면 꺼짐 */
 let dyTgt = 'dyTitle', dyRec = null, dyQuiet = 0;
@@ -6630,7 +6872,7 @@ async function stSend(slow){
   if (rec) await stopRec();
   if (!fbOk()) return;
   const u = who(), to = W.stranger.uid || null;
-  const L = { to: to ? (W.stranger.name || '모르는 분') : '모르는 분', toUid: null, fromName: u.name, body: badClean(W.body), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0, card: W.env || null };
+  const L = { to: to ? (W.stranger.name || '모르는 분') : '모르는 분', toUid: null, fromName: u.name, body: badClean(W.body), paper: W.paper, paperData: paperDataFor(W.paper), font: W.font, stickers: W.stickers, voice: W.voice, align: W.align || '', deliverAt: 0, card: W.env || null, atts: attsOf() };
   const draft = W.draftId;
   closeWriter(); W.stranger = null;   // 61번: 보내기를 누르면 창부터 닫아요 (서버 답을 기다리다 멈추지 않게)
   try { await Promise.race([FB.D.push(FB.D.ref(FB.db, 'giftstory/stranger'), { from: authUid, name: u.name, at: Date.now(), to, letter: L }), new Promise(ok => setTimeout(ok, 8000))]); }
@@ -6674,11 +6916,12 @@ function stReply(m){
   openWriter({ to: '모르는 분', toIds: null, body: '', paper: m.letter.paperData ? 'pink' : m.letter.paper, font: m.letter.font, stickers: [], voice: null, draftId: null, stranger: { uid: m.fromUid, name: m.letter.fromName } });
 }
 /* 홍보 글 - 잠깐 보였다가 5분 뒤 사라지고, 30분 뒤 다시 잠깐 */
-const PROMOS = ['📒 매일 일기장을 쓸 수 있어요', '✅ 할 일을 기록하고 편하게 지울 수 있어요', '🎵 ＋ → 같이 듣기로 친구와 음악을 같이 들을 수 있어요', '🎲 ＋ → 게임에서 다른 사람과 가위바위보를 할 수 있어요', '🍀 모르는 누군가에게 편지를 보낼 수 있어요', '👥 가족·회사 공동체를 만들면 연락처가 자동으로 등록돼요', '🎄 크리스마스 카드를 여러 명에게 한 번에 보낼 수 있어요'];
+const PROMOS = ['📒 매일 일기장을 쓸 수 있어요', '✅ 할 일을 기록하고 편하게 지울 수 있어요', '🎵 ＋ → 같이 듣기로 친구와 음악을 같이 들을 수 있어요', '🎲 ＋ → 게임에서 다른 사람과 가위바위보를 할 수 있어요', '🍀 모르는 누군가에게 편지를 보낼 수 있어요', '👥 가족·회사 공동체를 만들면 연락처가 자동으로 등록돼요', '🎄 크리스마스 카드를 여러 명에게 한 번에 보낼 수 있어요',
+  '🎆 예쁜 연말연시 카드를 보낼 수 있어요', '🖼 내 보관함에 사진·문서를 30MB까지 넣어 둘 수 있어요', '📎 편지에 사진·노래·문서를 넣어 보낼 수 있어요', '🎙 편지에 내 목소리를 녹음해 넣을 수 있어요', '📄 한글·엑셀 문서도 보관함에 넣어 둘 수 있어요'];   // 65번: 기능을 늘리면 여기와 PROMO_GO에 같이
 let promoT = 0;
 function promoShow(){
   if (document.hidden || $('writer').classList.contains('show') || document.querySelector('.ov.show')) { promoT = setTimeout(promoShow, 60000); return; }
-  const i = (LS.get('rp_promoI', -1) + 1) % PROMOS.length; LS.set('rp_promoI', i);
+  const last = LS.get('rp_promoI', -1); let i = Math.floor(Math.random() * PROMOS.length); if (i === last) i = (i + 1) % PROMOS.length; LS.set('rp_promoI', i);   // 65번: 랜덤
   $('promoTx').textContent = PROMOS[i]; $('promoBar').style.display = 'block';
   clearTimeout(promoT); promoT = setTimeout(() => { $('promoBar').style.display = 'none'; promoT = setTimeout(promoShow, 1800000); }, 300000);
 }
@@ -6693,8 +6936,14 @@ const PROMO_GO = [
   () => { const b = document.querySelector('[data-tg="rps"]'); if (b) b.click(); },
   () => { openWriter(); W.stranger = { uid: null }; W.to = '모르는 분'; $('wTo').value = W.to; toast('🍀 모르는 누군가에게 편지를 써 보세요'); },
   () => $('grpBtn').click(),
-  () => { openWriter(); openCards('xmas'); }
+  () => { openWriter(); openCards('xmas'); },
+  () => { openWriter(); openCards('ny'); },
+  () => stOpen('image'),
+  () => { openWriter(); setTimeout(() => { const b = $('attBtn'); if (b) b.scrollIntoView({ block: 'center' }); }, 300); },
+  () => { openWriter(); setTimeout(() => { const b = $('recBtn'); if (b) b.scrollIntoView({ block: 'center' }); }, 300); },
+  () => stOpen('doc')
 ];
+$('promoGo').onclick = () => $('promoTx').onclick();
 $('promoTx').onclick = () => { click(); $('promoBar').style.display = 'none'; clearTimeout(promoT); promoT = setTimeout(promoShow, 1800000); const f = PROMO_GO[LS.get('rp_promoI', 0)]; try { f && f(); } catch (e) {} };
 new MutationObserver(() => { if ($('roomOv').classList.contains('show')) devUi(); }).observe($('roomOv'), { attributes: true, attributeFilter: ['class'] });
 </script>

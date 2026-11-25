@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
+<!-- 66번: 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 여러 명이 같이 · 모두 20점씩 걸고 3판 2선승(비긴 판은 안 셈) · 이긴 사람이 판돈을 다 가져가요 · 20점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 46번: '친구랑 하기'가 진짜로 친구와 같이 돼요 (각자 휴대폰 · 대화방에 초대 말풍선 · 둘이 다 고르면 결과 · 먼저 3승 · 나가면 상대 승리) -->
 <!-- 41번: 화면 아래 시작 버튼·점수가 안 잘리게 (실제 보이는 높이에 맞춤, 손 그림 칸 줄임) · 게임에서 나가면 음악 꺼짐 · 점수는 계속 이어짐 -->
 <!-- 40번: 한 판 승부가 나면 1.5초 뒤 저절로 다음 판 · 5초 안 누르면 3, 2, 1 세고 내 손이 저절로 나가요 -->
@@ -49,8 +50,11 @@ h1{text-align:center;font-size:min(4vh,30px);font-weight:900;position:relative}
 .ov button{width:70%;max-width:320px;padding:2.2vh 0;border-radius:20px;border:0;font-size:min(3.4vh,26px);font-weight:900;color:#fff;background:#ff3b3b}
 .ov button+button{background:#333}
 .mk{position:fixed;right:6px;bottom:2px;font-size:10px;color:#555}
+.rk1{position:fixed;top:0;left:0;right:0;z-index:40;text-align:center;font-size:12px;font-weight:800;color:#ffd84a;background:rgba(0,0,0,.55);padding:2px 6px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-top:18px;box-sizing:border-box}
 #share{display:none;margin:0 auto;padding:1vh 4vw;border-radius:14px;border:0;background:#3a6fd8;color:#fff;font-size:min(2.4vh,18px);font-weight:900}
 </style></head><body>
+<div class="rk1" id="rk1"></div>
 <div class="w">
  <h1><a class="back" id="back" href="index.html">‹ 돌아가기</a>가위바위보 게임</h1>
  <div class="arena">
@@ -96,14 +100,12 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();e
 $('back').addEventListener('click',stopAll);
 function snd(k){try{const a=SND[k];a.currentTime=0;const p=a.play();if(p)p.catch(()=>{})}catch(e){}}
 
-let mode='solo',pt=500,bet=20,on=false,ws={m:0,o:0};
-try{const v=localStorage.getItem('rp-point');if(v!==null)pt=+v}catch(e){}
-function addDelta(n){try{localStorage.setItem('rp-point-delta',+(localStorage.getItem('rp-point-delta')||0)+n)}catch(e){}}   // 41번: 뽑기 게임 점수와 합쳐져요
-function save(){$('pt').textContent=pt;try{localStorage.setItem('rp-point',pt)}catch(e){}}
+let mode='solo',pt=0,bet=20,on=false,ws={m:0,o:0};
+const BET=20,WIN_N=2;   // 66번: 한 게임 20점 · 3판 2선승
+function save(){$('pt').textContent=pt.toLocaleString()}
 function showWins(){$('mw').textContent=ws.m+'승';$('ow').textContent=ws.o+'승'}
 function drawBets(){
-  $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':
-    [20,50,100].map(n=>`<button class="${n===bet?'on':''}" ${on||(mode==='friend'&&R&&R.host!==(FU&&FU.uid))?'disabled':''} onclick="setBet(${n})">${n}</button>`).join('');
+  $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':'<div class="pr">20점씩</div>';   // 66번
 }
 function setBet(n){bet=n;drawBets()}
 function enter(md){
@@ -148,7 +150,7 @@ function pick(i){
   if(i===c){b.textContent='비겼다! 다시';b.style.color='#f1c40f';setTimeout(round,1200);return}
   const me=(i-c+3)%3===1;
   ws[me?'m':'o']++;showWins();
-  if(ws.m===3||ws.o===3)return end(me);
+  if(ws.m===WIN_N||ws.o===WIN_N)return end(me);
   b.textContent=me?'아싸! 이겼다':'아유, 졌다';b.style.color=me?'#2ecc71':'#ff3b3b';
   snd(me?'assa':'ayu');
   setTimeout(()=>{if(on)round()},1500);   // 1.5초 뒤 저절로 다음 판
@@ -167,7 +169,14 @@ const CFG={apiKey:"AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",authDomain:"giftwav-
 const ME=(()=>{try{return JSON.parse(localStorage.getItem('rp_me'))||{}}catch(e){return{}}})();
 const myName=ME.name||'나';
 let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curRound=0,shown=0,paidKey=null,doneKey=null;
-try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
+try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
+/* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
+let ptRef=null;
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db||!FU)return;ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{pt=+(s.val()||0);save();ptMine()},()=>{})}
+function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
+function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 점수 1위 '+(x.name||'?')+' · '+(+x.p).toLocaleString()+'점'});$('rk1').textContent=t||'👑 점수 1위 · 아직 없어요'},()=>{})}
+function ptMine(){if(ref&&R&&FU&&R.players&&R.players[FU.uid]&&R.players[FU.uid].pts!==pt)ref.child('players/'+FU.uid+'/pts').set(pt).catch(()=>{})}
+rankWatch();
 async function friendGo(){
   if(!db){big('서버 연결이 안 돼요 · 혼자 하기로 해 보세요','#ff3b3b');return}
   if(!authDone){waitAuth=true;big('로그인 확인 중…');return}
@@ -176,17 +185,18 @@ async function friendGo(){
   if(!RID)try{history.replaceState(null,'',location.pathname+'?g='+gid)}catch(e){}
   await db.ref('giftstory/rooms/'+gid+'/keys/'+FU.uid).set(true).catch(()=>{});
   ref=db.ref('giftstory/rooms/'+gid+'/rps');
-  let made=false;
+  let made=false,why='';
   const r=await ref.transaction(v=>{
-    const now=Date.now(),p={name:myName};
-    if(!v||v.status==='end'&&!(v.players||{})[FU.uid]||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
+    const now=Date.now(),p={name:myName,pts:pt};
+    if(!v||v.status==='end'&&!Object.keys(v.players||{}).length||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
     made=false;v.players=v.players||{};
     if(v.players[FU.uid])return v;
-    if(Object.keys(v.players).length>=2)return;   // 이미 두 사람
+    if(v.status==='play'){why='이미 시작했어요 · 끝나면 다시 들어와요';return}
+    if(Object.keys(v.players).length>=10){why='이미 10명이 하고 있어요';return}   // 66번: 여러 명 (10명까지)
     v.players[FU.uid]=p;v.status='ready';v.at=now;return v;
   }).catch(()=>null);
   if(!r){big('서버에서 막혔어요 · 데이터베이스 규칙을 확인해 주세요','#ff3b3b');return}
-  if(!r.committed){big('이미 두 사람이 하고 있어요','#ff3b3b');return}
+  if(!r.committed){big(why||'들어갈 수 없어요','#ff3b3b');return}
   if(made&&RID&&!RID.startsWith('rps_'))   // 대화방에 초대 말풍선
     db.ref('giftstory/rooms/'+RID+'/msgs').push({from:ME.uid||FU.uid,name:myName,type:'gm',game:'gawibawibo.html',text:'✊ 가위바위보 같이 해요!',at:Date.now()}).catch(()=>{});
   ref.on('value',s=>onRps(s.val()));
@@ -198,19 +208,20 @@ function shareLink(){
 }
 function onRps(v){
   R=v;if(!v||!FU)return;
-  const ids=Object.keys(v.players||{});oid=ids.find(u=>u!==FU.uid)||null;
-  $('on').firstChild.textContent=oid?v.players[oid].name:'친구';
-  const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=((oid&&w[oid])||0)+'승';
-  $('share').style.display=v.status==='wait'&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
+  const ids=Object.keys(v.players||{}),others=ids.filter(u=>u!==FU.uid);oid=others[0]||null;
+  $('on').firstChild.textContent=others.length>1?'친구 '+others.length+'명':oid?v.players[oid].name:'친구';
+  const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=(others.length?Math.max(...others.map(u=>w[u]||0)):0)+'승';
+  $('share').style.display=(v.status==='wait'||v.status==='ready')&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
   if(v.status==='wait'){on=false;big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
-  if(v.status==='ready'){on=false;big(oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;drawBets();return}
+  if(v.status==='ready'){on=false;big(others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;drawBets();return}
   if(v.status==='play'){
+    if(!v.players[FU.uid])return;
     const k=gid+v.start;
-    if(paidKey!==k){paidKey=k;on=true;bet=v.bet;pt-=bet;addDelta(-bet);save();drawBets();
-      const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+bet*2;p.style.visibility='visible'}
+    if(paidKey!==k){paidKey=k;on=true;ptAdd(-(v.bet||BET));drawBets();$('op').textContent='';   // 66번: 내 점수에서 20점
+      const p=$('pot');p.style.transition='none';p.style.transform='';p.style.opacity=1;p.textContent='판돈 '+(v.pot||BET*ids.length);p.style.visibility='visible'}
     if(v.round!==curRound){curRound=v.round;round()}
     const pk=v.picks||{};
-    if(oid&&pk[FU.uid]!=null&&pk[oid]!=null&&shown!==v.round){shown=v.round;fShow(pk[FU.uid],pk[oid],v.round)}
+    if(ids.length>1&&ids.every(u=>pk[u]!=null)&&shown!==v.round){shown=v.round;fShow(pk,v.round)}
     return;
   }
   if(v.status==='end'){
@@ -220,51 +231,65 @@ function onRps(v){
 }
 function fStart(){
   if(!R||!oid)return;
-  if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status='ready';v.at=Date.now();return v});return}
-  const b=Math.min(bet,pt);if(b<20){big('점수가 부족해요','#ff3b3b');return}
+  if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status=Object.keys(v.players||{}).length>1?'ready':'wait';v.at=Date.now();return v});return}
+  if(pt<BET){big('점수가 부족해요 (20점 필요)','#ff3b3b');return}   // 66번
+  const ps=R.players||{},poor=Object.keys(ps).filter(u=>u!==FU.uid&&(+ps[u].pts||0)<BET);
+  if(poor.length){big(poor.map(u=>ps[u].name).join(', ')+'님 점수가 부족해요','#ff3b3b');return}
   $('go').disabled=true;
-  ref.transaction(v=>{if(!v||v.status!=='ready')return;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=b;v.start=Date.now();v.at=Date.now();return v});
+  ref.transaction(v=>{if(!v||v.status!=='ready')return;const n=Object.keys(v.players||{}).length;if(n<2)return;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
 }
 function fPick(i){
   $('m').classList.remove('shake');$('m').textContent=H[i];
   big('친구가 고르는 중…','#ffd84a');
   ref.child('picks/'+FU.uid).set(i).catch(()=>big('보내지 못했어요 · 인터넷을 확인해 주세요','#ff3b3b'));
 }
-function fShow(i,c,r){
+const winShape=sh=>sh.length===2?((sh[0]-sh[1]+3)%3===1?sh[0]:sh[1]):null;   // 두 가지 손만 나오면 승부 · 한 가지거나 세 가지 다 나오면 비김
+function fShow(pk,r){
   clearTimeout(autoT);HB.forEach(x=>x.disabled=true);
   $('m').classList.remove('shake');$('c').classList.remove('shake');
-  $('m').textContent=H[i];$('c').textContent=H[c];
-  const me=i!==c&&(i-c+3)%3===1;
-  if(i===c)big('비겼다! 다시','#f1c40f');
+  const ids=Object.keys(R.players||{}),others=ids.filter(u=>u!==FU.uid),my=pk[FU.uid];
+  $('m').textContent=H[my];$('c').textContent=oid&&pk[oid]!=null?H[pk[oid]]:'✊';
+  $('op').textContent=others.length>1?' '+others.map(u=>R.players[u].name+H[pk[u]]).join(' '):'';
+  const wn=winShape([...new Set(ids.map(u=>pk[u]))]),me=wn!==null&&my===wn;
+  if(wn===null)big('비겼다! 다시','#f1c40f');
   else{big(me?'아싸! 이겼다':'아유, 졌다',me?'#2ecc71':'#ff3b3b');snd(me?'assa':'ayu')}
   if(R.host!==FU.uid)return;   // 다음 판은 방장 폰이 넘겨요
   setTimeout(()=>ref.transaction(v=>{
     if(!v||v.status!=='play'||v.round!==r)return;
     const p=v.picks||{},ids=Object.keys(v.players||{});if(ids.length<2||ids.some(u=>p[u]==null))return;
-    const a=ids[0],b=ids[1],x=p[a],y=p[b];v.wins=v.wins||{};v.at=Date.now();
-    if(x!==y){const wn=(x-y+3)%3===1?a:b;v.wins[wn]=(v.wins[wn]||0)+1;if(v.wins[wn]>=3){v.status='end';v.winner=wn;return v}}
+    const w=winShape([...new Set(ids.map(u=>p[u]))]);v.wins=v.wins||{};v.at=Date.now();
+    if(w!==null){ids.forEach(u=>{if(p[u]===w)v.wins[u]=(v.wins[u]||0)+1});
+      const top=Math.max(...ids.map(u=>v.wins[u]||0)),lead=ids.filter(u=>(v.wins[u]||0)===top);
+      if(top>=WIN_N&&lead.length===1){v.status='end';v.winner=lead[0];return v}}   // 2승 먼저 (같이 2승이면 한 판 더)
     v.round=r+1;v.picks={};return v;
-  }),i===c?1200:1500);
+  }),wn===null?1200:1500);
 }
 function fEnd(v){
   on=false;clearTimeout(autoT);HB.forEach(x=>x.disabled=true);
   $('m').classList.remove('shake');$('c').classList.remove('shake');
-  const me=v.winner===FU.uid;
-  if(v.quit&&v.quit!==FU.uid)big('친구가 나갔어요 · 내가 이겼어요','#ffd84a');
-  else big(me?'🏆 최종 승리!':'최종 패배',me?'#ffd84a':'#ff3b3b');
+  const me=v.winner===FU.uid,wn=v.winner&&v.players&&v.players[v.winner]?v.players[v.winner].name:'친구';
+  if(v.quit&&me)big('친구가 나갔어요 · 내가 이겼어요','#ffd84a');
+  else big(me?'🏆 최종 승리!':'최종 패배 · '+wn+' 승리',me?'#ffd84a':'#ff3b3b');
   snd(me?'win3':'ayu');
   const p=$('pot');p.style.transition='';
   setTimeout(()=>{p.style.transform='translateY('+(me?'':'-')+'28vh) scale(1.6)';p.style.opacity=0},400);
-  setTimeout(()=>{if(me){pt+=v.bet*2;addDelta(v.bet*2)}save()},1200);
+  if(me)ptAdd(v.pot||v.bet*2);   // 66번: 이긴 사람이 판돈을 다 가져가요
   drawBets();$('go').textContent='다시 하기';$('go').disabled=false;
 }
-/* 나가면: 기다리는 중이면 방 지우기 · 하는 중이면 상대가 이긴 걸로 */
+/* 나가면: 기다리는 중이면 방 지우기 · 하는 중이면 나는 빠지고 (한 명 남으면 그 사람이 이겨요) */
 function fLeave(){
   if(!ref||!FU||!R)return;
   try{ref.off()}catch(e){}
-  if(R.status==='play'&&oid)ref.transaction(v=>{if(!v||v.status!=='play')return;v.status='end';v.winner=oid;v.quit=FU.uid;return v});
-  else if(R.status==='wait')ref.remove().catch(()=>{});
-  else if(R.status==='ready'||R.status==='end')ref.child('players/'+FU.uid).remove().then(()=>ref.child('status').set('wait')).catch(()=>{});
+  if(R.status==='wait'&&Object.keys(R.players||{}).length<=1){ref.remove().catch(()=>{});return}
+  ref.transaction(v=>{
+    if(!v||!v.players||!v.players[FU.uid])return;
+    delete v.players[FU.uid];if(v.picks)delete v.picks[FU.uid];
+    const rest=Object.keys(v.players);if(!rest.length)return null;
+    if(v.host===FU.uid)v.host=rest[0];
+    if(v.status==='play'){if(rest.length===1){v.status='end';v.winner=rest[0];v.quit=FU.uid}}
+    else if(rest.length<2)v.status='wait';
+    v.at=Date.now();return v;
+  }).catch(()=>{});
 }
 $('back').addEventListener('click',fLeave);
 addEventListener('pagehide',fLeave);

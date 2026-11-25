@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>뽑기 - 빨간 우체통</title>
 <!-- 46번: 대화방에서 '같이 하기'를 만들면 그 방에 초대 말풍선이 가요 (누르면 바로 들어옴) · 오래전에 멈춘 판이 있어도 새로 시작돼요 -->
+<!-- 66번: 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 돼지뽑기 한 사람 20점씩 · 돼지 뽑은 사람이 다 가져가요 · 20점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 41번: 게임에서 나가면 음악 꺼짐 · 가위바위보 점수와 같은 점수로 이어짐 -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:#111;color:#fff;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;min-height:100vh;overflow-x:hidden;user-select:none}
+body{padding-top:18px;background:#111;color:#fff;font-family:-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;min-height:100vh;overflow-x:hidden;user-select:none}
 .scr{display:none;padding:16px;min-height:100vh;flex-direction:column;align-items:center}
 .scr.on{display:flex}
 h1{font-size:28px;margin:14px 0 6px;text-align:center}
@@ -81,6 +82,7 @@ h1{font-size:28px;margin:14px 0 6px;text-align:center}
 </style>
 </head>
 <body>
+<div id="rk1" style="position:fixed;top:0;left:0;right:0;z-index:40;text-align:center;font-size:12px;font-weight:800;color:#ffd84a;background:rgba(0,0,0,.55);padding:2px 6px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
 
 <!-- 메뉴 -->
 <div class="scr on" id="sMenu">
@@ -150,9 +152,9 @@ h1{font-size:28px;margin:14px 0 6px;text-align:center}
 // ===== 설정 =====
 const MEDIA = 'sound/';   // 소리 파일은 sound 폴더
 const SND = {bgm:'jebi_bgm.mp3', start:'jebi_start.mp3', hurry:'jebi_hurry.mp3', last:'jebi_last.mp3', win:'jebi_win.mp3'};
-const PIG_IMG = 'img/pig.jpg', BET = 500, START_PTS = 10000, PER_PAGE = 15;
+const PIG_IMG = 'img/pig.jpg', BET = 20, PER_PAGE = 15;
 const NAMES = {jebi:'🐦 제비뽑기', pig:'🐗 돼지뽑기', partner:'💞 파트너 정하기'};
-const SUBS = {jebi:'제비 카드를 뽑은 사람이 오늘 쏘는 거예요!', pig:'모두 500점씩 걸고, 돼지 뽑은 사람이 다 가져가요', partner:'같은 모양끼리 짝꿍이 돼요'};
+const SUBS = {jebi:'제비 카드를 뽑은 사람이 오늘 쏘는 거예요!', pig:'모두 20점씩 걸고, 돼지 뽑은 사람이 다 가져가요', partner:'같은 모양끼리 짝꿍이 돼요'};
 const SHAPES = ['♥','♠','♣','★','◆'], SCOL = ['#e0284f','#222','#1d8a3f','#e0a000','#2f6fe0'];
 const BOTS = ['철수','영희','민수','지영','동현','수진','현우','미나','준호','은지','태호','소라','재민','하늘','보람','건우','다은','시우','유나'];
 
@@ -191,11 +193,11 @@ const FIREBASE_CONFIG = {
 };
 let auth=null, DB=null, me=null, myPts=null, roomParam=null;
 const ROOM = id=>'giftstory/rooms/'+id+'/game';           // 뽑기 판은 대화방 아래에 저장
-const PTS  = ()=>'giftstory/users/'+me.uid+'/my/points';  // 모든 게임이 같이 쓰는 점수
+const PTS  = ()=>'giftstory/points/'+me.uid+'/p';  // 66번: 모든 게임이 같이 쓰는 점수 (빨간 우체통 가입 500점)
 function myNick(u){ try{ const m=JSON.parse(localStorage.getItem('rp_me')); if(m&&m.name) return m.name; }catch(e){} return u.displayName||'나'; }
 function initServer(){
   try{
-    firebase.initializeApp(FIREBASE_CONFIG); auth=firebase.auth(); DB=rtdb();
+    firebase.initializeApp(FIREBASE_CONFIG); auth=firebase.auth(); DB=rtdb(); rankWatch();
     auth.onAuthStateChanged(async u=>{
       me = (u && !u.isAnonymous) ? {uid:u.uid, name:myNick(u)} : null;   // 게임은 구글 로그인한 사람만
       $('login').style.display = me ? 'none' : 'block';
@@ -214,11 +216,9 @@ function rtdb(){ const d=firebase.database(); return {
 };}
 const key = id=>DB.set('giftstory/rooms/'+id+'/keys/'+me.uid,true);   // index 와 같은 '열쇠' 방식
 
-async function loadPts(){ let v=await DB.get(PTS()).catch(()=>null); if(typeof v!=='number'){ v=START_PTS; await DB.set(PTS(),v).catch(()=>{}); }
-  const d=+(localStorage.getItem('rp-point-delta')||0);   // 41번: 가위바위보에서 따고 잃은 점수 합치기
-  if(d){ localStorage.removeItem('rp-point-delta'); const ok=await DB.tx(PTS(),x=>(typeof x==='number'?x:START_PTS)+d).catch(()=>false); if(ok) v=await DB.get(PTS()).catch(()=>v+d); else localStorage.setItem('rp-point-delta',d); }
-  myPts=v; $('myPts').textContent=myPts.toLocaleString(); try{localStorage.setItem('rp-point',myPts)}catch(e){} }
-async function addPts(n){ await DB.tx(PTS(),v=>(typeof v==='number'?v:START_PTS)+n).catch(()=>{}); await loadPts(); }
+async function loadPts(){ const v=await DB.get(PTS()).catch(()=>null); myPts=typeof v==='number'?v:0; $('myPts').textContent=myPts.toLocaleString(); }
+async function addPts(n){ await DB.tx(PTS(),v=>{ v=+(v||0); if(v+n<0) return; return v+n; }).catch(()=>{}); await loadPts(); }   // 66번: 0점 밑으로는 안 내려가요
+function rankWatch(){ try{ firebase.database().ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{ let t=''; s.forEach(c=>{ const x=c.val()||{}; if(x.p>0) t='👑 점수 1위 '+(x.name||'?')+' · '+(+x.p).toLocaleString()+'점'; }); $('rk1').textContent=t||'👑 점수 1위 · 아직 없어요'; },()=>{}); }catch(e){} }
 
 // ===== 메뉴 =====
 let gType='jebi';
@@ -250,7 +250,7 @@ function leaveGame(){ goMenu(); H.url(''); }
 async function makeGame(){
   if(!DB){ say('서버 연결이 안 돼요. 혼자 연습으로 해 보세요.'); return; }
   if(!me){ show('sMenu'); $('login').style.display='block'; return; }
-  if(gType==='pig' && myPts<BET){ say('점수가 모자라요 (500점 필요)'); return; }
+  if(gType==='pig' && myPts<BET){ say('점수가 모자라요 (20점 필요)'); return; }
   const id=roomParam||'pg_'+Math.random().toString(36).slice(2,9);
   try{ await key(id); await DB.set(ROOM(id),{type:gType,host:me.uid,status:'wait',players:{[me.uid]:{name:me.name}},picks:{},created:Date.now()}); }catch(e){ say('서버에서 막혔어요 - 데이터베이스 규칙을 확인해 주세요'); return; }
   if(roomParam && !roomParam.startsWith('pg_')){   // 46번: 대화방에 초대 말풍선
@@ -264,7 +264,7 @@ async function joinGame(id){
   const old = g && Date.now()-(g.created||0) > 30*60e3 && !(g.players&&g.players[me.uid]);   // 46번: 30분 넘게 멈춘 판은 새로
   if(!g || g.status==='reveal' || old){ roomParam=id; toast('이 대화방에서 새 뽑기를 시작해 보세요'); return; }   // 대화방에서 열었을 때
   if(g.status!=='wait' && !(g.players&&g.players[me.uid])){ say('이미 시작한 뽑기예요'); return; }
-  if(g.type==='pig' && myPts<BET){ say('점수가 모자라서 돼지뽑기에 못 들어가요 (500점 필요)'); return; }
+  if(g.type==='pig' && myPts<BET){ say('점수가 모자라서 돼지뽑기에 못 들어가요 (20점 필요)'); return; }
   local=false; gameId=id; myId=me.uid; gType=g.type;
   if(!(g.players&&g.players[me.uid])) await DB.set(ROOM(id)+'/players/'+me.uid,{name:me.name}).catch(()=>say('서버에서 막혔어요'));
   unwatch=DB.watch(ROOM(id),v=>{ if(v){ G=v; G.picks=G.picks||{}; onState(); } });

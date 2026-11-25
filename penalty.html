@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>승부차기 게임</title>
+<!-- 3번(66번): 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 한 사람 50점씩 걸고 5번씩 차서 골 많은 사람이 판돈을 다 가져가요 · 골 수가 같으면 판돈은 쌓아 두고 50점씩 또 걸고 다시 · 다음 판 이긴 사람이 쌓인 것까지 다 · 50점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 2번: 소리 순서 시작안내→레디→3,2,1→휘슬 (소리가 다 끝나야 다음으로) · 차기 전 배경음악 작게, 골/노골 소리 끝나면 원래대로 · 승부 끝나면 배경음악 꺼짐 · 골/노골 판정을 화면 속 골대·골키퍼 모양에 맞춤 -->
 <!-- 1번: 승부차기 첫 버전 · 공을 손가락으로 밀어서 슛(세기=속도, 방향=방향, 길게=뜬 공, 짧게=땅볼) · 3,2,1 삑 후 3초 안에 슛(못 차면 실축) · 골키퍼는 손가락으로 왼쪽/오른쪽 밀기, 가만히 있으면 가운데, 미리 날면 쓰러짐 · 3,2,1 동안 골키퍼 옆으로 살짝 움직이기 · 공 만지면 빙그르르 · 처음 3번 화살표 안내 · 친구랑 하기(대화방 초대) / 혼자 하기(연습, 컴퓨터) · 한 번 찰 때마다 20점, 3번 연속 골이면 다음 한 번 40점 · 5번씩 차고 같으면 한 번씩 더 -->
 <style>
@@ -23,8 +24,11 @@ h1{text-align:center;font-size:min(3.6vh,28px);font-weight:900;position:relative
 .ov button{width:70%;max-width:320px;padding:2.2vh 0;border-radius:20px;border:0;font-size:min(3.4vh,26px);font-weight:900;color:#fff;background:#ff3b3b}
 .ov button+button{background:#333}
 .mk{position:fixed;right:6px;bottom:2px;font-size:10px;color:#555}
+.rk1{position:fixed;top:0;left:0;right:0;z-index:40;text-align:center;font-size:12px;font-weight:800;color:#ffd84a;background:rgba(0,0,0,.55);padding:2px 6px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+body{padding-top:18px;box-sizing:border-box}
 #share{display:none;position:fixed;left:50%;top:14vh;transform:translateX(-50%);padding:1.2vh 5vw;border-radius:14px;border:0;background:#3a6fd8;color:#fff;font-size:min(2.4vh,18px);font-weight:900}
 </style></head><body>
+<div class="rk1" id="rk1"></div>
 <div class="w">
  <h1><a class="back" id="back" href="index.html">‹ 돌아가기</a>⚽ 승부차기</h1>
  <canvas id="cv"></canvas>
@@ -66,10 +70,9 @@ addEventListener('pagehide',stopAll);$('back').addEventListener('click',stopAll)
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopAll();else if(bgmOn){try{SND.bgm.play().catch(()=>{})}catch(e){}}});
 
 /* ===== 점수 (가위바위보·뽑기와 같은 점수) ===== */
-let mode=null,pt=500,on=false;
-try{const v=localStorage.getItem('rp-point');if(v!==null)pt=+v}catch(e){}
-function addDelta(n){try{localStorage.setItem('rp-point-delta',+(localStorage.getItem('rp-point-delta')||0)+n)}catch(e){}}
-function save(){$('pt').textContent=pt;try{localStorage.setItem('rp-point',pt)}catch(e){}}
+let mode=null,pt=0,on=false;
+const BET=50;   // 66번: 한 사람 50점씩
+function save(){$('pt').textContent=pt.toLocaleString()}
 let tut=0;try{tut=+(localStorage.getItem('pk-tut')||0)}catch(e){}
 
 /* ===== 화면 (360 x 600 기준으로 그려요) ===== */
@@ -85,7 +88,7 @@ let S=null,msg='',msgC='#fff',msgAt=0,sub='',spin=0,spinV=0,touch=null;
 function newShot(n,role,bet,intro){
   bgmVol(.08);
   S={n,role,bet,t0:performance.now(),ph:intro?'intro':'count',kx:0,kick:null,strike:0,dive:null,res:null,resAt:0,back:0};
-  sub=(role==='kick'?'⚽ 내가 찰 차례':'🧤 내가 막을 차례')+(mode==='friend'?' · 판돈 '+bet+(bet>20?' (두 배!)':''):'');
+  sub=(role==='kick'?'⚽ 내가 찰 차례':'🧤 내가 막을 차례')+(mode==='friend'?' · 판돈 '+bet+'점':'');
   if(!intro)return setMsg('3');
   setMsg('준비','#ffd84a');const me=S;
   sndThen('start',()=>sndThen('ready',()=>{if(S===me&&S.ph==='intro'){S.ph='count';S.t0=performance.now();setMsg('3')}}));
@@ -159,7 +162,6 @@ function showRes(r){
   const meKick=S.role==='kick',good=meKick?r.goal:!r.goal;
   if(r.goal)setMsg('골!!!','#ffd84a');else setMsg(r.why==='미리 날아서 쓰러졌어요'?'노골':r.why||'노골','#ff6b6b');
   sndThen(r.goal?'goal':'nogoal',()=>{if(bgmOn)bgmVol(.3)});
-  if(mode==='friend'&&S.paid!==S.n){S.paid=S.n;const dl=good?S.bet:-S.bet;pt+=dl;addDelta(dl);save()}
   if(mode==='solo')soloNext(r.goal);
   else if(R&&R.host===FU.uid)setTimeout(()=>hostNext(S.n),2300);
 }
@@ -309,8 +311,16 @@ if(RID&&!RID.startsWith('pk_'))$('back').href='index.html?room='+encodeURICompon
 const CFG={apiKey:"AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",authDomain:"giftwav-9ab6b.firebaseapp.com",databaseURL:"https://giftwav-9ab6b-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"giftwav-9ab6b",storageBucket:"giftwav-9ab6b.firebasestorage.app",messagingSenderId:"790729206880",appId:"1:790729206880:web:173a3a34e29e49a0b0a705"};
 const ME=(()=>{try{return JSON.parse(localStorage.getItem('rp_me'))||{}}catch(e){return{}}})();
 const myName=ME.name||'나';
-let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curKey=null,doneKey=null;
-try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
+let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curKey=null,doneKey=null,paidKey=null;
+try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
+/* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
+let ptRef=null;
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db||!FU)return;ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{pt=+(s.val()||0);save();ptMine()},()=>{})}
+function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
+function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 점수 1위 '+(x.name||'?')+' · '+(+x.p).toLocaleString()+'점'});$('rk1').textContent=t||'👑 점수 1위 · 아직 없어요'},()=>{})}
+function ptMine(){if(ref&&R&&FU&&R.players&&R.players[FU.uid]&&R.players[FU.uid].pts!==pt)ref.child('players/'+FU.uid+'/pts').set(pt).catch(()=>{})}
+rankWatch();
+const over5=(n,g)=>{const c=n+1,k0=Math.ceil(c/2),k1=Math.floor(c/2);return c>=10||g[0]>g[1]+(5-k1)||g[1]>g[0]+(5-k0)};   // 66번: 친구랑은 5번씩만 (같으면 비김)
 function info(t,c){S=null;sub='';setMsg(t,c||'#fff')}
 async function friendGo(){
   if(!db)return info('서버 연결이 안 돼요','#ff6b6b');
@@ -321,7 +331,7 @@ async function friendGo(){
   await db.ref('giftstory/rooms/'+gid+'/keys/'+FU.uid).set(true).catch(()=>{});
   ref=db.ref('giftstory/rooms/'+gid+'/pk');let made=false;
   const r=await ref.transaction(v=>{
-    const now=Date.now(),p={name:myName};
+    const now=Date.now(),p={name:myName,pts:pt};
     if(!v||v.status==='end'&&!(v.players||{})[FU.uid]||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
     made=false;v.players=v.players||{};if(v.players[FU.uid])return v;
     if(Object.keys(v.players).length>=2)return;
@@ -348,14 +358,22 @@ function onPk(v){
   if(v.status==='ready'){on=false;info(oid?names[1]+'님과 해요!':'친구 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;return}
   if(v.status==='play'){
     const key=v.start+'_'+v.n;
-    if(curKey!==key){curKey=key;on=true;$('go').disabled=true;if(v.n===0&&!bgmOn)bgmPlay();newShot(v.n,v.order[v.n%2]===FU.uid?'kick':'keep',v.bet||20,v.n===0)}
+    if(paidKey!==v.start){paidKey=v.start;ptAdd(-BET)}   // 66번: 시작할 때 내 점수에서 50점
+    if(curKey!==key){curKey=key;on=true;$('go').disabled=true;if(v.n===0&&!bgmOn)bgmPlay();newShot(v.n,v.order[v.n%2]===FU.uid?'kick':'keep',v.pot||BET*2,v.n===0)}
     if(S&&v.kick&&v.kick.n===S.n&&S.role==='keep')recvKick(v.kick);
     if(S&&v.res&&v.res.n===S.n&&S.role==='kick')showRes(v.res);
     return;
   }
+  if(v.status==='tie'&&doneKey!==v.start){   // 66번: 비김 → 판돈은 쌓아 두고 다시
+    doneKey=v.start;on=false;bgmStop();
+    setTimeout(()=>{S=null;sub='';setMsg('비겼어요! 판돈 '+(v.carry||0)+'점은 쌓아 두고 다시 해요','#ffd84a');$('go').textContent='다시 하기 (50점 더)';$('go').disabled=false},2300);
+    return;
+  }
+  if(v.status==='tie'){$('go').textContent='다시 하기 (50점 더)';$('go').disabled=!oid;return}
   if(v.status==='end'&&doneKey!==v.start){
     doneKey=v.start;on=false;bgmStop();
     const me=v.winner===FU.uid;
+    if(me&&paidKey)ptAdd(v.pot||BET*2);   // 66번: 이긴 사람이 판돈(쌓인 것까지) 다 가져가요
     setTimeout(()=>{S=null;sub='';
       if(v.quit&&v.quit!==FU.uid)setMsg('친구가 나갔어요 · 내 승리','#ffd84a');
       else setMsg(me?'🏆 '+myName+' 승리! 축하해요':names[1]+' 승리!',me?'#ffd84a':'#ff6b6b');
@@ -365,26 +383,27 @@ function onPk(v){
 function fStart(){
   if(!R||!oid)return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status='ready';v.at=Date.now();return v});return}
-  if(pt<20)return info('점수가 부족해요','#ff6b6b');
+  if(pt<BET)return info('점수가 부족해요 (50점 필요)','#ff6b6b');   // 66번
+  const ps=R.players||{};if(oid&&ps[oid]&&(+ps[oid].pts||0)<BET)return info(ps[oid].name+'님 점수가 부족해요','#ff6b6b');
   $('go').disabled=true;
-  ref.transaction(v=>{if(!v||v.status!=='ready')return;const ids=Object.keys(v.players||{});if(ids.length<2)return;
+  ref.transaction(v=>{if(!v||(v.status!=='ready'&&v.status!=='tie'))return;const ids=Object.keys(v.players||{});if(ids.length<2)return;
     if(Math.random()<.5)ids.reverse();
-    Object.assign(v,{status:'play',order:ids,n:0,goals:{},streak:{},bet:20,start:Date.now(),at:Date.now()});delete v.kick;delete v.res;delete v.winner;delete v.quit;return v});
+    const carry=v.status==='tie'?(v.carry||0):0;
+    Object.assign(v,{status:'play',order:ids,n:0,goals:{},bet:BET,pot:carry+BET*ids.length,carry:0,start:Date.now(),at:Date.now()});delete v.kick;delete v.res;delete v.winner;delete v.quit;delete v.streak;return v});
 }
 function hostNext(n){   // 방장 폰이 다음 차례로 넘겨요
   ref.transaction(v=>{
     if(!v||v.status!=='play'||v.n!==n||!v.res||v.res.n!==n)return;
-    const o=v.order,k=o[n%2];v.goals=v.goals||{};v.streak=v.streak||{};
-    if(v.bet>20)v.streak[k]=0;   // 두 배 판은 한 번만
-    if(v.res.goal){v.goals[k]=(v.goals[k]||0)+1;v.streak[k]=(v.streak[k]||0)+1}else v.streak[k]=0;
+    const o=v.order,k=o[n%2];v.goals=v.goals||{};
+    if(v.res.goal)v.goals[k]=(v.goals[k]||0)+1;
     const g=[v.goals[o[0]]||0,v.goals[o[1]]||0];v.at=Date.now();
-    if(over(n,g)){v.status='end';v.winner=g[0]>g[1]?o[0]:o[1];return v}
-    v.n=n+1;v.bet=(v.streak[o[(n+1)%2]]||0)>=3?40:20;delete v.kick;delete v.res;return v;
+    if(over5(n,g)){if(g[0]===g[1]){v.status='tie';v.carry=v.pot||0;return v}v.status='end';v.winner=g[0]>g[1]?o[0]:o[1];return v}   // 66번
+    v.n=n+1;delete v.kick;delete v.res;return v;
   });
 }
 function fLeave(){
   if(!ref||!FU||!R)return;try{ref.off()}catch(e){}
-  if(R.status==='play'&&oid)ref.transaction(v=>{if(!v||v.status!=='play')return;v.status='end';v.winner=oid;v.quit=FU.uid;return v});
+  if((R.status==='play'||R.status==='tie')&&oid)ref.transaction(v=>{if(!v||(v.status!=='play'&&v.status!=='tie'))return;if(v.status==='tie'){v.pot=v.carry||0;v.start=Date.now()}v.status='end';v.winner=oid;v.quit=FU.uid;return v});
   else if(R.status==='wait')ref.remove().catch(()=>{});
   else ref.child('players/'+FU.uid).remove().then(()=>ref.child('status').set('wait')).catch(()=>{});
 }
