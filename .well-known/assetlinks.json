@@ -1,0 +1,8 @@
+
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.giftwav.twa",
+        "sha256_cert_fingerprints": ["89:73:6A:2A:CD:14:CF:80:8F:DD:DA:CE:32:8E:3D:31:DE:D5:E2:3B:8D:19:74:63:F7:1C:A5:16:C7:EF:1D:5F"]
+      }
+    }]
