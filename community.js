@@ -107,7 +107,7 @@ function grpDrawPanel(){
         return `<div class="hrow" data-gmem="${p.uid}"><div class="hav">${ini(p.name)}</div><div class="htx"><b>${esc(p.name)}</b><small>${esc(pl ? pl.t : '눌러서 바로 대화')}</small></div>${telBtn(p.ph || phoneOf(pid))}<div class="hside">${m ? `<i>${m > 99 ? '99+' : m}</i>` : ''}</div></div>`; }).join('')
       : '<div class="tdempty">아직 아무도 안 들어왔어요 · 아래 초대하기로 링크를 보내 주세요</div>')
     + `<div class="gtools"><button class="y" data-ginv>＋ 사람 초대하기</button><button data-gpick>📮 우체통 친구 초대</button>`
-    + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gtopic>💬 오늘의 주제</button><button data-gsend>📨 모두에게 따로 보내기</button>` : `<button data-gleave>공동체 나가기</button>`)
+    + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gtopic>💬 오늘의 주제</button><button data-gsend>📨 개별 통보</button>` : `<button data-gleave>공동체 나가기</button>`)
     + `<button data-gsave>💾 저장하고 나가기</button></div>` + (own && ppl.length ? '<div class="tdempty" style="font-size:12px">사람을 길게 누르면 공동체에서 뺄 수 있어요</div>' : ''));
 }
 /* 대화방 위 공지 (공동체 전체방) */
@@ -163,24 +163,25 @@ $('gnPicFile').onchange = () => {   // 약도 사진: 작게 줄여서 공지에
   img.src = url;
 };
 $('grpMake').onclick = () => {
-  const n = $('grpName').value.trim(); if (!n) { toast('공동체 이름을 적어 주세요'); $('grpName').focus(); return; }
+  const n = [...$('grpName').value.trim()].slice(0, 14).join(''); if (!n) { toast('공동체 이름을 적어 주세요'); $('grpName').focus(); return; }
   if (!FB) { toast('서버 연결이 안 됐어요'); return; }
   click();
   const id = 'grp' + rid();
   needKey(id);
   FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group'), { name: n, owner: realMe.uid, at: Date.now() })
-    .then(() => { grpJoin(id, n); grpSel = id; hideOv('grpNewOv'); drawHome(); grpInvite(id); toast(`👥 '${n}' 공동체를 만들었어요 · 초대 링크를 보내 주세요`); })
+    .then(() => { grpJoin(id, n); grpSel = id; LS.set('rp_grp_new', id); hideOv('grpNewOv'); drawHome(); grpInvite(id); toast(`👥 '${n}' 공동체를 만들었어요 · 초대 링크를 보내 주세요`); })
     .catch(() => toast('공동체를 못 만들었어요 · 데이터베이스 규칙을 확인해 주세요'));
 };
 $('grpName').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('grpMake').click(); } });
 let grpInvId = null;
 function grpInvite(id){
   grpInvId = id; $('grpInvTitle').textContent = `👥 '${grpName(id)}'에 초대하기`;
-  document.querySelectorAll('#grpInvOv .shico').forEach(b => { b.innerHTML = (b.dataset.ginvk === 'kakao' ? ICON_KAKAO + '카카오톡' : ICON_SMS + '문자'); });
+  document.querySelectorAll('#grpInvOv .shico').forEach(b => { const k = b.dataset.ginvk; b.innerHTML = k === 'post' ? ICON_POST + '빨간 우체통' : k === 'kakao' ? ICON_KAKAO + '카카오톡' : ICON_SMS + '문자'; });   // 70번: 빨간 우체통 · 카톡 · 문자
   showOv('grpInvOv');
 }
 document.querySelectorAll('[data-ginvk]').forEach(b => b.onclick = () => {
   if (!grpInvId) return; click();
+  if (b.dataset.ginvk === 'post') { const gid = grpInvId; hideOv('grpInvOv'); grpPick(gid); return; }   // 70번
   const url = location.origin + location.pathname + '?room=' + grpInvId;   // 51번: 짧은 주소 (공동체 이름은 서버에서)
   shareTo(b.dataset.ginvk, url, `👥 ${me.name}님이 '${grpName(grpInvId)}' 공동체에 초대했어요. 누르면 공동체 사람들 이름이 저절로 생겨요.`, { f: me.name, t: grpName(grpInvId) });
 });
@@ -192,10 +193,9 @@ $('hGroup').addEventListener('click', e => {
   if (e.target.closest('[data-gview]')) { gnOpen(id); return; }   // 47번: 위 공지 누르기
   if (e.target.closest('[data-gtopic]')) { if (!grpIsOwner(id)) return; click(); gtAsk(id); return; }   // 60번: 오늘의 주제
   if (e.target.closest('[data-gnote]')) { if (!grpIsOwner(id)) return; gnOpen(id); setTimeout(() => $('gnTxt').focus(), 300); return; }   // 41번: 공지 쓰기 창
-  if (e.target.closest('[data-gsave]')) { click(); grpSel = null; drawHome(); syncLayer(); toast('💾 저장했어요'); return; }   // 41번: 저장하고 나가기
+  if (e.target.closest('[data-gsave]')) { click(); if (LS.get('rp_grp_new', null) === id) LS.set('rp_grp_new', null); grpSel = null; drawHome(); syncLayer(); toast('💾 저장했어요'); return; }   // 41번: 저장하고 나가기
   if (e.target.closest('[data-gpick]')) {   // 41번: 빨간 우체통 친구 골라 초대
-    click();
-    pickFriend(`👥 '${grpName(id)}'에 누구를 초대할까요?`, r => grpInvSend(id, Array.isArray(r) ? r : [r]), { all: true }); return;
+    click(); grpPick(id); return;
   }
   if (e.target.closest('[data-gsend]')) {
     const ppl = grpPeople(id); if (!ppl.length) { toast('아직 공동체에 들어온 사람이 없어요'); return; }
@@ -227,10 +227,47 @@ $('gnSave').onclick = () => { const v = $('gnTxt').value.trim().slice(0, 2000); 
 $('gnDel').onclick = () => { if (!confirm('공지를 내릴까요?')) return; click(); gnPut('', ''); };
 /* 41번: 빨간 우체통 친구에게 공동체 초대장 보내기 (누르면 바로 공동체에 들어와요) */
 function grpInvSend(gid, ids){
-  ids = ids.filter(x => !isGroup(x) && !isSelf(x)); if (!ids.length) return;
+  ids = ids.filter(x => !isGroup(x) && !isSelf(x)); if (!ids.length) { toast('초대할 수 있는 친구가 없어요'); return; }
   const gn = grpName(gid);
   ids.forEach(rid0 => pushTo(rid0, { from: realMe.uid, name: me.name, type: 'ginv', gid, gn, text: `👥 '${gn}' 공동체에 초대했어요`, at: Date.now() }));
-  sentFx(); toast(`👥 ${ids.length}명에게 초대장을 보냈어요`);
+  sentFx(); toast(`👥 ${ids.length}명에게 초대장을 보냈어요 · 친구가 '들어가기'를 누르면 목록에 생겨요`);
+}
+/* 70번: 빨간 우체통 친구 골라 초대 (사람 초대하기 창 · 우체통 친구 초대 버튼 둘 다) */
+function grpPick(gid){
+  const inG = new Set(grpPeople(gid).map(p => pairId(p.uid)));
+  const any = visibleRooms().some(x => !isGroup(x.id) && !isSelf(x.id) && !inG.has(x.id));
+  if (!any) { toast('초대할 빨간 우체통 친구가 없어요 · 카톡이나 문자로 초대해 주세요'); return; }
+  pickFriend(`📮 '${grpName(gid)}'에 누구를 초대할까요?`, r => grpInvSend(gid, Array.isArray(r) ? r : [r]), { all: true });
+}
+/* 70번: 빨간 우체통으로 공동체 초대장을 받으면 '들어갈까요?' (한 번만) */
+const ginvQ = [];
+function ginvAsk(m, key){
+  const gid = m.gid; if (!isGroup(gid) || grpList().some(g => g.id === gid)) return;
+  const asked = LS.get('rp_ginv_asked', {}); if (asked[key]) return;
+  asked[key] = 1; LS.set('rp_ginv_asked', asked);
+  ginvQ.push(m); if (ginvQ.length === 1) setTimeout(ginvNext, 800);
+}
+function ginvNext(){
+  const m = ginvQ[0]; if (!m) return;
+  if (document.querySelector('.ov.show')) { setTimeout(ginvNext, 3000); return; }
+  ginvQ.shift();
+  if (!grpList().some(g => g.id === m.gid) && confirm(`📮 ${m.name || '친구'}님이 '${m.gn || '공동체'}' 공동체에 초대했어요.\n들어갈까요?`)) {
+    grpJoin(m.gid, m.gn || ''); grpSel = m.gid; if (!homeOn) goHome(); else drawHome(); syncLayer(); toast(`👥 '${m.gn || '공동체'}' 공동체에 들어왔어요`);
+  }
+  if (ginvQ.length) setTimeout(ginvNext, 1500);
+}
+/* 70번: 공동체 화면 나가기 - '저장하고 나가기'를 안 누른 새 공동체(아무도 안 들어옴)는 지워요 */
+function grpLeavePanel(keepSel){
+  const id = grpSel, nw = LS.get('rp_grp_new', null);
+  if (!keepSel) grpSel = null;
+  if (id && nw === id) {
+    LS.set('rp_grp_new', null);
+    if (!grpPeople(id).length && grpIsOwner(id)) {
+      if (FB) FB.D.remove(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group')).catch(() => {});
+      grpDrop(id); toast('저장하지 않아서 공동체를 만들지 않았어요');
+    }
+  }
+  if (homeOn) render(); else queueRender();
 }
 /* 방장: 사람을 길게 누르면 빼기 */
 let glpT = 0, glpDone = false, glpY = 0;

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 70번: 공동체 사람 초대하기 창에 📮빨간 우체통·카톡·문자 · 빨간 우체통 초대장 받으면 '들어갈까요?' 창 · 모두에게 따로 보내기 → 개별 통보 · 저장 안 하고 나가면 공동체 안 만들어짐 · 공동체에서 뒤로 가기 → 메인 화면 · 공동체 안 홍보 글 6줄 숨김 · 공동체 이름 14자 · ＋메뉴 친구 초대 → 🐞 버그 신고 · 편지 ☐모두 체크 풀면 원래 받는 사람으로 · 실버 자주 하는 말 등록 -->
 <!-- 67번: index 쪼개기 - 기능 파일 8개 따로(shop · together · videocall · silver · todo · storage · diary · community .js) · index엔 메인 화면 · 대화 · 편지·카드 쓰기만 · 기능은 그대로 -->
 <!-- 66번: 🎮 게임 점수 - 로그인(가입)하면 500점 · 초대 링크로 온 친구가 로그인하면 초대한 사람 +500점 · 모든 게임이 같은 점수(서버 giftstory/points) · 1위 랭킹 -->
 <!-- 65번: 내 이름 눌러 내 말만 보기 · 내 말풍선 꾹 눌러 지우기 · 나와의 창 보관함 버그(편지 화면 열리던 것) → 🖼 사진 · 📄 문서 보관함(안 지워짐 · 30MB · 사진 줄여 올리기 · 공개/비공개) · 이름 누르면 "OO이 말만 보기 · OO에게 귓속말하기 · 📞 전화하기 · 🖼 OO의 앨범" · 나와의 창 버튼 아이콘+작은 글씨 · 홍보 "바로 가기 ➜" + 기능 랜덤 · 안 읽음 1 버그 · 숨은 테스트 버튼(내 말이 왼쪽·이름 테스트로 바뀌던 원인) 개발자만 · 로그아웃하면 이 폰 번호 새로 · 일기 읽어 주기 끝까지 · 로그인 화면 문구·버튼 한 줄 · 편지·카드에 📎 파일 첨부(⬇ ⬆) -->
@@ -759,6 +760,7 @@ body.menuon #menuDim{display:block}
 .htab.on{background:#ffe14d;color:#222;border-color:#ffe14d}
 .htab i{font-style:normal;background:#ff3b36;color:#fff;border-radius:10px;padding:0 6px;font-size:12px;margin-left:3px}
 .hsec{margin:0 12px;padding:4px 6px 8px;border-radius:16px;background:var(--card);border:1px solid #2c2d38}
+body.grpon .hpromo{display:none!important}
 .hpromo{text-align:left;display:table;margin-left:auto!important;margin-right:auto!important;margin:14px 12px 8px;padding:12px 14px;border-radius:14px;background:#17181e;border:1px dashed #3a3b46;font-size:14px;line-height:1.9;color:#d8d8e2}
 .hinvBar{margin-top:auto;position:sticky;bottom:0;padding:12px 0 12px;text-align:center;background:linear-gradient(rgba(17,18,23,0),var(--bg) 45%);z-index:2}
 .hinvBar .hinv{display:inline-block;margin:0;padding:7px 16px;font-size:14px;border-radius:24px;box-shadow:0 4px 14px rgba(224,50,47,.4)}
@@ -1215,9 +1217,9 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
         </g>
       </svg>
     </button>
-    <button id="plusBtn" title="파일 · 게임 · 친구 초대">＋</button>
+    <button id="plusBtn" title="파일 · 게임 · 버그 신고">＋</button>
     <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="stt">📝 음성 문자</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
-    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="set">⚙ 설정</button><button data-tg="invite">👥 친구 초대</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="set">⚙ 설정</button><button data-tg="bug">🐞 버그 신고</button></div>
     <div class="pmenu" id="topMenu">
       <button id="tmHome">🏠 메인 화면으로</button>
       <button id="tmWrite">✏ 편지 쓰기</button>
@@ -1759,7 +1761,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 </div></div>
 <div class="ov" id="grpInvOv"><div class="panel" style="max-width:380px">
   <h2 id="grpInvTitle">👥 공동체에 초대하기</h2>
-  <div class="sharerow"><button class="shico" data-ginvk="kakao">KAKAO</button><button class="shico" data-ginvk="sms">SMS</button></div>
+  <div class="sharerow"><button class="shico" data-ginvk="post">POST</button><button class="shico" data-ginvk="kakao">KAKAO</button><button class="shico" data-ginvk="sms">SMS</button></div>
   <div class="shhint">링크를 단체방에 한 번만 올려도 돼요</div>
   <button class="big" data-ginvk="copy">🔗 공동체 주소 복사</button><button class="big" data-close>닫기</button>
 </div></div>
@@ -1797,7 +1799,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
   <button class="big r" id="repSend">🚨 신고 보내기</button><button class="big" data-close>닫기</button>
 </div></div>
 <div class="ov" id="fbOv"><div class="panel mid">
-  <h2>💡 건의하기 · 제안하기</h2><div style="color:#ccc;font-size:14px">불편한 점이나 바라는 점을 적어 주세요</div>
+  <h2 id="fbTitle">💡 건의하기 · 제안하기</h2><div style="color:#ccc;font-size:14px" id="fbHint">불편한 점이나 바라는 점을 적어 주세요</div>
   <textarea id="fbTxt" rows="6" style="width:100%;font-size:16px;margin-top:8px"></textarea>
   <button class="big r" id="fbSend">💡 보내기</button><button class="big" data-close>닫기</button>
 </div></div>
@@ -1839,7 +1841,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '67';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '70';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -2420,6 +2422,7 @@ function watchRoom(id){
     const u = unread[id] || (unread[id] = { keys: new Set(), first: m.at || Date.now() });
     u.keys.add(snap.key); u.first = Math.min(u.first, m.at || Date.now());
     if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); svIncoming(id, { ...m, id: snap.key }); }
+    if (m.type === 'ginv') ginvAsk(m, snap.key);   // 70번: 빨간 우체통 공동체 초대장 → '들어갈까요?'
     queueRender();
   }));
   const mems = D.ref(db, path + '/members');
@@ -3853,8 +3856,9 @@ $('wAllBtn').onclick = () => {
   const b = $('wAllBtn'), on = !b.classList.contains('on'), list = visibleRooms();
   if (on && !list.length) { toast('아직 빨간 우체통 친구가 없어요'); return; }
   b.classList.toggle('on', on); b.textContent = on ? '☑ 모두' : '☐ 모두';
-  W.self = false; W.toIds = on ? list.map(x => x.id) : null;
-  W.to = on ? `모든 친구 (${list.length}명)` : ''; $('wTo').value = W.to;
+  if (on) { W.allPrev = { to: W.to, toIds: W.toIds || null, self: !!W.self, via: W.via || null }; W.self = false; W.via = null; W.toIds = list.map(x => x.id); W.to = `모든 친구 (${list.length}명)`; }
+  else { const p = W.allPrev || { to: '', toIds: null, self: false, via: null }; W.allPrev = null; W.to = p.to; W.toIds = p.toIds; W.self = p.self; W.via = p.via; }   // 70번: 체크 풀면 원래 받는 사람으로 (카톡·문자 창이 뜨던 것)
+  $('wTo').value = W.to;
 };
 $('toMe').onclick = () => { click(); toSel.has('__me') ? toSel.delete('__me') : toSel.add('__me'); drawTo(); };
 $('toList').addEventListener('click', e => { const r = e.target.closest('[data-to]'); if (!r) return; click(); const id = r.dataset.to; toSel.has(id) ? toSel.delete(id) : toSel.add(id); drawTo(); });
@@ -4167,6 +4171,7 @@ document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn
   if (['watch', 'game', 'file', 'set'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu', set: 'topMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
   click(); closeMenus();
   if (b.dataset.tg === 'invite') { openInvite(); return; }
+  if (b.dataset.tg === 'bug') { fbOpen(true); return; }   // 70번: 🐞 버그 신고
   if (b.dataset.tg === 'pk') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'penalty.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 63번: 승부차기는 따로 (penalty.html)
   if (b.dataset.tg === 'lot') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'ppopgi.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 33번: 뽑기 게임은 따로 (ppopgi.html)
   if (b.dataset.tg === 'rps') { if (!needLogin()) return; leaving = true; closeMenus(); location.href = 'gawibawibo.html' + (!homeOn && room ? '?g=' + encodeURIComponent(room) : ''); return; }   // 36번: 가위바위보는 따로 (gawibawibo.html)
@@ -4217,7 +4222,7 @@ const anyOv = () => $('writer').classList.contains('show') || [...document.query
 /* 39번: 메인 화면이 아니면(대화방·공동체 방·펼친 창·공동체 목록) 한 칸만 → 뒤로 가기 한 번에 메인 화면 */
 /* 60번: 뒤로 가기 규칙 - 늘 바로 전 단계로, 앱은 메인 화면에서 한 번 더 눌러야만 닫혀요
    메인 화면에도 한 칸(덫)을 깔아 둬요 → 메인에서 뒤로 가기 = "한 번 더 누르면 닫혀요" 안내 → 또 누르면 닫힘 */
-const subOn = () => anyOv() || (!homeOn && !S.on) || (homeOn && !S.on && !!grpSel) || (!homeOn && !!whoF);
+const subOn = () => anyOv() || (!homeOn && !S.on) || (homeOn && !!grpSel) || (!homeOn && !!whoF);   // 70번: 공동체 화면은 늘 한 단계 (뒤로 가기 → 메인)
 let exitArm = false, exitT = 0;
 const wantDepth = () => !started ? 0 : subOn() ? 2 : (exitArm ? 0 : 1);
 let leaving = false;   // 34번: 다른 화면(뽑기 게임)으로 넘어갈 땐 뒤로 가기 정리를 멈춰요
@@ -4260,6 +4265,7 @@ addEventListener('popstate', () => {
   if (hDepth <= 0) return;
   const wasSub = subOn();
   hDepth--;
+  if (!wasSub && homeOn && grpSel) { grpLeavePanel(); syncLayer(); return; }   // 70번: 공동체 화면에서 뒤로 → 메인 화면 (앱이 꺼지지 않게)
   if (!wasSub) {   // 60번: 메인 화면에서 뒤로 가기 → 안내만, 2.5초 안에 한 번 더 누르면 앱이 닫혀요
     exitArm = true; toast('뒤로 가기를 한 번 더 누르면 앱이 닫혀요');
     clearTimeout(exitT); exitT = setTimeout(() => { exitArm = false; syncLayer(); }, 2500);
@@ -4272,7 +4278,7 @@ addEventListener('popstate', () => {
   /* 47번: 뒤로 가기는 늘 바로 전 단계로 (열린 창 → 대화방 → 공동체 목록 → 메인 화면) */
   if (!S.on && !hadOv) {
     if (!homeOn) { grpSel = isGroup(room) ? room : (LS.get('rp_pairgid', {})[room] || null); if (grpSel && !grpList().some(g => g.id === grpSel)) grpSel = null; goHome(); }
-    else if (grpSel) { grpSel = null; render(); }
+    else if (grpSel) grpLeavePanel();   // 70번: 저장 안 한 새 공동체는 지워요
   }
   syncLayer();
 });
@@ -4465,7 +4471,7 @@ $('grpBtn').onclick = e => {
 $('grpMenu').addEventListener('click', e => {
   if (e.target.closest('[data-gnew]')) { grpNewOpen(); return; }
   const t = e.target.closest('[data-gtab]'); if (!t) return;
-  click(); closeMenus(); grpSel = t.dataset.gtab; if (!homeOn) goHome(); else drawHome(); syncLayer();
+  click(); closeMenus(); if (grpSel && grpSel !== t.dataset.gtab) grpLeavePanel(true); grpSel = t.dataset.gtab; if (!homeOn) goHome(); else drawHome(); syncLayer();
 });
 $('tmWrite').onclick = () => { click(); openWriter(); };
 $('tmHome').onclick = () => { click(); closeAll(); if (!homeOn) goHome(); syncLayer(); };
@@ -4975,11 +4981,19 @@ $('repSend').onclick = async () => {
   } catch (e) { toast('신고를 못 보냈어요 (서버 규칙 확인)'); }
 };
 /* 💡 건의하기 */
-$('fbBtn').onclick = () => { click(); $('fbTxt').value = ''; showOv('fbOv'); };
+let fbBug = false;
+function fbOpen(bug){   // 70번: 🐞 버그 신고도 같은 창 (보내면 건의 목록에 🐞 붙어서)
+  fbBug = !!bug; click(); $('fbTxt').value = '';
+  $('fbTitle').textContent = bug ? '🐞 버그 신고' : '💡 건의하기 · 제안하기';
+  $('fbHint').textContent = bug ? '어느 화면에서 무엇을 눌렀더니 어떻게 됐는지 적어 주세요' : '불편한 점이나 바라는 점을 적어 주세요';
+  $('fbSend').textContent = bug ? '🐞 보내기' : '💡 보내기';
+  showOv('fbOv');
+}
+$('fbBtn').onclick = () => fbOpen(false);
 $('fbSend').onclick = async () => {
   click(); const t = $('fbTxt').value.trim(); if (!t) { toast('내용을 적어 주세요'); return; }
   if (!fbOk()) return;
-  try { await FB.D.push(FB.D.ref(FB.db, 'giftstory/feedback'), { by: authUid, name: me.name, text: t.slice(0, 2000), at: Date.now() }); hideOv('fbOv'); toast('💡 고마워요! 잘 읽어 볼게요'); }
+  try { await FB.D.push(FB.D.ref(FB.db, 'giftstory/feedback'), { by: authUid, name: me.name, text: (fbBug ? '🐞 [버그] ' : '') + t.slice(0, 2000), bug: fbBug ? 1 : null, at: Date.now() }); hideOv('fbOv'); toast(fbBug ? '🐞 고마워요! 빨리 고칠게요' : '💡 고마워요! 잘 읽어 볼게요'); }
   catch (e) { toast('못 보냈어요 (서버 규칙 확인)'); }
 };
 /* 🚪 탈퇴하기 */

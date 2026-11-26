@@ -337,7 +337,7 @@ function svRepDraw(focusLast){
   const list = svReps(f);
   $('svList').innerHTML = svREdit
     ? list.map(t => `<div class="sv-erow"><textarea maxlength="60">${esc(t)}</textarea><button data-rdel>✕</button></div>`).join('') + `<div class="sv-rtools"><button data-radd>＋ 추가</button><button class="ok" data-rsave>✓ 저장</button></div>`
-    : list.map(t => `<button data-rep>${esc(t)}</button>`).join('') + `<div class="sv-rtools"><button data-radd>＋ 추가</button><button data-redit>✏ 수정</button></div>`;
+    : `<div class="sv-rtools"><button data-radd>＋ 자주 하는 말 등록</button></div>` + list.map(t => `<button data-rep>${esc(t)}</button>`).join('') + `<div class="sv-rtools"><button data-radd>＋ 추가</button><button data-redit>✏ 수정</button></div>`;   // 70번: 맨 위에도 ＋ 등록
   if (focusLast) { const ts = $('svList').querySelectorAll('textarea'), t = ts[ts.length - 1]; if (t) { t.focus(); $('svList').scrollTop = $('svList').scrollHeight; } }
 }
 function svRepSave(){
