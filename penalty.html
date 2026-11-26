@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>승부차기 게임</title>
+<!-- 4번(68번): 친구랑 하기 - 빨간 우체통 친구 목록(검색)이 먼저, 없으면 카톡·메신저 · 시작은 부른 사람(방장)만 · 맨 위 "승부" 네모에 걸린 점수(비기면 계속 쌓여요) · 가입 500점이 안 들어와 있으면 여기서도 넣어요 · 카톡 갔다 와도 방이 안 없어져요(기다리는 중 멈춤 고침) -->
 <!-- 3번(66번): 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 한 사람 50점씩 걸고 5번씩 차서 골 많은 사람이 판돈을 다 가져가요 · 골 수가 같으면 판돈은 쌓아 두고 50점씩 또 걸고 다시 · 다음 판 이긴 사람이 쌓인 것까지 다 · 50점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 2번: 소리 순서 시작안내→레디→3,2,1→휘슬 (소리가 다 끝나야 다음으로) · 차기 전 배경음악 작게, 골/노골 소리 끝나면 원래대로 · 승부 끝나면 배경음악 꺼짐 · 골/노골 판정을 화면 속 골대·골키퍼 모양에 맞춤 -->
 <!-- 1번: 승부차기 첫 버전 · 공을 손가락으로 밀어서 슛(세기=속도, 방향=방향, 길게=뜬 공, 짧게=땅볼) · 3,2,1 삑 후 3초 안에 슛(못 차면 실축) · 골키퍼는 손가락으로 왼쪽/오른쪽 밀기, 가만히 있으면 가운데, 미리 날면 쓰러짐 · 3,2,1 동안 골키퍼 옆으로 살짝 움직이기 · 공 만지면 빙그르르 · 처음 3번 화살표 안내 · 친구랑 하기(대화방 초대) / 혼자 하기(연습, 컴퓨터) · 한 번 찰 때마다 20점, 3번 연속 골이면 다음 한 번 40점 · 5번씩 차고 같으면 한 번씩 더 -->
@@ -26,11 +27,23 @@ h1{text-align:center;font-size:min(3.6vh,28px);font-weight:900;position:relative
 .mk{position:fixed;right:6px;bottom:2px;font-size:10px;color:#555}
 .rk1{position:fixed;top:0;left:0;right:0;z-index:40;text-align:center;font-size:12px;font-weight:800;color:#ffd84a;background:rgba(0,0,0,.55);padding:2px 6px;pointer-events:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 body{padding-top:18px;box-sizing:border-box}
+.pot2{display:none;flex-direction:column;align-items:center;flex:none}
+.pot2 span{font-size:15px;color:#bbb;font-weight:700}
+.pot2 b{font-size:52px;line-height:1.15;color:#ffd84a;border:2px solid #ffd84a;border-radius:12px;padding:0 22px;min-width:120px;text-align:center}
+.fr{position:fixed;inset:0;background:#000;display:none;flex-direction:column;padding:22px 5vw calc(14px + env(safe-area-inset-bottom));gap:12px;z-index:50}
+.fr h2{font-size:24px;text-align:center}
+.fr input{font-size:20px;padding:12px;border-radius:12px;border:2px solid #444;background:#111;color:#fff;user-select:text;-webkit-user-select:text}
+.fr .ls{flex:1;overflow:auto;display:flex;flex-direction:column;gap:8px;touch-action:pan-y}
+.fr .ls button{text-align:left;font-size:22px;font-weight:800;padding:14px;border-radius:12px;border:2px solid #333;background:#1c1c1c;color:#fff}
+.fr .ls p{color:#888;font-size:18px;text-align:center;padding:20px 0}
+.fr .km{font-size:20px;font-weight:900;padding:16px;border-radius:14px;border:0;background:#fee500;color:#000}
+.fr .cx{font-size:18px;padding:10px;border:0;background:none;color:#aaa}
 #share{display:none;position:fixed;left:50%;top:14vh;transform:translateX(-50%);padding:1.2vh 5vw;border-radius:14px;border:0;background:#3a6fd8;color:#fff;font-size:min(2.4vh,18px);font-weight:900}
 </style></head><body>
 <div class="rk1" id="rk1"></div>
 <div class="w">
  <h1><a class="back" id="back" href="index.html">‹ 돌아가기</a>⚽ 승부차기</h1>
+ <div class="pot2" id="pot2"><span>승부</span><b id="potN">0</b></div>
  <canvas id="cv"></canvas>
  <div class="btns">
   <div class="me"><span>내 점수</span><b id="pt">500</b></div>
@@ -39,6 +52,13 @@ body{padding-top:18px;box-sizing:border-box}
  </div>
 </div>
 <button id="share" onclick="shareLink()">📨 친구 부르기 (링크 보내기)</button>
+<div class="fr" id="fr">
+ <h2>📮 누구를 부를까요?</h2>
+ <input id="frq" placeholder="🔍 친구 이름 찾기" oninput="frDraw()">
+ <div class="ls" id="frl"></div>
+ <button class="km" onclick="frMsg()">💬 카톡·메신저로 부르기</button>
+ <button class="cx" onclick="frClose()">닫기</button>
+</div>
 <div class="ov" id="ov">
  <h2>누구랑 할까요?</h2>
  <button onclick="enter('friend')">친구랑 하기</button>
@@ -283,8 +303,17 @@ function board(){$('sc').textContent=goals[0]+' : '+goals[1];$('nm').textContent
 function enter(md){
   mode=md;$('ov').style.display='none';names=['나',md==='solo'?'컴퓨터':'친구'];board();save();
   bgmPlay();setMsg('');sub=md==='solo'?'연습 · 점수는 안 걸려요':'';
-  if(md==='friend'){$('go').disabled=true;friendGo()}
+  if(md==='friend'){$('go').disabled=true;if(RID)friendGo();else frOpen()}
 }
+/* 68번: 친구 부르기 - 빨간 우체통 친구 목록이 먼저 (검색), 없으면 카톡·메신저 */
+const ROOMS=(()=>{try{return(JSON.parse(localStorage.getItem('rp_rooms'))||[]).filter(x=>x&&x.id&&x.title)}catch(e){return[]}})();
+const escH=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function frOpen(){$('fr').style.display='flex';$('frq').value='';frDraw();setMsg('부를 친구를 골라요')}
+function frClose(){$('fr').style.display='none';if(!gid)setMsg('친구랑 하려면 다시 들어와 주세요')}
+function frDraw(){const q=$('frq').value.trim(),l=ROOMS.filter(x=>!q||x.title.includes(q));
+  $('frl').innerHTML=l.length?l.map(x=>'<button data-id="'+escH(x.id)+'">💌 '+escH(x.title)+'</button>').join(''):'<p>'+(q?'찾는 친구가 없어요':'빨간 우체통 친구가 없어요')+'<br>아래 카톡·메신저로 불러요</p>';
+  $('frl').querySelectorAll('button').forEach(b=>b.onclick=()=>{bgmStop();location.href=location.pathname+'?g='+encodeURIComponent(b.dataset.id)+'&j=1'})}
+function frMsg(){$('fr').style.display='none';gid='pk_'+Math.random().toString(36).slice(2,9);shareLink();friendGo()}
 function start(){
   if(mode==='friend')return fStart();
   if(!bgmOn)bgmPlay();$('go').disabled=true;$('go').textContent='시작';
@@ -315,7 +344,9 @@ let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=n
 try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
 /* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
 let ptRef=null;
-function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db||!FU)return;ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{pt=+(s.val()||0);save();ptMine()},()=>{})}
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db||!FU)return;ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>info('점수를 못 불러왔어요 (서버 규칙 확인)','#ff6b6b'))}
+/* 68번: 구글·카카오로 로그인했는데 가입 500점이 없으면 여기서 넣어요 (한 번만) */
+function ptGift(){if(!db||!FU||FU.isAnonymous||ptGift.d)return;ptGift.d=1;db.ref('giftstory/points/'+FU.uid).transaction(v=>{if(v&&v.p!=null)return;return Object.assign(v||{},{p:500,name:myName,at:Date.now()})}).catch(()=>{})}
 function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
 function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 점수 1위 '+(x.name||'?')+' · '+(+x.p).toLocaleString()+'점'});$('rk1').textContent=t||'👑 점수 1위 · 아직 없어요'},()=>{})}
 function ptMine(){if(ref&&R&&FU&&R.players&&R.players[FU.uid]&&R.players[FU.uid].pts!==pt)ref.child('players/'+FU.uid+'/pts').set(pt).catch(()=>{})}
@@ -326,7 +357,7 @@ async function friendGo(){
   if(!db)return info('서버 연결이 안 돼요','#ff6b6b');
   if(!authDone){waitAuth=true;return info('로그인 확인 중…')}
   if(!FU)return info('빨간 우체통에서 로그인해 주세요','#ff6b6b');
-  gid=RID||('pk_'+Math.random().toString(36).slice(2,9));
+  gid=gid||RID||('pk_'+Math.random().toString(36).slice(2,9));
   if(!RID)try{history.replaceState(null,'',location.pathname+'?g='+gid)}catch(e){}
   await db.ref('giftstory/rooms/'+gid+'/keys/'+FU.uid).set(true).catch(()=>{});
   ref=db.ref('giftstory/rooms/'+gid+'/pk');let made=false;
@@ -348,14 +379,16 @@ function shareLink(){
   if(navigator.share)navigator.share({title:'승부차기',text:t,url}).catch(()=>{});
   else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+url).then(()=>setMsg('링크 복사됨'));
 }
+function potShow(n){const b=$('pot2'),d=n?'flex':'none';if(n)$('potN').textContent=n;if(b.style.display!==d){b.style.display=d;setTimeout(sizeCv,30)}}
 function onPk(v){
-  R=v;if(!v||!FU)return;
+  R=v;if(!v||!FU)return;const host=v.host===FU.uid;
+  potShow(v.status==='play'||v.status==='end'?(v.pot||BET*2):v.status==='tie'?(v.carry||0):0);   // 68번: 맨 위 "승부" 네모 (비기면 쌓인 점수)
   oid=Object.keys(v.players||{}).find(u=>u!==FU.uid)||null;
   names=['나',oid?v.players[oid].name:'친구'];
   const g=v.goals||{};goals=[g[FU.uid]||0,(oid&&g[oid])||0];board();
   $('share').style.display=v.status==='wait'&&!(RID&&!RID.startsWith('pk_'))?'block':'none';
   if(v.status==='wait'){on=false;info('친구 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;return}
-  if(v.status==='ready'){on=false;info(oid?names[1]+'님과 해요!':'친구 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid;return}
+  if(v.status==='ready'){on=false;info(!oid?'친구 기다리는 중…':host?names[1]+'님과 해요! 시작을 눌러요':'부른 사람이 시작을 누르면 해요');$('go').textContent='시작';$('go').disabled=!oid||!host;return}   // 68번: 시작은 부른 사람만
   if(v.status==='play'){
     const key=v.start+'_'+v.n;
     if(paidKey!==v.start){paidKey=v.start;ptAdd(-BET)}   // 66번: 시작할 때 내 점수에서 50점
@@ -366,10 +399,10 @@ function onPk(v){
   }
   if(v.status==='tie'&&doneKey!==v.start){   // 66번: 비김 → 판돈은 쌓아 두고 다시
     doneKey=v.start;on=false;bgmStop();
-    setTimeout(()=>{S=null;sub='';setMsg('비겼어요! 판돈 '+(v.carry||0)+'점은 쌓아 두고 다시 해요','#ffd84a');$('go').textContent='다시 하기 (50점 더)';$('go').disabled=false},2300);
+    setTimeout(()=>{S=null;sub='';setMsg('비겼어요! 판돈 '+(v.carry||0)+'점은 쌓아 두고 다시 해요','#ffd84a');$('go').textContent='다시 하기 (50점 더)';$('go').disabled=!host},2300);
     return;
   }
-  if(v.status==='tie'){$('go').textContent='다시 하기 (50점 더)';$('go').disabled=!oid;return}
+  if(v.status==='tie'){$('go').textContent='다시 하기 (50점 더)';$('go').disabled=!oid||!host;return}
   if(v.status==='end'&&doneKey!==v.start){
     doneKey=v.start;on=false;bgmStop();
     const me=v.winner===FU.uid;
@@ -377,11 +410,11 @@ function onPk(v){
     setTimeout(()=>{S=null;sub='';
       if(v.quit&&v.quit!==FU.uid)setMsg('친구가 나갔어요 · 내 승리','#ffd84a');
       else setMsg(me?'🏆 '+myName+' 승리! 축하해요':names[1]+' 승리!',me?'#ffd84a':'#ff6b6b');
-      if(me)snd('win');$('go').textContent='다시 하기';$('go').disabled=false},v.quit?0:2300);
-  }else if(v.status==='end'){$('go').textContent='다시 하기';$('go').disabled=!oid}
+      if(me)snd('win');$('go').textContent='다시 하기';$('go').disabled=!host},v.quit?0:2300);
+  }else if(v.status==='end'){$('go').textContent='다시 하기';$('go').disabled=!oid||!host}
 }
 function fStart(){
-  if(!R||!oid)return;
+  if(!R||!oid||R.host!==FU.uid)return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status='ready';v.at=Date.now();return v});return}
   if(pt<BET)return info('점수가 부족해요 (50점 필요)','#ff6b6b');   // 66번
   const ps=R.players||{};if(oid&&ps[oid]&&(+ps[oid].pts||0)<BET)return info(ps[oid].name+'님 점수가 부족해요','#ff6b6b');
@@ -407,7 +440,7 @@ function fLeave(){
   else if(R.status==='wait')ref.remove().catch(()=>{});
   else ref.child('players/'+FU.uid).remove().then(()=>ref.child('status').set('wait')).catch(()=>{});
 }
-$('back').addEventListener('click',fLeave);addEventListener('pagehide',fLeave);
+$('back').addEventListener('click',fLeave);   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
 save();board();
 if(RID&&(RID.startsWith('pk_')||new URLSearchParams(location.search).get('j')))enter('friend');
 </script>
