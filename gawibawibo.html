@@ -2,6 +2,7 @@
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
+<!-- 69번: 친구랑 하기 들어가면 맨 위 "승부" 점수가 바로 보여요 · 점수가 0이면 내 점수 칸에 이유(로그인 필요·서버 막힘)를 보여 줘요 -->
 <!-- 68번: 친구랑 하기 - 빨간 우체통 친구 목록(검색)이 먼저, 없으면 카톡·메신저 · 시작은 부른 사람(방장)만 · 맨 위 "승부" 네모에 걸린 점수 · 먼저 3번 이기면 승리 · 가입 500점이 안 들어와 있으면 여기서도 넣어요 · 카톡 갔다 와도 방이 안 없어져요(기다리는 중 멈춤 고침) -->
 <!-- 66번: 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 여러 명이 같이 · 모두 20점씩 걸고 3판 2선승(비긴 판은 안 셈) · 이긴 사람이 판돈을 다 가져가요 · 20점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 46번: '친구랑 하기'가 진짜로 친구와 같이 돼요 (각자 휴대폰 · 대화방에 초대 말풍선 · 둘이 다 고르면 결과 · 먼저 3승 · 나가면 상대 승리) -->
@@ -201,7 +202,8 @@ let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=n
 try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
 /* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
 let ptRef=null;
-function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db||!FU)return;ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>big('점수를 못 불러왔어요 (서버 규칙 확인)','#ff3b3b'))}
+function ptWhy(t){const e=document.querySelector('.me span');if(e)e.textContent=t||'내 점수'}
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db)return ptWhy('서버 연결 안 됨');if(!FU)return ptWhy('로그인 필요');if(FU.isAnonymous)ptWhy('구글·카톡 로그인 필요');else ptWhy('');ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>{ptWhy('점수 서버 막힘');big('점수를 못 불러왔어요 (서버 규칙 확인)','#ff3b3b')})}
 /* 68번: 구글·카카오로 로그인했는데 가입 500점이 없으면 여기서 넣어요 (한 번만) */
 function ptGift(){if(!db||!FU||FU.isAnonymous||ptGift.d)return;ptGift.d=1;db.ref('giftstory/points/'+FU.uid).transaction(v=>{if(v&&v.p!=null)return;return Object.assign(v||{},{p:500,name:myName,at:Date.now()})}).catch(()=>{})}
 function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
@@ -244,8 +246,8 @@ function onRps(v){
   $('on').firstChild.textContent=others.length>1?'친구 '+others.length+'명':oid?v.players[oid].name:'친구';
   const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=(others.length?Math.max(...others.map(u=>w[u]||0)):0)+'승';
   $('share').style.display=(v.status==='wait'||v.status==='ready')&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
-  if(v.status==='wait'){on=false;potShow(0);big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
-  if(v.status==='ready'){on=false;potShow(0);big(!host&&oid?'부른 사람이 시작을 누르면 해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid||!host;drawBets();return}   // 68번: 시작은 부른 사람만
+  if(v.status==='wait'){on=false;potShow(BET*2);big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
+  if(v.status==='ready'){on=false;potShow(BET*Math.max(2,ids.length));big(!host&&oid?'부른 사람이 시작을 누르면 해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid||!host;drawBets();return}   // 68번: 시작은 부른 사람만
   if(v.status==='play'){
     if(!v.players[FU.uid])return;
     const k=gid+v.start;
