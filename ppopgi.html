@@ -310,7 +310,7 @@ const iPicked=()=>!G||Object.values(G.picks).includes(myId);
 let lastStatus=null;
 function onState(){
   if(!G) return;
-  const n=Object.keys(G.players).length;
+  const n=Object.keys(G.players).length;joinChk(n);
   if(G.status==='wait'){
     show('sWait'); $('wTitle').textContent=NAMES[G.type]; $('wSub').textContent=SUBS[G.type]; $('wCode').textContent='방 '+gameId;
     $('wCnt').textContent=n; $('wList').innerHTML=Object.values(G.players).map(p=>`<div>${esc(p.name)}</div>`).join('');
@@ -424,6 +424,8 @@ function confetti(){
 addEventListener('pagehide',stopBgm);
 document.addEventListener('visibilitychange',()=>{ if(document.hidden) stopBgm(); });
 initServer();
+/* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */
+let jN=0;function joinChk(n){if(jN&&n>jN){try{const A=new(window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[[784,0],[622,.35]].forEach(([f,d])=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.4,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.7);o.connect(g);g.connect(A.destination);o.start(t+d);o.stop(t+d+.75)});setTimeout(()=>A.close(),1600)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}jN=n}
 </script>
 </body>
 </html>

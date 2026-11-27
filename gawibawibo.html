@@ -242,7 +242,7 @@ function shareLink(){
 function potShow(n){const b=$('pot2');if(n){$('potN').textContent=n;b.style.display='flex'}else b.style.display='none'}
 function onRps(v){
   R=v;if(!v||!FU)return;const host=v.host===FU.uid;
-  const ids=Object.keys(v.players||{}),others=ids.filter(u=>u!==FU.uid);oid=others[0]||null;
+  const ids=Object.keys(v.players||{}),others=ids.filter(u=>u!==FU.uid);oid=others[0]||null;joinChk(ids.length);
   $('on').firstChild.textContent=others.length>1?'친구 '+others.length+'명':oid?v.players[oid].name:'친구';
   const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=(others.length?Math.max(...others.map(u=>w[u]||0)):0)+'승';
   $('share').style.display=(v.status==='wait'||v.status==='ready')&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
@@ -327,5 +327,7 @@ function fLeave(){
 $('back').addEventListener('click',fLeave);   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
 save();drawBets();
 if(RID&&(RID.startsWith('rps_')||new URLSearchParams(location.search).get('j')))enter('friend');   // 친구가 보낸 링크로 들어오면 바로 같이 하기
+/* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */
+let jN=0;function joinChk(n){if(jN&&n>jN){try{const A=new(window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[[784,0],[622,.35]].forEach(([f,d])=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.4,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.7);o.connect(g);g.connect(A.destination);o.start(t+d);o.stop(t+d+.75)});setTimeout(()=>A.close(),1600)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}jN=n}
 </script>
 </body></html>

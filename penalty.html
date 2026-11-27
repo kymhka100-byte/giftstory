@@ -385,7 +385,7 @@ function potShow(n){const b=$('pot2'),d=n?'flex':'none';if(n)$('potN').textConte
 function onPk(v){
   R=v;if(!v||!FU)return;const host=v.host===FU.uid;
   potShow(v.status==='play'||v.status==='end'?(v.pot||BET*2):v.status==='tie'?(v.carry||0)+BET*2:BET*2);   // 68번: 맨 위 "승부" 네모 (비기면 쌓인 점수)
-  oid=Object.keys(v.players||{}).find(u=>u!==FU.uid)||null;
+  oid=Object.keys(v.players||{}).find(u=>u!==FU.uid)||null;joinChk(Object.keys(v.players||{}).length);
   names=['나',oid?v.players[oid].name:'친구'];
   const g=v.goals||{};goals=[g[FU.uid]||0,(oid&&g[oid])||0];board();
   $('share').style.display=v.status==='wait'&&!(RID&&!RID.startsWith('pk_'))?'block':'none';
@@ -445,5 +445,7 @@ function fLeave(){
 $('back').addEventListener('click',fLeave);   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
 save();board();
 if(RID&&(RID.startsWith('pk_')||new URLSearchParams(location.search).get('j')))enter('friend');
+/* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */
+let jN=0;function joinChk(n){if(jN&&n>jN){try{const A=new(window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[[784,0],[622,.35]].forEach(([f,d])=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.4,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.7);o.connect(g);g.connect(A.destination);o.start(t+d);o.stop(t+d+.75)});setTimeout(()=>A.close(),1600)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}jN=n}
 </script>
 </body></html>

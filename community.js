@@ -276,12 +276,13 @@ $('hGroup').addEventListener('pointerdown', e => {
   glpDone = false; glpY = e.clientY; clearTimeout(glpT);
   glpT = setTimeout(() => {
     glpDone = true; if (navigator.vibrate) navigator.vibrate(30);
-    const id = grpSel, p = grpPeople(id).find(x => x.uid === r.dataset.gmem); if (!p) return;
-    if (!confirm(`'${p.name}'님을 공동체에서 뺄까요?`)) return;
-    FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group/out/' + p.uid), true).catch(() => toast('빼지 못했어요'));
-    FB.D.remove(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members/' + p.uid)).catch(() => {});
-    if (roomMembers[id]) delete roomMembers[id][p.uid];
-    toast(`${p.name}님을 공동체에서 뺐어요`); queueRender();
+    const id = grpSel, pn = u => (grpPeople(id).find(x => x.uid === u) || {}).name || '?';
+    mselStart($('hGroup'), '[data-gmem]', 'data-gmem', pn, u => {   // 71번: 여러 명 골라 한꺼번에 빼기
+      FB.D.set(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group/out/' + u), true).catch(() => toast('빼지 못했어요'));
+      FB.D.remove(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/members/' + u)).catch(() => {});
+      if (roomMembers[id]) delete roomMembers[id][u];
+      queueRender();
+    }, r.dataset.gmem);
   }, 700);
 });
 $('hGroup').addEventListener('pointermove', e => { if (Math.abs(e.clientY - glpY) > 10) clearTimeout(glpT); });
