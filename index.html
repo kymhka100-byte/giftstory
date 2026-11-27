@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 73번: 로그인할 때마다(처음 · 로그아웃 뒤 다시) 빨간 우체통 환영 편지 한 통(홍보 · 크리스마스 카드·연하장 · 12월 20일쯤 출시 · 비공개 버전 ⭐ 많이 · 친구 초대 ⭐ 500) + 편지 안 '지금 친구 초대하기' 버튼(📮빨간 우체통·카톡·문자) · 점수 → ⭐ 숫자 -->
 <!-- 71번: 우체통 봉투 골라 열기 버그 · 목록 꾹 누르면 여러 개 골라 지우기(친구 목록·더보기·공동체 사람) · 👂 불편 사항 알려 주기 버튼('큰' 위) · 대화방 이름 메뉴에 🚨 신고·🚫 차단 · 모르는 편지에도 신고·차단 · 편지 '☐ 모두'는 누구나(카드도) · 🌙 다음 날 도착 = 톱니 우표 고르기 · 게임 친구 들어오면 딩동+진동 -->
 <!-- 70번: 공동체 사람 초대하기 창에 📮빨간 우체통·카톡·문자 · 빨간 우체통 초대장 받으면 '들어갈까요?' 창 · 모두에게 따로 보내기 → 개별 통보 · 저장 안 하고 나가면 공동체 안 만들어짐 · 공동체에서 뒤로 가기 → 메인 화면 · 공동체 안 홍보 글 6줄 숨김 · 공동체 이름 14자 · ＋메뉴 친구 초대 → 🐞 버그 신고 · 편지 ☐모두 체크 풀면 원래 받는 사람으로 · 실버 자주 하는 말 등록 -->
 <!-- 67번: index 쪼개기 - 기능 파일 8개 따로(shop · together · videocall · silver · todo · storage · diary · community .js) · index엔 메인 화면 · 대화 · 편지·카드 쓰기만 · 기능은 그대로 -->
@@ -1408,6 +1409,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
   <div class="panel">
     <div id="readPaper"></div>
     <div class="twin"><button class="big" id="rVoice" style="display:none">🔊 목소리 다시 듣기</button><button class="big" id="rTTS">📖 편지 읽기</button></div>
+    <button class="big y" id="rInvite" style="display:none">💌 지금 친구 초대하기 (⭐ 500)</button>
     <div class="twin"><button class="big r" id="rReply">✏ 답장 쓰기</button><button class="big" id="rClose">닫기</button></div>
     <div class="twin" id="rStBox" style="display:none"><button class="big" id="rStRep">🚨 신고</button><button class="big" id="rStBlk">🚫 차단</button></div>
   </div>
@@ -1860,7 +1862,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '71';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '73';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -2938,10 +2940,19 @@ async function ptInit(uid){
     let made = false;
     await D.runTransaction(r, v => { if (v) { made = false; return; } made = true; return { p: PT_START, name: me.name || '', at: Date.now(), by: iv && iv !== uid ? iv : null }; });
     if (made) {
-      toast('🎁 가입 선물 ' + PT_START + '점이 들어왔어요 (게임에 써요)');
+      toast('🎁 가입 선물 ⭐ ' + PT_START + '이 들어왔어요 (게임에 써요)');
       if (iv && iv !== uid) D.runTransaction(D.ref(db, 'giftstory/points/' + iv + '/p'), v => (typeof v === 'number' ? v : 0) + PT_INVITE).catch(() => {});
     } else if (me.name) D.update(r, { name: me.name }).catch(() => {});   // 랭킹에 보이는 이름
   } catch (e) { ptInit.done = null; }
+}
+/* 73번: 로그인할 때마다 (처음 · 로그아웃했다가 다시) 빨간 우체통이 보내는 환영 편지 한 통 */
+const WELCOME_BODY = '빨간 우체통에 오신 걸 환영해요! 💌\n\n이곳은 소중한 사람에게\n손편지처럼 마음을 전하는 곳이에요.\n예쁜 편지지와 우표로 편지를 꾸미고,\n친구랑 가위바위보 · 승부차기 게임도\n즐길 수 있어요.\n\n곧 다가오는 연말,\n예쁜 크리스마스 카드와 연하장도\n준비되어 있으니 마음껏 이용하세요! 🎄\n\n빨간 우체통은 2026년 12월 20일쯤\n구글 플레이 스토어에 정식으로 나와요.\n\n지금 쓰시는 비공개 버전은\n먼저 써 보시는 분들만을 위한 거라\n⭐을 훨씬 많이 드려요.\n모은 ⭐로 게임도 하고,\n우표와 편지지도 살 수 있어요.\n\n친구를 초대하면 ⭐ 500이 쌓여요!\n지금 친구를 초대할까요?';
+function welcomeLetter(){
+  const to = me.name || '친구';
+  const m = { id: 'welcome_' + rid(), self: true, welcome: true, from: 'redpost', name: '빨간 우체통', type: 'letter', at: Date.now(), read: false,
+    letter: { to, toUid: null, fromName: '빨간 우체통', body: WELCOME_BODY, paper: 'plain', font: 'pen', stickers: ['💌', '🎄', '⭐'], align: '' } };
+  LS.set('rp_selfletters', [...selfL().filter(x => !x.welcome), m].slice(-60));   // 지난 환영 편지는 빼고 새로 한 통
+  try { updateFlag(); if (homeOn) drawHome(); } catch (e) {}
 }
 async function authModule(){ if (!AU && FB) AU = await import(FB.base + 'firebase-auth.js'); return AU; }
 /* 29번: 로그인 창은 버튼을 누른 그 순간에 바로 열어야 해요 (미리 준비해 두기)
@@ -2972,9 +2983,9 @@ async function afterLogin(user, kind){
   if ($('nameOv').classList.contains('show')) {
     (kind === 'kakao' ? $('nameKakao') : $('nameLogin')).innerHTML = '<b>✓</b>' + (kind === 'kakao' ? '카톡' : '구글') + ' 됨'; toast('예전 대화를 찾는 중…');
     await syncAccount();   // 31번: 예전 번호·방·이름을 먼저 불러와요 → 원래 이름 그대로
-    nameFromLogin(); ptInit(user.uid); return;
+    nameFromLogin(); ptInit(user.uid); welcomeLetter(); return;
   }
-  await syncAccount(); toast('✓ 로그인했어요'); drawRooms(); ptInit(user.uid);
+  await syncAccount(); toast('✓ 로그인했어요'); drawRooms(); ptInit(user.uid); welcomeLetter();
   if (started) setTimeout(() => location.reload(), 1200);   // 22번: 새 로그인 번호로 방을 다시 열기
 }
 async function loginReturn(){   // 페이지 이동 방식으로 로그인하고 돌아왔을 때
@@ -4116,7 +4127,8 @@ function showReader(){
   rp.innerHTML = `<div ${box}><div class="ptop">To. ${esc(L.to)}</div><div class="${bc}" style="font-size:${f.size}px">${esc(L.body)}</div></div>`;
   rp.style.animation = 'none'; void rp.offsetWidth; rp.style.animation = '';
   $('rVoice').style.display = L.voice ? '' : 'none';
-  $('rReply').style.display = isMine(m) || m.sample ? 'none' : '';
+  $('rReply').style.display = isMine(m) || m.sample || m.welcome ? 'none' : '';
+  $('rInvite').style.display = m.welcome ? '' : 'none';   // 73번: 환영 편지엔 친구 초대 버튼
   showOv('readOv'); $('readOv').scrollTop = 0;
   const pg = letterPages(rp.querySelector('.rbody'), L.body || ''), N = pg.length;   // 42번: 길면 한 장, 두 장… 나눠서
   rp.innerHTML = pg.map((t, i) => `<div class="paperbox ${pcls(p)} rpage" style="${paperVars(p)};font-family:${f.css}">
@@ -4157,6 +4169,7 @@ function playVoice(){
 }
 function closeReader(){ letterBgmOff(); if (voiceAudio) voiceAudio.pause(); if ('speechSynthesis' in window) speechSynthesis.cancel(); musicDuck(false); hideOv('readOv'); }
 $('rVoice').onclick = playVoice;
+$('rInvite').onclick = () => { closeReader(); click(); $('addRoom').click(); };   // 73번: 📮빨간 우체통 · 카톡 · 문자 초대 창
 function readAloud(){
   if (!('speechSynthesis' in window)) { toast('이 화면에서는 읽어 주기가 안 돼요 (크롬으로 열어 주세요)'); return; }
   const ss = speechSynthesis;
@@ -4978,14 +4991,14 @@ $('pingTest').onclick = () => {
 };
 </script>
 <!-- 67번: 기능 파일 (순서 그대로 · 버전 숫자는 APP_VER와 같이 바꿔요) -->
-<script src="shop.js?v=71"></script>
-<script src="together.js?v=71"></script>
-<script src="videocall.js?v=71"></script>
-<script src="silver.js?v=71"></script>
-<script src="todo.js?v=71"></script>
-<script src="storage.js?v=71"></script>
-<script src="diary.js?v=71"></script>
-<script src="community.js?v=71"></script>
+<script src="shop.js?v=73"></script>
+<script src="together.js?v=73"></script>
+<script src="videocall.js?v=73"></script>
+<script src="silver.js?v=73"></script>
+<script src="todo.js?v=73"></script>
+<script src="storage.js?v=73"></script>
+<script src="diary.js?v=73"></script>
+<script src="community.js?v=73"></script>
 <script>
 /* 67번: 기능 파일을 다 읽은 다음에 시작 */
 

@@ -77,7 +77,7 @@ body{padding-top:18px;box-sizing:border-box}
   <div class="row"><div class="side win" id="mw">0승</div><div class="hand" id="m">✊</div><div class="side">나</div></div>
  </div>
  <div class="btns">
-  <div class="me"><span>내 점수</span><b id="pt">500</b></div>
+  <div class="me"><span>내 ⭐</span><b id="pt">500</b></div>
   <div class="hs">
    <button onclick="pick(0)" disabled><i>✌️</i>가위</button>
    <button onclick="pick(1)" disabled><i>✊</i>바위</button>
@@ -126,7 +126,7 @@ const BET=20,WIN_N=3;   // 68번: 한 게임 20점 · 먼저 3번 이기면 승�
 function save(){$('pt').textContent=pt.toLocaleString()}
 function showWins(){$('mw').textContent=ws.m+'승';$('ow').textContent=ws.o+'승'}
 function drawBets(){
-  $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':'<div class="pr">20점씩</div>';   // 66번
+  $('bets').innerHTML=mode==='solo'?'<div class="pr">연습</div>':'<div class="pr">⭐ 20씩</div>';   // 66번
 }
 function setBet(n){bet=n;drawBets()}
 function enter(md){
@@ -202,12 +202,12 @@ let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=n
 try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
 /* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
 let ptRef=null;
-function ptWhy(t){const e=document.querySelector('.me span');if(e)e.textContent=t||'내 점수'}
-function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db)return ptWhy('서버 연결 안 됨');if(!FU)return ptWhy('로그인 필요');if(FU.isAnonymous)ptWhy('구글·카톡 로그인 필요');else ptWhy('');ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>{ptWhy('점수 서버 막힘');big('점수를 못 불러왔어요 (서버 규칙 확인)','#ff3b3b')})}
+function ptWhy(t){const e=document.querySelector('.me span');if(e)e.textContent=t||'내 ⭐'}
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db)return ptWhy('서버 연결 안 됨');if(!FU)return ptWhy('로그인 필요');if(FU.isAnonymous)ptWhy('구글·카톡 로그인 필요');else ptWhy('');ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>{ptWhy('⭐ 서버 막힘');big('⭐을 못 불러왔어요 (서버 규칙 확인)','#ff3b3b')})}
 /* 68번: 구글·카카오로 로그인했는데 가입 500점이 없으면 여기서 넣어요 (한 번만) */
 function ptGift(){if(!db||!FU||FU.isAnonymous||ptGift.d)return;ptGift.d=1;db.ref('giftstory/points/'+FU.uid).transaction(v=>{if(v&&v.p!=null)return;return Object.assign(v||{},{p:500,name:myName,at:Date.now()})}).catch(()=>{})}
 function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
-function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 점수 1위 '+(x.name||'?')+' · '+(+x.p).toLocaleString()+'점'});$('rk1').textContent=t||'👑 점수 1위 · 아직 없어요'},()=>{})}
+function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 ⭐ 1위 '+(x.name||'?')+' · ⭐ '+(+x.p).toLocaleString()});$('rk1').textContent=t||'👑 ⭐ 1위 · 아직 없어요'},()=>{})}
 function ptMine(){if(ref&&R&&FU&&R.players&&R.players[FU.uid]&&R.players[FU.uid].pts!==pt)ref.child('players/'+FU.uid+'/pts').set(pt).catch(()=>{})}
 rankWatch();
 async function friendGo(){
@@ -239,7 +239,7 @@ function shareLink(){
   if(navigator.share)navigator.share({title:'가위바위보',text:t,url}).catch(()=>{});
   else if(navigator.clipboard)navigator.clipboard.writeText(t+' '+url).then(()=>big('링크를 복사했어요'));
 }
-function potShow(n){const b=$('pot2');if(n){$('potN').textContent=n;b.style.display='flex'}else b.style.display='none'}
+function potShow(n){const b=$('pot2');if(n){$('potN').textContent='⭐ '+n;b.style.display='flex'}else b.style.display='none'}
 function onRps(v){
   R=v;if(!v||!FU)return;const host=v.host===FU.uid;
   const ids=Object.keys(v.players||{}),others=ids.filter(u=>u!==FU.uid);oid=others[0]||null;joinChk(ids.length);
@@ -267,9 +267,9 @@ function onRps(v){
 function fStart(){
   if(!R||!oid||R.host!==FU.uid)return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status=Object.keys(v.players||{}).length>1?'ready':'wait';v.at=Date.now();return v});return}
-  if(pt<BET){big('점수가 부족해요 (20점 필요)','#ff3b3b');return}   // 66번
+  if(pt<BET){big('⭐이 부족해요 (⭐ 20 필요)','#ff3b3b');return}   // 66번
   const ps=R.players||{},poor=Object.keys(ps).filter(u=>u!==FU.uid&&(+ps[u].pts||0)<BET);
-  if(poor.length){big(poor.map(u=>ps[u].name).join(', ')+'님 점수가 부족해요','#ff3b3b');return}
+  if(poor.length){big(poor.map(u=>ps[u].name).join(', ')+'님 ⭐이 부족해요','#ff3b3b');return}
   $('go').disabled=true;
   ref.transaction(v=>{if(!v||v.status!=='ready')return;const n=Object.keys(v.players||{}).length;if(n<2)return;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
 }
