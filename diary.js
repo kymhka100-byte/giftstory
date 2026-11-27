@@ -70,11 +70,11 @@ $('dyRead').onclick = () => {
   $('dyRead').classList.add('on');
   speakAll(t, .9, () => $('dyRead').classList.remove('on'));   // 65번: 긴 일기도 끝까지 (조각조각 이어서)
 };
-/* 🎤 일기 마이크 하나: 누른 칸에 써져요 · 제목 말하면 본문으로 · 말 끝나면 다음 줄 · 3초 조용하면 꺼짐 */
-let dyTgt = 'dyTitle', dyRec = null, dyQuiet = 0;
+/* 🎤 일기 마이크 하나: 누른 칸에 써져요 · 제목 말하면 본문으로 · 73번: 1초 조용하면 다음 줄 · 3초 조용하면 꺼짐 */
+let dyTgt = 'dyTitle', dyRec = null, dyQuiet = 0, dyNl = 0;
 $('dyTitle').addEventListener('focus', () => { dyTgt = 'dyTitle'; });
 $('dyText').addEventListener('focus', () => { dyTgt = 'dyText'; });
-function dyMicOff(){ const r = dyRec; dyRec = null; clearTimeout(dyQuiet); if (r) { try { r.abort(); } catch (e) {} musicDuck(false); } $('dyMic').classList.remove('on'); }
+function dyMicOff(){ const r = dyRec; dyRec = null; clearTimeout(dyQuiet); clearTimeout(dyNl); if (r) { try { r.abort(); } catch (e) {} musicDuck(false); } $('dyMic').classList.remove('on'); }
 function dyToBody(){ dyTgt = 'dyText'; const t = $('dyText'); t.placeholder = '🎤 이제 오늘 있었던 일을 말해 보세요'; }
 function dyNewLine(){
   const t = $('dyText'); dyToBody();
@@ -88,13 +88,17 @@ $('dyMic').onclick = () => {
   if (!R0) { toast('이 화면에서는 말로 쓰기가 안 돼요 (크롬으로 열어 주세요)'); return; }
   click(); dySpeakOff(); if (dictR) dictOff();
   const r = dyRec = new R0(); r.lang = 'ko-KR'; r.continuous = true; r.interimResults = true;
-  let el = $(dyTgt), base = el.value;
-  const hush = () => { clearTimeout(dyQuiet); dyQuiet = setTimeout(() => { if (dyRec === r) dyMicOff(); }, 3000); };
+  let el = $(dyTgt), base = el.value, pend = false;
+  const hush = () => {
+    clearTimeout(dyQuiet); dyQuiet = setTimeout(() => { if (dyRec === r) dyMicOff(); }, 3000);
+    clearTimeout(dyNl); dyNl = setTimeout(() => { if (dyRec !== r || pend || el.id !== 'dyText' || !base || base.endsWith('\n')) return; base = el.value = base + '\n'; el.scrollTop = el.scrollHeight; el.dispatchEvent(new Event('input')); }, 1000);   // 73번: 1초 조용하면 줄 바꿈
+  };
   const put = (t, fin) => {
     const sep = base && !/\s$/.test(base) ? ' ' : '';
+    pend = !fin;
     if (!fin) { el.value = base + sep + t; return; }
     if (el.id === 'dyTitle') { el.value = (base + sep + t).slice(0, 30); dyToBody(); el = $('dyText'); base = el.value; if (base && !base.endsWith('\n')) base += '\n'; el.value = base; }
-    else { base = el.value = base + sep + t + '\n'; el.scrollTop = el.scrollHeight; }
+    else { base = el.value = base + sep + t; el.scrollTop = el.scrollHeight; }
     el.dispatchEvent(new Event('input'));
   };
   r.onresult = e => {
