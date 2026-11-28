@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
 <!-- 69번: 친구랑 하기 들어가면 맨 위 "승부" 점수가 바로 보여요 · 점수가 0이면 내 점수 칸에 이유(로그인 필요·서버 막힘)를 보여 줘요 -->
+<!-- 77번: 같이 하기 고침 - 부를 때 내 ⭐20 자동으로 걸림 · 친구가 들어오면 친구 ⭐20도 자동으로 걸림(맨 위 승부 20→40) · 둘 다 걸려야 '들어왔어요' 확인 창 → 확인 누르면 바로 시작(창이 다시 안 떠요) · 한 판 끝나면 저절로 ⭐20씩 다시 걸리고 시작만 누르면 돼요 · 시작 전에 나가면 건 ⭐ 돌려받아요 -->
 <!-- 75번: 같이 하기 멈춤 고침 - 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 부른 사람이 없거나 15초 넘게 안 누르면 누구나 시작 -->
 <!-- 68번: 친구랑 하기 - 빨간 우체통 친구 목록(검색)이 먼저, 없으면 카톡·메신저 · 시작은 부른 사람(방장)만 · 맨 위 "승부" 네모에 걸린 점수 · 먼저 3번 이기면 승리 · 가입 500점이 안 들어와 있으면 여기서도 넣어요 · 카톡 갔다 와도 방이 안 없어져요(기다리는 중 멈춤 고침) -->
 <!-- 66번: 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 여러 명이 같이 · 모두 20점씩 걸고 3판 2선승(비긴 판은 안 셈) · 이긴 사람이 판돈을 다 가져가요 · 20점 안 되면 못 해요 · 맨 위 점수 1위 -->
@@ -199,17 +200,24 @@ if(RID&&!RID.startsWith('rps_'))$('back').href='index.html?room='+encodeURICompo
 const CFG={apiKey:"AIzaSyDnsj9dxYrPow82Wd6kUnqVJvfACTqMWf4",authDomain:"giftwav-9ab6b.firebaseapp.com",databaseURL:"https://giftwav-9ab6b-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"giftwav-9ab6b",storageBucket:"giftwav-9ab6b.firebasestorage.app",messagingSenderId:"790729206880",appId:"1:790729206880:web:173a3a34e29e49a0b0a705"};
 const ME=(()=>{try{return JSON.parse(localStorage.getItem('rp_me'))||{}}catch(e){return{}}})();
 const myName=ME.name||'나';
-let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curRound=0,shown=0,paidKey=null,doneKey=null;
+let db=null,FU=null,authDone=false,waitAuth=false,gid=null,ref=null,R=null,oid=null,curRound=0,shown=0,paidKey=null,doneKey=null,ptLoaded=false,payKey='',paying=false,jpDone='';
 try{firebase.initializeApp(CFG);db=firebase.database();firebase.auth().onAuthStateChanged(u=>{FU=u;authDone=true;ptWatch();if(waitAuth){waitAuth=false;friendGo()}})}catch(e){}
 /* ===== 66번: 게임 점수 (빨간 우체통과 같은 점수 · 서버 giftstory/points) ===== */
 let ptRef=null;
 function ptWhy(t){const e=document.querySelector('.me span');if(e)e.textContent=t||'내 ⭐'}
-function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db)return ptWhy('서버 연결 안 됨');if(!FU)return ptWhy('로그인 필요');if(FU.isAnonymous)ptWhy('구글·카톡 로그인 필요');else ptWhy('');ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();ptMine()},()=>{ptWhy('⭐ 서버 막힘');big('⭐을 못 불러왔어요 (서버 규칙 확인)','#ff3b3b')})}
+function ptWatch(){if(ptRef){ptRef.off();ptRef=null}if(!db)return ptWhy('서버 연결 안 됨');if(!FU)return ptWhy('로그인 필요');if(FU.isAnonymous)ptWhy('구글·카톡 로그인 필요');else ptWhy('');ptRef=db.ref('giftstory/points/'+FU.uid+'/p');ptRef.on('value',s=>{if(s.val()==null)ptGift();pt=+(s.val()||0);save();const f=!ptLoaded;ptLoaded=true;if(f&&R)onRps(R)},()=>{ptWhy('⭐ 서버 막힘');big('⭐을 못 불러왔어요 (서버 규칙 확인)','#ff3b3b')})}
 /* 68번: 구글·카카오로 로그인했는데 가입 500점이 없으면 여기서 넣어요 (한 번만) */
 function ptGift(){if(!db||!FU||FU.isAnonymous||ptGift.d)return;ptGift.d=1;db.ref('giftstory/points/'+FU.uid).transaction(v=>{if(v&&v.p!=null)return;return Object.assign(v||{},{p:500,name:myName,at:Date.now()})}).catch(()=>{})}
 function ptAdd(n){if(!db||!FU)return Promise.resolve(false);return db.ref('giftstory/points/'+FU.uid+'/p').transaction(v=>{v=+(v||0);if(v+n<0)return;return v+n}).then(r=>r.committed).catch(()=>false)}
 function rankWatch(){if(!db)return;db.ref('giftstory/points').orderByChild('p').limitToLast(1).on('value',s=>{let t='';s.forEach(c=>{const x=c.val()||{};if(x.p>0)t='👑 ⭐ 1위 '+(x.name||'?')+' · ⭐ '+(+x.p).toLocaleString()});$('rk1').textContent=t||'👑 ⭐ 1위 · 아직 없어요'},()=>{})}
-function ptMine(){if(ref&&R&&FU&&R.players&&R.players[FU.uid]&&R.players[FU.uid].pts!==pt)ref.child('players/'+FU.uid+'/pts').set(pt).catch(()=>{})}
+/* 77번: 판돈 자동으로 걸기 - 방에 들어오면(부른 사람·들어온 친구 모두) 내 ⭐에서 20을 빼고 방에 '걸었어요(paid)' 표시 */
+const gN=v=>v.gno||1,isPaid=(v,u)=>!!(v.players&&v.players[u]&&v.players[u].paid===gN(v));
+function payChk(v){
+  const me=v.players&&v.players[FU.uid],g=gN(v),k=gid+'_'+g;if(!me||me.paid===g||paying)return;
+  if(payKey===k){ref.child('players/'+FU.uid+'/paid').set(g).catch(()=>{});return}   // 빼긴 했는데 표시가 안 됐으면 표시만 다시
+  if(!ptLoaded||pt<BET)return;
+  paying=true;ptAdd(-BET).then(ok=>{paying=false;if(!ok)return;payKey=k;ref.child('players/'+FU.uid+'/paid').set(g).catch(()=>{})});
+}
 rankWatch();
 async function friendGo(){
   if(!db){big('서버 연결이 안 돼요 · 혼자 하기로 해 보세요','#ff3b3b');return}
@@ -221,13 +229,14 @@ async function friendGo(){
   ref=db.ref('giftstory/rooms/'+gid+'/rps');
   let made=false,why='';
   const r=await ref.transaction(v=>{
-    const now=Date.now(),p={name:myName,pts:pt};
-    if(!v||v.status==='end'&&!Object.keys(v.players||{}).length||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
+    const now=Date.now(),p={name:myName};
+    if(!v||v.status==='end'&&!Object.keys(v.players||{}).length||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',gno:1,players:{[FU.uid]:p},at:now}}
     made=false;v.players=v.players||{};
     if(v.players[FU.uid]){if(!v.players[v.host])v.host=FU.uid;if(v.status==='wait'&&Object.keys(v.players).length>1){v.status='ready';v.at=now}return v}   // 75번: 방장이 없으면 내가 방장 · 둘이면 준비
     if(!v.players[v.host])v.host=FU.uid;
     if(v.status==='play'){why='이미 시작했어요 · 끝나면 다시 들어와요';return}
     if(Object.keys(v.players).length>=10){why='이미 10명이 하고 있어요';return}   // 66번: 여러 명 (10명까지)
+    if(v.status==='end'){v.gno=gN(v)+1;v.wins={};v.picks={}}   // 77번: 끝난 방에 들어오면 새 판(모두 다시 걸기)
     v.players[FU.uid]=p;v.status='ready';v.at=now;return v;
   }).catch(()=>null);
   if(!r){big('서버에서 막혔어요 · 데이터베이스 규칙을 확인해 주세요','#ff3b3b');return}
@@ -248,14 +257,17 @@ function onRps(v){
   $('on').firstChild.textContent=others.length>1?'친구 '+others.length+'명':oid?v.players[oid].name:'친구';
   const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=(others.length?Math.max(...others.map(u=>w[u]||0)):0)+'승';
   $('share').style.display=(v.status==='wait'||v.status==='ready')&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
-  if(v.status==='wait'){on=false;potShow(BET*2);big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
-  if(v.status==='ready'){on=false;potShow(BET*Math.max(2,ids.length));if(host&&oid&&v.host===FU.uid)joinPop(others.map(u=>v.players[u].name).join(', '));else joinPopOff();
-    big(!host&&oid?'준비 완료! 친구가 확인을 누르면 시작해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid||!host;drawBets();return}   // 68번: 시작은 부른 사람만
+  if(v.status==='wait'||v.status==='ready'){   // 77번: 들어오면 ⭐20 자동으로 걸고, 모두 걸려야 시작
+    on=false;payChk(v);const nP=ids.filter(u=>isPaid(v,u)).length,all=ids.length>1&&nP===ids.length,mePoor=!isPaid(v,FU.uid)&&ptLoaded&&pt<BET,unp=others.filter(u=>!isPaid(v,u)).map(u=>v.players[u].name);
+    potShow(BET*nP||BET);$('go').textContent='시작';$('go').disabled=!all||!host;drawBets();
+    const jk=gid+'_'+gN(v)+'_'+ids.length;
+    if(v.status==='ready'&&all&&v.host===FU.uid&&gN(v)===1&&jpDone!==jk)joinPop(others.map(u=>v.players[u].name).join(', '),jk);else joinPopOff();
+    big(mePoor?'⭐이 부족해요 (⭐ 20 필요)':!oid?'친구를 기다리는 중…':unp.length?unp.join(', ')+'님 ⭐ 거는 중…':!host?'준비 완료! 친구가 시작을 누르면 해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':v.players[oid].name+'님과 해요! 시작을 눌러요',mePoor?'#ff3b3b':'');
+    return}
   if(v.status==='play'){
     if(!v.players[FU.uid])return;
     const k=gid+v.start;
-    if(paidKey!==k){paidKey=k;on=true;ptAdd(-(v.bet||BET));drawBets();$('op').textContent='';   // 66번: 내 점수에서 20점
-}
+    if(paidKey!==k){paidKey=k;on=true;drawBets();$('op').textContent=''}   // 77번: ⭐은 들어올 때 이미 걸었어요
     potShow(v.pot||BET*ids.length);   // 68번: 맨 위 "승부" 네모
     if(v.round!==curRound){curRound=v.round;round()}
     const pk=v.picks||{};
@@ -263,7 +275,8 @@ function onRps(v){
     return;
   }
   if(v.status==='end'){
-    if(doneKey!==gid+v.start&&paidKey===gid+v.start){doneKey=gid+v.start;fEnd(v)}
+    if(doneKey!==gid+v.start&&paidKey===gid+v.start){doneKey=gid+v.start;fEnd(v);
+      if(v.host===FU.uid){const st=v.start;setTimeout(()=>ref&&ref.transaction(x=>{if(!x||x.status!=='end'||x.start!==st)return;const n=Object.keys(x.players||{}).length;if(!n)return;x.gno=gN(x)+1;x.status=n>1?'ready':'wait';x.wins={};x.picks={};x.at=Date.now();delete x.winner;delete x.quit;return x}).catch(()=>{}),3500)}}   // 77번: 3.5초 뒤 새 판 - 모두 ⭐20 자동으로 다시 걸려요
     else if(doneKey!==gid+v.start){on=false;big(oid?(host?'다시 하기를 누르면 또 해요':'부른 사람이 다시 하기를 누르면 해요'):'친구를 기다리는 중…');$('go').textContent='다시 하기';$('go').disabled=!oid||!host;drawBets()}
   }
 }
@@ -271,11 +284,10 @@ function fStart(){
   joinPopOff();
   if(!R||!oid||(R.host!==FU.uid&&(R.players||{})[R.host]&&!(R.status==='ready'&&Date.now()-(R.at||0)>15e3)))return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status=Object.keys(v.players||{}).length>1?'ready':'wait';v.at=Date.now();return v});return}
-  if(pt<BET){big('⭐이 부족해요 (⭐ 20 필요)','#ff3b3b');return}   // 66번
-  const ps=R.players||{},poor=Object.keys(ps).filter(u=>u!==FU.uid&&(+ps[u].pts||0)<BET);
-  if(poor.length){big(poor.map(u=>ps[u].name).join(', ')+'님 ⭐이 부족해요','#ff3b3b');return}
+  const ps=R.players||{},unp=Object.keys(ps).filter(u=>!isPaid(R,u));
+  if(unp.length){big(unp.map(u=>ps[u].name).join(', ')+'님 ⭐ 거는 중…','#ffd84a');return}   // 77번: 모두 걸려야 시작
   $('go').disabled=true;
-  ref.transaction(v=>{if(!v||v.status!=='ready')return;const n=Object.keys(v.players||{}).length;if(n<2)return;v.host=FU.uid;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
+  ref.transaction(v=>{if(!v||v.status!=='ready')return;const ids=Object.keys(v.players||{}),n=ids.length;if(n<2||ids.some(u=>!isPaid(v,u)))return;v.host=FU.uid;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
 }
 function fPick(i){
   $('m').classList.remove('shake');$('m').textContent=H[i];
@@ -311,14 +323,16 @@ function fEnd(v){
   else big(me?'🏆 최종 승리!':'최종 패배 · '+wn+' 승리',me?'#ffd84a':'#ff3b3b');
   snd(me?'win3':'ayu');
   if(me)ptAdd(v.pot||v.bet*2);   // 66번: 이긴 사람이 판돈을 다 가져가요
-  drawBets();$('go').textContent='다시 하기';$('go').disabled=v.host!==FU.uid;
+  drawBets();$('go').textContent='시작';$('go').disabled=true;
+  setTimeout(()=>{if(R&&R.status==='end')big('곧 한 판 더! (⭐ 20씩 자동으로 걸려요 · 안 하려면 돌아가기)','#ffd84a')},1800);
 }
 /* 나가면: 기다리는 중이면 방 지우기 · 하는 중이면 나는 빠지고 (한 명 남으면 그 사람이 이겨요) */
 function fLeave(){
   if(!ref||!FU||!R)return;
   try{ref.off()}catch(e){}
-  if(R.status==='wait'&&Object.keys(R.players||{}).length<=1){ref.remove().catch(()=>{});return}
-  ref.transaction(v=>{
+  const back=(R.status==='wait'||R.status==='ready')&&isPaid(R,FU.uid)?ptAdd(BET):null;   // 77번: 시작 전에 나가면 건 ⭐ 돌려받아요
+  if(R.status==='wait'&&Object.keys(R.players||{}).length<=1)return Promise.all([back,ref.remove().catch(()=>{})]);
+  return Promise.all([back,ref.transaction(v=>{
     if(!v||!v.players||!v.players[FU.uid])return;
     delete v.players[FU.uid];if(v.picks)delete v.picks[FU.uid];
     const rest=Object.keys(v.players);if(!rest.length)return null;
@@ -326,13 +340,13 @@ function fLeave(){
     if(v.status==='play'){if(rest.length===1){v.status='end';v.winner=rest[0];v.quit=FU.uid}}
     else if(rest.length<2)v.status='wait';
     v.at=Date.now();return v;
-  }).catch(()=>{});
+  }).catch(()=>{})]);
 }
-$('back').addEventListener('click',fLeave);   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
+$('back').addEventListener('click',e=>{if(!ref||!FU||!R)return;e.preventDefault();const h=$('back').href;let go=0;const nav=()=>{if(!go){go=1;location.href=h}};Promise.resolve(fLeave()).then(nav,nav);setTimeout(nav,1500)});   // 77번: 돌려받기·나가기가 서버에 적힌 다음 이동   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
 save();drawBets();
 if(RID&&(RID.startsWith('rps_')||new URLSearchParams(location.search).get('j')))enter('friend');   // 친구가 보낸 링크로 들어오면 바로 같이 하기
 /* 75번: 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 친구는 준비 중으로 기다려요 */
-let jpOn='';function joinPop(n){if(jpOn===n)return;jpOn=n;let d=document.getElementById('jpop');if(!d){d=document.createElement('div');d.id='jpop';d.style.cssText='position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center';d.innerHTML='<div style="background:#1b1b22;border:2px solid #ffd84a;border-radius:20px;padding:26px 22px;text-align:center;color:#fff;max-width:320px;width:86%"><div style="font-size:46px">🙋</div><div id="jpN" style="font-size:22px;font-weight:900;margin:10px 0 18px"></div><button id="jpOk" style="width:100%;padding:16px;font-size:22px;font-weight:900;border:0;border-radius:14px;background:#ff3b3b;color:#fff">확인 · 시작!</button></div>';document.body.appendChild(d);d.querySelector('#jpOk').onclick=()=>{joinPopOff();fStart()}}d.querySelector('#jpN').textContent=n+'님이 들어왔어요!';d.style.display='flex'}
+let jpOn='';function joinPop(n,jk){if(jpOn===jk)return;jpOn=jk;let d=document.getElementById('jpop');if(!d){d=document.createElement('div');d.id='jpop';d.style.cssText='position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center';d.innerHTML='<div style="background:#1b1b22;border:2px solid #ffd84a;border-radius:20px;padding:26px 22px;text-align:center;color:#fff;max-width:320px;width:86%"><div style="font-size:46px">🙋</div><div id="jpN" style="font-size:22px;font-weight:900;margin:10px 0 18px"></div><button id="jpOk" style="width:100%;padding:16px;font-size:22px;font-weight:900;border:0;border-radius:14px;background:#ff3b3b;color:#fff">확인 · 시작!</button></div>';document.body.appendChild(d);d.querySelector('#jpOk').onclick=()=>{jpDone=jpOn;joinPopOff();fStart()}}d.querySelector('#jpN').innerHTML=escH(n)+'님이 들어왔어요!<br><span style="font-size:17px;color:#ffd84a">⭐ 20씩 걸었어요 · 승부 ⭐ '+(BET*(1+n.split(', ').length))+'</span>';d.style.display='flex'}
 function joinPopOff(){jpOn='';const d=document.getElementById('jpop');if(d)d.style.display='none'}
 setInterval(()=>{if(R&&R.status==='ready'&&Date.now()-(R.at||0)>15e3&&$('go').disabled)onRps(R)},3000);
 /* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */

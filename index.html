@@ -2,6 +2,7 @@
 <!-- 76번: 홈 정가운데 새 메시지 말풍선(최대 3개·꿈틀, 편지가 먼저) · 더보기 옆 분홍 말풍선 없앰 · 대화하고 나오면/가끔 할 일·친구 목록 → 뒤로 가기 → 홈 · 고정 말풍선 친구가 와 있으면 밝은 노랑 · 게임 초대 창(어느 화면이든 소리) · 공동체 지우기 · 공동체 친구 중복 안 생김 · 단체방 📢 공지(누구나, 🎤) · 편지 쓰기 가게 가기 아이콘 · 메뉴 글씨 → 아이콘 · 다른 계정 로그인/로그아웃 때 방·번호 섞임 고침 -->
 <!-- 75번: 환영 편지 맨 끝에 친구 초대 버튼(카톡 · 문자만 · 누르면 새 방이 생겨 친구가 그 방으로 · ⭐ 500은 친구가 가입했을 때만) · 로그인 화면 실버 모드 버튼을 카톡·구글 버튼과 같은 모양 · 알림 두 번 울림 고침 · 편지·카드 쓰기 🎤 옆에 노란 🔊 · 받은 편지 장마다 🔊(첫 장 = 끝까지, 다른 장 = 그 장만) · 일기장 🎤 옆 🔊 · 같이 하기 게임 멈춤 고침(들어왔어요 확인 창) -->
 <!-- 74번(72번 다시): 👂·'큰' 버튼 테두리·바탕 없이 · 🚨 신고·💡 건의 창 크게 + 🎤 말로 쓰기(1초 쉬면 줄 바꿈) + 🔊 읽어 주기 · 일기장 말로 쓰기도 1초 쉬면 줄 바꿈 · 여러 개 고르는 중 홍보 글 ✕는 홍보 글만 닫기 · 같은 이름 빈 방은 하나로 · 이미 친구인 이름으로 초대하면 원래 방으로 갈지 묻기 -->
+<!-- 77번: 홈 손글씨 편지 연말연시 카드 옆 '친구 불러오기' 아이콘(빨간 우체통·카톡·문자 초대 창) · 가위바위보 같이 하기 고침(⭐20 자동 걸기 · 확인 창 · 다음 판 자동) -->
 <!-- 73번: 로그인할 때마다(처음 · 로그아웃 뒤 다시) 빨간 우체통 환영 편지 한 통(홍보 · 크리스마스 카드·연하장 · 12월 20일쯤 출시 · 비공개 버전 ⭐ 많이 · 친구 초대 ⭐ 500) + 편지 안 '지금 친구 초대하기' 버튼(📮빨간 우체통·카톡·문자) · 점수 → ⭐ 숫자 -->
 <!-- 71번: 우체통 봉투 골라 열기 버그 · 목록 꾹 누르면 여러 개 골라 지우기(친구 목록·더보기·공동체 사람) · 👂 불편 사항 알려 주기 버튼('큰' 위) · 대화방 이름 메뉴에 🚨 신고·🚫 차단 · 모르는 편지에도 신고·차단 · 편지 '☐ 모두'는 누구나(카드도) · 🌙 다음 날 도착 = 톱니 우표 고르기 · 게임 친구 들어오면 딩동+진동 -->
 <!-- 70번: 공동체 사람 초대하기 창에 📮빨간 우체통·카톡·문자 · 빨간 우체통 초대장 받으면 '들어갈까요?' 창 · 모두에게 따로 보내기 → 개별 통보 · 저장 안 하고 나가면 공동체 안 만들어짐 · 공동체에서 뒤로 가기 → 메인 화면 · 공동체 안 홍보 글 6줄 숨김 · 공동체 이름 14자 · ＋메뉴 친구 초대 → 🐞 버그 신고 · 편지 ☐모두 체크 풀면 원래 받는 사람으로 · 실버 자주 하는 말 등록 -->
@@ -1085,8 +1086,9 @@ body:not(.dark) .hav.in,body:not(.dark) #morePanel .mav.in{background:#f3edc0!im
 /* 메인 화면 아이콘 4개 한 줄 · 작게 · 테두리 없이 그림만 */
 #letterHome .lhic.r{left:0;right:0;justify-content:center;gap:18px}
 #letterHome .lhic button{width:38px!important;height:38px!important;border-radius:8px!important;font-size:24px!important;box-shadow:none!important}
-#lhWrite,#lhBox,#lhNY{background:transparent!important}
-#lhNY svg{width:32px!important;height:32px!important}
+#lhWrite,#lhBox,#lhNY,#lhInv{background:transparent!important}
+#lhNY svg,#lhInv svg{width:32px!important;height:32px!important}
+#lhInv{border:none!important;outline:none!important}
 #promoTx{cursor:pointer}
 #roomBar .rb.pin:not(.wait){background:#5a5520!important;border-color:#8a8240!important;color:#eee!important;font-weight:500!important}
 #roomBar .rb.empty{background:transparent!important;border:1px dotted #777!important;color:#888!important;font-weight:300!important}
@@ -1235,7 +1237,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
   <div id="homeList">
     <div id="letterHome">
       <div id="lhQuote"><q>소중한 분께 마음을 전하세요</q></div>
-      <div class="lhic r"><button id="lhWrite" title="편지 쓰기">✍️</button><button id="lhBox" title="편지함">📬</button><button id="lhXmas" title="크리스마스 카드"></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
+      <div class="lhic r"><button id="lhWrite" title="편지 쓰기">✍️</button><button id="lhBox" title="편지함">📬</button><button id="lhXmas" title="크리스마스 카드"></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button><button class="cardic" id="lhInv" title="친구 불러오기"><svg viewBox="0 0 40 40"><circle cx="16" cy="13" r="6.5" fill="#ffd54f"/><path d="M4 34q0-12 12-12t12 12z" fill="#ffd54f"/><g stroke="#ff5a52" stroke-width="3.4" stroke-linecap="round"><path d="M32 12v12M26 18h12"/></g></svg></button></div>
       <div id="lhBubs"></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
@@ -1916,7 +1918,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '76';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '77';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -2308,6 +2310,7 @@ $('homeList').addEventListener('click', e => {
   if (e.target.closest('#lhWrite')) { click(); openWriter(); return; }
   if (e.target.closest('#lhXmas')) { click(); openWriter(); openCards('xmas'); return; }   // 53번
   if (e.target.closest('#lhNY')) { click(); openWriter(); openCards('ny'); return; }
+  if (e.target.closest('#lhInv')) { click(); $('addRoom').click(); return; }   // 77번: 홈 친구 불러오기 (빨간 우체통·카톡·문자)
   if (e.target.closest('#lhBox')) { click(); const un = unreadIn(); if (un.length) openBox(un); else $('pileBtn').click(); return; }
   const le = e.target.closest('#lhEnv'); if (le) { const un = unreadIn(); if (un.length > 1) { click(); openBox(un); } else if (un.length) lhRip(le, un[0]); return; }
   const bb = e.target.closest('[data-bub]'); if (bb) { click(); openRoom(bb.dataset.bub); return; }   // 76번: 가운데 말풍선 → 그 대화로
@@ -5164,14 +5167,14 @@ $('goStamp').onclick = () => { click(); openShop(); toast('📮 우표 가게는
 });
 </script>
 <!-- 67번: 기능 파일 (순서 그대로 · 버전 숫자는 APP_VER와 같이 바꿔요) -->
-<script src="shop.js?v=76"></script>
-<script src="together.js?v=76"></script>
-<script src="videocall.js?v=76"></script>
-<script src="silver.js?v=76"></script>
-<script src="todo.js?v=76"></script>
-<script src="storage.js?v=76"></script>
-<script src="diary.js?v=76"></script>
-<script src="community.js?v=76"></script>
+<script src="shop.js?v=77"></script>
+<script src="together.js?v=77"></script>
+<script src="videocall.js?v=77"></script>
+<script src="silver.js?v=77"></script>
+<script src="todo.js?v=77"></script>
+<script src="storage.js?v=77"></script>
+<script src="diary.js?v=77"></script>
+<script src="community.js?v=77"></script>
 <script>
 /* 67번: 기능 파일을 다 읽은 다음에 시작 */
 
