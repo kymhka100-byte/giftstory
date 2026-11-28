@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 75번: 환영 편지 맨 끝에 친구 초대 버튼(카톡 · 문자만 · 누르면 새 방이 생겨 친구가 그 방으로 · ⭐ 500은 친구가 가입했을 때만) · 로그인 화면 실버 모드 버튼을 카톡·구글 버튼과 같은 모양 · 알림 두 번 울림 고침 · 편지·카드 쓰기 🎤 옆에 노란 🔊 · 받은 편지 장마다 🔊(첫 장 = 끝까지, 다른 장 = 그 장만) · 일기장 🎤 옆 🔊 · 같이 하기 게임 멈춤 고침(들어왔어요 확인 창) -->
 <!-- 74번(72번 다시): 👂·'큰' 버튼 테두리·바탕 없이 · 🚨 신고·💡 건의 창 크게 + 🎤 말로 쓰기(1초 쉬면 줄 바꿈) + 🔊 읽어 주기 · 일기장 말로 쓰기도 1초 쉬면 줄 바꿈 · 여러 개 고르는 중 홍보 글 ✕는 홍보 글만 닫기 · 같은 이름 빈 방은 하나로 · 이미 친구인 이름으로 초대하면 원래 방으로 갈지 묻기 -->
 <!-- 73번: 로그인할 때마다(처음 · 로그아웃 뒤 다시) 빨간 우체통 환영 편지 한 통(홍보 · 크리스마스 카드·연하장 · 12월 20일쯤 출시 · 비공개 버전 ⭐ 많이 · 친구 초대 ⭐ 500) + 편지 안 '지금 친구 초대하기' 버튼(📮빨간 우체통·카톡·문자) · 점수 → ⭐ 숫자 -->
 <!-- 71번: 우체통 봉투 골라 열기 버그 · 목록 꾹 누르면 여러 개 골라 지우기(친구 목록·더보기·공동체 사람) · 👂 불편 사항 알려 주기 버튼('큰' 위) · 대화방 이름 메뉴에 🚨 신고·🚫 차단 · 모르는 편지에도 신고·차단 · 편지 '☐ 모두'는 누구나(카드도) · 🌙 다음 날 도착 = 톱니 우표 고르기 · 게임 친구 들어오면 딩동+진동 -->
@@ -980,6 +981,19 @@ body:not(.dark) #tgBtn b{text-shadow:none}
 .tkb .tksp{filter:sepia(1) saturate(6) hue-rotate(5deg) brightness(1.15)}
 .tkb .tkmic.on{background:#e0322f;animation:svpulse 1.4s infinite}
 .tkta{display:block;width:100%;min-height:38vh;font-size:19px;line-height:1.6;margin-top:10px;padding:12px;border-radius:14px;background:#1c1c22;color:#fff;border:1.5px solid #555;resize:vertical;font-family:inherit}
+/* ===== 75번 ===== */
+.nrow3 .nbtn{flex:1 1 0;min-width:0}
+.nrow3 .nbtn.sv{background:#e3302e;border-color:#e3302e;color:#fff}
+.wlinv{margin-top:14px;padding-top:12px;border-top:1.5px dashed rgba(0,0,0,.25);text-align:center;position:relative;z-index:1}
+.wlinv .wlt{font-size:20px;font-weight:700;margin-bottom:8px}
+.wlinv .wlt small{font-size:14px;font-weight:500}
+.wlinv .wlb{display:flex;gap:22px;justify-content:center}
+.wlinv button{border:none;background:none;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:15px;font-weight:700;color:inherit}
+.wlinv button svg{width:58px;height:58px}
+.rpage{position:relative}
+.rpspk{position:absolute;top:6px;right:6px;z-index:2;width:44px;height:44px;border:none;background:none;font-size:26px;padding:0;filter:sepia(1) saturate(6) hue-rotate(5deg) brightness(1.15)}
+.wspk,.dyspk{filter:sepia(1) saturate(6) hue-rotate(5deg) brightness(1.15)}
+.dyspk{font-size:22px}
 /* ===== 42번 ===== */
 .hadd{gap:0}
 .hadd .ok,.hadd .mic,.hadd .hlist{width:38px;height:40px;border:none!important;background:none;border-radius:10px}
@@ -1283,14 +1297,14 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
   </div>
   <!-- 2단계: 쓰기 -->
   <div class="wbody" id="step2" style="display:none">
-    <div class="wtopchips"><button class="chip ic" id="wPick" title="편지지·글씨">🎨</button><button class="chip ic" id="wDrafts" title="쓰던 편지">📝</button><button class="chip ic" id="wPile" title="내 편지함" style="margin-left:auto">📚</button></div>
+    <div class="wtopchips"><button class="chip ic" id="wPick" title="편지지·글씨">🎨</button><button class="chip ic" id="wDrafts" title="쓰던 편지">📝</button><button class="chip ic mic" data-dict="wBody" title="말로 쓰기">🎤</button><button class="chip ic wspk" data-tks="wBody" title="읽어 주기">🔊</button><button class="chip ic" id="wPile" title="내 편지함" style="margin-left:auto">📚</button></div>
     <div class="paperbox" id="wPaper">
       <div class="ptop wto">To. <input id="wTo" placeholder="받는 사람"><button type="button" id="wAllBtn">☐ 모두</button><span class="toico"><button type="button" id="toBtn" title="빨간 우체통 친구"></button><button type="button" id="wCard" title="크리스마스 카드 쓰기">🎄</button></span></div>
       <textarea class="lined" id="wBody" placeholder="친구에게 못다한 그 말을 여기에 적어 보세요..."></textarea>
       <div class="pstk" id="wStk"></div>
       <div class="pfrom">From. <span id="wFrom"></span></div>
     </div>
-    <div class="chips" style="margin-top:10px"><button class="chip mic" data-dict="wBody" style="min-height:0">🎤 말로 쓰기</button><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button><button class="chip" id="nameInsBtn">👤 이름 넣기</button></div>
+    <div class="chips" style="margin-top:10px"><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button><button class="chip" id="nameInsBtn">👤 이름 넣기</button></div>
     <div class="lab">스티커 (편지 끝에 붙어요)</div>
     <div class="chips" id="stkChips"></div>
     <div class="lab">목소리 녹음 (선택 · 편지를 펼치면 나와요)</div>
@@ -1737,7 +1751,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     <span id="dyTools"><button class="dtb" id="dyBig" title="큰 글씨">큰</button><button class="dtb" id="dyRead" title="읽어 주기">🔊</button><button id="dySave">저장</button></span><button id="dyCalBtn" title="달력">📅</button></div>
   <div class="dbody" id="dyWrite">
     <div id="dyFold"><div class="dydate" id="dyDate"></div><div class="dypick" id="dyPick"></div></div>
-    <div class="dytrow"><input id="dyTitle" maxlength="30" placeholder="제목 (안 쓰면 첫 글이 제목)"><button class="dyic" id="dyMic" title="말로 쓰기">🎤</button><button class="dyic" id="dyEnt" title="다음 줄">↵</button></div>
+    <div class="dytrow"><input id="dyTitle" maxlength="30" placeholder="제목 (안 쓰면 첫 글이 제목)"><button class="dyic" id="dyMic" title="말로 쓰기">🎤</button><button class="dyic dyspk" id="dySpk" title="읽어 주기">🔊</button><button class="dyic" id="dyEnt" title="다음 줄">↵</button></div>
     <div class="dypaper" id="dyPaper"><svg class="dyart" viewBox="0 0 130 150" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M70 148 Q66 120 72 92"/><circle cx="72" cy="80" r="3"/><g id="dySeeds"></g><path d="M18 40 L52 30"/><ellipse cx="30" cy="28" rx="11" ry="4" transform="rotate(-25 30 28)"/><ellipse cx="32" cy="44" rx="11" ry="4" transform="rotate(25 32 44)"/><ellipse cx="40" cy="25" rx="10" ry="3.5" transform="rotate(-40 40 25)"/><ellipse cx="42" cy="42" rx="10" ry="3.5" transform="rotate(35 42 42)"/><circle cx="53" cy="30" r="2"/><path d="M100 30 l4 -6 M108 50 l3 -6 M96 14 l3 -5"/></svg>
       <textarea id="dyText" placeholder="오늘 있었던 일을 적어 보세요…"></textarea></div>
     <div class="dyphoto"><span id="dyPic"></span><button class="chip" id="dyPicBtn">🖼 오늘 사진 넣기</button><button class="chip" id="dyPicDel">지우기</button></div>
@@ -1875,7 +1889,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '74';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '75';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -3112,6 +3126,7 @@ $('notiTest').onclick = () => {
 function notifyNew(m){
   if (isMine(m) || m.at < loadedAt - 5000 || !document.hidden) return;
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  if (FB && LS.get('rp_push_ok', 0)) return;   // 75번: 서버 알림이 이미 울려요 (두 번 울리지 않게)
   let body;
   if (m.type === 'letter') { if (!forMe(m) || !arrived(m)) return; body = '💌 편지가 도착했어요'; }
   else if (m.wt != null) { if (!forWsp(m)) return; body = '🤫 ' + m.wt; }   // 65번
@@ -4151,15 +4166,17 @@ function showReader(){
   rp.style.animation = 'none'; void rp.offsetWidth; rp.style.animation = '';
   $('rVoice').style.display = L.voice ? '' : 'none';
   $('rReply').style.display = isMine(m) || m.sample || m.welcome ? 'none' : '';
-  $('rInvite').style.display = m.welcome ? '' : 'none';   // 73번: 환영 편지엔 친구 초대 버튼
+  $('rInvite').style.display = 'none';   // 75번: 친구 초대는 편지 맨 끝 (카톡 · 문자)
   showOv('readOv'); $('readOv').scrollTop = 0;
-  const pg = letterPages(rp.querySelector('.rbody'), L.body || ''), N = pg.length;   // 42번: 길면 한 장, 두 장… 나눠서
+  const pg = letterPages(rp.querySelector('.rbody'), L.body || ''), N = pg.length; showReader.pages = pg;   // 42번: 길면 한 장, 두 장… 나눠서
   rp.innerHTML = pg.map((t, i) => `<div class="paperbox ${pcls(p)} rpage" style="${paperVars(p)};font-family:${f.css}">
     ${i === 0 ? `<div class="ptop">To. ${esc(L.to)}</div>` : ''}
     <div class="${bc}" style="font-size:${f.size}px">${esc(t)}</div>
     ${i === N - 1 && L.stickers && L.stickers.length ? `<div class="pstk">${L.stickers.join('')}</div>` : ''}
     ${i === N - 1 ? `<div class="pfrom">From. ${esc(L.fromName)}</div>` : ''}
+    ${i === N - 1 && m.welcome ? `<div class="wlinv"><div class="wlt">💌 친구 초대하기 <small>(친구가 가입하면 ⭐ 500)</small></div><div class="wlb"><button data-wlinv="kakao">${ICON_KAKAO}카카오톡</button><button data-wlinv="sms">${ICON_SMS}문자</button></div></div>` : ''}
     ${N > 1 ? `<div class="pno">${i + 1} / ${N}장</div>` : ''}
+    <button class="rpspk" data-rpg="${i}" title="${i === 0 ? '처음부터 끝까지 읽어 주기' : '이 장 읽어 주기'}">🔊</button>
   </div>`).join('');
   if (L.atts && L.atts.length) rp.insertAdjacentHTML('beforeend', `<div class="latts"><div class="lab2">📎 함께 온 파일 ${L.atts.length}개</div>${L.atts.map((x, i) => `<div class="latt">${x.kind === 'image' && x.thumb ? `<img src="${esc(x.thumb)}" alt="" data-laopen="${i}">` : `<span class="bic" style="font-size:24px" data-laopen="${i}">${x.kind === 'audio' ? '♪' : x.kind === 'video' ? '🎬' : '📄'}</span>`}<span class="bn" data-laopen="${i}">${esc(x.fname || '파일')}<small>${fmtSize(x.size || 0)}</small></span><button class="fsv" data-lasave="${i}" title="내 폰에 저장">${IC_DN}</button><button class="fsv" data-lashare="${i}" title="공유">${IC_UP}</button></div>`).join('')}</div>`);   // 65번
   letterBgmOn();
@@ -4192,7 +4209,26 @@ function playVoice(){
 }
 function closeReader(){ letterBgmOff(); if (voiceAudio) voiceAudio.pause(); if ('speechSynthesis' in window) speechSynthesis.cancel(); musicDuck(false); hideOv('readOv'); }
 $('rVoice').onclick = playVoice;
-$('rInvite').onclick = () => { closeReader(); click(); $('addRoom').click(); };   // 73번: 📮빨간 우체통 · 카톡 · 문자 초대 창
+$('rInvite').onclick = () => { closeReader(); click(); $('addRoom').click(); };
+/* 75번: 환영 편지 맨 끝 친구 초대 - 가입 안 한 새 친구를 카톡 · 문자로 (누르면 새 방이 생기고 친구가 그 방으로 · ⭐ 500은 친구가 가입했을 때만) */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-wlinv]'); if (!b) return;
+  click(); const kind = b.dataset.wlinv, id = rid(), n = getRooms().filter(x => /^초대 \d+$/.test(x.title || '')).length + 1;
+  saveRoom(id, '초대 ' + n);
+  shareTo(kind, roomURL(id), inviteText(), { f: me.name, t: '' });
+  closeReader(); setTimeout(() => openRoom(id), 300);
+});
+/* 75번: 받은 편지 장마다 🔊 - 첫 장 = 처음부터 끝까지, 다른 장 = 그 장만 */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-rpg]'); if (!b || !curLetter) return;
+  click(); if (!('speechSynthesis' in window)) { toast('이 화면에서는 읽어 주기가 안 돼요 (크롬으로 열어 주세요)'); return; }
+  const ss = speechSynthesis; if (ss.speaking) { ss.cancel(); musicDuck(false); return; }
+  const i = +b.dataset.rpg, pg = showReader.pages || [curLetter.letter.body || ''];
+  const t = i === 0 ? pg.join('\n') : (pg[i] || ''); if (!t.trim()) return;
+  if (voiceAudio) voiceAudio.pause();
+  const u = new SpeechSynthesisUtterance(t); u.lang = 'ko-KR'; u.rate = .95; const v = koVoice(); if (v) u.voice = v;
+  u.onend = u.onerror = () => musicDuck(false); musicDuck(true); ss.speak(u);
+});
 function readAloud(){
   if (!('speechSynthesis' in window)) { toast('이 화면에서는 읽어 주기가 안 돼요 (크롬으로 열어 주세요)'); return; }
   const ss = speechSynthesis;
@@ -5006,6 +5042,7 @@ $('wPile').onclick = () => $('pileBtn').click();
 const MIC_SVG = '<svg viewBox="0 0 24 24" width="20" height="20"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5" fill="currentColor"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/><path d="M12 18v3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 document.querySelectorAll('.mic[data-dict]').forEach(b => { b.innerHTML = b.innerHTML.replace('🎤', MIC_SVG); });
 $('dyMic').innerHTML = MIC_SVG;
+$('dySpk').onclick = () => $('dyRead').click();   // 75번: 일기장 🎤 바로 옆 🔊
 /* 화면 끄고 시험: 2분 30초 뒤 서버가 알림을 보내요 (화면이 꺼져도 울리는지 확인) */
 $('pingTest').onclick = () => {
   if (!LS.get('rp_push_ok', 0)) { toast('먼저 위의 알림 켜기를 눌러 주세요'); return; }
@@ -5014,14 +5051,14 @@ $('pingTest').onclick = () => {
 };
 </script>
 <!-- 67번: 기능 파일 (순서 그대로 · 버전 숫자는 APP_VER와 같이 바꿔요) -->
-<script src="shop.js?v=74"></script>
-<script src="together.js?v=74"></script>
-<script src="videocall.js?v=74"></script>
-<script src="silver.js?v=74"></script>
-<script src="todo.js?v=74"></script>
-<script src="storage.js?v=74"></script>
-<script src="diary.js?v=74"></script>
-<script src="community.js?v=74"></script>
+<script src="shop.js?v=75"></script>
+<script src="together.js?v=75"></script>
+<script src="videocall.js?v=75"></script>
+<script src="silver.js?v=75"></script>
+<script src="todo.js?v=75"></script>
+<script src="storage.js?v=75"></script>
+<script src="diary.js?v=75"></script>
+<script src="community.js?v=75"></script>
 <script>
 /* 67번: 기능 파일을 다 읽은 다음에 시작 */
 

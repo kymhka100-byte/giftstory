@@ -20,7 +20,7 @@ async function sendTo(uids, data, why){
   const db = getDatabase(), list = [];   // [uid, key, token]
   for (const u of uids) {
     const t = (await db.ref(`giftstory/tokens/${u}`).get()).val() || {};
-    for (const [k, v] of Object.entries(t)) if (v && v.token) list.push([u, k, v.token]);
+    for (const [k, v] of Object.entries(t)) if (v && v.token && !list.some(x => x[2] === v.token)) list.push([u, k, v.token]);   // 75번: 같은 휴대폰에 두 번 안 가게
   }
   if (!list.length) { console.log(`[알림] ${why}: 받을 휴대폰 주소가 없어요 (대상 ${uids.length}명)`); return; }
   const res = await getMessaging().sendEachForMulticast({

@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>승부차기 게임</title>
 <!-- 5번(69번): 친구랑 하기 들어가면 맨 위 "승부" 점수가 바로 보여요 · 점수가 0이면 내 점수 칸에 이유(로그인 필요·서버 막힘)를 보여 줘요 -->
+<!-- 75번: 같이 하기 멈춤 고침 - 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 부른 사람이 없거나 15초 넘게 안 누르면 누구나 시작 -->
 <!-- 4번(68번): 친구랑 하기 - 빨간 우체통 친구 목록(검색)이 먼저, 없으면 카톡·메신저 · 시작은 부른 사람(방장)만 · 맨 위 "승부" 네모에 걸린 점수(비기면 계속 쌓여요) · 가입 500점이 안 들어와 있으면 여기서도 넣어요 · 카톡 갔다 와도 방이 안 없어져요(기다리는 중 멈춤 고침) -->
 <!-- 3번(66번): 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 한 사람 50점씩 걸고 5번씩 차서 골 많은 사람이 판돈을 다 가져가요 · 골 수가 같으면 판돈은 쌓아 두고 50점씩 또 걸고 다시 · 다음 판 이긴 사람이 쌓인 것까지 다 · 50점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 2번: 소리 순서 시작안내→레디→3,2,1→휘슬 (소리가 다 끝나야 다음으로) · 차기 전 배경음악 작게, 골/노골 소리 끝나면 원래대로 · 승부 끝나면 배경음악 꺼짐 · 골/노골 판정을 화면 속 골대·골키퍼 모양에 맞춤 -->
@@ -366,7 +367,7 @@ async function friendGo(){
   const r=await ref.transaction(v=>{
     const now=Date.now(),p={name:myName,pts:pt};
     if(!v||v.status==='end'&&!(v.players||{})[FU.uid]||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
-    made=false;v.players=v.players||{};if(v.players[FU.uid])return v;
+    made=false;v.players=v.players||{};if(v.players[FU.uid]){if(!v.players[v.host])v.host=FU.uid;if(v.status==='wait'&&Object.keys(v.players).length>1){v.status='ready';v.at=now}return v}if(!v.players[v.host])v.host=FU.uid;   // 75번
     if(Object.keys(v.players).length>=2)return;
     v.players[FU.uid]=p;v.status='ready';v.at=now;return v;
   }).catch(()=>null);
@@ -383,14 +384,14 @@ function shareLink(){
 }
 function potShow(n){const b=$('pot2'),d=n?'flex':'none';if(n)$('potN').textContent='⭐ '+n;if(b.style.display!==d){b.style.display=d;setTimeout(sizeCv,30)}}
 function onPk(v){
-  R=v;if(!v||!FU)return;const host=v.host===FU.uid;
+  R=v;if(!v||!FU)return;const host=v.host===FU.uid||!(v.players||{})[v.host]||(v.status==='ready'&&Date.now()-(v.at||0)>15e3);   // 75번
   potShow(v.status==='play'||v.status==='end'?(v.pot||BET*2):v.status==='tie'?(v.carry||0)+BET*2:BET*2);   // 68번: 맨 위 "승부" 네모 (비기면 쌓인 점수)
   oid=Object.keys(v.players||{}).find(u=>u!==FU.uid)||null;joinChk(Object.keys(v.players||{}).length);
   names=['나',oid?v.players[oid].name:'친구'];
   const g=v.goals||{};goals=[g[FU.uid]||0,(oid&&g[oid])||0];board();
   $('share').style.display=v.status==='wait'&&!(RID&&!RID.startsWith('pk_'))?'block':'none';
   if(v.status==='wait'){on=false;info('친구 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;return}
-  if(v.status==='ready'){on=false;info(!oid?'친구 기다리는 중…':host?names[1]+'님과 해요! 시작을 눌러요':'부른 사람이 시작을 누르면 해요');$('go').textContent='시작';$('go').disabled=!oid||!host;return}   // 68번: 시작은 부른 사람만
+  if(v.status==='ready'){on=false;if(host&&oid&&v.host===FU.uid)joinPop(names[1]);else joinPopOff();info(!oid?'친구 기다리는 중…':host?names[1]+'님과 해요! 시작을 눌러요':'준비 완료! 친구가 확인을 누르면 시작해요');$('go').textContent='시작';$('go').disabled=!oid||!host;return}   // 68번: 시작은 부른 사람만
   if(v.status==='play'){
     const key=v.start+'_'+v.n;
     if(paidKey!==v.start){paidKey=v.start;ptAdd(-BET)}   // 66번: 시작할 때 내 점수에서 50점
@@ -416,7 +417,8 @@ function onPk(v){
   }else if(v.status==='end'){$('go').textContent='다시 하기';$('go').disabled=!oid||!host}
 }
 function fStart(){
-  if(!R||!oid||R.host!==FU.uid)return;
+  joinPopOff();
+  if(!R||!oid||(R.host!==FU.uid&&(R.players||{})[R.host]&&!(R.status==='ready'&&Date.now()-(R.at||0)>15e3)))return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status='ready';v.at=Date.now();return v});return}
   if(pt<BET)return info('⭐이 부족해요 (⭐ 50 필요)','#ff6b6b');   // 66번
   const ps=R.players||{};if(oid&&ps[oid]&&(+ps[oid].pts||0)<BET)return info(ps[oid].name+'님 ⭐이 부족해요','#ff6b6b');
@@ -424,7 +426,7 @@ function fStart(){
   ref.transaction(v=>{if(!v||(v.status!=='ready'&&v.status!=='tie'))return;const ids=Object.keys(v.players||{});if(ids.length<2)return;
     if(Math.random()<.5)ids.reverse();
     const carry=v.status==='tie'?(v.carry||0):0;
-    Object.assign(v,{status:'play',order:ids,n:0,goals:{},bet:BET,pot:carry+BET*ids.length,carry:0,start:Date.now(),at:Date.now()});delete v.kick;delete v.res;delete v.winner;delete v.quit;delete v.streak;return v});
+    Object.assign(v,{host:FU.uid,status:'play',order:ids,n:0,goals:{},bet:BET,pot:carry+BET*ids.length,carry:0,start:Date.now(),at:Date.now()});delete v.kick;delete v.res;delete v.winner;delete v.quit;delete v.streak;return v});
 }
 function hostNext(n){   // 방장 폰이 다음 차례로 넘겨요
   ref.transaction(v=>{
@@ -447,5 +449,9 @@ save();board();
 if(RID&&(RID.startsWith('pk_')||new URLSearchParams(location.search).get('j')))enter('friend');
 /* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */
 let jN=0;function joinChk(n){if(jN&&n>jN){try{const A=new(window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[[784,0],[622,.35]].forEach(([f,d])=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.4,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.7);o.connect(g);g.connect(A.destination);o.start(t+d);o.stop(t+d+.75)});setTimeout(()=>A.close(),1600)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}jN=n}
+/* 75번: 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 친구는 준비 중으로 기다려요 */
+let jpOn='';function joinPop(n){if(jpOn===n)return;jpOn=n;let d=document.getElementById('jpop');if(!d){d=document.createElement('div');d.id='jpop';d.style.cssText='position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center';d.innerHTML='<div style="background:#1b1b22;border:2px solid #ffd84a;border-radius:20px;padding:26px 22px;text-align:center;color:#fff;max-width:320px;width:86%"><div style="font-size:46px">🙋</div><div id="jpN" style="font-size:22px;font-weight:900;margin:10px 0 18px"></div><button id="jpOk" style="width:100%;padding:16px;font-size:22px;font-weight:900;border:0;border-radius:14px;background:#ff3b3b;color:#fff">확인 · 시작!</button></div>';document.body.appendChild(d);d.querySelector('#jpOk').onclick=()=>{joinPopOff();fStart()}}d.querySelector('#jpN').textContent=n+'님이 들어왔어요!';d.style.display='flex'}
+function joinPopOff(){jpOn='';const d=document.getElementById('jpop');if(d)d.style.display='none'}
+setInterval(()=>{if(R&&R.status==='ready'&&Date.now()-(R.at||0)>15e3&&$('go').disabled)onPk(R)},3000);
 </script>
 </body></html>

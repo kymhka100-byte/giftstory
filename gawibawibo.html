@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover">
 <title>가위바위보 게임</title>
 <!-- 69번: 친구랑 하기 들어가면 맨 위 "승부" 점수가 바로 보여요 · 점수가 0이면 내 점수 칸에 이유(로그인 필요·서버 막힘)를 보여 줘요 -->
+<!-- 75번: 같이 하기 멈춤 고침 - 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 부른 사람이 없거나 15초 넘게 안 누르면 누구나 시작 -->
 <!-- 68번: 친구랑 하기 - 빨간 우체통 친구 목록(검색)이 먼저, 없으면 카톡·메신저 · 시작은 부른 사람(방장)만 · 맨 위 "승부" 네모에 걸린 점수 · 먼저 3번 이기면 승리 · 가입 500점이 안 들어와 있으면 여기서도 넣어요 · 카톡 갔다 와도 방이 안 없어져요(기다리는 중 멈춤 고침) -->
 <!-- 66번: 점수 규칙 - 빨간 우체통 점수(가입 500점) 그대로 · 여러 명이 같이 · 모두 20점씩 걸고 3판 2선승(비긴 판은 안 셈) · 이긴 사람이 판돈을 다 가져가요 · 20점 안 되면 못 해요 · 맨 위 점수 1위 -->
 <!-- 46번: '친구랑 하기'가 진짜로 친구와 같이 돼요 (각자 휴대폰 · 대화방에 초대 말풍선 · 둘이 다 고르면 결과 · 먼저 3승 · 나가면 상대 승리) -->
@@ -223,7 +224,8 @@ async function friendGo(){
     const now=Date.now(),p={name:myName,pts:pt};
     if(!v||v.status==='end'&&!Object.keys(v.players||{}).length||now-(v.at||0)>15*60e3){made=true;return{host:FU.uid,status:'wait',players:{[FU.uid]:p},at:now}}
     made=false;v.players=v.players||{};
-    if(v.players[FU.uid])return v;
+    if(v.players[FU.uid]){if(!v.players[v.host])v.host=FU.uid;if(v.status==='wait'&&Object.keys(v.players).length>1){v.status='ready';v.at=now}return v}   // 75번: 방장이 없으면 내가 방장 · 둘이면 준비
+    if(!v.players[v.host])v.host=FU.uid;
     if(v.status==='play'){why='이미 시작했어요 · 끝나면 다시 들어와요';return}
     if(Object.keys(v.players).length>=10){why='이미 10명이 하고 있어요';return}   // 66번: 여러 명 (10명까지)
     v.players[FU.uid]=p;v.status='ready';v.at=now;return v;
@@ -241,13 +243,14 @@ function shareLink(){
 }
 function potShow(n){const b=$('pot2');if(n){$('potN').textContent='⭐ '+n;b.style.display='flex'}else b.style.display='none'}
 function onRps(v){
-  R=v;if(!v||!FU)return;const host=v.host===FU.uid;
+  R=v;if(!v||!FU)return;const host=v.host===FU.uid||!(v.players||{})[v.host]||(v.status==='ready'&&Date.now()-(v.at||0)>15e3);   // 75번: 방장이 없거나 15초 넘게 안 누르면 누구나 시작
   const ids=Object.keys(v.players||{}),others=ids.filter(u=>u!==FU.uid);oid=others[0]||null;joinChk(ids.length);
   $('on').firstChild.textContent=others.length>1?'친구 '+others.length+'명':oid?v.players[oid].name:'친구';
   const w=v.wins||{};$('mw').textContent=(w[FU.uid]||0)+'승';$('ow').textContent=(others.length?Math.max(...others.map(u=>w[u]||0)):0)+'승';
   $('share').style.display=(v.status==='wait'||v.status==='ready')&&!(RID&&!RID.startsWith('rps_'))?'block':'none';
   if(v.status==='wait'){on=false;potShow(BET*2);big('친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=true;drawBets();return}
-  if(v.status==='ready'){on=false;potShow(BET*Math.max(2,ids.length));big(!host&&oid?'부른 사람이 시작을 누르면 해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid||!host;drawBets();return}   // 68번: 시작은 부른 사람만
+  if(v.status==='ready'){on=false;potShow(BET*Math.max(2,ids.length));if(host&&oid&&v.host===FU.uid)joinPop(others.map(u=>v.players[u].name).join(', '));else joinPopOff();
+    big(!host&&oid?'준비 완료! 친구가 확인을 누르면 시작해요':others.length>1?'모두 '+ids.length+'명! 시작을 눌러요':oid?v.players[oid].name+'님과 해요! 시작을 눌러요':'친구를 기다리는 중…');$('go').textContent='시작';$('go').disabled=!oid||!host;drawBets();return}   // 68번: 시작은 부른 사람만
   if(v.status==='play'){
     if(!v.players[FU.uid])return;
     const k=gid+v.start;
@@ -265,13 +268,14 @@ function onRps(v){
   }
 }
 function fStart(){
-  if(!R||!oid||R.host!==FU.uid)return;
+  joinPopOff();
+  if(!R||!oid||(R.host!==FU.uid&&(R.players||{})[R.host]&&!(R.status==='ready'&&Date.now()-(R.at||0)>15e3)))return;
   if(R.status==='end'){ref.transaction(v=>{if(!v||v.status!=='end')return;v.status=Object.keys(v.players||{}).length>1?'ready':'wait';v.at=Date.now();return v});return}
   if(pt<BET){big('⭐이 부족해요 (⭐ 20 필요)','#ff3b3b');return}   // 66번
   const ps=R.players||{},poor=Object.keys(ps).filter(u=>u!==FU.uid&&(+ps[u].pts||0)<BET);
   if(poor.length){big(poor.map(u=>ps[u].name).join(', ')+'님 ⭐이 부족해요','#ff3b3b');return}
   $('go').disabled=true;
-  ref.transaction(v=>{if(!v||v.status!=='ready')return;const n=Object.keys(v.players||{}).length;if(n<2)return;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
+  ref.transaction(v=>{if(!v||v.status!=='ready')return;const n=Object.keys(v.players||{}).length;if(n<2)return;v.host=FU.uid;v.status='play';v.round=1;v.picks={};v.wins={};v.bet=BET;v.pot=BET*n;v.start=Date.now();v.at=Date.now();delete v.winner;delete v.quit;return v});
 }
 function fPick(i){
   $('m').classList.remove('shake');$('m').textContent=H[i];
@@ -327,6 +331,10 @@ function fLeave(){
 $('back').addEventListener('click',fLeave);   // 68번: 카톡으로 친구 부르러 갔다 오면 방이 지워지던 것 고침 (돌아가기를 눌러야만 나가요)
 save();drawBets();
 if(RID&&(RID.startsWith('rps_')||new URLSearchParams(location.search).get('j')))enter('friend');   // 친구가 보낸 링크로 들어오면 바로 같이 하기
+/* 75번: 친구가 들어오면 부른 사람에게 '들어왔어요' 확인 창 → 확인 누르면 바로 시작 · 친구는 준비 중으로 기다려요 */
+let jpOn='';function joinPop(n){if(jpOn===n)return;jpOn=n;let d=document.getElementById('jpop');if(!d){d=document.createElement('div');d.id='jpop';d.style.cssText='position:fixed;inset:0;z-index:99;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center';d.innerHTML='<div style="background:#1b1b22;border:2px solid #ffd84a;border-radius:20px;padding:26px 22px;text-align:center;color:#fff;max-width:320px;width:86%"><div style="font-size:46px">🙋</div><div id="jpN" style="font-size:22px;font-weight:900;margin:10px 0 18px"></div><button id="jpOk" style="width:100%;padding:16px;font-size:22px;font-weight:900;border:0;border-radius:14px;background:#ff3b3b;color:#fff">확인 · 시작!</button></div>';document.body.appendChild(d);d.querySelector('#jpOk').onclick=()=>{joinPopOff();fStart()}}d.querySelector('#jpN').textContent=n+'님이 들어왔어요!';d.style.display='flex'}
+function joinPopOff(){jpOn='';const d=document.getElementById('jpop');if(d)d.style.display='none'}
+setInterval(()=>{if(R&&R.status==='ready'&&Date.now()-(R.at||0)>15e3&&$('go').disabled)onRps(R)},3000);
 /* 71번: 같이 하기 - 친구가 들어오면 '딩동' 소리 + 진동 */
 let jN=0;function joinChk(n){if(jN&&n>jN){try{const A=new(window.AudioContext||window.webkitAudioContext)(),t=A.currentTime;[[784,0],[622,.35]].forEach(([f,d])=>{const o=A.createOscillator(),g=A.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t+d);g.gain.exponentialRampToValueAtTime(.4,t+d+.02);g.gain.exponentialRampToValueAtTime(.0001,t+d+.7);o.connect(g);g.connect(A.destination);o.start(t+d);o.stop(t+d+.75)});setTimeout(()=>A.close(),1600)}catch(e){}try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}jN=n}
 </script>
