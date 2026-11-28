@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 76번: 홈 정가운데 새 메시지 말풍선(최대 3개·꿈틀, 편지가 먼저) · 더보기 옆 분홍 말풍선 없앰 · 대화하고 나오면/가끔 할 일·친구 목록 → 뒤로 가기 → 홈 · 고정 말풍선 친구가 와 있으면 밝은 노랑 · 게임 초대 창(어느 화면이든 소리) · 공동체 지우기 · 공동체 친구 중복 안 생김 · 단체방 📢 공지(누구나, 🎤) · 편지 쓰기 가게 가기 아이콘 · 메뉴 글씨 → 아이콘 · 다른 계정 로그인/로그아웃 때 방·번호 섞임 고침 -->
 <!-- 75번: 환영 편지 맨 끝에 친구 초대 버튼(카톡 · 문자만 · 누르면 새 방이 생겨 친구가 그 방으로 · ⭐ 500은 친구가 가입했을 때만) · 로그인 화면 실버 모드 버튼을 카톡·구글 버튼과 같은 모양 · 알림 두 번 울림 고침 · 편지·카드 쓰기 🎤 옆에 노란 🔊 · 받은 편지 장마다 🔊(첫 장 = 끝까지, 다른 장 = 그 장만) · 일기장 🎤 옆 🔊 · 같이 하기 게임 멈춤 고침(들어왔어요 확인 창) -->
 <!-- 74번(72번 다시): 👂·'큰' 버튼 테두리·바탕 없이 · 🚨 신고·💡 건의 창 크게 + 🎤 말로 쓰기(1초 쉬면 줄 바꿈) + 🔊 읽어 주기 · 일기장 말로 쓰기도 1초 쉬면 줄 바꿈 · 여러 개 고르는 중 홍보 글 ✕는 홍보 글만 닫기 · 같은 이름 빈 방은 하나로 · 이미 친구인 이름으로 초대하면 원래 방으로 갈지 묻기 -->
 <!-- 73번: 로그인할 때마다(처음 · 로그아웃 뒤 다시) 빨간 우체통 환영 편지 한 통(홍보 · 크리스마스 카드·연하장 · 12월 20일쯤 출시 · 비공개 버전 ⭐ 많이 · 친구 초대 ⭐ 500) + 편지 안 '지금 친구 초대하기' 버튼(📮빨간 우체통·카톡·문자) · 점수 → ⭐ 숫자 -->
@@ -1163,6 +1164,28 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 .latt .bn{flex:1;min-width:0;word-break:break-all;cursor:pointer}
 .latt small{display:block;color:#aaa;font-size:12px}
 .latt img{flex:none;width:40px;height:40px;border-radius:6px;object-fit:cover}
+/* ===== 76번 ===== */
+/* 홈 화면 정가운데 새 메시지 말풍선 (최대 3개 · 꿈틀) */
+#lhBubs{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;z-index:2;pointer-events:none;padding:0 16px}
+#lhBubs:empty{display:none}
+#lhBubs .lhb{pointer-events:auto;max-width:88%;min-width:150px;background:#ff4d4a;color:#fff;border:none;border-radius:22px 22px 22px 6px;padding:11px 16px;font-size:19px;font-weight:800;line-height:1.3;box-shadow:0 6px 18px rgba(0,0,0,.6);text-align:left;animation:rbflash 1.8s ease infinite;display:flex;align-items:center;gap:10px}
+#lhBubs .lhb span{min-width:0;flex:1}
+#lhBubs .lhb small{display:block;font-size:14px;font-weight:600;opacity:.95;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#lhBubs .lhb i{font-style:normal;background:#fff;color:#e0322f;border-radius:12px;padding:1px 8px;font-size:14px;flex:none}
+#lhBubs .lhb:nth-child(2){animation-delay:.6s}
+#lhBubs .lhb:nth-child(3){animation-delay:1.2s}
+/* 고정 말풍선: 친구가 지금 우리 방에 와 있으면 밝은 노랑 */
+#roomBar .rb.pin.here:not(.unread),body:not(.dark) #roomBar .rb.pin.here:not(.unread){background:#ffe14d!important;border-color:#fff6b0!important;color:#222!important;font-weight:800!important;box-shadow:0 0 10px rgba(255,225,77,.85)!important}
+/* 편지 쓰기: 가게 가기 아이콘 (테두리 없이 그림만) */
+.shopgo{display:flex;gap:6px;justify-content:space-around;margin:4px 0 6px}
+.shopgo button{flex:1;min-width:0;border:none;background:none;color:inherit;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 2px}
+.shopgo b{font-size:34px;line-height:1}
+.shopgo small{font-size:12px;opacity:.85;white-space:nowrap}
+/* ＋ · 🎤 · 게임 · 파일 메뉴: 글씨 버튼 → 아이콘 (테두리 없이 그림 + 밑에 작은 글씨) */
+.pmenu.icm.show{display:grid;grid-template-columns:repeat(3,76px);gap:4px}
+.pmenu.icm button,body:not(.dark) .pmenu.icm button{border:none!important;background:none!important;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;white-space:normal;text-align:center}
+.pmenu.icm button b{font-size:30px;line-height:1;font-weight:400}
+.pmenu.icm button small{font-size:12px;line-height:1.2;opacity:.9}
 </style>
 </head>
 <body>
@@ -1213,6 +1236,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     <div id="letterHome">
       <div id="lhQuote"><q>소중한 분께 마음을 전하세요</q></div>
       <div class="lhic r"><button id="lhWrite" title="편지 쓰기">✍️</button><button id="lhBox" title="편지함">📬</button><button id="lhXmas" title="크리스마스 카드"></button><button class="cardic" id="lhNY" title="연말연시 카드" style="background:rgba(25,30,70,.85)"><svg viewBox="0 0 40 40"><g stroke="#ffd54f" stroke-width="2.2" stroke-linecap="round"><path d="M20 20V8M20 20l9-6M20 20l9 6M20 20l-9 6M20 20l-9-6M20 20v12"/></g><g fill="#ff7a59"><circle cx="20" cy="6" r="2"/><circle cx="31" cy="13" r="2"/><circle cx="9" cy="27" r="2"/></g><g fill="#fff"><circle cx="31" cy="27" r="1.6"/><circle cx="9" cy="13" r="1.6"/><circle cx="20" cy="34" r="1.6"/></g></svg></button></div>
+      <div id="lhBubs"></div>
       <div id="lhArrive"><div id="lhMsg">편지가 도착했어요!</div><div class="lhenv" id="lhEnv"><div class="f"></div><div class="t"></div></div><div id="lhHint">봉투를 누르면 편지가 열려요</div></div>
     </div>
     <div id="hGroup" class="hsec"></div>
@@ -1254,7 +1278,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     </button>
     <button id="plusBtn" title="파일 · 게임 · 버그 신고">＋</button>
     <div class="pmenu" id="micMenu"><button data-mic="call">📞 음성 통화</button><button data-mic="stt">📝 음성 문자</button><button data-mic="rec">🎤 목소리 녹음 보내기</button></div>
-    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="set">⚙ 설정</button><button data-tg="bug">🐞 버그 신고</button></div>
+    <div class="pmenu" id="plusMenu"><button data-tg="watch">🎬 같이 보기</button><button data-tg="game">🎲 게임</button><button data-tg="file">📁 파일 보내기</button><button data-tg="set">⚙ 설정</button><button data-tg="bug">🐞 버그 신고</button><button data-tg="note">📢 공지</button></div>
     <div class="pmenu" id="topMenu">
       <button id="tmHome">🏠 메인 화면으로</button>
       <button id="tmWrite">✏ 편지 쓰기</button>
@@ -1307,6 +1331,8 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
     <div class="chips" style="margin-top:10px"><button class="chip" id="alignBtn">≡ 가운데 정렬 (시처럼)</button><button class="chip" id="nameInsBtn">👤 이름 넣기</button></div>
     <div class="lab">스티커 (편지 끝에 붙어요)</div>
     <div class="chips" id="stkChips"></div>
+    <div class="lab">가게 (예쁜 편지지 · 카드 · 우표)</div>
+    <div class="shopgo"><button id="goPaper" type="button"><b>🛍</b><small>편지지 고르러 가기</small></button><button id="goCard" type="button"><b>🎄</b><small>예쁜 카드 고르러 가기</small></button><button id="goStamp" type="button"><b>📮</b><small>우표 고르러 가기</small></button></div>
     <div class="lab">목소리 녹음 (선택 · 편지를 펼치면 나와요)</div>
     <div class="chips">
       <button class="chip" id="recBtn">🎙 녹음하기</button>
@@ -1776,7 +1802,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 <!-- 37번: 우리 공동체 만들기 · 초대 -->
 <!-- 41번: 공동체 공지 쓰기 (저장 버튼) -->
 <div class="ov" id="gnOv"><div class="panel" style="max-width:380px">
-  <h2>📢 공동체 공지</h2>
+  <h2 class="tkh"><span id="gnHead">📢 공동체 공지</span><span class="tkb"><button class="tkmic" data-tk="gnTxt" title="말로 쓰기">🎤</button><button class="tksp" data-tks="gnTxt" title="읽어 주기">🔊</button></span></h2>
   <div style="color:#ccc;font-size:14px;margin:4px 0 8px">예: 금요일 7시 회식 · 강남역 ○○식당 · 전화번호 · 버스 타고 오는 길</div>
   <textarea id="gnTxt" maxlength="2000"></textarea>
   <div class="gnpic"><button id="gnPicBtn">🗺 약도 사진 넣기</button><button id="gnPicDel">사진 지우기</button></div><div id="gnPic"></div><input type="file" id="gnPicFile" accept="image/*" style="display:none">
@@ -1786,7 +1812,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 </div></div>
 <!-- 47번: 공지 전체 보기 (방장이 아니면 보기만) -->
 <div class="ov" id="gnViewOv"><div class="panel" style="max-width:420px">
-  <h2>📢 공동체 공지</h2>
+  <h2 id="gnViewHead">📢 공동체 공지</h2>
   <div id="gnView"></div>
   <button class="big" data-close>닫기</button>
 </div></div>
@@ -1861,6 +1887,7 @@ body:not(.dark) .who.mine::before{filter:brightness(.35)}
 <div id="toast"></div>
 
 <!-- 71번: 톱니 우표 고르기 · 여러 개 지우기 막대 -->
+<div class="ov" id="gmOv"><div class="panel" style="max-width:340px;text-align:center"><div style="font-size:58px;line-height:1.1">🎮</div><h2 style="margin:6px 0">친구가 게임을 요청했어요</h2><div id="gmWho" style="font-size:18px;font-weight:700;color:#ffe14d;margin-bottom:14px"></div><button class="big" id="gmGo" style="background:#e0322f;color:#fff;border-color:#e0322f">👉 들어가기</button><button class="big" id="gmNo">나중에</button></div></div>
 <div class="ov" id="tsOv"><div class="panel" style="max-width:380px;text-align:center"><h2>🌙 다음 날 도착</h2><div style="color:#ccc;font-size:15px">정성 들인 톱니 우표를 골라 붙이면<br>내일 아침 8시에 도착해요</div><div id="tsList" class="tslist"></div><button class="big" data-close>취소</button></div></div>
 <div id="mselBar"><span>지울 것을 골라 누르세요</span><button id="mselDel">🗑 1개 지우기</button><button id="mselNo">취소</button></div>
 <style>
@@ -1889,7 +1916,7 @@ const VAPID_KEY = 'BOsK11ZvoEiFeybzysMkS6PLB1P8syI6YO33JqNKc6Xu5IR3Awy5ImRPg3Ktr
 const MEDIA_HOME = 'https://kymhka100-byte.github.io/giftstory/';   // 음악·효과음 파일이 있는 곳
 const BGM_FILE = 'sound/bgm.mp3';     // 빨간 우체통 테마곡 (노래 목록 첫 곡)
 const SFX_FILES = { drop: 'sound/drop.mp3', rustle: 'sound/rustle.mp3', tear: 'sound/tear.mp3' };   // 34번: sound 폴더  // 효과음 (없으면 기본 소리)
-const APP_VER = '75';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
+const APP_VER = '76';   // 32번: 새 버전을 올리면 이 숫자를 바꿔요 → 사용자 폰이 저절로 새 버전으로
 /* ================ */
 
 const $ = id => document.getElementById(id);
@@ -2132,7 +2159,8 @@ function openRoom(id){
       msgs[snap.key] = { ...snap.val(), id: snap.key };
       if (isNew) {
         const nm = msgs[snap.key]; noteLast(room, nm); notifyNew(nm);
-        if (nm.at >= t0 - 3000) { svIncoming(room, nm); if (!isMine(nm)) { const b = $('msgs'); if (b.scrollHeight - b.scrollTop - b.clientHeight < 160) render.jump = true; else toast('💬 새 메시지가 왔어요 · 맨 아래에 있어요'); } }   // 새 메시지는 키보드 위로 보이게
+        if (nm.at >= t0 - 3000) { svIncoming(room, nm); if (!isMine(nm)) { hereNote(room, nm.from); if (nm.type === 'gm') gmAsk(nm, room, nm.id); } }   // 76번
+        if (nm.at >= t0 - 3000) { if (!isMine(nm)) { const b = $('msgs'); if (b.scrollHeight - b.scrollTop - b.clientHeight < 160) render.jump = true; else toast('💬 새 메시지가 왔어요 · 맨 아래에 있어요'); } }   // 새 메시지는 키보드 위로 보이게
         if (nm.type === 'file' && !isMine(nm)) fileFetch(room, nm).then(queueRender).catch(() => {});   // 사진·파일은 내 폰에 받아 두기
       }
       queueRender();
@@ -2152,6 +2180,7 @@ function openRoom(id){
       const mems = D.ref(db, path + '/members');
       unsub.push(D.onChildAdded(mems, s => memberIn(rid0, s.key, s.val(), t0)));
       unsub.push(D.onChildChanged(mems, s => memberIn(rid0, s.key, s.val(), Infinity)));
+      if (!isGroup(rid0)) unsub.push(D.onValue(D.ref(db, path + '/group/notice'), s => { (grpMeta[rid0] || (grpMeta[rid0] = {})).notice = s.val() || null; grpRoomNote(); }, () => {}));   // 76번: 단체방 공지
       joinRoom(rid0);
     });
   } else {
@@ -2205,6 +2234,7 @@ function lhDraw(){
   const un = unreadIn(), a = $('lhArrive'), env = $('lhEnv');
   const nb = $('lhBox'); nb.innerHTML = '📬' + (un.length ? `<i>${un.length}</i>` : ''); nb.parentNode.classList.toggle('has', !!un.length);
   a.classList.toggle('show', !!un.length);
+  bubDraw(un.length);   // 76번: 편지가 먼저 · 편지를 다 읽으면 말풍선
   if (!un.length) { a._on = false; return; }
   lhImg(env, 'letter_invite.jpg');   // 60번: 받는 사람도 빨간 리본 봉투
   const m = un[0], key = un.map(x => x.id).join(',');
@@ -2249,6 +2279,7 @@ function ripShow(m, done){
 }
 const lhShown = () => homeOn && document.body.classList.contains('lview');
 function drawHome(){   // 32번: 맨 위 나와의 대화 고정 → 할 일(기본) / 친구 목록 → 홍보 글 → 친구 초대(아래 가운데)
+  if (hvAuto && homeView() !== 'letter' && homeBusy()) { hvAuto = false; LS.set('rp_homeview', 'letter'); setTimeout(syncLayer, 0); }   // 76번: 편지·말풍선이 오면 홈으로
   const rooms = visibleRooms();
   rooms.sort(roomOrder);
   const view = homeView(); document.body.classList.toggle('lview', view === 'letter' && !grpSel); if (view === 'letter' && !grpSel) { lhDraw(); } else $('lhArrive')._on = false;
@@ -2279,7 +2310,8 @@ $('homeList').addEventListener('click', e => {
   if (e.target.closest('#lhNY')) { click(); openWriter(); openCards('ny'); return; }
   if (e.target.closest('#lhBox')) { click(); const un = unreadIn(); if (un.length) openBox(un); else $('pileBtn').click(); return; }
   const le = e.target.closest('#lhEnv'); if (le) { const un = unreadIn(); if (un.length > 1) { click(); openBox(un); } else if (un.length) lhRip(le, un[0]); return; }
-  const hv = e.target.closest('[data-hv]'); if (hv) { click(); LS.set('rp_homeview', hv.dataset.hv); drawHome(); return; }
+  const bb = e.target.closest('[data-bub]'); if (bb) { click(); openRoom(bb.dataset.bub); return; }   // 76번: 가운데 말풍선 → 그 대화로
+  const hv = e.target.closest('[data-hv]'); if (hv) { click(); hvAuto = false; LS.set('rp_homeview', hv.dataset.hv); drawHome(); syncLayer(); return; }
   const r = e.target.closest('[data-home]'); if (!r) return;
   if (hlpDone) { hlpDone = false; return; }
   click(); openRoom(r.dataset.home);
@@ -2324,7 +2356,7 @@ function memberIn(id, uid, v, t0){
   if (!v) return;
   (roomMembers[id] || (roomMembers[id] = {}))[uid] = v;
   const mine = me.ids.includes(uid) || v.name === me.name;
-  if (mine && me === realMe && !me.ids.includes(uid)) { me.ids.push(uid); saveMe(); }   // 다른 브라우저에서 쓰던 내 번호도 내 것으로
+  if (!mine && v.at && (t0 === Infinity || Date.now() - v.at < 30 * 60e3)) hereNote(id, uid);   // 76번
   if (!mine && v.joined && v.joined > t0) {
     showBanner(isGroup(id) ? `👥 ${v.name}님이 '${grpName(id)}' 공동체에 들어왔어요` : `🔔 ${v.name}님이 들어왔어요`); dingdong();
     flashRoom(id);
@@ -2352,6 +2384,7 @@ const visibleRooms = () => { const m = twinMap(); return dedupRooms(getRooms().f
 function dedupRooms(list){
   const g = {}; list.forEach(x => { const n = (roomName(x.id) || '').trim(); (g[n] = g[n] || []).push(x); });
   return list.filter(x => {
+    if (x.id.startsWith('gp') && x.id !== room && (g[(roomName(x.id) || '').trim()] || []).some(y => !y.id.startsWith('gp'))) return false;   // 76번: 공동체에서 온 사람이 이미 친구면 친구 목록에 또 안 생겨요 (대화는 공동체 화면에서)
     const n = (roomName(x.id) || '').trim(), a = g[n]; if (!n || a.length < 2 || x.id === room || lastMsg[x.id]) return true;
     return !a.some(y => lastMsg[y.id] || y.id === room) && a[0] === x;
   });
@@ -2477,7 +2510,7 @@ function watchRoom(id){
     if (m.type === 'letter' && m.letter && m.letter.deliverAt > Date.now()) return;   // 아직 도착 안 한 편지
     const u = unread[id] || (unread[id] = { keys: new Set(), first: m.at || Date.now() });
     u.keys.add(snap.key); u.first = Math.min(u.first, m.at || Date.now());
-    if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); svIncoming(id, { ...m, id: snap.key }); }
+    if ((m.at || 0) >= t0 - 3000) { flashRoom(id); pop(); svIncoming(id, { ...m, id: snap.key }); hereNote(id, m.from); if (m.type === 'gm') gmAsk(m, id, snap.key); }   // 76번: 밝아지기 · 게임 초대 창
     if (m.type === 'ginv') ginvAsk(m, snap.key);   // 70번: 빨간 우체통 공동체 초대장 → '들어갈까요?'
     queueRender();
   }));
@@ -2551,6 +2584,19 @@ function moreRooms(){
   const p = getPins();
   return visibleRooms().filter(x => !p.includes(x.id)).sort(roomOrder);
 }
+/* 76번: 고정 말풍선 밝아지기 - 친구가 우리 방에 들어오거나 말을 보내고, 지금 앱을 보고 있으면 밝은 노랑 */
+const hereAt = {}, hereU = {}, liveAt = {}, liveUn = {};
+function hereNote(id, uid){
+  if (!id || !uid || me.ids.includes(uid)) return;
+  hereAt[id] = Date.now(); hereU[id] = uid;
+  if (FB && !liveUn[uid]) liveUn[uid] = FB.D.onValue(FB.D.ref(FB.db, 'giftstory/live/' + uid), s => { liveAt[uid] = +(s.val() || 0); barHTML = ''; queueRender(); }, () => {});
+  barHTML = ''; queueRender();
+}
+function isHere(id){
+  const t = hereAt[id], u = hereU[id]; if (!t || Date.now() - t > 30 * 60e3) return false;
+  return !!liveAt[u] && Date.now() - liveAt[u] < 150e3;
+}
+setInterval(() => { if (homeOn || !document.hidden) { barHTML = ''; queueRender(); } }, 30000);
 let barHTML = '';
 function drawBar(){
   const p = getPins();
@@ -2558,17 +2604,14 @@ function drawBar(){
   const html = p.slice(0, shown).map((id, i) => {
     if (!id) return `<button class="rb empty" data-pin="${i}">＋친구</button>`;   // 31번: 빈칸은 모두 ＋친구
     const name = roomName(id), cur = !homeOn && id === room, n = unreadN(id);
-    return `<button class="rb pin ${reqHas(id) && !cur ? 'wig' : ''} ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return `<button class="rb pin ${reqHas(id) && !cur ? 'wig' : ''} ${cur ? 'cur' : ''} ${n && !cur ? 'unread' : ''} ${flashing[id] ? 'flash' : ''} ${FB && !othersIn(id).length ? 'wait' : ''} ${!cur && isHere(id) ? 'here' : ''}" data-go="${id}" data-slot="${i}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n && !cur ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
   }).join('') + (() => {   // 24번: 고정 안 된 방에 들어가 있으면 더보기 바로 옆에 잠깐 보여요
     const tw = twinMap(), cr = tw[room] || room;
     if (!homeOn && room && !p.includes(cr) && getRooms().some(x => x.id === room)) {
       const name = roomName(room);
       return `<button class="rb cur tmp" data-go="${room}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}</button>`;
     }
-    const nw = moreRooms().find(x => unreadN(x.id)) || moreRooms().find(x => reqHas(x.id));   // 29번: 말풍선에 없는 사람이 보낸 새 메시지   // 52번: 새 대화 신청도
-    if (!nw) return '';
-    const name = roomName(nw.id), n = unreadN(nw.id);
-    return `<button class="rb tmp ${n ? 'unread' : ''} ${reqHas(nw.id) ? 'wig' : ''} ${flashing[nw.id] ? 'flash' : ''}" data-go="${nw.id}" title="${esc(name)}">${esc([...name.replace(/\s+/g, '')].slice(0, 3).join(''))}${n ? `<i class="cnt">${n > 99 ? '99+' : n}</i>` : ''}</button>`;
+    return '';   // 76번: 더보기 옆 분홍 새 메시지 말풍선은 없앰 (새 메시지는 메인 화면 정가운데 말풍선으로)
   })();
   const mn = moreRooms().reduce((t, x) => t + (x.id === room && !homeOn ? 0 : unreadN(x.id)), 0);
   const mb = $('moreBtn'); mb.classList.toggle('has', !!mn);
@@ -2763,9 +2806,13 @@ $('rmSelBtn').onclick = () => {
 $('logoutBtn').onclick = async () => {
   if (!confirm('로그아웃할까요?')) return;
   click();
+  const au = LS.get('rp_auth', null);
+  if (FB && au) {   // 76번: 이 계정과 이 폰 번호 연결을 끊어요 → 다시 로그인하면 깨끗한 새 번호 (다른 계정 방·이름이 섞이지 않게)
+    try { await FB.D.remove(FB.D.ref(FB.db, 'giftstory/users/' + au.uid + '/main')); await FB.D.remove(FB.D.ref(FB.db, 'giftstory/users/' + au.uid + '/ids')); } catch (e) {}
+  }
   try { const A = await authModule(); if (A) await A.signOut(A.getAuth(FB.app)); } catch (e) {}
   LS.set('rp_auth', null);
-  realMe.uid = rid(); realMe.ids = [realMe.uid]; LS.set('rp_me', realMe); LS.set('rp_test_me', null);   // 65번: 같은 계정을 두 폰에서 쓰다 로그아웃하면 이 폰은 새 번호로 (내 계정이 헷갈리지 않게)
+  accReset(); LS.set('rp_owner', null); LS.set('rp_test_me', null);   // 65번 + 76번: 이 폰은 새 번호 · 예전 계정 방 목록도 지워요
   toast('로그아웃했어요'); setTimeout(() => location.reload(), 900);
 };
 $('roomList').addEventListener('click', e => {
@@ -3038,6 +3085,12 @@ async function syncAccount(){
     if (auth.authStateReady) await auth.authStateReady();
     if (!auth.currentUser) return;
     const { D, db } = FB, base = 'giftstory/users/' + au.uid;
+    {   // 76번: 이 폰에 다른 계정이 쓰던 방·번호가 남아 있으면 먼저 지워요 (새 계정 이름이 예전 방마다 붙던 문제)
+      let m0 = null; try { m0 = (await D.get(D.ref(db, base + '/main'))).val(); } catch (e) {}
+      const prev = LS.get('rp_owner', null);
+      if ((prev && prev !== au.uid) || (!prev && !(m0 && m0.uid) && (getRooms().length || realMe.ids.length > 1))) { accReset(); toast('새 계정으로 깨끗하게 시작해요'); }
+      LS.set('rp_owner', au.uid);
+    }
     await D.update(D.ref(db, base + '/ids'), { [realMe.uid]: Date.now() });
     const ids = (await D.get(D.ref(db, base + '/ids'))).val() || {};
     /* 31번: 이 구글 계정의 대표 번호와 이름 (앱을 지웠다 깔아도, 폰이 두 대여도 같은 사람) */
@@ -3067,6 +3120,13 @@ async function syncAccount(){
     render();
     if ('Notification' in window && Notification.permission === 'granted') setupPush(false);   // 32번: 바뀐 번호로도 알림 등록
   } catch (e) {}
+}
+/* 76번: 이 폰에 남은 예전 계정 대화 정보를 지우고 새 번호로 (일기·할 일·편지지는 그대로) */
+const ACC_KEYS = ['rp_rooms', 'rp_removed', 'rp_removed_k', 'rp_seen', 'rp_pins', 'rp_pinseen', 'rp_pinno', 'rp_pinreset', 'rp_mynames', 'rp_groups', 'rp_grp_new', 'rp_room', 'rp_last', 'rp_alias', 'rp_opencnt', 'rp_pairgid', 'rp_req', 'rp_ginv_asked'];
+function accReset(){
+  ACC_KEYS.forEach(k => { try { localStorage.removeItem(k); } catch (e) {} });
+  Object.keys(lastMsg).forEach(k => delete lastMsg[k]); Object.keys(unread).forEach(k => delete unread[k]);
+  realMe.uid = rid(); realMe.ids = [realMe.uid]; LS.set('rp_me', realMe);
 }
 function pushRoomUp(r){
   const au = LS.get('rp_auth', null); if (!FB || !au) return;
@@ -4312,12 +4372,14 @@ function closeMenus(){ ['plusMenu', 'tgMenu', 'gameMenu', 'fileMenu', 'topMenu',
 /* 32번: 메뉴가 열리면 뒤 화면을 어둡게 (뒤로 가기는 메뉴부터 닫아요) */
 function menuDim(){ const on = !!document.querySelector('.pmenu.show,#morePanel.show'); if (document.body.classList.contains('menuon') !== on) { document.body.classList.toggle('menuon', on); syncLayer(); } }
 function toggleMenu(id, e){ e.stopPropagation(); click(); const on = !$(id).classList.contains('show'); closeMenus(); $('morePanel').classList.remove('show'); $(id).classList.toggle('show', on); if (id === 'plusMenu') $('plusBtn').classList.toggle('on', on); menuDim(); }
-$('plusBtn').onclick = e => toggleMenu('plusMenu', e);
+$('plusBtn').onclick = e => { const nb = $('plusMenu').querySelector('[data-tg="note"]'); if (nb) nb.style.display = multiRoom(room) ? '' : 'none'; toggleMenu('plusMenu', e); };   // 76번: 📢 공지는 여러 명 있는 단체방에서만
+const multiRoom = id => !homeOn && !!id && !isGroup(id) && !isSelf(id) && othersIn(id).length >= 2;
 $('tgBtn').onclick = e => { e.stopPropagation(); click(); closeMenus(); const big = LS.get('rp_zoom', 100) > 100; LS.set('rp_zoom', big ? 100 : BIG_Z); zoomApply(); toast(big ? '보통 글씨' : '큰 글씨'); };   // 38번: 한 번 누르면 큰 글씨 ⇄ 보통   // 34번: 같이 보기는 ＋ 안으로, 여기는 '큰' 글씨
 document.addEventListener('click', e => { if (!e.target.closest('.pmenu,#plusBtn,#tgBtn,#grpBtn,#micBtn')) closeMenus(); });
 ['plusMenu', 'tgMenu', 'gameMenu'].forEach(id => $(id).addEventListener('click', e => {
   const b = e.target.closest('[data-tg]'); if (!b) return;
   if (['watch', 'game', 'file', 'set'].includes(b.dataset.tg)) { e.stopPropagation(); click(); closeMenus(); const m = $({ watch: 'tgMenu', game: 'gameMenu', file: 'fileMenu', set: 'topMenu' }[b.dataset.tg]); m.classList.add('show'); $('plusBtn').classList.add('on'); menuDim(); return; }   // 38번: 같이 보기·게임은 안쪽 메뉴로 · 39번: 파일도 (오디오·사진·일반 파일)
+  if (b.dataset.tg === 'note') { closeMenus(); if (!homeOn && room) gnOpen(room); return; }   // 76번: 단체방 공지 (누구나)
   click(); closeMenus();
   if (b.dataset.tg === 'invite') { openInvite(); return; }
   if (b.dataset.tg === 'bug') { fbOpen(true); return; }   // 70번: 🐞 버그 신고
@@ -4361,7 +4423,7 @@ function fallbackCopy(t){ const a = document.createElement('textarea'); a.value 
 
 /* ----- 창 공통 ----- */
 function showOv(id){ $(id).classList.add('show'); syncLayer(); }
-function hideOv(id){ if (id === 'repOv' || id === 'fbOv') try { tkOff(); } catch (e) {} $(id).classList.remove('show'); syncLayer(); }
+function hideOv(id){ if (id === 'repOv' || id === 'fbOv' || id === 'gnOv') try { tkOff(); } catch (e) {} $(id).classList.remove('show'); syncLayer(); }
 document.querySelectorAll('[data-close]').forEach(b => b.onclick = () => hideOv(b.closest('.ov').id));
 /* 뒤로 가기 버튼: 열린 창을 닫고 대화창으로 (앱 밖으로 나가지 않게) */
 let hDepth = 0, skipPop = 0, started = false;
@@ -4371,7 +4433,7 @@ const anyOv = () => $('writer').classList.contains('show') || [...document.query
 /* 39번: 메인 화면이 아니면(대화방·공동체 방·펼친 창·공동체 목록) 한 칸만 → 뒤로 가기 한 번에 메인 화면 */
 /* 60번: 뒤로 가기 규칙 - 늘 바로 전 단계로, 앱은 메인 화면에서 한 번 더 눌러야만 닫혀요
    메인 화면에도 한 칸(덫)을 깔아 둬요 → 메인에서 뒤로 가기 = "한 번 더 누르면 닫혀요" 안내 → 또 누르면 닫힘 */
-const subOn = () => anyOv() || (!homeOn && !S.on) || (homeOn && !!grpSel) || (!homeOn && !!whoF);   // 70번: 공동체 화면은 늘 한 단계 (뒤로 가기 → 메인)
+const subOn = () => anyOv() || (!homeOn && !S.on) || (homeOn && !!grpSel) || (!homeOn && !!whoF) || (homeOn && !S.on && !grpSel && homeView() !== 'letter');   // 76번: 할 일·친구 목록에서 뒤로 → 편지 쓰기 홈   // 70번: 공동체 화면은 늘 한 단계 (뒤로 가기 → 메인)
 let exitArm = false, exitT = 0;
 const wantDepth = () => !started ? 0 : subOn() ? 2 : (exitArm ? 0 : 1);
 let leaving = false;   // 34번: 다른 화면(뽑기 게임)으로 넘어갈 땐 뒤로 가기 정리를 멈춰요
@@ -4426,8 +4488,9 @@ addEventListener('popstate', () => {
   closeAll(); showPanel('musicPanel', false); if (vOn) document.querySelector('[data-tclose="videoPanel"]').click();
   /* 47번: 뒤로 가기는 늘 바로 전 단계로 (열린 창 → 대화방 → 공동체 목록 → 메인 화면) */
   if (!S.on && !hadOv) {
-    if (!homeOn) { grpSel = isGroup(room) ? room : (LS.get('rp_pairgid', {})[room] || null); if (grpSel && !grpList().some(g => g.id === grpSel)) grpSel = null; goHome(); }
+    if (!homeOn) { grpSel = isGroup(room) ? room : (LS.get('rp_pairgid', {})[room] || null); if (grpSel && !grpList().some(g => g.id === grpSel)) grpSel = null; goHome(); if (!grpSel) homePeek(); }   // 76번
     else if (grpSel) grpLeavePanel();   // 70번: 저장 안 한 새 공동체는 지워요
+    else if (homeView() !== 'letter') { hvAuto = false; LS.set('rp_homeview', 'letter'); drawHome(); }   // 76번: 할 일·친구 목록 → 편지 쓰기 홈
   }
   syncLayer();
 });
@@ -5049,16 +5112,66 @@ $('pingTest').onclick = () => {
   click(); myPut('ping', { u: me.uid, at: Date.now() });
   toast('🕑 지금 화면을 끄고 기다려 보세요 · 2분 30초 뒤에 알림이 와요');
 };
+
+/* ===== 76번: 홈 화면 정가운데 새 메시지 말풍선 · 할 일/친구 목록 가끔 보여 주기 ===== */
+function bubRooms(){
+  return Object.keys(unread).filter(id => unreadN(id) && !isSelf(id) && !(!homeOn && id === room))
+    .sort((a, b) => ((lastMsg[b] || {}).at || unread[b].first || 0) - ((lastMsg[a] || {}).at || unread[a].first || 0)).slice(0, 3);
+}
+function bubDraw(letters){
+  const ids = letters ? [] : bubRooms();
+  setHTML('lhBubs', ids.map(id => {
+    const n = unreadN(id), L = lastMsg[id], nm = isGroup(id) ? '👥 ' + grpName(id) : roomName(id);
+    return `<button class="lhb" data-bub="${esc(id)}"><span>💬 ${esc(nm)}<small>${esc(L && !L.me ? L.t : '새 메시지가 왔어요')}</small></span><i>${n > 99 ? '99+' : n}</i></button>`;
+  }).join(''));
+}
+var hvAuto = false, hvAct = Date.now(), hvSw = Date.now();   // var: 먼저 불려도 괜찮게
+function homeBusy(){ return !!(unreadIn().length || bubRooms().length); }
+function homePeek(){   // 대화하고 나오면 (남은 편지·말풍선이 없을 때) 할 일이나 친구 목록을 한 번 → 뒤로 가기 한 번 더 → 홈
+  if (!homeOn || S.on || grpSel || homeView() !== 'letter' || homeBusy()) return;
+  hvSw = Date.now(); hvAuto = true; LS.set('rp_homeview', Math.random() < .5 ? 'todo' : 'friends'); drawHome();
+}
+document.addEventListener('pointerdown', () => { hvAct = Date.now(); }, true);
+setInterval(() => {   // 10분에 한 번쯤, 가만히 홈을 보고 있을 때
+  if (document.hidden || !started || !homeOn || S.on || grpSel || anyOv() || homeView() !== 'letter' || homeBusy()) return;
+  if (document.activeElement && /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if (Date.now() - hvAct < 60e3 || Date.now() - hvSw < 10 * 60e3) return;
+  homePeek(); syncLayer();
+}, 30000);
+/* 76번: 친구가 게임을 부르면 어느 화면에서든 가운데 창 + 소리 → 들어가기 누르면 그 게임방으로 */
+var GM_OK = /^(gawibawibo|ppopgi|penalty)\.html$/, gmDone = new Set(), gmCur = null, gmT = 0;
+function gmAsk(m, rid0, key){
+  if (!m || !GM_OK.test(m.game || '') || isMine(m) || isBlocked(m.from) || gmDone.has(key)) return;
+  gmDone.add(key); gmCur = { game: m.game, room: rid0 };
+  $('gmWho').textContent = `${m.name || '친구'}님 · ${m.text || '게임 같이 해요'}`;
+  showOv('gmOv'); dingdong(); if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  clearTimeout(gmT); gmT = setTimeout(() => { if ($('gmOv').classList.contains('show')) dingdong(); }, 2500);
+}
+$('gmGo').onclick = () => {
+  if (!gmCur) return; click();
+  const g = gmCur; gmCur = null; clearTimeout(gmT); delete unread[g.room]; setSeen(g.room);
+  $('gmOv').classList.remove('show'); leaving = true; location.href = g.game + '?g=' + encodeURIComponent(g.room) + '&j=1';
+};
+$('gmNo').onclick = () => { click(); gmCur = null; clearTimeout(gmT); hideOv('gmOv'); };
+/* 76번: 편지 쓰기 화면 → 가게 (편지지 · 카드 · 우표) */
+$('goPaper').onclick = () => { click(); openShop(); };
+$('goCard').onclick = () => { click(); openCards((W && W.card) || 'xmas'); };
+$('goStamp').onclick = () => { click(); openShop(); toast('📮 우표 가게는 곧 열려요 · 지금은 편지를 보낼 때 우표를 골라 붙여요'); };
+/* 76번: ＋ · 🎤 · 게임 · 파일 메뉴 글씨 버튼 → 아이콘 + 밑에 작은 글씨 */
+['plusMenu', 'micMenu', 'tgMenu', 'gameMenu', 'fileMenu'].forEach(id => {
+  const m = $(id); if (!m) return; m.classList.add('icm');
+  m.querySelectorAll(':scope > button').forEach(b => { const t = b.textContent.trim(), k = t.indexOf(' '); if (k > 0) b.innerHTML = `<b>${esc(t.slice(0, k))}</b><small>${esc(t.slice(k + 1))}</small>`; });
+});
 </script>
 <!-- 67번: 기능 파일 (순서 그대로 · 버전 숫자는 APP_VER와 같이 바꿔요) -->
-<script src="shop.js?v=75"></script>
-<script src="together.js?v=75"></script>
-<script src="videocall.js?v=75"></script>
-<script src="silver.js?v=75"></script>
-<script src="todo.js?v=75"></script>
-<script src="storage.js?v=75"></script>
-<script src="diary.js?v=75"></script>
-<script src="community.js?v=75"></script>
+<script src="shop.js?v=76"></script>
+<script src="together.js?v=76"></script>
+<script src="videocall.js?v=76"></script>
+<script src="silver.js?v=76"></script>
+<script src="todo.js?v=76"></script>
+<script src="storage.js?v=76"></script>
+<script src="diary.js?v=76"></script>
+<script src="community.js?v=76"></script>
 <script>
 /* 67번: 기능 파일을 다 읽은 다음에 시작 */
 

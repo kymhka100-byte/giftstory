@@ -37,6 +37,7 @@ function grpWatch(id){
   const un = gwatch[id] = [];
   un.push(FB.D.onValue(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group'), s => {
     const v = s.val() || {}; grpMeta[id] = v;
+    if (v.gone) { grpDrop(id); if (!grpIsOwner(id)) toast(`'${v.name || '공동체'}' 공동체가 없어졌어요`); return; }   // 76번: 방장이 지운 공동체
     if (v.name) grpAdd(id, v.name);
     if (v.out && realMe.ids.some(u => v.out[u])) { grpDrop(id); toast(`'${v.name || '공동체'}' 공동체에서 빠졌어요`); return; }
     grpSilver(id); queueRender();
@@ -107,7 +108,7 @@ function grpDrawPanel(){
         return `<div class="hrow" data-gmem="${p.uid}"><div class="hav">${ini(p.name)}</div><div class="htx"><b>${esc(p.name)}</b><small>${esc(pl ? pl.t : '눌러서 바로 대화')}</small></div>${telBtn(p.ph || phoneOf(pid))}<div class="hside">${m ? `<i>${m > 99 ? '99+' : m}</i>` : ''}</div></div>`; }).join('')
       : '<div class="tdempty">아직 아무도 안 들어왔어요 · 아래 초대하기로 링크를 보내 주세요</div>')
     + `<div class="gtools"><button class="y" data-ginv>＋ 사람 초대하기</button><button data-gpick>📮 우체통 친구 초대</button>`
-    + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gtopic>💬 오늘의 주제</button><button data-gsend>📨 개별 통보</button>` : `<button data-gleave>공동체 나가기</button>`)
+    + (own ? `<button data-gnote>📢 공지 쓰기</button><button data-gtopic>💬 오늘의 주제</button><button data-gsend>📨 개별 통보</button><button data-gdel>🗑 공동체 지우기</button>` : `<button data-gleave>공동체 나가기</button>`)
     + `<button data-gsave>💾 저장하고 나가기</button></div>` + (own && ppl.length ? '<div class="tdempty" style="font-size:12px">사람을 길게 누르면 공동체에서 뺄 수 있어요</div>' : ''));
 }
 /* 대화방 위 공지 (공동체 전체방) */
@@ -123,7 +124,7 @@ function gtAsk(id){
 }
 function grpRoomNote(){
   { const t = !homeOn && isGroup(room) ? gtOf(room) : ''; document.body.classList.toggle('gtopicon', !!t); const s0 = '💬 오늘의 주제: ' + t; if (t && $('gTopic').textContent !== s0) $('gTopic').textContent = s0; }   // 60번
-  const on = !homeOn && isGroup(room) && grpMeta[room] && gnHas(grpMeta[room].notice);
+  const on = !homeOn && !isSelf(room) && grpMeta[room] && gnHas(grpMeta[room].notice);   // 76번: 일반 단체방 공지도
   document.body.classList.toggle('gnoteon', !!on);   // 46번: .gnote(공지 칸) 모양이 화면 전체에 씌워져 아래 입력 줄이 잘리던 것 고침
   if (on) { const t = '📢 ' + gnLine(grpMeta[room].notice); if ($('gNote').textContent !== t) $('gNote').textContent = t; }
 }
@@ -135,7 +136,9 @@ function gnOpen(id){
   if (!id) return;
   const n = (grpMeta[id] || {}).notice || {};
   click(); gnId = id;
-  if (grpIsOwner(id)) {
+  const g = isGroup(id), hd = g ? '📢 공동체 공지' : '📢 단체방 공지';   // 76번: 일반 단체방은 누구나 써요
+  $('gnHead').textContent = hd; $('gnViewHead').textContent = hd;
+  if (grpIsOwner(id) || !g) {
     $('gnTxt').value = n.text || ''; gnImg = n.img || ''; gnPicDraw();
     $('gnDel').style.display = gnHas(n) ? '' : 'none';
     showOv('gnOv'); return;
@@ -145,7 +148,7 @@ function gnOpen(id){
   $('gnView').innerHTML = tel(esc(n.text || '')) + (n.img ? `<img src="${n.img}" alt="약도">` : '');
   showOv('gnViewOv');
 }
-$('gNote').onclick = () => { if (!homeOn && isGroup(room)) gnOpen(room); };
+$('gNote').onclick = () => { if (!homeOn && room) gnOpen(room); };
 $('gTopic').onclick = () => { if (!homeOn && isGroup(room) && grpIsOwner(room)) { click(); gtAsk(room); } };   // 60번: 방장은 눌러서 주제 바꾸기
 function gnPicDraw(){ $('gnPic').innerHTML = gnImg ? `<img src="${gnImg}" alt="">` : ''; $('gnPicDel').style.display = gnImg ? '' : 'none'; }
 $('gnPicBtn').onclick = () => { click(); $('gnPicFile').click(); };
@@ -203,6 +206,12 @@ $('hGroup').addEventListener('click', e => {
     const t = prompt(`공동체 사람 ${ppl.length}명에게 각자 따로 보낼 말`, ''); if (!t || !t.trim()) return;
     ppl.forEach(p => { const pid = pairId(p.uid); pairInfo[pid] = { gid: id, uid: p.uid, name: p.name, sent: false }; grpPing(pid); saveRoom(pid, p.name); pushTo(pid, { from: realMe.uid, name: me.name, type: 'text', text: nameFill(t.trim(), aliasOf(pid) || p.name), at: Date.now() }); });   // 52번: {이름} → 사람마다
     sentFx(); toast(`📨 ${ppl.length}명에게 따로 보냈어요`); return;
+  }
+  if (e.target.closest('[data-gdel]')) {   // 76번: 방장이 공동체 지우기 → 모든 사람 목록에서 없어져요
+    if (!grpIsOwner(id) || !confirm(`'${grpName(id)}' 공동체를 지울까요?\n공동체 사람 모두의 목록에서 없어져요.`)) return;
+    click(); const nm = grpName(id);
+    if (FB) FB.D.update(FB.D.ref(FB.db, 'giftstory/rooms/' + id + '/group'), { gone: Date.now() }).catch(() => {});
+    grpDrop(id); drawHome(); syncLayer(); toast(`🗑 '${nm}' 공동체를 지웠어요`); return;
   }
   if (e.target.closest('[data-gleave]')) {
     if (!confirm(`'${grpName(id)}' 공동체에서 나갈까요?`)) return;
